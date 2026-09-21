@@ -57,5 +57,8 @@
     "oxlint-plugin-react-native": "^0.2.35",
     "oxlint-tsgolint": "^7.0.2002",
     "typescript": "~6.0.3"
+  },
+  "engines": {
+    "node": ">=24.14.0"
   }
 }
