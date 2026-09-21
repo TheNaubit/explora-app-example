@@ -39,6 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-asset",
     "expo-image",
     "expo-sharing",
+    "@rnrepo/expo-config-plugin"
   ],
   experiments: {
     typedRoutes: true,
