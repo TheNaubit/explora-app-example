@@ -1,56 +1,137 @@
-# Welcome to your Expo app 👋
+# Explora
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Explora is a React Native (Expo) mobile app for **Android** and **iOS**.  
+Users browse activities, open details, and save favorites for later — including offline.
 
-## Get started
+This repository is a technical assessment build. It must run locally without external accounts, API keys, or hosted services.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## Goals
 
-2. Start the app
+**Core journey:** browse → search / filter → open detail → save favorite → open again later (offline).
 
-   ```bash
-   npx expo start
-   ```
+**Must support (summary)**
 
-In the output, you'll find options to open the app in a
+- Discovery: search by title, filter by category, keep filters after detail
+- Favorites: persist across relaunch; details available offline
+- Refresh: each **successful** refresh adds **one** generated activity; failures add nothing
+- Clear loading, empty, error, and recovery states
+- Safe behavior across background / resume / delayed results
+- Accessibility for the main journey
+- One native device capability (with permission, cancel, and invalid-input cases)
+- Performance with **≥1,000** local activities and release-build evidence
+- One documented improvement with before/after evidence
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+**Out of scope:** real backend, login, payments, multi-device sync, store publication.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Full requirements: [`docs/assessment/requirements.md`](./docs/assessment/requirements.md)  
+Hard constraints for agents: [`AGENTS.md`](./AGENTS.md)
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## Requirements
+
+| Item            | Value                                        |
+| --------------- | -------------------------------------------- |
+| Node.js         | `>=24.14.0` (see `package.json` → `engines`) |
+| Package manager | **npm** only (do not use yarn, pnpm, or bun) |
+| Platforms       | iOS and Android (Expo)                       |
+| Language        | TypeScript                                   |
+
+You need an iOS Simulator and/or Android emulator (or a development build on a device) to run the app.
+
+Native modules may need a **development build** (`npx expo run:ios` / `run:android`). Expo Go alone may not be enough after you add native libraries.
+
+---
+
+## Quick start
 
 ```bash
-npm run reset-project
+# 1. Install dependencies (also sets up Husky git hooks via `prepare`)
+npm install
+
+# 2. Start Metro
+npm start
+# same as: npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Then open the app in a simulator, emulator, or development build from the Expo CLI menu.
 
-### Other setup steps
+```bash
+npm run ios      # Expo → iOS
+npm run android  # Expo → Android
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+---
 
-## Learn more
+## Useful scripts
 
-To learn more about developing your project with Expo, look at the following resources:
+| Script                            | Purpose                                |
+| --------------------------------- | -------------------------------------- |
+| `npm start`                       | Start Expo / Metro                     |
+| `npm run ios` / `npm run android` | Open on platform                       |
+| `npm run lint`                    | Oxlint (deny warnings)                 |
+| `npm run fix`                     | Oxlint `--fix` (deny warnings) + Oxfmt |
+| `npm run format`                  | Oxfmt only                             |
+| `npx tsc --noEmit`                | TypeScript check                       |
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+**Pre-commit:** Husky runs lint-staged (oxlint, oxfmt, and `tsc` when TypeScript files are staged).
 
-## Join the community
+**Agents:** after a change batch, run oxlint with `--format=agent`, then format and `tsc`. See `AGENTS.md`.
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Project layout (short)
+
+```text
+assets/activities.json   # Supplied catalog (12 activities) — do not drop these
+src/app/                 # Expo Router routes (thin)
+src/screens/             # Screen UI
+src/components/          # Shared UI
+src/schemas/             # Zod schemas
+src/data/                # Catalog loaders
+src/mocks/               # Client-side API mocks (as built)
+docs/                    # Technical wiki — start at docs/INDEX.md
+AGENTS.md                # Always-on rules for AI agents
+AI_SESSION.md            # Index of AI sessions for the assessment
+```
+
+Details: [`docs/architecture/project-structure.md`](./docs/architecture/project-structure.md)
+
+---
+
+## Data and mocks
+
+- Supplied dataset: `assets/activities.json` (12 activities, stable IDs)
+- Keep those 12 intact. Generate more local activities for the ≥1,000 performance case
+- Network calls are mocked (TanStack Query + local mocks). Validate payloads with Zod
+- Success / fail / slow load modes: document here and in [`docs/operations/local-dev.md`](./docs/operations/local-dev.md) when the mock layer exists
+- Reset local persisted data: document in ops when persistence exists
+
+---
+
+## Documentation map
+
+| Audience                    | Start here                                                             |
+| --------------------------- | ---------------------------------------------------------------------- |
+| Humans (setup + goals)      | This README                                                            |
+| AI agents (rules)           | [`AGENTS.md`](./AGENTS.md)                                             |
+| Product / architecture wiki | [`docs/INDEX.md`](./docs/INDEX.md)                                     |
+| Assessment requirements     | [`docs/assessment/requirements.md`](./docs/assessment/requirements.md) |
+| AI session records          | [`AI_SESSION.md`](./AI_SESSION.md)                                     |
+
+Write wiki pages and agent-facing docs in Simplified Technical English (see `AGENTS.md` and `docs/meta/simplified-technical-english.md`).
+
+---
+
+## Current status
+
+Scaffold and foundations are in place (structure, Zod catalog load, wiki, lint/format hooks).  
+Discovery list, favorites, refresh, native capability, and submission artifacts are **not** complete yet. See [`docs/features/index.md`](./docs/features/index.md).
+
+---
+
+## License / sharing
+
+Private assessment project. Do not publish store builds from this README alone. Follow the assessment delivery rules in `docs/assessment/requirements.md` when you produce APK / iOS Simulator artifacts.
