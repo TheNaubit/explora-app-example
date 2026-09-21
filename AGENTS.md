@@ -176,6 +176,7 @@ Additional folders as needed (still under `src/`, never as routes): e.g. `state/
 
 ### Styling
 
+- **Light and dark mode are mandatory.** Every screen and shared component must look correct in both appearances. Follow the system color scheme by default (`userInterfaceStyle: "automatic"`). Provide light and dark tokens in `src/theme.ts` (or equivalent) and select colors from the active scheme — do not hard-code a single-mode palette in UI. Verify both modes when building or changing UI.
 - Use React Native **`StyleSheet` only** (plus normal inline styles when truly dynamic).
 - Keep `StyleSheet.create({ … })` at the **bottom of the same component file** — do not split into `*.styles.ts` files.
 - Shared design tokens (colors, spacing, type scale) may live in `src/theme.ts` (or similar) and be referenced from StyleSheets.
@@ -203,6 +204,7 @@ Docs: https://docs.expo.dev/eas/index.md
 ## Best practices
 
 - Styling: React Native `StyleSheet` only (colocated at the bottom of the component file). No Uniwind, NativeWind, Unistyles, or similar. See **Project structure → Styling** above.
+- Always support **light and dark mode** (system appearance). Theme tokens must include both palettes; UI must not be light-only or dark-only.
 - For local state and offline usage (local-first), we use Legend State v3 with `react-native-mmkv`. Docs: https://legendapp.com/open-source/state/v3/intro/introduction/ and https://legendapp.com/open-source/state/v3/sync/persist-sync/#mmkv-rn
 - For lists, we use Legend List. Docs: https://legendapp.com/open-source/list/v3/react-native/getting-started/ and https://legendapp.com/open-source/list/v3/react-native/keyboard-and-animated/
 - For handling the keyboard, we use `react-native-keyboard-controller`. We must always use at least version `1.21.7` since Legend List’s `KeyboardAwareLegendList` requires at least that version.
