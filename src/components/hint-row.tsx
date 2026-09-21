@@ -23,13 +23,13 @@ export function HintRow({ title = 'Try editing', hint = 'app/index.tsx' }: HintR
 }
 
 const styles = StyleSheet.create({
-  stepRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   codeSnippet: {
     borderRadius: Spacing.two,
     paddingVertical: Spacing.half,
     paddingHorizontal: Spacing.two,
+  },
+  stepRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });

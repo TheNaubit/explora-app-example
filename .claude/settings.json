@@ -1,5 +1,18 @@
 {
   "enabledPlugins": {
     "expo@claude-plugins-official": true
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path'); npx oxlint --fix --no-error-on-unmatched-pattern \"$file\"; npx oxfmt --no-error-on-unmatched-pattern \"$file\""
+          }
+        ]
+      }
+    ]
   }
 }

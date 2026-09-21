@@ -41,14 +41,6 @@ export function Collapsible({ children, title }: PropsWithChildren & { title: st
 }
 
 const styles = StyleSheet.create({
-  heading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  pressedHeading: {
-    opacity: 0.7,
-  },
   button: {
     width: Spacing.four,
     height: Spacing.four,
@@ -61,5 +53,13 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.three,
     marginLeft: Spacing.four,
     padding: Spacing.four,
+  },
+  heading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  pressedHeading: {
+    opacity: 0.7,
   },
 });

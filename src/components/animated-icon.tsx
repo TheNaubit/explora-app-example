@@ -111,9 +111,12 @@ export function AnimatedIcon() {
 }
 
 const styles = StyleSheet.create({
-  imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  background: {
+    borderRadius: 40,
+    experimental_backgroundImage: `linear-gradient(180deg, #3C9FFE, #0274DF)`,
+    width: 128,
+    height: 128,
+    position: 'absolute',
   },
   glow: {
     width: 201,
@@ -131,17 +134,14 @@ const styles = StyleSheet.create({
     width: 76,
     height: 71,
   },
-  background: {
-    borderRadius: 40,
-    experimental_backgroundImage: `linear-gradient(180deg, #3C9FFE, #0274DF)`,
-    width: 128,
-    height: 128,
-    position: 'absolute',
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   splashOverlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: '#208AEF',
     alignItems: 'center',
+    backgroundColor: '#208AEF',
     justifyContent: 'center',
     zIndex: 1000,
   },

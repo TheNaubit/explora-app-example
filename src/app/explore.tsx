@@ -126,28 +126,30 @@ export default function TabTwoScreen() {
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
+  centerText: {
+    textAlign: 'center',
   },
-  contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+  collapsibleContent: {
+    alignItems: 'center',
   },
   container: {
     maxWidth: MaxContentWidth,
     flexGrow: 1,
   },
-  titleContainer: {
-    gap: Spacing.three,
-    alignItems: 'center',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
+  contentContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  centerText: {
-    textAlign: 'center',
+  imageReact: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
   },
-  pressed: {
-    opacity: 0.7,
+  imageTutorial: {
+    width: '100%',
+    aspectRatio: 296 / 171,
+    borderRadius: Spacing.three,
+    marginTop: Spacing.two,
   },
   linkButton: {
     flexDirection: 'row',
@@ -158,23 +160,21 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
     alignItems: 'center',
   },
+  pressed: {
+    opacity: 0.7,
+  },
+  scrollView: {
+    flex: 1,
+  },
   sectionsWrapper: {
     gap: Spacing.five,
     paddingHorizontal: Spacing.four,
     paddingTop: Spacing.three,
   },
-  collapsibleContent: {
+  titleContainer: {
+    gap: Spacing.three,
     alignItems: 'center',
-  },
-  imageTutorial: {
-    width: '100%',
-    aspectRatio: 296 / 171,
-    borderRadius: Spacing.three,
-    marginTop: Spacing.two,
-  },
-  imageReact: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
+    paddingHorizontal: Spacing.four,
+    paddingVertical: Spacing.six,
   },
 });

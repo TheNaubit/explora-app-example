@@ -42,6 +42,10 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "oxfmt": "^0.70.0",
+    "oxlint": "^1.85.0",
+    "oxlint-plugin-react-native": "^0.2.35",
+    "oxlint-tsgolint": "^7.0.2002",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -49,8 +53,9 @@
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "lint": "expo lint"
+    "format": "oxfmt",
+    "lint": "oxlint",
+    "fix": "oxlint . --fix && oxfmt ."
   },
   "private": true
 }

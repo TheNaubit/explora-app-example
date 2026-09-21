@@ -28,6 +28,10 @@ export function WebBadge() {
 }
 
 const styles = StyleSheet.create({
+  badgeImage: {
+    width: 123,
+    aspectRatio: 123 / 24,
+  },
   container: {
     padding: Spacing.five,
     alignItems: 'center',
@@ -35,9 +39,5 @@ const styles = StyleSheet.create({
   },
   versionText: {
     textAlign: 'center',
-  },
-  badgeImage: {
-    width: 123,
-    aspectRatio: 123 / 24,
   },
 });

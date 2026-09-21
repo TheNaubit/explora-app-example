@@ -73,36 +73,29 @@ export function AnimatedIcon() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    width: '100%',
-    zIndex: 1000,
-    position: 'absolute',
-    top: 128 / 2 + 138,
-  },
   imageContainer: {
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   glow: {
-    width: 201,
     height: 201,
     position: 'absolute',
+    width: 201,
   },
   iconContainer: {
-    justifyContent: 'center',
     alignItems: 'center',
-    width: 128,
     height: 128,
+    justifyContent: 'center',
+    width: 128,
   },
   image: {
+    height: 71,
     position: 'absolute',
     width: 76,
-    height: 71,
   },
   background: {
-    width: 128,
     height: 128,
     position: 'absolute',
+    width: 128,
   },
 });
