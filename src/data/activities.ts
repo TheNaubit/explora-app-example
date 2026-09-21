@@ -1,8 +1,9 @@
 import dataset from "@/assets/activities.json";
 
-import type { ActivitiesDataset, Activity } from "@/types/activity";
+import { activitiesDatasetSchema, type Activity } from "@/schemas/activity";
+import { parseWithSchema } from "@/utils/parse-with-schema";
 
-const activitiesDataset = dataset as ActivitiesDataset;
+const activitiesDataset = parseWithSchema(activitiesDatasetSchema, dataset);
 
 /** Supplied catalog (12 activities). Source of truth for the assessment dataset. */
 export const SUPPLIED_ACTIVITIES: Activity[] = activitiesDataset.activities;

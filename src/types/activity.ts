@@ -1,15 +1,2 @@
-export type ActivityCategory = "Outdoors" | "Culture" | "Workshops" | "Leisure";
-
-export type Activity = {
-  id: string;
-  title: string;
-  description: string;
-  category: ActivityCategory;
-  location: string;
-  durationMinutes: number;
-};
-
-export type ActivitiesDataset = {
-  schemaVersion: number;
-  activities: Activity[];
-};
+/** Re-export activity domain types inferred from Zod schemas. */
+export type { Activity, ActivityCategory, ActivitiesDataset } from "@/schemas/activity";

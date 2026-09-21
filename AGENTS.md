@@ -33,7 +33,7 @@ Reviewers assess product judgment, technical decisions, and **verification with 
 
 **Performance scale (≥1,000 activities):** discovery must demonstrate scrolling, search, and interaction with at least 1,000 **locally generated** activities. Keep the original 12 as the base; generate additional items in the same shape with unique stable IDs. Defaulting discovery to ~1,012 items (12 + generated) is acceptable. Document dataset size, generation method, and how to reset local data in the README. This is **not** the same as refresh (refresh adds one activity per successful run).
 
-**Mocked network (no real backend):** build as if production — perform “network requests” but mock API responses locally. No external accounts, API keys, or hosted services. Make **successful**, **failed**, and **slow** loading reproducible for review and document how in the README.
+**Mocked network (no real backend):** build as if production — perform “network requests” but mock API responses locally. Validate every mock/fixture/generated payload with **Zod** before it enters app state. No external accounts, API keys, or hosted services. Make **successful**, **failed**, and **slow** loading reproducible for review and document how in the README.
 
 ### Required capabilities
 
@@ -161,7 +161,7 @@ Use `/src` so application code is separate from root config (`app.json`, `eas.js
 └── package.json
 ```
 
-Additional folders as needed (still under `src/`, never as routes): e.g. `state/`, `api/` or `mocks/` for TanStack Query + mocked responses, `types/`, `features/`. Do **not** invent Expo Router `+api` / `server/` code for this assessment — there is no real backend; keep mocks on the client.
+Additional folders as needed (still under `src/`, never as routes): e.g. `state/`, `api/` or `mocks/` for TanStack Query + mocked responses, `schemas/` for Zod schemas, `types/`, `features/`. Do **not** invent Expo Router `+api` / `server/` code for this assessment — there is no real backend; keep mocks on the client.
 
 ### Conventions
 
@@ -216,6 +216,7 @@ Docs: https://docs.expo.dev/eas/index.md
 - For icons in the app, we always use native ones via `expo-symbols`, which exposes SF Symbols on iOS and Material Symbols on Android: https://docs.expo.dev/versions/latest/sdk/symbols/
 - When we need native UI toolkits, we use `expo-ui` (https://docs.expo.dev/versions/latest/sdk/ui/universal/) with the universal components so they work on both iOS and Android. It also has many drop-in replacements (https://docs.expo.dev/versions/latest/sdk/ui/drop-in-replacements/) so we don't need third-party libs for many things like bottom sheets, masked views, etc.
 - While this app’s requirements are to build a demo without real APIs or servers, we want to build it as if it were a production app: perform “network requests” but mock the API response. Use https://tanstack.com/query/latest/docs/framework/react/react-native for those requests. For online status, use `expo-network`. Legend State also has a React Query plugin that can be useful: https://legendapp.com/open-source/state/v3/sync/tanstack-query/
+- For runtime schema validation use **Zod** (`zod`). Define schemas under `src/schemas/`, infer TypeScript types with `z.infer`, and validate mocked API responses, JSON fixtures, generated/refresh activities, and other untrusted or external-shaped payloads before they enter app state. Prefer `parseWithSchema` / `safeParseWithSchema` from `src/utils/parse-with-schema.ts` (or the same pattern) so invalid mocks surface as failures instead of silent bad data. Docs: https://zod.dev/
 - We also have `expo-glass-effect` for glass effect on iOS 26+ (important to make the app feel native).
 - For blur, we have `expo-blur`.
 - For images and assets, we use `expo-image` and `expo-asset`.
