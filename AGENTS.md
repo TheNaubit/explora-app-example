@@ -199,7 +199,9 @@ Docs: https://docs.expo.dev/eas/index.md
 ## Linting and formatting
 
 - After making code changes, run `npx oxlint --fix`, then run `npx oxfmt`.
-- Before finishing, run `npx oxlint --deny-warnings --format=agent`.
+- Before finishing, run `npx oxlint --deny-warnings --format=agent` (or `npm run lint` / `npm run fix`).
+- Config lives in `oxlint.config.mjs`. It loads **eslint-plugin-sonarjs** as an Oxlint JS plugin (Sonar-style rules). Recommended SonarJS rules are enabled except **type-aware** ones, which Oxlint’s JS plugin API does not support yet. Do not reintroduce a separate ESLint Sonar setup unless type-aware rules become necessary and supported.
+- Third-party skill trees (`.agents/`, `.claude/`) are ignored via `.eslintignore` — never “fix” those files to silence lint.
 
 ## Best practices
 

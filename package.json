@@ -8,9 +8,9 @@
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "format": "oxfmt",
-    "lint": "oxlint",
-    "fix": "oxlint . --fix && oxfmt ."
+    "format": "oxfmt .",
+    "lint": "oxlint . --deny-warnings",
+    "fix": "oxlint . --fix --deny-warnings && oxfmt ."
   },
   "dependencies": {
     "@expo/ui": "~57.0.19",
@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "eslint-plugin-sonarjs": "^4.2.1",
     "oxfmt": "^0.70.0",
     "oxlint": "^1.85.0",
     "oxlint-plugin-react-native": "^0.2.35",

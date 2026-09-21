@@ -1,0 +1,13 @@
+# Vendored / third-party skill packs — do not lint
+.agents/
+.claude/
+
+# Local scratch
+.tmp-review/
+
+# Dependencies and generated native projects
+node_modules/
+android/
+ios/
+dist/
+.expo/
