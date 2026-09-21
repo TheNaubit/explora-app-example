@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "activities": [
+    {
+      "id": "act-001",
+      "title": "Botanical Garden Walk",
+      "description": "A relaxed walk along marked paths through a collection of plants.",
+      "category": "Outdoors",
+      "location": "North Garden",
+      "durationMinutes": 60
+    },
+    {
+      "id": "act-002",
+      "title": "Sunset Walk",
+      "description": "A short coastal walk with stops to enjoy the scenery.",
+      "category": "Outdoors",
+      "location": "Lighthouse Promenade",
+      "durationMinutes": 45
+    },
+    {
+      "id": "act-003",
+      "title": "Viewpoint Trail",
+      "description": "A gentle trail connecting three scenic viewpoints.",
+      "category": "Outdoors",
+      "location": "Hillside Park",
+      "durationMinutes": 90
+    },
+    {
+      "id": "act-004",
+      "title": "Photography Exhibition",
+      "description": "A collection of photographs exploring everyday life in imaginary cities.",
+      "category": "Culture",
+      "location": "Horizon Gallery",
+      "durationMinutes": 50
+    },
+    {
+      "id": "act-005",
+      "title": "Museum of Inventions",
+      "description": "A collection of objects and prototypes with explanatory displays.",
+      "category": "Culture",
+      "location": "Museum of Ideas",
+      "durationMinutes": 75
+    },
+    {
+      "id": "act-006",
+      "title": "Short Story Reading",
+      "description": "A gathering to listen to and discuss short stories.",
+      "category": "Culture",
+      "location": "Central Library",
+      "durationMinutes": 60
+    },
+    {
+      "id": "act-007",
+      "title": "Pottery Workshop",
+      "description": "An introduction to hand building with practice materials.",
+      "category": "Workshops",
+      "location": "Clay Studio",
+      "durationMinutes": 120
+    },
+    {
+      "id": "act-008",
+      "title": "Drawing Workshop",
+      "description": "Observation exercises and sketches of everyday objects.",
+      "category": "Workshops",
+      "location": "Line Studio",
+      "durationMinutes": 90
+    },
+    {
+      "id": "act-009",
+      "title": "Urban Gardening Workshop",
+      "description": "Prepare a small planter and learn basic plant care.",
+      "category": "Workshops",
+      "location": "Seed Center",
+      "durationMinutes": 80
+    },
+    {
+      "id": "act-010",
+      "title": "Board Games",
+      "description": "A session of cooperative games with rules explained at the start.",
+      "category": "Leisure",
+      "location": "Meeting Place",
+      "durationMinutes": 120
+    },
+    {
+      "id": "act-011",
+      "title": "Classic Film Session",
+      "description": "A fictional screening followed by a discussion of the film.",
+      "category": "Leisure",
+      "location": "Aurora Cinema",
+      "durationMinutes": 150
+    },
+    {
+      "id": "act-012",
+      "title": "Puzzle Gathering",
+      "description": "A shared activity solving puzzles of different difficulty levels.",
+      "category": "Leisure",
+      "location": "Mosaic Space",
+      "durationMinutes": 60
+    }
+  ]
+}
