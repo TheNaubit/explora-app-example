@@ -49,7 +49,7 @@ Docs: https://docs.expo.dev/eas/index.md
 - For local state and offline usage (local-first), we use Legends State v3 with `react-native-mmkv`. You can find its docs at https://legendapp.com/open-source/state/v3/intro/introduction/ & https://legendapp.com/open-source/state/v3/sync/persist-sync/#mmkv-rn
 - For lists, we use Legends List, you can check its docs at https://legendapp.com/open-source/list/v3/react-native/getting-started/ & https://legendapp.com/open-source/list/v3/react-native/keyboard-and-animated/
 - For handling the keyboard, we use `react-native-keyboard-controller`. We must always use at least version `1.21.7` since Legends List component `KeyboardAwareLegendList` requires at least that version.
-- For haptics, we use `react-native-pulsar` since it allows us to customize a lot the haptic patterns. Never use other libs like `expo-haptics`.
+- For haptics, we use `react-native-pulsar` since it allows us to customize a lot the haptic patterns. Never use other libs like `expo-haptics`. You have available also the skill `pulsar-haptics` to help you with this.
 - For animations we use `react-native-reanimated` v4.
 - When we want custom animated graphics, we use Lottie with the lib `lottie-react-native`. We always try to use dotLottie files but we can rely in other formats if not available.
 - For icons in the app, we always use native ones, using the Expo lib `expo-symbols`, which exposes SF Symbols in iOS and Material Symbols in Android: https://docs.expo.dev/versions/latest/sdk/symbols/
@@ -61,3 +61,4 @@ Docs: https://docs.expo.dev/eas/index.md
 - Since this is a demo app we will share, we will use Node with `npm`. No `yarn`, no `pnpm` and not `bun`, easier to share and run for others.
 - Always use project-scoped Emil skills (animate, animate-expo, animation-vocabulary, apple-design, emil-design-eng, find-animation-opportunities, improve-animations, mobile-native, review-animations, write-swift ) whe designing the app and creating animations and microinteractions. Specially when building the "iOS part", use the `apple-design` one to we follow the `HIG` guidelines. But in every platform, all the skills it has are pretty useful for high quality premium interfaces.
 - We must follow a TDD-oriented way of coding: Use Jest for unit testing and use Maestro (https://docs.maestro.dev/) for E2E tests.
+- You have in the project scope many official Expo skills you can load to help you develop in the intended way Expo apps, make sure to use them. You also have the skill `react-native-best-practices`, also useful for this.
