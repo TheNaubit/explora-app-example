@@ -1,6 +1,15 @@
 # Accessibility
 
-Explora must stay usable with VoiceOver, TalkBack, Dynamic Type, and a hardware keyboard on the main journey.
+## Assessment bar (always)
+
+Explora must **always** support:
+
+1. **Usable navigation** on the main journey (browse → search/filter → detail → favorites → open again offline)
+2. **Keyboard behavior** (hardware keyboard focus and activation)
+3. **Larger text** (Dynamic Type / system font scaling; primary content and actions stay usable)
+4. **Screen-reader access** (VoiceOver / TalkBack labels, roles, order, and announcements)
+
+Library setup alone is not enough. Every a11y rule in this project must serve this bar. Verify the main journey with evidence.
 
 ## Status
 
@@ -16,7 +25,7 @@ Explora must stay usable with VoiceOver, TalkBack, Dynamic Type, and a hardware 
 
 - Package: [`react-native-a11y`](https://github.com/ArturKalach/react-native-a11y) (pinned). Source and docs: that GitHub repo.
 - Always use this library for accessibility work in Explora. Do not add a different a11y library or a parallel focus stack.
-- Every screen, every UI component, and every feature must be accessibility-compliant with this stack. Build a11y in the same change as the UI. Do not defer it.
+- Every screen, every UI component, and every feature must be accessibility-compliant with this stack and with the assessment bar above. Build a11y in the same change as the UI. Do not defer it.
 - Native module. Needs a development or release build. It does not run in Expo Go.
 - Import only from `@/a11y` or project wrappers under `src/components/a11y-*` and `src/components/screen-frame`.
 - Do not install `react-native-a11y-order`, `react-native-external-keyboard`, or other mutually exclusive split packages.
@@ -39,19 +48,39 @@ Explora must stay usable with VoiceOver, TalkBack, Dynamic Type, and a hardware 
 
 ## Rules for every screen, component, and feature
 
+Map every change to the assessment bar.
+
+### Usable navigation
+
 1. Wrap every screen body with `ScreenFrame` and a clear `title`.
-2. Give every interactive control an `accessibilityLabel`. Add `accessibilityHint` when the result is not obvious.
-3. Set `accessibilityRole` to match the control (`button`, `header`, `search`, `link`, and similar).
-4. Prefer `A11yPressable`, `A11yInput`, and `A11yCard` over raw `Pressable` / `TextInput` / plain cards.
-5. Use `A11y.Order` + `A11y.Index` when visual order and spoken order differ.
-6. Set `focusable={false}` on non-interactive `A11y.View` / `A11y.Index` wrappers. Do not let layout wrappers steal Tab focus.
-7. Wrap modals and sheets with `A11yFocusTrap` while they are open. Use `A11yFocusFrame` when a frame fits better.
+2. Prefer `A11yPressable`, `A11yInput`, and `A11yCard` over raw `Pressable` / `TextInput` / plain cards.
+3. Keep minimum touch targets about 44×44 pt on iOS and 48×48 dp on Android.
+4. Keep browse, search/filter, detail, favorites, and offline reopen reachable and understandable without sighted-only cues.
+
+### Screen-reader access
+
+5. Give every interactive control an `accessibilityLabel`. Add `accessibilityHint` when the result is not obvious.
+6. Set `accessibilityRole` to match the control (`button`, `header`, `search`, `link`, and similar).
+7. Use `A11y.Order` + `A11y.Index` when visual order and spoken order differ.
 8. Announce loading, empty, error, and success with `announceStatus` after the UI updates.
-9. Keep Dynamic Type on. Do not set `allowFontScaling={false}` on journey text.
-10. Keep minimum touch targets about 44×44 pt on iOS and 48×48 dp on Android.
-11. For activity rows, use `buildActivityAccessibilityLabel`. For favorite toggles, use `buildFavoriteToggleLabel` and `accessibilityState={{ selected }}`.
-12. `A11y.ScreenChange` announces on mount. When a kept-alive stack screen returns, announce again.
-13. Treat missing a11y on new or changed UI as incomplete work. Fix it before you call the feature done.
+9. `A11y.ScreenChange` announces on mount. When a kept-alive stack screen returns, announce again.
+10. For activity rows, use `buildActivityAccessibilityLabel`. For favorite toggles, use `buildFavoriteToggleLabel` and `accessibilityState={{ selected }}`.
+
+### Keyboard behavior
+
+11. Set `focusable={false}` on non-interactive `A11y.View` / `A11y.Index` wrappers. Do not let layout wrappers steal Tab focus.
+12. Wrap modals and sheets with `A11yFocusTrap` while they are open. Use `A11yFocusFrame` when a frame fits better.
+13. Primary actions must work with Tab / Shift+Tab and Space or Enter on a hardware keyboard.
+
+### Larger text
+
+14. Keep Dynamic Type on. Do not set `allowFontScaling={false}` on journey text.
+15. Layout must remain usable at large text sizes. Do not clip primary labels or actions on the main journey.
+
+### Done criteria
+
+16. Treat missing a11y on new or changed UI as incomplete work. Fix it before you call the feature done.
+17. Main-journey verification is incomplete until navigation, keyboard, larger text, and screen-reader checks have evidence.
 
 ## Feature map (library)
 
@@ -78,9 +107,9 @@ Explora must stay usable with VoiceOver, TalkBack, Dynamic Type, and a hardware 
 ## Verification
 
 - Write scenario 8 in [verification/scenarios.md](../verification/scenarios.md).
-- Cover browse, search or filter, detail, favorite, and offline reopen with VoiceOver or TalkBack.
-- Check Tab / Shift+Tab and Space or Enter on a hardware keyboard for primary actions.
-- Record device, OS, and build type in the scenario evidence.
+- Cover the full main journey: browse, search or filter, detail, favorite, and offline reopen.
+- Prove all four assessment conditions: usable navigation, hardware keyboard, larger text, and VoiceOver or TalkBack.
+- Record device, OS, text size setting, and build type in the scenario evidence.
 
 ## Related
 

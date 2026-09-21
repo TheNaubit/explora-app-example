@@ -68,7 +68,7 @@ Do not forget these rules. Full text: [`docs/assessment/requirements.md`](./docs
 - Favorites and offline detail
 - Refresh (+1 on success; add nothing on failure)
 - Safe async across app lifecycle
-- Accessibility for every screen, component, and feature (via `react-native-a11y`; main journey must be verified)
+- Accessibility for every screen, component, and feature via `react-native-a11y`. Always support **usable navigation**, **keyboard behavior**, **larger text**, and **screen-reader access** on the main journey (verify with evidence)
 - **One** native capability (permission, cancel, and invalid input)
 - Performance evidence from a **release** build
 - **One** improvement with before/after evidence
@@ -91,8 +91,10 @@ Do not forget these rules. Full text: [`docs/assessment/requirements.md`](./docs
 6. Record AI usage honestly.
 7. Ask early if you cannot build or verify a platform or capability.
 8. Keep `docs/` current when behavior or decisions change.
-9. Make every screen, component, and feature accessibility-compliant with `react-native-a11y` in the same change. Do not defer a11y.
+9. Make every screen, component, and feature accessibility-compliant with `react-native-a11y` in the same change. Always support usable navigation, keyboard behavior, larger text, and screen-reader access on the main journey. Do not defer a11y.
 10. Make every screen, component, and feature i18n-compliant with Lingui in the same change. Do not defer translations.
+11. Ship loading, empty, not-found, and error UI for every data screen. Prefer skeletons over spinners when the success layout is known.
+12. Load Emil design/motion skills and the matching Expo skills before you build or change UI. Do not invent patterns from memory alone.
 
 ---
 
@@ -136,7 +138,7 @@ Follow Expo folder-structure best practices ([blog](https://expo.dev/blog/expo-a
 
 - Put app code under `src/`. Put routes only in `src/app/` (thin). Put UI in `src/screens/` and `src/components/`.
 - Use **kebab-case** file names. Export one primary name per component file. Use a folder with `index.tsx` when you split a component.
-- Add folders as needed: `schemas/`, `mocks/`, `data/`, `state/`, `types/`, `a11y/`, `i18n/`, `locales/`. Do not make them routes.
+- Add folders as needed: `schemas/`, `mocks/`, `data/`, `state/`, `types/`, `a11y/`, `i18n/`, `locales/`, and shared UI-state components under `src/components/`. Do not make them routes.
 - Do not add Expo Router `+api` or `server/` for this assessment. Keep mocks on the client.
 - Colocate unit tests (`*.test.ts`). Put Maestro flows in `.maestro/` at the repo root.
 - For platform splits, use `.ios` / `.android` / `.native` / `.web` plus a default file. Import without the suffix.
@@ -157,9 +159,11 @@ Follow Expo folder-structure best practices ([blog](https://expo.dev/blog/expo-a
 
 ### Accessibility
 
-Full behavior and feature map: [`docs/features/accessibility.md`](./docs/features/accessibility.md). Decision: [`docs/decisions/adr-005-react-native-a11y.md`](./docs/decisions/adr-005-react-native-a11y.md).
+Full behavior and feature map: [`docs/features/accessibility.md`](./docs/features/accessibility.md). Decision: [`docs/decisions/adr-005-react-native-a11y.md`](./docs/decisions/adr-005-react-native-a11y.md). Assessment text: [`docs/assessment/requirements.md`](./docs/assessment/requirements.md).
 
-**Mandatory scope:** Every screen, every UI component, and every feature must be accessibility-compliant. Build a11y in the same change as the UI. Do not ship screens or controls without labels, roles, focus behavior, and announcements where they apply. Do not leave a11y as a later pass.
+**Assessment bar (always):** Accessibility work must always support **usable navigation**, **keyboard behavior**, **larger text**, and **screen-reader access** on the **main journey** (browse → search/filter → detail → favorites → open again offline). Library compliance alone is not enough. The main journey must stay usable under those four conditions, and you must verify it with evidence.
+
+**Mandatory scope:** Every screen, every UI component, and every feature must be accessibility-compliant. Build a11y in the same change as the UI. Do not ship screens or controls without labels, roles, focus behavior, larger-text-safe layout, and announcements where they apply. Do not leave a11y as a later pass.
 
 **Library (required):** Always implement accessibility with [`react-native-a11y`](https://github.com/ArturKalach/react-native-a11y) (pinned) through `@/a11y` and project wrappers. Open that repo for API docs, examples, and release notes. Do not replace it with another a11y library. Do not invent a parallel focus or screen-reader stack. Keep React Native props (`accessibilityLabel`, `accessibilityRole`, and similar) for labels, roles, hints, and state.
 
@@ -167,18 +171,13 @@ Hard rules for every screen, component, and feature:
 
 1. Import accessibility APIs from `@/a11y` or `src/components/a11y-*` / `screen-frame`. Do not import `react-native-a11y` in screens.
 2. Do not add `react-native-a11y-order`, `react-native-external-keyboard`, or other mutually exclusive split packages.
-3. Wrap every screen body with `ScreenFrame` and a clear spoken `title`.
-4. Prefer `A11yPressable`, `A11yInput`, and `A11yCard` over raw `Pressable` / `TextInput` / plain cards.
-5. Give every interactive control `accessibilityLabel` and a matching `accessibilityRole`. Add `accessibilityHint` when needed.
-6. Use `A11y.Order` + `A11y.Index` when spoken order must differ from render order.
-7. Set `focusable={false}` on non-interactive `A11y.View` / `A11y.Index` wrappers so they do not steal hardware-keyboard Tab stops.
-8. Wrap modals and overlays with `A11yFocusTrap` while open. Use `A11yFocusFrame` when a frame fits better than a trap.
-9. Announce loading, empty, error, and success with `announceStatus` after the UI changes.
-10. Keep Dynamic Type on for journey text. Do not set `allowFontScaling={false}` there.
-11. For activity rows and favorites, use `buildActivityAccessibilityLabel` and `buildFavoriteToggleLabel`.
-12. Verify with a development or release build. This native module does not run in Expo Go alone.
-13. `A11y.ScreenChange` announces on mount. When a kept-alive screen returns, announce again (for example with a focus effect).
-14. Treat missing a11y on new or changed UI as incomplete work. Fix it before you call the feature done.
+3. **Usable navigation:** Wrap every screen body with `ScreenFrame` and a clear spoken `title`. Keep focus order and route structure clear for browse, search/filter, detail, favorites, and offline reopen. Prefer `A11yPressable`, `A11yInput`, and `A11yCard` over raw `Pressable` / `TextInput` / plain cards.
+4. **Screen-reader access:** Give every interactive control `accessibilityLabel` and a matching `accessibilityRole`. Add `accessibilityHint` when needed. Use `A11y.Order` + `A11y.Index` when spoken order must differ from render order. Announce loading, empty, error, and success with `announceStatus` after the UI changes. `A11y.ScreenChange` announces on mount; when a kept-alive screen returns, announce again.
+5. **Keyboard behavior:** Set `focusable={false}` on non-interactive `A11y.View` / `A11y.Index` wrappers so they do not steal hardware-keyboard Tab stops. Wrap modals and overlays with `A11yFocusTrap` while open (or `A11yFocusFrame` when a frame fits better). Primary actions must work with Tab / Shift+Tab and Space or Enter.
+6. **Larger text:** Keep Dynamic Type on for journey text. Do not set `allowFontScaling={false}` there. Layout must remain usable at large text sizes (no clipped primary actions or labels on the main journey).
+7. For activity rows and favorites, use `buildActivityAccessibilityLabel` and `buildFavoriteToggleLabel`.
+8. Verify with a development or release build (VoiceOver or TalkBack, hardware keyboard, and larger text on the main journey). This native module does not run in Expo Go alone.
+9. Treat missing a11y on new or changed UI as incomplete work. Fix it before you call the feature done.
 
 ### Internationalization (i18n)
 
@@ -203,6 +202,37 @@ Hard rules for every screen, component, and feature:
 9. Keep RTL support on. Prefer `start` / `end` layout. Set `textAlign: "left"` on text so it mirrors in RTL.
 10. Lint uses `eslint-plugin-lingui` **as an Oxlint JS plugin**. Do not install or run the ESLint CLI for this project.
 11. Treat missing i18n on new or changed UI as incomplete work.
+
+### Async UI states (loading / empty / not-found / error)
+
+Full behavior: [`docs/features/ui-states.md`](./docs/features/ui-states.md). Decision: [`docs/decisions/adr-007-async-ui-states-skeletons.md`](./docs/decisions/adr-007-async-ui-states-skeletons.md).
+
+**Mandatory scope:** Every screen that loads, lists, or looks up data must ship a designed UI for **loading**, **empty**, **not-found**, **error**, and **content**. Build these states in the same change as the screen. Do not leave blank views, silent failures, or spinner-only placeholders for later.
+
+**Skills (required when working on data screens):** `expo-data-fetching`, `expo-design-system` (four-state / Spinner Blink guidance). Use them. Do not skip them.
+
+Hard rules for every data screen and async component:
+
+1. Treat **loading**, **empty**, **not-found**, **error**, and **content** as separate states. Loading is not empty. Empty is resolved with zero items. Not-found is a missing entity (for example a bad activity id). Error is a failed load or action.
+2. Prefer a **skeleton** that matches the success layout for the first load when the shape is known. Do not use a centered `ActivityIndicator` or full-screen spinner as the default loading UI.
+3. Allow a small spinner only when the layout is unknown, the wait is very short, or a control is busy (for example a button submit). Prefer inline / control-level feedback there.
+4. Keep stale content on refetch. Show a non-blocking error and retry. Do not replace content with a spinner while refreshing.
+5. Design empty and not-found with clear copy and a next action (clear filters, go back, retry). Do not show an empty list while the first fetch is still running.
+6. Pair every state with a11y announcements (`announceStatus`) and i18n copy. Use `errorKey` + `resolveErrorMessage` for failures.
+7. Treat missing state UI on new or changed screens as incomplete work. Fix it before you call the feature done.
+
+### Design craft and Expo skills
+
+**Mandatory scope:** Every new or changed screen and interactive UI must meet the project design and motion bar. Follow Expo patterns for Expo / React Native work. Do not ship flat, unanimated UI when the journey needs feedback, or invent Expo APIs from training data.
+
+**Skills (required when building or polishing UI):**
+
+1. Read and follow `emil-design-eng` for polish, microinteractions, and interaction detail.
+2. Use `find-animation-opportunities`, then `animate-expo` (or `animate` when the motion is not Expo-specific). Use `animation-vocabulary` when you need named motion language. Use `improve-animations` / `review-animations` when polishing or reviewing motion.
+3. Use `apple-design` for iOS-facing HIG alignment when the screen or control is platform-sensitive.
+4. Use the matching **Expo** skill for the task. Examples: `expo-project-structure`, `expo-design-system`, `expo-native-ui`, `expo-data-fetching`, `expo-dev-client`, router / modules skills as needed. Also use `react-native-best-practices` when it applies.
+5. For Expo, EAS, or React Native APIs, still open the SDK docs for this app’s major version (see **Expo has changed** above). Skills do not replace versioned docs.
+6. Treat skipped design/Expo skills on UI work as incomplete process. Load them before you invent patterns.
 
 ## Building with EAS
 
@@ -237,13 +267,15 @@ You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`
 - **Icons:** `expo-symbols` · **Native UI:** `expo-ui` universal + drop-ins
 - **Fetching:** TanStack Query + mocks · **Online:** `expo-network` · optional Legend State React Query plugin
 - **Validation:** Zod in `src/schemas/` + `parseWithSchema` / `safeParseWithSchema`
-- **Accessibility:** [`react-native-a11y`](https://github.com/ArturKalach/react-native-a11y) via `@/a11y` (pinned). Always use this library. Every screen, component, and feature must be a11y-compliant in the same change. See Accessibility section above.
+- **Accessibility:** [`react-native-a11y`](https://github.com/ArturKalach/react-native-a11y) via `@/a11y` (pinned). Always use this library. Always support usable navigation, keyboard behavior, larger text, and screen-reader access on the main journey. Every screen, component, and feature must be a11y-compliant in the same change. See Accessibility section above.
 - **i18n:** [Lingui](https://lingui.dev/introduction) + [expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/) via `@/i18n`. Every user-facing string and permission string must use this system. Numbers and dates use device `Intl` formatting. See Internationalization section above.
 - **JSDoc:** selective. Document intent on shared exports only. Do not repeat TypeScript types. Do not enable a strict JSDoc lint plugin. Write JSDoc in Simplified Technical English.
 - **Glass / blur / images:** `expo-glass-effect`, `expo-blur`, `expo-image`, `expo-asset`
 - **Fake data:** installed Faker library
 - **Package manager:** npm only
 - **Tests:** TDD with Jest; E2E with Maestro
-- **Design motion:** project Emil skills + `apple-design` (HIG) for iOS-facing work; Expo skills + `react-native-best-practices` when useful
+- **Design motion:** mandatory Emil skills (`emil-design-eng`, `animate-expo` / related) + `apple-design` when iOS-facing. See **Design craft and Expo skills** above.
+- **Expo development:** mandatory matching Expo skills + versioned Expo docs + `react-native-best-practices` when it applies. See **Design craft and Expo skills** above.
+- **Async UI states:** loading / empty / not-found / error / content on every data screen; skeletons over spinners when the success layout is known. See **Async UI states** above.
 
 Upstream docs: [Legend State](https://legendapp.com/open-source/state/v3/intro/introduction/), [MMKV persist](https://legendapp.com/open-source/state/v3/sync/persist-sync/#mmkv-rn), [Legend List](https://legendapp.com/open-source/list/v3/react-native/getting-started/), [TanStack Query RN](https://tanstack.com/query/latest/docs/framework/react/react-native), [Zod](https://zod.dev/), [Expo Symbols](https://docs.expo.dev/versions/latest/sdk/symbols/), [Expo UI](https://docs.expo.dev/versions/latest/sdk/ui/universal/), [react-native-a11y](https://github.com/ArturKalach/react-native-a11y), [Lingui](https://lingui.dev/introduction), [Expo Localization](https://docs.expo.dev/versions/latest/sdk/localization/).

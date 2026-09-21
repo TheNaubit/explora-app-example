@@ -7,6 +7,7 @@ Index of product capabilities. Each feature page describes **current behavior**,
 | Discovery (browse / search / filter) | Partial | [discovery.md](./discovery.md)                       |
 | Accessibility                        | Partial | [accessibility.md](./accessibility.md)               |
 | Internationalization (i18n)          | Partial | [internationalization.md](./internationalization.md) |
+| Async UI states (skeleton / empty)   | Partial | [ui-states.md](./ui-states.md)                       |
 | Activity detail                      | Planned | _(add when implemented)_                             |
 | Favorites + offline                  | Planned | _(add when implemented)_                             |
 | Refresh + recovery                   | Planned | _(add when implemented)_                             |

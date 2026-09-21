@@ -26,6 +26,7 @@ Independent review of the published tarball found no install-time malware signal
 
 - Agents follow one API surface for screen-reader order, announcements, cards, and keyboard focus.
 - Every screen, component, and feature must ship accessibility-compliant in the same change. Missing a11y means the work is not done.
+- Compliance always means the assessment bar: usable navigation, keyboard behavior, larger text, and screen-reader access on the main journey. Library usage without that bar is incomplete.
 - Native folders must come from prebuild or `expo run:*` before device verification.
 - Version bumps need a short re-check of install scripts, dependencies, and gitHead vs tag.
 - Pure RN solutions remain valid for labels and font scaling. The library fills focus and keyboard gaps.
