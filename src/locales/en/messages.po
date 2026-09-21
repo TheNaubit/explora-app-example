@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-09-21 23:29+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. Home meta line: how many supplied catalog activities are loaded
+#. js-lingui-explicit-id
+#: src/screens/home/index.tsx
+msgid "home.catalogSummary"
+msgstr "{count, plural, one {Catalog ready: # supplied activity} other {Catalog ready: # supplied activities}}"
+
+#. Spoken summary for an activity list row: title, category, duration, location
+#. js-lingui-explicit-id
+#: src/a11y/activity-label.ts
+msgid "a11y.activity.row"
+msgstr "{title}. {category}. {duration}. {location}."
+
+#: src/utils/format-duration.ts
+msgid "{value, plural, one {# hr} other {# hr}}"
+msgstr "{value, plural, one {# hr} other {# hr}}"
+
+#: src/utils/format-duration.ts
+msgid "{value, plural, one {# min} other {# min}}"
+msgstr "{value, plural, one {# min} other {# min}}"
+
+#. Home supporting line under the product name
+#. js-lingui-explicit-id
+#: src/screens/home/index.tsx
+msgid "home.subtitle"
+msgstr "Discover activities and save favorites for later."
+
+#. Product name shown as the home screen heading
+#. js-lingui-explicit-id
+#: src/screens/home/index.tsx
+msgid "home.brand"
+msgstr "Explora"
+
+#. Spoken screen title for the home / discovery entry screen
+#. js-lingui-explicit-id
+#: src/screens/home/index.tsx
+msgid "home.screenTitle"
+msgstr "Explora home"
+
+#. Shown when refresh fails and no new activity is added
+#. js-lingui-explicit-id
+#: src/i18n/error-keys.ts
+msgid "errors.refreshFailed"
+msgstr "Refresh failed. No new activity was added."
+
+#. Spoken label for the favorite toggle when the activity is already a favorite
+#. js-lingui-explicit-id
+#: src/a11y/activity-label.ts
+msgid "a11y.favorite.remove"
+msgstr "Remove {title} from favorites"
+
+#. Spoken label for the favorite toggle when the activity is not a favorite
+#. js-lingui-explicit-id
+#: src/a11y/activity-label.ts
+msgid "a11y.favorite.save"
+msgstr "Save {title} to favorites"
+
+#. Spoken label for the discovery search text field
+#. js-lingui-explicit-id
+#: src/a11y/activity-label.ts
+msgid "a11y.search.field"
+msgstr "Search activities by title"
+
+#. Fallback when an error key is missing or unrecognized
+#. js-lingui-explicit-id
+#: src/i18n/error-keys.ts
+msgid "errors.unknown"
+msgstr "Something went wrong. Try again."
+
+#. Shown when a Zod-validated payload is invalid
+#. js-lingui-explicit-id
+#: src/i18n/error-keys.ts
+msgid "errors.validationFailed"
+msgstr "The data from the server was invalid."
+
+#. Shown when a mocked or network request times out
+#. js-lingui-explicit-id
+#: src/i18n/error-keys.ts
+msgid "errors.networkTimeout"
+msgstr "The request took too long. Try again."
+
+#. Shown when the device has no network for a fetch that needs it
+#. js-lingui-explicit-id
+#: src/i18n/error-keys.ts
+msgid "errors.networkOffline"
+msgstr "You are offline. Check your connection and try again."

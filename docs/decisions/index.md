@@ -9,6 +9,7 @@ Architecture Decision Records (ADRs) for lasting choices. Each page is short: co
 | ADR-003 | [Simplified Technical English](./adr-003-simplified-technical-english.md)            | Accepted |
 | ADR-004 | [Pre-commit lint, format, and TypeScript check](./adr-004-pre-commit-lint-staged.md) | Accepted |
 | ADR-005 | [react-native-a11y for accessibility](./adr-005-react-native-a11y.md)                | Accepted |
+| ADR-006 | [Lingui + expo-localization for i18n](./adr-006-lingui-i18n.md)                      | Accepted |
 
 ## Template
 

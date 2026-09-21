@@ -36,6 +36,9 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# Lingui: Metro compiles .po on import. Do not ignore the .po sources.
+# If you add `lingui compile` artifacts later, ignore only messages.js / messages.ts.
+
 example
 
 # generated native folders

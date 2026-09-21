@@ -1,0 +1,9 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "Explora",
+    "NSLocationWhenInUseUsageDescription": "Explora uses your location to show nearby activities when you allow it."
+  },
+  "android": {
+    "app_name": "Explora"
+  }
+}

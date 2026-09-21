@@ -3,7 +3,7 @@ import { ConfigContext, ExpoConfig } from "expo/config";
 /** Expo app config. `userInterfaceStyle: "automatic"` follows system light and dark appearance. */
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "explora-agile-monkeys",
+  name: "Explora",
   slug: "explora-agile-monkeys",
   version: "1.0.0",
   orientation: "portrait",
@@ -13,6 +13,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   platforms: ["ios", "android"],
   ios: {
     icon: "./assets/expo.icon",
+    infoPlist: {
+      CFBundleAllowMixedLocalizations: true,
+    },
   },
   android: {
     adaptiveIcon: {
@@ -23,9 +26,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     predictiveBackGestureEnabled: false,
   },
-  web: {
-    output: "static",
-    favicon: "./assets/images/favicon.png",
+  locales: {
+    en: "./src/locales/native/en.json",
   },
   plugins: [
     "expo-router",
@@ -41,6 +43,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-image",
     "expo-sharing",
     "@rnrepo/expo-config-plugin",
+    [
+      "expo-localization",
+      {
+        supportedLocales: {
+          ios: ["en"],
+          android: ["en"],
+        },
+        supportsRTL: true,
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,

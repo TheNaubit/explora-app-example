@@ -15,6 +15,8 @@ Based on [Expo folder-structure best practices](https://expo.dev/blog/expo-app-f
 │   ├── screens/             # screen bodies (+ screen-local components)
 │   ├── components/          # shared UI (incl. a11y-* wrappers, screen-frame)
 │   ├── a11y/                # canonical react-native-a11y re-exports + helpers
+│   ├── i18n/                # Lingui activate, format, error keys, bootstrap
+│   ├── locales/             # message catalogs (.po) + native metadata JSON
 │   ├── hooks/
 │   ├── utils/
 │   ├── schemas/             # Zod
