@@ -1,7 +1,17 @@
 {
   "name": "explora-agile-monkeys",
-  "main": "expo-router/entry",
   "version": "1.0.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "reset-project": "node ./scripts/reset-project.js",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "format": "oxfmt",
+    "lint": "oxlint",
+    "fix": "oxlint . --fix && oxfmt ."
+  },
   "dependencies": {
     "@expo/ui": "~57.0.19",
     "@legendapp/list": "^3.4.0",
@@ -47,15 +57,5 @@
     "oxlint-plugin-react-native": "^0.2.35",
     "oxlint-tsgolint": "^7.0.2002",
     "typescript": "~6.0.3"
-  },
-  "scripts": {
-    "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "format": "oxfmt",
-    "lint": "oxlint",
-    "fix": "oxlint . --fix && oxfmt ."
-  },
-  "private": true
+  }
 }
