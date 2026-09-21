@@ -4,9 +4,10 @@ Index of AI-assisted work for the Explora assessment submission.
 
 Each linked file is either a conversation export or an **AI-generated session summary** (not a verbatim transcript). Read the title of each file.
 
-| #   | Date (approx.) | Topic                                                      | File                                                                                             | Tool / model (if known)                                                       |
-| --- | -------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
-| 1   | 2026-09-21     | Project foundation: requirements, structure, wiki, tooling | [ai-sessions/session-001-project-foundation.md](./ai-sessions/session-001-project-foundation.md) | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
+| #   | Date (approx.) | Topic                                                        | File                                                                                                         | Tool / model (if known)                                                       |
+| --- | -------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| 1   | 2026-09-21     | Project foundation: requirements, structure, wiki, tooling   | [ai-sessions/session-001-project-foundation.md](./ai-sessions/session-001-project-foundation.md)             | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
+| 2   | 2026-09-21     | Accessibility: library review, install, rules, style cleanup | [ai-sessions/session-002-accessibility-foundation.md](./ai-sessions/session-002-accessibility-foundation.md) | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
 
 ## How to add a later session
 

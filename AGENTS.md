@@ -134,15 +134,44 @@ Follow Expo folder-structure best practices ([blog](https://expo.dev/blog/expo-a
 
 - Put app code under `src/`. Put routes only in `src/app/` (thin). Put UI in `src/screens/` and `src/components/`.
 - Use **kebab-case** file names. Export one primary name per component file. Use a folder with `index.tsx` when you split a component.
-- Add folders as needed: `schemas/`, `mocks/`, `data/`, `state/`, `types/`. Do not make them routes.
+- Add folders as needed: `schemas/`, `mocks/`, `data/`, `state/`, `types/`, `a11y/`. Do not make them routes.
 - Do not add Expo Router `+api` or `server/` for this assessment. Keep mocks on the client.
 - Colocate unit tests (`*.test.ts`). Put Maestro flows in `.maestro/` at the repo root.
 - For platform splits, use `.ios` / `.android` / `.native` / `.web` plus a default file. Import without the suffix.
+
+### TypeScript function and props style
+
+1. Use `function` / `export function` / `export default function` for components, hooks, and named utilities.
+2. Do not write `const Foo = () => …` or `const Foo = function () …` for those.
+3. Use `const` for values, config objects, StyleSheet results, and maps.
+4. Destructure props in the parameter list: `function Button({ title, onPress }: Props)`.
+5. For pass-through wrappers, destructure fields you override and put the rest in `...rest`. Do not take a single undeconstructed `props` argument.
+6. Prefer the current `react-native-a11y` APIs. Do not use deprecated props such as `focusStyle` or `containerFocusStyle`. Use `style={(state) => …}` / `mergeFocusedStyle` instead.
 
 ### Styling
 
 - Support **light and dark** mode (system appearance; `userInterfaceStyle: "automatic"`). Put both palettes in `src/theme.ts` (or equal). Do not ship one-mode UI.
 - Use React Native **`StyleSheet` only** (inline styles only when values are dynamic). Put `StyleSheet.create` at the **bottom of the same file**. Do not use `*.styles.ts`. Do not use Uniwind, NativeWind, Unistyles, or Tamagui.
+
+### Accessibility
+
+Full behavior and feature map: [`docs/features/accessibility.md`](./docs/features/accessibility.md). Decision: [`docs/decisions/adr-005-react-native-a11y.md`](./docs/decisions/adr-005-react-native-a11y.md).
+
+Hard rules for every new UI:
+
+1. Import accessibility APIs from `@/a11y` or `src/components/a11y-*` / `screen-frame`. Do not import `react-native-a11y` in screens.
+2. Do not add `react-native-a11y-order`, `react-native-external-keyboard`, or other mutually exclusive split packages.
+3. Wrap every screen body with `ScreenFrame` and a clear spoken `title`.
+4. Prefer `A11yPressable`, `A11yInput`, and `A11yCard` over raw `Pressable` / `TextInput` / plain cards.
+5. Give every interactive control `accessibilityLabel` and a matching `accessibilityRole`. Add `accessibilityHint` when needed.
+6. Use `A11y.Order` + `A11y.Index` when spoken order must differ from render order.
+7. Set `focusable={false}` on non-interactive `A11y.View` / `A11y.Index` wrappers so they do not steal hardware-keyboard Tab stops.
+8. Wrap modals and overlays with `A11yFocusTrap` while open. Use `A11yFocusFrame` when a frame fits better than a trap.
+9. Announce loading, empty, error, and success with `announceStatus` after the UI changes.
+10. Keep Dynamic Type on for journey text. Do not set `allowFontScaling={false}` there.
+11. For activity rows and favorites, use `buildActivityAccessibilityLabel` and `buildFavoriteToggleLabel`.
+12. Verify with a development or release build. This native module does not run in Expo Go alone.
+13. `A11y.ScreenChange` announces on mount. When a kept-alive screen returns, announce again (for example with a focus effect).
 
 ## Building with EAS
 
@@ -176,6 +205,7 @@ You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`
 - **Icons:** `expo-symbols` · **Native UI:** `expo-ui` universal + drop-ins
 - **Fetching:** TanStack Query + mocks · **Online:** `expo-network` · optional Legend State React Query plugin
 - **Validation:** Zod in `src/schemas/` + `parseWithSchema` / `safeParseWithSchema`
+- **Accessibility:** `react-native-a11y` via `@/a11y` (pinned). See Accessibility section above.
 - **JSDoc:** selective. Document intent on shared exports only. Do not repeat TypeScript types. Do not enable a strict JSDoc lint plugin. Write JSDoc in Simplified Technical English.
 - **Glass / blur / images:** `expo-glass-effect`, `expo-blur`, `expo-image`, `expo-asset`
 - **Fake data:** installed Faker library

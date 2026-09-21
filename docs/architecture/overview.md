@@ -18,7 +18,8 @@ This page describes how Explora is structured. Update it when layering, data flo
 ## UI and platform
 
 - StyleSheet only. Support light and dark mode.
-- Lists: Legend List. Keyboard: `react-native-keyboard-controller`
+- Lists: Legend List. Soft keyboard: `react-native-keyboard-controller`
+- Accessibility: `react-native-a11y` via `@/a11y` and `ScreenFrame` / `a11y-*` wrappers. See [accessibility](../features/accessibility.md).
 - Native UI: `expo-ui` and `expo-symbols` when needed
 
 ## Related pages

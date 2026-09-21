@@ -13,7 +13,8 @@ Based on [Expo folder-structure best practices](https://expo.dev/blog/expo-app-f
 ├── src/
 │   ├── app/                 # Expo Router routes only (thin)
 │   ├── screens/             # screen bodies (+ screen-local components)
-│   ├── components/          # shared UI
+│   ├── components/          # shared UI (incl. a11y-* wrappers, screen-frame)
+│   ├── a11y/                # canonical react-native-a11y re-exports + helpers
 │   ├── hooks/
 │   ├── utils/
 │   ├── schemas/             # Zod
@@ -36,5 +37,7 @@ Do not add Expo Router `+api` or `server/` for this assessment. Keep mocks on th
 - Screen-only UI under that screen folder. Shared UI in `components/`
 - Colocate unit tests next to the file. Put Maestro under `.maestro/` at repo root.
 - Platform splits: `.ios` / `.android` / `.native` / `.web` with a default file
+- Components and utilities: `export function` (not `const … = () =>`)
+- Destructure props in the parameter list; use `...rest` for pass-through
 
 Full rules: `AGENTS.md` → Project structure.
