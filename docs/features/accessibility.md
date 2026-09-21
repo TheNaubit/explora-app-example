@@ -14,7 +14,10 @@ Explora must stay usable with VoiceOver, TalkBack, Dynamic Type, and a hardware 
 
 ## Stack
 
-- Package: `react-native-a11y` (pinned). Native module. Needs a development or release build. It does not run in Expo Go.
+- Package: [`react-native-a11y`](https://github.com/ArturKalach/react-native-a11y) (pinned). Source and docs: that GitHub repo.
+- Always use this library for accessibility work in Explora. Do not add a different a11y library or a parallel focus stack.
+- Every screen, every UI component, and every feature must be accessibility-compliant with this stack. Build a11y in the same change as the UI. Do not defer it.
+- Native module. Needs a development or release build. It does not run in Expo Go.
 - Import only from `@/a11y` or project wrappers under `src/components/a11y-*` and `src/components/screen-frame`.
 - Do not install `react-native-a11y-order`, `react-native-external-keyboard`, or other mutually exclusive split packages.
 
@@ -34,7 +37,7 @@ Explora must stay usable with VoiceOver, TalkBack, Dynamic Type, and a hardware 
 | `src/components/a11y-focus-frame/` | Focus frame when a trap is not the right tool |
 | `src/app/_layout.tsx`              | Wraps the tree with `A11yProvider`            |
 
-## Rules for new UI
+## Rules for every screen, component, and feature
 
 1. Wrap every screen body with `ScreenFrame` and a clear `title`.
 2. Give every interactive control an `accessibilityLabel`. Add `accessibilityHint` when the result is not obvious.
@@ -48,6 +51,7 @@ Explora must stay usable with VoiceOver, TalkBack, Dynamic Type, and a hardware 
 10. Keep minimum touch targets about 44×44 pt on iOS and 48×48 dp on Android.
 11. For activity rows, use `buildActivityAccessibilityLabel`. For favorite toggles, use `buildFavoriteToggleLabel` and `accessibilityState={{ selected }}`.
 12. `A11y.ScreenChange` announces on mount. When a kept-alive stack screen returns, announce again.
+13. Treat missing a11y on new or changed UI as incomplete work. Fix it before you call the feature done.
 
 ## Feature map (library)
 
@@ -80,6 +84,7 @@ Explora must stay usable with VoiceOver, TalkBack, Dynamic Type, and a hardware 
 
 ## Related
 
+- Library source and docs: [ArturKalach/react-native-a11y](https://github.com/ArturKalach/react-native-a11y)
 - ADR: [ADR-005 react-native-a11y](../decisions/adr-005-react-native-a11y.md)
 - Assessment: [requirements.md](../assessment/requirements.md)
 - Agent rules: root `AGENTS.md`

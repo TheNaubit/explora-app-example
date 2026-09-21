@@ -68,7 +68,7 @@ Do not forget these rules. Full text: [`docs/assessment/requirements.md`](./docs
 - Favorites and offline detail
 - Refresh (+1 on success; add nothing on failure)
 - Safe async across app lifecycle
-- Accessibility for the main journey
+- Accessibility for every screen, component, and feature (via `react-native-a11y`; main journey must be verified)
 - **One** native capability (permission, cancel, and invalid input)
 - Performance evidence from a **release** build
 - **One** improvement with before/after evidence
@@ -91,6 +91,7 @@ Do not forget these rules. Full text: [`docs/assessment/requirements.md`](./docs
 6. Record AI usage honestly.
 7. Ask early if you cannot build or verify a platform or capability.
 8. Keep `docs/` current when behavior or decisions change.
+9. Make every screen, component, and feature accessibility-compliant with `react-native-a11y` in the same change. Do not defer a11y.
 
 ---
 
@@ -157,7 +158,11 @@ Follow Expo folder-structure best practices ([blog](https://expo.dev/blog/expo-a
 
 Full behavior and feature map: [`docs/features/accessibility.md`](./docs/features/accessibility.md). Decision: [`docs/decisions/adr-005-react-native-a11y.md`](./docs/decisions/adr-005-react-native-a11y.md).
 
-Hard rules for every new UI:
+**Mandatory scope:** Every screen, every UI component, and every feature must be accessibility-compliant. Build a11y in the same change as the UI. Do not ship screens or controls without labels, roles, focus behavior, and announcements where they apply. Do not leave a11y as a later pass.
+
+**Library (required):** Always implement accessibility with [`react-native-a11y`](https://github.com/ArturKalach/react-native-a11y) (pinned) through `@/a11y` and project wrappers. Open that repo for API docs, examples, and release notes. Do not replace it with another a11y library. Do not invent a parallel focus or screen-reader stack. Keep React Native props (`accessibilityLabel`, `accessibilityRole`, and similar) for labels, roles, hints, and state.
+
+Hard rules for every screen, component, and feature:
 
 1. Import accessibility APIs from `@/a11y` or `src/components/a11y-*` / `screen-frame`. Do not import `react-native-a11y` in screens.
 2. Do not add `react-native-a11y-order`, `react-native-external-keyboard`, or other mutually exclusive split packages.
@@ -172,6 +177,7 @@ Hard rules for every new UI:
 11. For activity rows and favorites, use `buildActivityAccessibilityLabel` and `buildFavoriteToggleLabel`.
 12. Verify with a development or release build. This native module does not run in Expo Go alone.
 13. `A11y.ScreenChange` announces on mount. When a kept-alive screen returns, announce again (for example with a focus effect).
+14. Treat missing a11y on new or changed UI as incomplete work. Fix it before you call the feature done.
 
 ## Building with EAS
 
@@ -205,7 +211,7 @@ You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`
 - **Icons:** `expo-symbols` · **Native UI:** `expo-ui` universal + drop-ins
 - **Fetching:** TanStack Query + mocks · **Online:** `expo-network` · optional Legend State React Query plugin
 - **Validation:** Zod in `src/schemas/` + `parseWithSchema` / `safeParseWithSchema`
-- **Accessibility:** `react-native-a11y` via `@/a11y` (pinned). See Accessibility section above.
+- **Accessibility:** [`react-native-a11y`](https://github.com/ArturKalach/react-native-a11y) via `@/a11y` (pinned). Always use this library. Every screen, component, and feature must be a11y-compliant in the same change. See Accessibility section above.
 - **JSDoc:** selective. Document intent on shared exports only. Do not repeat TypeScript types. Do not enable a strict JSDoc lint plugin. Write JSDoc in Simplified Technical English.
 - **Glass / blur / images:** `expo-glass-effect`, `expo-blur`, `expo-image`, `expo-asset`
 - **Fake data:** installed Faker library
@@ -213,4 +219,4 @@ You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`
 - **Tests:** TDD with Jest; E2E with Maestro
 - **Design motion:** project Emil skills + `apple-design` (HIG) for iOS-facing work; Expo skills + `react-native-best-practices` when useful
 
-Upstream docs: [Legend State](https://legendapp.com/open-source/state/v3/intro/introduction/), [MMKV persist](https://legendapp.com/open-source/state/v3/sync/persist-sync/#mmkv-rn), [Legend List](https://legendapp.com/open-source/list/v3/react-native/getting-started/), [TanStack Query RN](https://tanstack.com/query/latest/docs/framework/react/react-native), [Zod](https://zod.dev/), [Expo Symbols](https://docs.expo.dev/versions/latest/sdk/symbols/), [Expo UI](https://docs.expo.dev/versions/latest/sdk/ui/universal/).
+Upstream docs: [Legend State](https://legendapp.com/open-source/state/v3/intro/introduction/), [MMKV persist](https://legendapp.com/open-source/state/v3/sync/persist-sync/#mmkv-rn), [Legend List](https://legendapp.com/open-source/list/v3/react-native/getting-started/), [TanStack Query RN](https://tanstack.com/query/latest/docs/framework/react/react-native), [Zod](https://zod.dev/), [Expo Symbols](https://docs.expo.dev/versions/latest/sdk/symbols/), [Expo UI](https://docs.expo.dev/versions/latest/sdk/ui/universal/), [react-native-a11y](https://github.com/ArturKalach/react-native-a11y).
