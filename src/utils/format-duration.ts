@@ -1,4 +1,7 @@
-/** Formats activity duration for list and detail UI. */
+/**
+ * Formats duration for list/detail copy (`45 min`, `1 hr`, `1 hr 30 min`).
+ * Input is whole minutes from the activity schema.
+ */
 export function formatDuration(minutes: number): string {
   if (minutes < 60) {
     return `${minutes} min`;

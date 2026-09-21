@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+/**
+ * Zod schemas for the supplied activities catalog and generated items.
+ * Domain TypeScript types are inferred below — do not maintain a parallel type hand-write.
+ */
+
 export const activityCategorySchema = z.enum(["Outdoors", "Culture", "Workshops", "Leisure"]);
 
 export const activitySchema = z.object({
@@ -11,6 +16,7 @@ export const activitySchema = z.object({
   durationMinutes: z.number().int().positive(),
 });
 
+/** Supplied `activities.json` shape (`schemaVersion` + activities array). */
 export const activitiesDatasetSchema = z.object({
   schemaVersion: z.number().int().positive(),
   activities: z.array(activitySchema).min(1),
