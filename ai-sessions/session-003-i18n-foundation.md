@@ -16,7 +16,9 @@
 5. Mock API errors return stable string keys, not localized display messages; document that pattern.
 6. Clarification: do not use the ESLint CLI; Oxlint only — check whether `eslint-plugin-lingui` can run as an Oxlint JS plugin.
 7. Prefer not to hardcode the product name in UI; later: keep `Explora` hardcoded in `app.config` and simplify (drop overengineered product-name helpers / sync).
-8. End of session: update the AI session docs.
+8. Confirm Lingui Babel macros run before React Compiler (Lingui install warning with React Compiler).
+9. Check setup against https://lingui.dev/tutorials/react-native for gaps.
+10. End of session: update the AI session docs.
 
 ## 3. Assistant proposals and work performed
 
@@ -41,11 +43,23 @@
 - Installed `eslint-plugin-lingui` only (no ESLint CLI).
 - Enabled recommended Lingui rules plus `lingui/no-unlocalized-strings` in `oxlint.config.mjs`.
 
-### Product name simplification (end of session)
+### Product name simplification
 
 - Tried a shared product-name source (`product.json`, config sync, `getProductDisplayName`). User asked to stop overengineering.
 - Final approach: hardcoded `name: "Explora"` in `app.config.ts`; stack title hardcoded in `_layout`; Home brand / screen title via Lingui messages.
 - Removed `src/constants/product-display-name.ts`, `product.json`, and related docs / rules.
+
+### React Compiler + Lingui Babel order
+
+- Confirmed Expo injects React Compiler inside `babel-preset-expo` when `experiments.reactCompiler` is true.
+- Babel runs root `plugins` before presets, so `@lingui/babel-plugin-lingui-macro` in `babel.config.js` already expands macros before the compiler.
+- Documented that requirement in `babel.config.js` comments and `docs/features/internationalization.md`.
+
+### React Native tutorial check
+
+- Compared setup to https://lingui.dev/tutorials/react-native.
+- Covered: Babel macros, core/react packages, metro transformer, Intl polyfills (`/polyfill-force`), `I18nProvider` + `defaultComponent={Text}`, device locale via expo-localization, no in-app locale switcher.
+- Added docs for Metro cache clear (`npx expo start -c`) and for importing pluralrules locale data when adding languages.
 
 ### Verification (end state)
 

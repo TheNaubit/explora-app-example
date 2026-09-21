@@ -25,6 +25,11 @@ Agents must not wait for the commit hook alone. After a change batch, run:
 
 `--format=agent` gives structured output so the agent can fix issues without a human.
 
+## Lingui / Metro
+
+- After you change `babel.config.js`, `metro.config.js`, or Lingui packages, clear the Metro cache: `npx expo start -c`.
+- Catalog extract: `npm run lingui:extract`.
+
 ## Data
 
 - Supplied catalog: `assets/activities.json` (validated on load)

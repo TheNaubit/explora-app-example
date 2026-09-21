@@ -18,7 +18,10 @@ Explora keeps all user-facing copy in Lingui catalogs. Device locale drives cata
 - Device locale and RTL: [expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/).
 - Numbers and dates: `Intl` helpers in `@/i18n/format` using the device language tag.
 - Catalogs: `src/locales/{locale}/messages.po`. Metro compiles `.po` with `@lingui/metro-transformer`.
+- Babel: `@lingui/babel-plugin-lingui-macro` stays in root `plugins` in `babel.config.js`. Babel runs those plugins before `babel-preset-expo`, so macros expand before React Compiler (`experiments.reactCompiler`).
+- Intl polyfills: `@formatjs/intl-locale` and `@formatjs/intl-pluralrules` via `/polyfill-force` (see [Lingui RN tutorial](https://lingui.dev/tutorials/react-native)). English plural locale data is loaded today. When you add a catalog locale, import that locale’s pluralrules data in `src/i18n/polyfills.ts`.
 - Lint: `eslint-plugin-lingui` as an **Oxlint** JS plugin (not the ESLint CLI).
+- After Lingui or Metro config changes, clear the Metro cache once: `npx expo start -c`.
 
 ## Project entry points
 
