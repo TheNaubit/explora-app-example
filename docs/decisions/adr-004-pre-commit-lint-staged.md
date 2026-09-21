@@ -15,11 +15,12 @@ Use Husky plus lint-staged on pre-commit.
 - Staged JSON/Markdown: `oxfmt`
 - When any `.ts` / `.tsx` file is staged: run `npx tsc --noEmit` once for the project
 
-Agents rely on this gate instead of a full-tree fix after every change.
+Agents also run oxlint with `--format=agent` (then format and `tsc`) after a change batch. The commit hook is a backup. It is not the only check during agent work.
 
 ## Consequences
 
-- Commits stay clean without full-tree lint cost on each edit.
+- Commits stay clean without full-tree lint cost on each tiny edit.
 - Type errors block the commit when TypeScript files are staged.
-- Unstaged or uncommitted work can still be dirty until commit or a manual check.
+- Agents get actionable lint output during the coding loop.
+- Unstaged or uncommitted work can still be dirty until those checks or a commit.
 - `tsc` checks the whole project, so one bad unstaged TS file can still fail the hook.

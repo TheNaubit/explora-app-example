@@ -15,6 +15,16 @@ See `AGENTS.md` (npm and Expo commands). Prefer `npm run lint` and `npm run fix`
 - Staged JSON/Markdown: `oxfmt`.
 - The commit stops if lint warnings, lint errors, or TypeScript errors remain.
 
+### Agent checks (during development)
+
+Agents must not wait for the commit hook alone. After a change batch, run:
+
+1. `npx oxlint --fix --deny-warnings --format=agent`
+2. `npx oxfmt` (or `npm run fix`)
+3. `npx tsc --noEmit`
+
+`--format=agent` gives structured output so the agent can fix issues without a human.
+
 ## Data
 
 - Supplied catalog: `assets/activities.json` (validated on load)
