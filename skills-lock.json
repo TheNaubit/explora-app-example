@@ -73,6 +73,12 @@
       "skillPath": "skills/emil-design-eng/SKILL.md",
       "computedHash": "51f2537e04d15911b41d78e2de24c36a0e26d41beae15e82a954fe5496a5eda9"
     },
+    "enhanced-message-context": {
+      "source": "lingui/skills",
+      "sourceType": "github",
+      "skillPath": "skills/enhanced-message-context/SKILL.md",
+      "computedHash": "de808be0383d355a128534dc8f80676461317df447b46c6cf93005a71b6abc37"
+    },
     "expo-animation": {
       "source": "expo/skills",
       "sourceType": "github",
@@ -193,11 +199,35 @@
       "skillPath": "skills/find-animation-opportunities/SKILL.md",
       "computedHash": "465d087c41768e4f14ed640dd049036009f613feb55baaa5831b68b33178f9d2"
     },
+    "find-unwrapped-strings": {
+      "source": "lingui/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-unwrapped-strings/SKILL.md",
+      "computedHash": "b22e320a8edc46a3d1f1f3e95f1fb1d6aac97918384a7bff95dc2b37775ffe06"
+    },
     "improve-animations": {
       "source": "emilkowalski/skill",
       "sourceType": "github",
       "skillPath": "skills/improve-animations/SKILL.md",
       "computedHash": "524ea241e41d58bbdd8e288700fe24f5725e2a2f3ae7186ad7cebf9055058356"
+    },
+    "lingui-best-practices": {
+      "source": "lingui/skills",
+      "sourceType": "github",
+      "skillPath": "skills/lingui-best-practices/SKILL.md",
+      "computedHash": "c68883e005dfe6ca5a8620c62b456319717689a327043e9e68112b6b3728421f"
+    },
+    "lingui-framework-setup": {
+      "source": "lingui/skills",
+      "sourceType": "github",
+      "skillPath": "skills/lingui-framework-setup/SKILL.md",
+      "computedHash": "6786f2dd8708fa286eadda73df52a2a824352d321d6f1dde21266882a8224cfe"
+    },
+    "migrate-i18next-to-lingui": {
+      "source": "lingui/skills",
+      "sourceType": "github",
+      "skillPath": "skills/migrate-i18next-to-lingui/SKILL.md",
+      "computedHash": "aadf9a1cb3fcc89a5b56a5c0eb4c3b1e3ee2065f528c6ad6ab2281cb990b4e3c"
     },
     "mobile-native": {
       "source": "emilkowalski/skill",
@@ -228,6 +258,12 @@
       "sourceType": "github",
       "skillPath": "skills/rnrepo/SKILL.md",
       "computedHash": "9175c0003e5a4d4c8c6e99d4f8e25c28666dcb716fa8a0e3e83662e378ed3ed7"
+    },
+    "swc-plugin-compatibility": {
+      "source": "lingui/skills",
+      "sourceType": "github",
+      "skillPath": "skills/swc-plugin-compatibility/SKILL.md",
+      "computedHash": "5ecf87404f4b22de5e68a4358a45298183c279f9c173bf8e971b22d0bbc7ace8"
     },
     "typegpu": {
       "source": "software-mansion-labs/skills",
