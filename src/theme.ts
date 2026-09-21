@@ -1,9 +1,9 @@
 /**
- * Shared design tokens for StyleSheet usage.
+ * Shared design tokens for StyleSheet use.
  * Keep `StyleSheet.create` at the bottom of each component file.
  *
- * Light and dark palettes are required (see AGENTS.md). Extend with a dark set and
- * select via the system color scheme — do not ship UI that only works in one mode.
+ * Support light and dark mode (see `AGENTS.md`). Add a dark palette and select by system scheme.
+ * Do not ship UI that works in one mode only.
  */
 export const colors = {
   background: "#FFFFFF",

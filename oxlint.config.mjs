@@ -2,8 +2,8 @@ import { defineConfig } from "oxlint";
 import sonarjs from "eslint-plugin-sonarjs";
 
 /**
- * SonarJS recommended rules that do not require TypeScript type information.
- * Oxlint JS plugins do not yet support type-aware ESLint rules
+ * SonarJS recommended rules that do not need TypeScript type information.
+ * Oxlint JS plugins do not support type-aware ESLint rules yet
  * (see https://oxc.rs/docs/guide/usage/linter/js-plugins and oxc#19596).
  */
 function sonarjsRecommendedWithoutTypeAware() {

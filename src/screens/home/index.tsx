@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from "react-native";
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { colors, spacing, typography } from "@/theme";
 
-/** Discovery entry screen body — rendered by the thin `src/app/index` route. */
+/** Discovery entry screen. The thin route `src/app/index` renders this screen. */
 export function Home() {
   return (
     <View style={styles.container}>

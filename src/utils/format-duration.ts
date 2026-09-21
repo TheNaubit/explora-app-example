@@ -1,5 +1,5 @@
 /**
- * Formats duration for list/detail copy (`45 min`, `1 hr`, `1 hr 30 min`).
+ * Format duration for list and detail text (`45 min`, `1 hr`, `1 hr 30 min`).
  * Input is whole minutes from the activity schema.
  */
 export function formatDuration(minutes: number): string {

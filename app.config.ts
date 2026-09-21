@@ -1,6 +1,6 @@
 import { ConfigContext, ExpoConfig } from "expo/config";
 
-/** Expo app config. `userInterfaceStyle: "automatic"` enables system light/dark appearance. */
+/** Expo app config. `userInterfaceStyle: "automatic"` follows system light and dark appearance. */
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "explora-agile-monkeys",

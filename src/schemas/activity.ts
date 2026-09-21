@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 /**
- * Zod schemas for the supplied activities catalog and generated items.
- * Domain TypeScript types are inferred below — do not maintain a parallel type hand-write.
+ * Zod schemas for the supplied activity catalog and generated items.
+ * Infer domain types from these schemas. Do not keep a second hand-written type set.
  */
 
 export const activityCategorySchema = z.enum(["Outdoors", "Culture", "Workshops", "Leisure"]);
@@ -16,7 +16,7 @@ export const activitySchema = z.object({
   durationMinutes: z.number().int().positive(),
 });
 
-/** Supplied `activities.json` shape (`schemaVersion` + activities array). */
+/** Shape of supplied `activities.json`: schema version plus activities array. */
 export const activitiesDatasetSchema = z.object({
   schemaVersion: z.number().int().positive(),
   activities: z.array(activitySchema).min(1),
