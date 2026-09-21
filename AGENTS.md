@@ -59,3 +59,4 @@ Docs: https://docs.expo.dev/eas/index.md
 - For blur, we have `expo-blur`.
 - For images and assets, we will use `expo-image` and `expo-asset`.
 - Since this is a demo app we will share, we will use Node with `npm`. No `yarn`, no `pnpm` and not `bun`, easier to share and run for others.
+- Always use project-scoped Emil skills (animate, animate-expo, animation-vocabulary, apple-design, emil-design-eng, find-animation-opportunities, improve-animations, mobile-native, review-animations, write-swift ) whe designing the app and creating animations and microinteractions. Specially when building the "iOS part", use the `apple-design` one to we follow the `HIG` guidelines. But in every platform, all the skills it has are pretty useful for high quality premium interfaces.
