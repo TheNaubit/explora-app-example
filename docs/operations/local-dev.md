@@ -4,7 +4,16 @@ Practical notes for local run and review. Keep this page aligned with the root R
 
 ## Stack commands
 
-See `AGENTS.md` (npm and Expo commands). Prefer `npm run lint` and `npm run fix`.
+See `AGENTS.md` (npm and Expo commands). Prefer `npm run lint` and `npm run fix` for full-tree checks.
+
+### Git hooks
+
+- `prepare` runs Husky after `npm install`.
+- Pre-commit runs `lint-staged` (`lint-staged.config.mjs`).
+- Staged JS/TS: `oxlint --fix --deny-warnings`, then `oxfmt`.
+- Staged `.ts` / `.tsx`: also run `npx tsc --noEmit` once for the project.
+- Staged JSON/Markdown: `oxfmt`.
+- The commit stops if lint warnings, lint errors, or TypeScript errors remain.
 
 ## Data
 

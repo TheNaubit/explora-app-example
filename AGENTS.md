@@ -117,7 +117,7 @@ npx expo-doctor
 npx expo install --fix
 ```
 
-Also use `npm run lint` / `npm run fix` (oxlint with `--deny-warnings`, then oxfmt). Run lint and typecheck before you say a task is done.
+Also use `npm run lint` / `npm run fix` when you need a full-tree check. Pre-commit runs lint-staged (oxlint, oxfmt, and `tsc --noEmit` when TypeScript files are staged).
 
 ## Navigation and routing
 
@@ -156,9 +156,11 @@ You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`
 
 ## Linting and formatting
 
-- After changes, run `npx oxlint --fix`, then `npx oxfmt` (or `npm run fix`).
-- Before you finish, run `npx oxlint --deny-warnings --format=agent` (or `npm run lint`).
-- Config file: `oxlint.config.mjs` (includes `eslint-plugin-sonarjs`). Skip type-aware Sonar rules until Oxlint supports them.
+- **Commit gate:** Husky runs `lint-staged` on pre-commit. Staged JS/TS files get `oxlint --fix --deny-warnings` and `oxfmt`. When any `.ts` / `.tsx` file is staged, run `npx tsc --noEmit` once. Staged JSON/Markdown get `oxfmt`. A commit fails if lint warnings, lint errors, or TypeScript errors remain.
+- **While coding:** You do not need to run a full-tree `npm run fix` after every edit. Rely on the commit hook for staged files.
+- **Before you say a task is done (no commit yet):** Run `npm exec lint-staged` with your files staged, or run `npm run lint` and `npx tsc --noEmit`.
+- **Manual full tree:** `npm run fix` or `npm run lint` when you need a whole-project lint check. Use `npx tsc --noEmit` for types outside a commit.
+- Config: `oxlint.config.mjs`, `lint-staged.config.mjs`, `.husky/pre-commit`. Skip type-aware Sonar rules until Oxlint supports them.
 - Ignore vendored skills with `.eslintignore`. Do not edit `.agents/` or `.claude/` to silence lint.
 
 ## Best practices (stack)
