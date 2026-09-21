@@ -16,6 +16,7 @@ npm install react-native-wgpu
 ## When to Use GPU Shaders
 
 GPU shaders are the right choice when:
+
 - The effect requires per-pixel computation (noise fields, distortion, blur, glow)
 - Physics simulations drive the animation (fluid, cloth, boids flocking, gravity)
 - You need signed distance function (SDF) rendering for procedural shapes
@@ -39,6 +40,7 @@ npm install react-native-wgpu
 ```
 
 With Expo:
+
 ```sh
 npx create-expo-app@latest -e with-webgpu
 ```
@@ -65,8 +67,8 @@ Add the Babel plugin for `'use gpu'` function syntax:
 module.exports = (api) => {
   api.cache(true);
   return {
-    presets: ['babel-preset-expo'],
-    plugins: ['unplugin-typegpu/babel'],
+    presets: ["babel-preset-expo"],
+    plugins: ["unplugin-typegpu/babel"],
   };
 };
 ```
@@ -84,8 +86,8 @@ On the iOS simulator, disable Metal Validation in Edit Scheme to avoid crashes.
 The `Canvas` component provides the WebGPU surface. Use `useDevice` and `useCanvasRef` hooks from `react-native-wgpu`:
 
 ```tsx
-import { Canvas, useDevice, useCanvasRef } from 'react-native-wgpu';
-import tgpu, { d } from 'typegpu';
+import { Canvas, useDevice, useCanvasRef } from "react-native-wgpu";
+import tgpu, { d } from "typegpu";
 
 function GPUScene() {
   const { device = null } = useDevice();
@@ -94,10 +96,10 @@ function GPUScene() {
   useEffect(() => {
     if (!device) return;
 
-    const context = ref.current!.getContext('webgpu')!;
+    const context = ref.current!.getContext("webgpu")!;
     const root = tgpu.initFromDevice({ device });
     const format = navigator.gpu.getPreferredCanvasFormat();
-    context.configure({ device, format, alphaMode: 'premultiplied' });
+    context.configure({ device, format, alphaMode: "premultiplied" });
 
     // Create pipelines and render here
     // ...
@@ -123,20 +125,22 @@ function GPUScene() {
 WebGPU objects (`GPUDevice`, `GPUCanvasContext`) are automatically registered for worklet serialization. You can pass them directly to worklets and run GPU rendering on the UI thread:
 
 ```tsx
-import { scheduleOnUI } from 'react-native-worklets';
+import { scheduleOnUI } from "react-native-worklets";
 
 const renderFrame = (device: GPUDevice, context: GPUCanvasContext) => {
-  'worklet';
+  "worklet";
   const commandEncoder = device.createCommandEncoder();
   const textureView = context.getCurrentTexture().createView();
 
   const pass = commandEncoder.beginRenderPass({
-    colorAttachments: [{
-      view: textureView,
-      clearValue: [0, 0, 0, 1],
-      loadOp: 'clear',
-      storeOp: 'store',
-    }],
+    colorAttachments: [
+      {
+        view: textureView,
+        clearValue: [0, 0, 0, 1],
+        loadOp: "clear",
+        storeOp: "store",
+      },
+    ],
   });
   pass.setPipeline(pipeline);
   pass.draw(3);
@@ -167,7 +171,7 @@ TypeGPU provides a type-safe API for creating GPU pipelines with TypeScript shad
 ### Vertex and fragment functions
 
 ```tsx
-import tgpu, { d } from 'typegpu';
+import tgpu, { d } from "typegpu";
 
 const positions = tgpu.const(d.arrayOf(d.vec2f, 3), [
   d.vec2f(0.0, 0.5),
@@ -179,7 +183,7 @@ const mainVertex = tgpu.vertexFn({
   in: { vertexIndex: d.builtin.vertexIndex },
   out: { pos: d.builtin.position, uv: d.vec2f },
 })(({ vertexIndex }) => {
-  'use gpu';
+  "use gpu";
   return {
     pos: d.vec4f(positions.$[vertexIndex], 0, 1),
     uv: positions.$[vertexIndex],
@@ -190,7 +194,7 @@ const mainFragment = tgpu.fragmentFn({
   in: { uv: d.vec2f },
   out: d.vec4f,
 })(({ uv }) => {
-  'use gpu';
+  "use gpu";
   return d.vec4f(uv.x, uv.y, 0.5, 1);
 });
 ```
@@ -204,9 +208,7 @@ const pipeline = root.createRenderPipeline({
   targets: { format: navigator.gpu.getPreferredCanvasFormat() },
 });
 
-pipeline
-  .withColorAttachment({ view: context })
-  .draw(3);
+pipeline.withColorAttachment({ view: context }).draw(3);
 
 context.present();
 ```
@@ -220,22 +222,18 @@ Use compute shaders when the animation state (positions, velocities, colors) is 
 ### Standard compute pipeline
 
 ```tsx
-const particleBuffer = root.createMutable(
-  d.arrayOf(d.vec2f, 1000),
-  initialPositions,
-);
+const particleBuffer = root.createMutable(d.arrayOf(d.vec2f, 1000), initialPositions);
 
 const updateParticles = tgpu.computeFn({
   workgroupSize: [64],
   in: { gid: d.builtin.globalInvocationId },
 })(({ gid }) => {
-  'use gpu';
+  "use gpu";
   const idx = gid.x;
   particleBuffer.$[idx] = particleBuffer.$[idx].add(d.vec2f(0.001, 0));
 });
 
-root.createComputePipeline({ compute: updateParticles })
-  .dispatchWorkgroups(16); // 16 workgroups * 64 threads = 1024 particles
+root.createComputePipeline({ compute: updateParticles }).dispatchWorkgroups(16); // 16 workgroups * 64 threads = 1024 particles
 ```
 
 ### Guarded compute pipeline (simplified)
@@ -245,10 +243,12 @@ For simple parallel loops without manual workgroup sizing:
 ```tsx
 const data = root.createMutable(d.arrayOf(d.f32, 512));
 
-root.createGuardedComputePipeline((x) => {
-  'use gpu';
-  data.$[x] = data.$[x] * 2;
-}).dispatchThreads(512);
+root
+  .createGuardedComputePipeline((x) => {
+    "use gpu";
+    data.$[x] = data.$[x] * 2;
+  })
+  .dispatchThreads(512);
 ```
 
 Think of `dispatchThreads(n)` as a parallelized `for (let i = 0; i < n; i++)` that runs on the GPU.
@@ -268,10 +268,7 @@ const Particle = d.struct({
   life: d.f32,
 });
 
-const particles = root.createMutable(
-  d.arrayOf(Particle, 10000),
-  initialData,
-);
+const particles = root.createMutable(d.arrayOf(Particle, 10000), initialData);
 
 const time = root.createUniform(d.f32);
 
@@ -280,7 +277,7 @@ const updateCompute = tgpu.computeFn({
   workgroupSize: [256],
   in: { gid: d.builtin.globalInvocationId },
 })(({ gid }) => {
-  'use gpu';
+  "use gpu";
   const i = gid.x;
   const p = particles.$[i];
   particles.$[i].position = p.position.add(p.velocity.mul(time.$));
@@ -300,13 +297,13 @@ npm install @typegpu/noise
 ```
 
 ```tsx
-import { perlin2d, randf } from '@typegpu/noise';
+import { perlin2d, randf } from "@typegpu/noise";
 
 const noiseFragment = tgpu.fragmentFn({
   in: { uv: d.vec2f },
   out: d.vec4f,
 })(({ uv }) => {
-  'use gpu';
+  "use gpu";
   const noise = perlin2d.sample(uv.mul(10));
   return d.vec4f(noise, noise, noise, 1);
 });
@@ -317,14 +314,13 @@ For better performance on large textures, precompute gradients with a static or 
 ```tsx
 const cache = perlin3d.staticCache({ root, size: d.vec3u(64, 64, 1) });
 
-const pipeline = root
-  .pipe(cache.inject())
-  .createRenderPipeline({ /* ... */ });
+const pipeline = root.pipe(cache.inject()).createRenderPipeline({/* ... */});
 ```
 
 Caching provides up to 10x performance improvement over on-demand gradient computation.
 
 Available from `@typegpu/noise`:
+
 - **PRNG**: `randf.sample()`, `randf.seed2()` for per-thread seeding
 - **Distributions**: `exponential`, `normal`, `cauchy`, `bernoulli`
 - **Geometric**: `inUnitCircle`, `onUnitSphere`, `inHemisphere`, and more
@@ -339,13 +335,13 @@ npm install @typegpu/sdf
 ```
 
 ```tsx
-import * as sdf from '@typegpu/sdf';
+import * as sdf from "@typegpu/sdf";
 
 const sdfFragment = tgpu.fragmentFn({
   in: { uv: d.vec2f },
   out: d.vec4f,
 })(({ uv }) => {
-  'use gpu';
+  "use gpu";
   const centered = uv.sub(0.5);
   const dist = sdf.sdDisk(centered, 0.25);
   if (dist < 0) {

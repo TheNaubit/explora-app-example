@@ -16,8 +16,8 @@ import Animated, {
   useAnimatedProps,
   withRepeat,
   withTiming,
-} from 'react-native-reanimated';
-import { Circle, Svg } from 'react-native-svg';
+} from "react-native-reanimated";
+import { Circle, Svg } from "react-native-svg";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -43,12 +43,8 @@ export default function PulsingCircle() {
 ## Animating SVG Path (e.g. Progress Arc)
 
 ```tsx
-import Animated, {
-  useSharedValue,
-  useAnimatedProps,
-  withTiming,
-} from 'react-native-reanimated';
-import { Path, Svg } from 'react-native-svg';
+import Animated, { useSharedValue, useAnimatedProps, withTiming } from "react-native-reanimated";
+import { Path, Svg } from "react-native-svg";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 

@@ -23,22 +23,23 @@ const pipeline = root
 Create one query set sized for all tracked passes and give each pass a begin/end index pair:
 
 ```ts
-const querySet = root.createQuerySet('timestamp', 2 * PASS_COUNT);
+const querySet = root.createQuerySet("timestamp", 2 * PASS_COUNT);
 
 // pass i writes to slots 2i / 2i+1:
 const timedPipeline = pipeline.withTimestampWrites({
   querySet,
   beginningOfPassWriteIndex: 2 * i,
-  endOfPassWriteIndex: 2 * i + 1,   // omit either index to skip that write
+  endOfPassWriteIndex: 2 * i + 1, // omit either index to skip that write
 });
 ```
 
 Pass descriptors take the same shape: `encoder.beginRenderPass({ ..., timestampWrites })` accepts a `TgpuQuerySet` directly; a raw WebGPU encoder needs `root.unwrap(querySet)`.
 
-Timestamp *writes* are near-free, so tracked passes can be timed on every dispatch. The expensive part is the readback — `resolve()` + `read()` (a buffer map). Sample at a low rate (a HUD refresh a few times per second), and one readback covers every tracked pass:
+Timestamp _writes_ are near-free, so tracked passes can be timed on every dispatch. The expensive part is the readback — `resolve()` + `read()` (a buffer map). Sample at a low rate (a HUD refresh a few times per second), and one readback covers every tracked pass:
 
 ```ts
-if (querySet.available) {        // false while a previous read is in flight
+if (querySet.available) {
+  // false while a previous read is in flight
   querySet.resolve();
   const ts: bigint[] = await querySet.read();
   const passMs = Number(ts[2 * i + 1] - ts[2 * i]) / 1e6;

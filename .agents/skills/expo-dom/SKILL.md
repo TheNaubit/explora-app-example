@@ -36,12 +36,7 @@ Create a new file with the `'use dom';` directive at the top:
 // components/WebChart.tsx
 "use dom";
 
-export default function WebChart({
-  data,
-}: {
-  data: number[];
-  dom: import("expo/dom").DOMProps;
-}) {
+export default function WebChart({ data }: { data: number[]; dom: import("expo/dom").DOMProps }) {
   return (
     <div style={{ padding: 20 }}>
       <h2>Chart Data</h2>
@@ -133,10 +128,7 @@ export default function Screen() {
 
 interface Props {
   showAlert: (message: string) => Promise<void>;
-  saveData: (data: {
-    name: string;
-    value: number;
-  }) => Promise<{ success: boolean }>;
+  saveData: (data: { name: string; value: number }) => Promise<{ success: boolean }>;
   dom?: import("expo/dom").DOMProps;
 }
 
@@ -181,14 +173,7 @@ export default function SyntaxHighlight({ code, language }: Props) {
 // components/chart.tsx
 "use dom";
 
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 
 interface Props {
   data: Array<{ name: string; value: number }>;
@@ -218,11 +203,7 @@ CSS imports must be in the DOM component file since they run in isolated context
 
 import "@/styles.css"; // CSS file in same directory
 
-export default function StyledComponent({
-  dom,
-}: {
-  dom: import("expo/dom").DOMProps;
-}) {
+export default function StyledComponent({ dom }: { dom: import("expo/dom").DOMProps }) {
   return (
     <div className="container">
       <h1 className="title">Styled Content</h1>
@@ -247,11 +228,7 @@ const styles = {
   },
 };
 
-export default function StyledComponent({
-  dom,
-}: {
-  dom: import("expo/dom").DOMProps;
-}) {
+export default function StyledComponent({ dom }: { dom: import("expo/dom").DOMProps }) {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Styled Content</h1>
@@ -269,11 +246,7 @@ The expo-router `<Link />` component and router API work inside DOM components:
 
 import { Link, useRouter } from "expo-router";
 
-export default function Navigation({
-  dom,
-}: {
-  dom: import("expo/dom").DOMProps;
-}) {
+export default function Navigation({ dom }: { dom: import("expo/dom").DOMProps }) {
   const router = useRouter();
 
   return (
@@ -340,11 +313,7 @@ Check if code is running in a DOM component:
 
 import { IS_DOM } from "expo/dom";
 
-export default function Component({
-  dom,
-}: {
-  dom?: import("expo/dom").DOMProps;
-}) {
+export default function Component({ dom }: { dom?: import("expo/dom").DOMProps }) {
   return <div>{IS_DOM ? "Running in DOM component" : "Running natively"}</div>;
 }
 ```
@@ -359,11 +328,7 @@ Prefer requiring assets instead of using the public directory:
 // Good - bundled with the component
 const logo = require("../assets/logo.png");
 
-export default function Component({
-  dom,
-}: {
-  dom: import("expo/dom").DOMProps;
-}) {
+export default function Component({ dom }: { dom: import("expo/dom").DOMProps }) {
   return <img src={logo} alt="Logo" />;
 }
 ```
@@ -385,11 +350,7 @@ export default function HomeScreen() {
 
       <WebChart data={[10, 20, 30, 40, 50]} dom={{ style: { height: 300 } }} />
 
-      <CodeBlock
-        code="const x = 1;"
-        language="javascript"
-        dom={{ scrollEnabled: true }}
-      />
+      <CodeBlock code="const x = 1;" language="javascript" dom={{ scrollEnabled: true }} />
 
       <Text>Native content below</Text>
     </View>
@@ -417,9 +378,12 @@ On web, the `dom` prop is ignored since no webview is needed.
 - The webview has its own JavaScript context — cannot directly share state with native
 
 ## Submitting Feedback
+
 If you encounter errors, misleading or outdated information in this skill, report it so Expo can improve:
+
 ```bash
 npx --yes submit-expo-feedback@latest --category skills --subject "expo-dom" "<actionable feedback>"
 ```
+
 Only submit when you have something specific and actionable to report. Include as much relevant context as possible.
 If an AI agent repeatedly failed or the user had to take over an Expo task, load the expo-skill-feedback skill and follow its eval-candidate flow instead of reusing the command above.

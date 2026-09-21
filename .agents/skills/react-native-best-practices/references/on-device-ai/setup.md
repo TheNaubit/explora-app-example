@@ -32,16 +32,16 @@ Register a resource-fetcher adapter at app entry **before any other API**:
 
 ```tsx
 // Expo
-import { initExecutorch } from 'react-native-executorch';
-import { ExpoResourceFetcher } from 'react-native-executorch-expo-resource-fetcher';
+import { initExecutorch } from "react-native-executorch";
+import { ExpoResourceFetcher } from "react-native-executorch-expo-resource-fetcher";
 
 initExecutorch({ resourceFetcher: ExpoResourceFetcher });
 ```
 
 ```tsx
 // Bare React Native
-import { initExecutorch } from 'react-native-executorch';
-import { BareResourceFetcher } from 'react-native-executorch-bare-resource-fetcher';
+import { initExecutorch } from "react-native-executorch";
+import { BareResourceFetcher } from "react-native-executorch-bare-resource-fetcher";
 
 initExecutorch({ resourceFetcher: BareResourceFetcher });
 ```
@@ -60,11 +60,11 @@ To `require('../assets/model.pte')`, register the extensions:
 
 ```js
 // metro.config.js
-const { getDefaultConfig } = require('expo/metro-config');
+const { getDefaultConfig } = require("expo/metro-config");
 
 const config = getDefaultConfig(__dirname);
-config.resolver.assetExts.push('pte');
-config.resolver.assetExts.push('bin');
+config.resolver.assetExts.push("pte");
+config.resolver.assetExts.push("bin");
 
 module.exports = config;
 ```
@@ -99,12 +99,12 @@ How large is the model?
 `models.<category>.<model>({ quant?, backend? })` — typed accessors that resolve to the right URL and backend per platform. Default is the quantized variant when one is published; iOS prefers CoreML, Android prefers XNNPACK, for multi-backend models.
 
 ```tsx
-import { useLLM, useObjectDetection, useOCR, models } from 'react-native-executorch';
+import { useLLM, useObjectDetection, useOCR, models } from "react-native-executorch";
 
-useLLM({ model: models.llm.llama3_2_3b() });                 // platform default, quantized
+useLLM({ model: models.llm.llama3_2_3b() }); // platform default, quantized
 useLLM({ model: models.llm.llama3_2_3b({ quant: false }) }); // full precision
-useObjectDetection({ model: models.object_detection.rf_detr_nano({ backend: 'xnnpack' }) });
-useOCR({ model: models.ocr.craft({ language: 'en' }) });
+useObjectDetection({ model: models.object_detection.rf_detr_nano({ backend: "xnnpack" }) });
+useOCR({ model: models.ocr.craft({ language: "en" }) });
 ```
 
 Available top-level categories: `llm`, `classification`, `object_detection`, `pose_estimation`, `semantic_segmentation`, `instance_segmentation`, `style_transfer`, `speech_to_text`, `text_to_speech`, `text_embedding`, `image_embedding`, `image_generation`, `vad`, `ocr`, `privacy_filter`. Per-category accessors are listed in `llm.md`, `vision.md`, `speech.md`, and the privacy filter section below.
@@ -124,7 +124,7 @@ Hooks expose `downloadProgress` (0–1):
 
 ```tsx
 const llm = useLLM({ model: models.llm.llama3_2_1b() });
-<Text>{Math.round(llm.downloadProgress * 100)}%</Text>
+<Text>{Math.round(llm.downloadProgress * 100)}%</Text>;
 ```
 
 ---
@@ -134,26 +134,26 @@ const llm = useLLM({ model: models.llm.llama3_2_1b() });
 For advanced download management — pause, resume, cancel, list, delete — the adapters expose a Promise-based API. For the full surface, webfetch [ResourceFetcher](https://docs.swmansion.com/react-native-executorch/docs/utilities/resource-fetcher).
 
 ```tsx
-import { ExpoResourceFetcher } from 'react-native-executorch-expo-resource-fetcher';
+import { ExpoResourceFetcher } from "react-native-executorch-expo-resource-fetcher";
 
 // Download with progress
 const uris = await ExpoResourceFetcher.fetch(
   (p) => console.log(`${Math.round(p * 100)}%`),
-  'https://example.com/model.pte',
-  'https://example.com/tokenizer.bin'
+  "https://example.com/model.pte",
+  "https://example.com/tokenizer.bin",
 );
 // uris: string[] of local file paths (no `file://` prefix), or null if interrupted
 ```
 
 ```ts
-await ExpoResourceFetcher.pauseFetching('https://…/model.pte');
-const uris = await ExpoResourceFetcher.resumeFetching('https://…/model.pte');
-await ExpoResourceFetcher.cancelFetching('https://…/model.pte');
+await ExpoResourceFetcher.pauseFetching("https://…/model.pte");
+const uris = await ExpoResourceFetcher.resumeFetching("https://…/model.pte");
+await ExpoResourceFetcher.cancelFetching("https://…/model.pte");
 
 const files = await ExpoResourceFetcher.listDownloadedFiles();
 const models = await ExpoResourceFetcher.listDownloadedModels();
-const bytes = await ExpoResourceFetcher.getFilesTotalSize('https://…/model.pte');
-await ExpoResourceFetcher.deleteResources('https://…/model.pte');
+const bytes = await ExpoResourceFetcher.getFilesTotalSize("https://…/model.pte");
+await ExpoResourceFetcher.deleteResources("https://…/model.pte");
 ```
 
 `BareResourceFetcher` exposes the same API but does **not** support pause/resume on Android — use Expo's if you need it cross-platform.
@@ -166,25 +166,25 @@ Downloaded files are stored in the app's documents directory.
 
 All errors inherit from `RnExecutorchError` with a `code` from `RnExecutorchErrorCode`. For the full table, webfetch [Error Handling](https://docs.swmansion.com/react-native-executorch/docs/utilities/error-handling).
 
-| Error code | When | Recovery |
-|---|---|---|
-| `ResourceFetcherAdapterNotInitialized` | Any API used before `initExecutorch()` | Call `initExecutorch({ resourceFetcher })` at app entry |
-| `ModuleNotLoaded` | Inference before `isReady === true` | Gate on `isReady` |
-| `ModelGenerating` | New inference while one is running | Wait or call `interrupt()` |
-| `InvalidConfig` | Bad params (e.g. `topp > 1`) | Validate config |
-| `ResourceFetcherDownloadFailed` | Network error during download | Retry with backoff |
-| `MemoryAllocationFailed` | Model too large for device | Switch to a smaller / quantized accessor |
-| `DownloadInterrupted` | Download did not complete | Retry |
-| `StreamingNotStarted` | `streamInsert` before `stream()` is active | Start `stream()` first |
-| `StreamingInProgress` | `stream()` while one is active | Wait or call `streamStop()` |
-| `InvalidUserInput` | Empty / malformed input | Validate before calling |
-| `FileReadFailed` | Bad image path, unsupported format | Verify path and format |
-| `LanguageNotSupported` | OCR / multilingual model asked for an unpublished language | Use a supported code |
+| Error code                             | When                                                       | Recovery                                                |
+| -------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------- |
+| `ResourceFetcherAdapterNotInitialized` | Any API used before `initExecutorch()`                     | Call `initExecutorch({ resourceFetcher })` at app entry |
+| `ModuleNotLoaded`                      | Inference before `isReady === true`                        | Gate on `isReady`                                       |
+| `ModelGenerating`                      | New inference while one is running                         | Wait or call `interrupt()`                              |
+| `InvalidConfig`                        | Bad params (e.g. `topp > 1`)                               | Validate config                                         |
+| `ResourceFetcherDownloadFailed`        | Network error during download                              | Retry with backoff                                      |
+| `MemoryAllocationFailed`               | Model too large for device                                 | Switch to a smaller / quantized accessor                |
+| `DownloadInterrupted`                  | Download did not complete                                  | Retry                                                   |
+| `StreamingNotStarted`                  | `streamInsert` before `stream()` is active                 | Start `stream()` first                                  |
+| `StreamingInProgress`                  | `stream()` while one is active                             | Wait or call `streamStop()`                             |
+| `InvalidUserInput`                     | Empty / malformed input                                    | Validate before calling                                 |
+| `FileReadFailed`                       | Bad image path, unsupported format                         | Verify path and format                                  |
+| `LanguageNotSupported`                 | OCR / multilingual model asked for an unpublished language | Use a supported code                                    |
 
 ### Pattern
 
 ```tsx
-import { RnExecutorchError, RnExecutorchErrorCode } from 'react-native-executorch';
+import { RnExecutorchError, RnExecutorchErrorCode } from "react-native-executorch";
 
 try {
   await model.forward(imageUri);
@@ -201,7 +201,7 @@ try {
         // Device can't fit the model — fall back to a smaller one
         break;
       default:
-        console.error('ExecuTorch error:', err.code, err.message);
+        console.error("ExecuTorch error:", err.code, err.message);
     }
   } else {
     throw err;
@@ -224,10 +224,10 @@ For `.pte` models not covered by a dedicated hook, use `useExecutorchModule` to 
 ### Running
 
 ```tsx
-import { useExecutorchModule, ScalarType } from 'react-native-executorch';
+import { useExecutorchModule, ScalarType } from "react-native-executorch";
 
 const m = useExecutorchModule({
-  modelSource: require('../assets/custom_model.pte'),
+  modelSource: require("../assets/custom_model.pte"),
 });
 
 const run = async () => {
@@ -251,7 +251,7 @@ You own preprocessing (resize, normalize, color conversion) and postprocessing. 
 For services or non-React contexts, use the module class directly via `fromModelName`:
 
 ```ts
-import { ClassificationModule, models } from 'react-native-executorch';
+import { ClassificationModule, models } from "react-native-executorch";
 
 const m = await ClassificationModule.fromModelName(models.classification.efficientnet_v2_s());
 ```
@@ -265,15 +265,15 @@ Every hook has a corresponding module: `LLMModule`, `ObjectDetectionModule`, `OC
 HuggingFace-compatible BPE / WordPiece tokenizer. Mostly useful for counting tokens before sending text to embedding models or LLMs.
 
 ```tsx
-import { useTokenizer, models } from 'react-native-executorch';
+import { useTokenizer, models } from "react-native-executorch";
 
 const tokenizer = useTokenizer({ tokenizer: models.text_embedding.all_minilm_l6_v2() });
 
-const ids = await tokenizer.encode('Hello, world!');
+const ids = await tokenizer.encode("Hello, world!");
 const text = await tokenizer.decode(ids);
 
 const vocab = await tokenizer.getVocabSize();
-const id = await tokenizer.tokenToId('hello');
+const id = await tokenizer.tokenToId("hello");
 const token = await tokenizer.idToToken(id);
 ```
 
@@ -286,13 +286,11 @@ You usually don't need this — `useLLM` and `useTextEmbeddings` tokenize intern
 On-device PII detection. Returns `PiiEntity[]` with `{ label, text, startToken, endToken }`. Useful for redacting messages before they leave the device.
 
 ```tsx
-import { usePrivacyFilter, models } from 'react-native-executorch';
+import { usePrivacyFilter, models } from "react-native-executorch";
 
 const pf = usePrivacyFilter({ model: models.privacy_filter.openai() });
 
-const entities = await pf.generate(
-  'Email me at jane@example.com — my account is 1234-5678-0001.'
-);
+const entities = await pf.generate("Email me at jane@example.com — my account is 1234-5678-0001.");
 // entities: [
 //   { label: 'private_email', text: 'jane@example.com', startToken: …, endToken: … },
 //   { label: 'account_number', text: '1234-5678-0001', startToken: …, endToken: … },
@@ -321,8 +319,8 @@ npm install @react-native-rag/op-sqlite
 ```
 
 ```tsx
-import { useRAG, MemoryVectorStore, ExecuTorchEmbeddings, ExecuTorchLLM } from 'react-native-rag';
-import { models } from 'react-native-executorch';
+import { useRAG, MemoryVectorStore, ExecuTorchEmbeddings, ExecuTorchLLM } from "react-native-rag";
+import { models } from "react-native-executorch";
 
 const vectorStore = new MemoryVectorStore({
   embeddings: new ExecuTorchEmbeddings(models.text_embedding.all_minilm_l6_v2()),
@@ -349,11 +347,11 @@ Both `ExecuTorchEmbeddings` and `ExecuTorchLLM` accept any model accessor from t
 
 ## Device constraints
 
-| Tier | Parameter range | Examples |
-|---|---|---|
-| Low-end | 135M–500M | `models.llm.smollm2_1_135m`, `models.llm.smollm2_1_360m` |
-| Mid-range | 500M–1.7B | `models.llm.qwen3_0_6b`, `models.llm.smollm2_1_1_7b`, `models.llm.llama3_2_1b` |
-| High-end | 1.7B–4B | `models.llm.qwen3_4b`, `models.llm.phi_4_mini_4b`, `models.llm.llama3_2_3b` |
+| Tier      | Parameter range | Examples                                                                       |
+| --------- | --------------- | ------------------------------------------------------------------------------ |
+| Low-end   | 135M–500M       | `models.llm.smollm2_1_135m`, `models.llm.smollm2_1_360m`                       |
+| Mid-range | 500M–1.7B       | `models.llm.qwen3_0_6b`, `models.llm.smollm2_1_1_7b`, `models.llm.llama3_2_1b` |
+| High-end  | 1.7B–4B         | `models.llm.qwen3_4b`, `models.llm.phi_4_mini_4b`, `models.llm.llama3_2_3b`    |
 
 For per-model memory and inference benchmarks: webfetch [Benchmarks](https://docs.swmansion.com/react-native-executorch/docs/benchmarks/inference-time).
 

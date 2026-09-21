@@ -23,15 +23,15 @@ Pick models through the typed `models` registry:
 ### One-shot transcription
 
 ```tsx
-import { useSpeechToText, models } from 'react-native-executorch';
-import { AudioContext } from 'react-native-audio-api';
-import * as FileSystem from 'expo-file-system';
+import { useSpeechToText, models } from "react-native-executorch";
+import { AudioContext } from "react-native-audio-api";
+import * as FileSystem from "expo-file-system";
 
 const stt = useSpeechToText({ model: models.speech_to_text.whisper_tiny_en() });
 
 const { uri } = await FileSystem.downloadAsync(
-  'https://example.com/file.mp3',
-  FileSystem.cacheDirectory + 'audio.mp3'
+  "https://example.com/file.mp3",
+  FileSystem.cacheDirectory + "audio.mp3",
 );
 
 const audioContext = new AudioContext({ sampleRate: 16000 });
@@ -47,7 +47,7 @@ Use a multilingual Whisper accessor and pass a language code:
 
 ```tsx
 const stt = useSpeechToText({ model: models.speech_to_text.whisper_tiny() });
-const { text } = await stt.transcribe(buffer, { language: 'es' });
+const { text } = await stt.transcribe(buffer, { language: "es" });
 ```
 
 ### Word-level timestamps
@@ -81,38 +81,38 @@ const result = await stt.transcribe(buffer, { verbose: true });
 For audio longer than 30 s, use streaming. It applies the whisper-streaming algorithm so audio is chunked without cutting mid-sentence.
 
 ```tsx
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, SafeAreaView, Text, View } from 'react-native';
-import { useSpeechToText, models } from 'react-native-executorch';
-import { AudioManager, AudioRecorder } from 'react-native-audio-api';
+import React, { useEffect, useRef, useState } from "react";
+import { Button, SafeAreaView, Text, View } from "react-native";
+import { useSpeechToText, models } from "react-native-executorch";
+import { AudioManager, AudioRecorder } from "react-native-audio-api";
 
 export default function StreamingStt() {
   const stt = useSpeechToText({ model: models.speech_to_text.whisper_tiny_en() });
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const isRecording = useRef(false);
   const [recorder] = useState(() => new AudioRecorder());
 
   useEffect(() => {
     AudioManager.setAudioSessionOptions({
-      iosCategory: 'playAndRecord',
-      iosMode: 'spokenAudio',
-      iosOptions: ['allowBluetooth', 'defaultToSpeaker'],
+      iosCategory: "playAndRecord",
+      iosMode: "spokenAudio",
+      iosOptions: ["allowBluetooth", "defaultToSpeaker"],
     });
     AudioManager.requestRecordingPermissions();
   }, []);
 
   const start = async () => {
     isRecording.current = true;
-    setText('');
+    setText("");
 
     const sampleRate = 16000;
     recorder.onAudioReady(
       { sampleRate, bufferLength: 0.1 * sampleRate, channelCount: 1 },
-      (chunk) => stt.streamInsert(chunk.buffer.getChannelData(0))
+      (chunk) => stt.streamInsert(chunk.buffer.getChannelData(0)),
     );
     await recorder.start();
 
-    let committed = '';
+    let committed = "";
     for await (const { committed: c, nonCommitted } of stt.stream({ verbose: false })) {
       if (!isRecording.current) break;
       if (c.text) committed += c.text;
@@ -129,7 +129,7 @@ export default function StreamingStt() {
   return (
     <SafeAreaView>
       <View style={{ padding: 20 }}>
-        <Text>{text || 'Press start to speak…'}</Text>
+        <Text>{text || "Press start to speak…"}</Text>
         <Button title="Start" onPress={start} disabled={stt.isGenerating} />
         <Button title="Stop" color="red" onPress={stop} />
       </View>
@@ -140,10 +140,10 @@ export default function StreamingStt() {
 
 **Available STT accessors:**
 
-| Accessor | Languages |
-|---|---|
+| Accessor                                                                         | Languages    |
+| -------------------------------------------------------------------------------- | ------------ |
 | `models.speech_to_text.whisper_tiny_en` / `whisper_base_en` / `whisper_small_en` | English only |
-| `models.speech_to_text.whisper_tiny` / `whisper_base` / `whisper_small` | Multilingual |
+| `models.speech_to_text.whisper_tiny` / `whisper_base` / `whisper_small`          | Multilingual |
 
 ---
 
@@ -152,8 +152,8 @@ export default function StreamingStt() {
 Pick a Kokoro preset that bundles the model, a voice, and the phonemizer for that language:
 
 ```tsx
-import { useTextToSpeech, models } from 'react-native-executorch';
-import { AudioContext } from 'react-native-audio-api';
+import { useTextToSpeech, models } from "react-native-executorch";
+import { AudioContext } from "react-native-audio-api";
 
 const tts = useTextToSpeech({
   model: models.text_to_speech.kokoro.en_us.heart(),
@@ -180,9 +180,9 @@ Stream chunks for lower time-to-first-audio on long text:
 
 ```tsx
 await tts.stream({
-  text: 'Long text streamed chunk by chunk…',
+  text: "Long text streamed chunk by chunk…",
   speed: 1.0,
-  onBegin: async () => console.log('start'),
+  onBegin: async () => console.log("start"),
   onNext: async (chunk) =>
     new Promise<void>((resolve) => {
       const buffer = audioContext.createBuffer(1, chunk.length, 24000);
@@ -193,7 +193,7 @@ await tts.stream({
       source.onEnded = () => resolve();
       source.start();
     }),
-  onEnd: async () => console.log('done'),
+  onEnd: async () => console.log("done"),
   stopAutomatically: true,
 });
 ```
@@ -203,12 +203,14 @@ await tts.stream({
 If you already have phonemes (e.g. from a custom pronunciation pipeline), skip the phonemizer:
 
 ```tsx
-const waveform = await tts.forwardFromPhonemes({ phonemes: 'hɛloʊ', speed: 1.0 });
+const waveform = await tts.forwardFromPhonemes({ phonemes: "hɛloʊ", speed: 1.0 });
 
 await tts.streamFromPhonemes({
-  phonemes: 'hɛloʊ wɜːld',
+  phonemes: "hɛloʊ wɜːld",
   speed: 1.0,
-  onNext: async (chunk) => { /* play */ },
+  onNext: async (chunk) => {
+    /* play */
+  },
 });
 ```
 
@@ -216,17 +218,17 @@ await tts.streamFromPhonemes({
 
 `models.text_to_speech.kokoro.<locale>.<voice>` — locale + voice combinations:
 
-| Locale | Voices |
-|---|---|
+| Locale  | Voices                                                |
+| ------- | ----------------------------------------------------- |
 | `en_us` | `heart`, `river`, `sarah`, `adam`, `michael`, `santa` |
-| `en_gb` | `emma`, `daniel` |
-| `fr` | `siwis` |
-| `es` | `dora`, `alex` |
-| `it` | `sara`, `nicola` |
-| `pt` | `dora`, `santa` |
-| `hi` | `alpha`, `omega`, `psi` |
-| `pl` | `mateusz` |
-| `de` | `anna` |
+| `en_gb` | `emma`, `daniel`                                      |
+| `fr`    | `siwis`                                               |
+| `es`    | `dora`, `alex`                                        |
+| `it`    | `sara`, `nicola`                                      |
+| `pt`    | `dora`, `santa`                                       |
+| `hi`    | `alpha`, `omega`, `psi`                               |
+| `pl`    | `mateusz`                                             |
+| `de`    | `anna`                                                |
 
 ---
 
@@ -235,15 +237,15 @@ await tts.streamFromPhonemes({
 Detects speech segments in an audio buffer. Useful for trimming silence, segmenting recordings, or gating STT.
 
 ```tsx
-import { useVAD, models } from 'react-native-executorch';
-import { AudioContext } from 'react-native-audio-api';
-import * as FileSystem from 'expo-file-system';
+import { useVAD, models } from "react-native-executorch";
+import { AudioContext } from "react-native-audio-api";
+import * as FileSystem from "expo-file-system";
 
 const vad = useVAD({ model: models.vad.fsmn_vad() });
 
 const { uri } = await FileSystem.downloadAsync(
-  'https://example.com/file.mp3',
-  FileSystem.cacheDirectory + 'vad.mp3'
+  "https://example.com/file.mp3",
+  FileSystem.cacheDirectory + "vad.mp3",
 );
 
 const audioContext = new AudioContext({ sampleRate: 16000 });

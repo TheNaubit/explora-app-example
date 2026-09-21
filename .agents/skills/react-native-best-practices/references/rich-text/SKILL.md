@@ -39,10 +39,7 @@ npm install react-native-enriched-html
 
 ```tsx
 import { EnrichedTextInput } from "react-native-enriched-html";
-import type {
-  EnrichedTextInputInstance,
-  OnChangeStateEvent,
-} from "react-native-enriched-html";
+import type { EnrichedTextInputInstance, OnChangeStateEvent } from "react-native-enriched-html";
 import { useState, useRef } from "react";
 import { View, Button, StyleSheet } from "react-native";
 
@@ -330,10 +327,7 @@ This is **bold**, *italic*, and [a link](https://reactnative.dev).
 
 export default function MarkdownDisplay() {
   return (
-    <EnrichedMarkdownText
-      markdown={markdown}
-      onLinkPress={({ url }) => Linking.openURL(url)}
-    />
+    <EnrichedMarkdownText markdown={markdown} onLinkPress={({ url }) => Linking.openURL(url)} />
   );
 }
 ```
@@ -422,7 +416,7 @@ const markdownStyle: MarkdownStyle = useMemo(
     link: { color: "#007AFF", underline: true },
     blockquote: { borderColor: "#007AFF", backgroundColor: "#F0F8FF" },
   }),
-  []
+  [],
 );
 ```
 

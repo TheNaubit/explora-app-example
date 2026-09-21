@@ -21,8 +21,8 @@ Read the relevant reference for the topic at hand. All references are in `refere
 
 ## References
 
-| File | When to read |
-|------|-------------|
-| `references/installation.md` | Setting up RNRepo for the first time — Expo CNG, standard React Native, Android Gradle, iOS CocoaPods |
-| `references/configuration.md` | Opting out specific libraries (denyList), disabling the plugin, Fingerprint config, GPG verification |
+| File                            | When to read                                                                                                                               |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `references/installation.md`    | Setting up RNRepo for the first time — Expo CNG, standard React Native, Android Gradle, iOS CocoaPods                                      |
+| `references/configuration.md`   | Opting out specific libraries (denyList), disabling the plugin, Fingerprint config, GPG verification                                       |
 | `references/troubleshooting.md` | Build failures, C++ debug/release mismatch, duplicate `.so` files, Xcode version issues, empty repository list, verifying the plugin works |

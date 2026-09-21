@@ -65,24 +65,13 @@ import { useState } from "react";
 
 const [value, setValue] = useState(0.5);
 
-<Slider
-  value={value}
-  onValueChange={setValue}
-  minimumValue={0}
-  maximumValue={1}
-/>;
+<Slider value={value} onValueChange={setValue} minimumValue={0} maximumValue={1} />;
 ```
 
 ### Discrete Steps
 
 ```tsx
-<Slider
-  value={value}
-  onValueChange={setValue}
-  minimumValue={0}
-  maximumValue={10}
-  step={1}
-/>
+<Slider value={value} onValueChange={setValue} minimumValue={0} maximumValue={10} step={1} />
 ```
 
 ## Date/Time Picker
@@ -131,11 +120,7 @@ const [date, setDate] = useState(new Date());
 ### Time Intervals
 
 ```tsx
-<DateTimePicker
-  value={date}
-  mode="time"
-  minuteInterval={15}
-/>
+<DateTimePicker value={date} mode="time" minuteInterval={15} />
 ```
 
 ### Min/Max Dates
@@ -166,7 +151,7 @@ import { colors } from "@/theme/colors";
     borderRadius: 8,
     backgroundColor: colors.secondarySystemBackground,
   }}
-/>
+/>;
 ```
 
 ### Keyboard Types
@@ -194,12 +179,7 @@ import { colors } from "@/theme/colors";
 ### Multiline
 
 ```tsx
-<TextInput
-  multiline
-  numberOfLines={4}
-  textAlignVertical="top"
-  style={{ minHeight: 100 }}
-/>
+<TextInput multiline numberOfLines={4} textAlignVertical="top" style={{ minHeight: 100 }} />
 ```
 
 ## Picker (Wheel)

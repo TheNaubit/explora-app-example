@@ -13,9 +13,9 @@ If a single team owns both layers, is comfortable with React Native tooling and 
 
 ## What you produce
 
-| Platform | Artifact                                                                                                                                                                                                                | Default location                                              |
-| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Android  | `{group}:{libraryName}:{version}` AAR                                                                                                                                                                                   | Local Maven (`~/.m2`) by default; remote Maven also supported |
+| Platform | Artifact                                                                                                                              | Default location                                              |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Android  | `{group}:{libraryName}:{version}` AAR                                                                                                 | Local Maven (`~/.m2`) by default; remote Maven also supported |
 | iOS      | Set of `.xcframework`s (depends on source/prebuilt settings and package version), or a Swift Package via `--package`; see [iOS](#ios) | `./artifacts`                                                 |
 
 The JavaScript bundle is **embedded inside the artifact** in release builds, so the native app does not need Metro at runtime in production.
@@ -218,12 +218,7 @@ To force source builds, configure the brownfield plugin directly in `app.json`:
 ```json
 {
   "expo": {
-    "plugins": [
-      [
-        "expo-brownfield",
-        { "ios": { "buildReactNativeFromSource": true } }
-      ]
-    ]
+    "plugins": [["expo-brownfield", { "ios": { "buildReactNativeFromSource": true } }]]
   }
 }
 ```

@@ -13,8 +13,8 @@ Read after choosing the build approach. Packaging a framework and displaying its
 For a small standalone producer, set `package.json`'s `main` to `index.ts` and register a component explicitly. If the scaffold has no TypeScript setup, first run `npx expo install typescript @types/react`:
 
 ```ts
-import { registerRootComponent } from 'expo';
-import Feature from './Feature';
+import { registerRootComponent } from "expo";
+import Feature from "./Feature";
 
 registerRootComponent(Feature); // Registers "main", matching the native examples.
 ```
@@ -24,18 +24,24 @@ Do not overwrite an existing app entry point blindly. A Router-based producer ne
 `Feature.tsx`:
 
 ```tsx
-import { useEffect, useState } from 'react';
-import { Button, Text, View } from 'react-native';
-import * as Brownfield from 'expo-brownfield';
+import { useEffect, useState } from "react";
+import { Button, Text, View } from "react-native";
+import * as Brownfield from "expo-brownfield";
 
-export default function Feature({ requestId, userId, greeting: initialGreeting }: {
-  requestId: string; userId: string; greeting: string;
+export default function Feature({
+  requestId,
+  userId,
+  greeting: initialGreeting,
+}: {
+  requestId: string;
+  userId: string;
+  greeting: string;
 }) {
   const [greeting, setGreeting] = useState(initialGreeting);
 
   useEffect(() => {
     const subscription = Brownfield.addMessageListener((event) => {
-      if (event.requestId === requestId && event.type === 'feature.context') {
+      if (event.requestId === requestId && event.type === "feature.context") {
         setGreeting(String(event.greeting));
       }
     });
@@ -43,17 +49,38 @@ export default function Feature({ requestId, userId, greeting: initialGreeting }
   }, [requestId]);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
-      <Text>{greeting}: {userId}</Text>
-      <Button title="Refresh greeting" onPress={() => Brownfield.sendMessage({
-        type: 'feature.request-context', requestId,
-      })} />
-      <Button title="Done" onPress={() => Brownfield.sendMessage({
-        type: 'feature.completed', requestId, selectedId: 'item-42',
-      })} />
-      <Button title="Cancel" onPress={() => Brownfield.sendMessage({
-        type: 'feature.cancelled', requestId,
-      })} />
+    <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
+      <Text>
+        {greeting}: {userId}
+      </Text>
+      <Button
+        title="Refresh greeting"
+        onPress={() =>
+          Brownfield.sendMessage({
+            type: "feature.request-context",
+            requestId,
+          })
+        }
+      />
+      <Button
+        title="Done"
+        onPress={() =>
+          Brownfield.sendMessage({
+            type: "feature.completed",
+            requestId,
+            selectedId: "item-42",
+          })
+        }
+      />
+      <Button
+        title="Cancel"
+        onPress={() =>
+          Brownfield.sendMessage({
+            type: "feature.cancelled",
+            requestId,
+          })
+        }
+      />
     </View>
   );
 }

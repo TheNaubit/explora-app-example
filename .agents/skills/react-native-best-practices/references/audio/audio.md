@@ -40,7 +40,7 @@ Do you need simple file playback with no effects or real-time processing?
 Encapsulate `AudioContext` in a singleton class to keep audio logic outside of React components and maintain consistent state across the app.
 
 ```tsx
-import { AudioContext } from 'react-native-audio-api';
+import { AudioContext } from "react-native-audio-api";
 
 class AudioManager {
   private static instance: AudioManager;
@@ -75,7 +75,7 @@ Activate the context when the audio feature mounts, suspend on unmount:
 useEffect(() => {
   const ctx = audioManager.context;
 
-  if (ctx.state === 'suspended') {
+  if (ctx.state === "suspended") {
     ctx.resume();
   }
 
@@ -120,13 +120,13 @@ Use `decodeAudioData` to load audio from files, URLs, ArrayBuffers, or bundled a
 
 ```tsx
 // From a URL or local file path
-const buffer = await audioContext.decodeAudioData('https://example.com/audio.mp3');
+const buffer = await audioContext.decodeAudioData("https://example.com/audio.mp3");
 
 // From an ArrayBuffer
 const buffer = await audioContext.decodeAudioData(arrayBuffer);
 
 // From a bundled asset (mobile only)
-const buffer = await audioContext.decodeAudioData(require('./audio.mp3'));
+const buffer = await audioContext.decodeAudioData(require("./audio.mp3"));
 ```
 
 The audio is automatically resampled to match the context's `sampleRate`. Pass an optional `sampleRate` parameter to override.

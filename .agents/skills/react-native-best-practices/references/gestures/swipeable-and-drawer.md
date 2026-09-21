@@ -9,15 +9,12 @@ Pre-built gesture components for common interaction patterns. For full API refer
 Drop-in swipeable list item component built on Reanimated. Use for swipe-to-delete, swipe-to-archive, and swipe-to-reveal-actions patterns.
 
 ```tsx
-import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 
 function ListItem({ onDelete }: { onDelete: () => void }) {
   const swipeableRef = useRef<SwipeableMethods>(null);
 
-  const renderRightActions = (
-    progress: SharedValue<number>,
-    translation: SharedValue<number>,
-  ) => (
+  const renderRightActions = (progress: SharedValue<number>, translation: SharedValue<number>) => (
     <Animated.View style={[styles.deleteAction, { opacity: progress }]}>
       <Text>Delete</Text>
     </Animated.View>
@@ -30,7 +27,7 @@ function ListItem({ onDelete }: { onDelete: () => void }) {
       rightThreshold={80}
       overshootFriction={8}
       onSwipeableOpen={(direction) => {
-        if (direction === 'right') onDelete();
+        if (direction === "right") onDelete();
       }}
     >
       <View style={styles.row}>
@@ -62,7 +59,7 @@ function ListItem({ onDelete }: { onDelete: () => void }) {
 Cross-platform drawer (side menu) component. Replacement for React Native's `DrawerLayoutAndroid`.
 
 ```tsx
-import ReanimatedDrawerLayout from 'react-native-gesture-handler/ReanimatedDrawerLayout';
+import ReanimatedDrawerLayout from "react-native-gesture-handler/ReanimatedDrawerLayout";
 
 function App() {
   const drawerRef = useRef<DrawerLayoutMethods>(null);
@@ -112,8 +109,12 @@ const startX = useSharedValue(0);
 const pan = usePanGesture({
   activeOffsetX: [-10, 10],
   failOffsetY: [-5, 5],
-  onBegin: () => { startX.value = translateX.value; },
-  onUpdate: (e) => { translateX.value = startX.value + e.translationX; },
+  onBegin: () => {
+    startX.value = translateX.value;
+  },
+  onUpdate: (e) => {
+    translateX.value = startX.value + e.translationX;
+  },
   onDeactivate: (e) => {
     if (e.translationX < -80) {
       translateX.value = withTiming(-ACTIONS_WIDTH);
@@ -124,20 +125,26 @@ const pan = usePanGesture({
 });
 
 // v2
-const pan = useMemo(() =>
-  Gesture.Pan()
-    .activeOffsetX([-10, 10])
-    .failOffsetY([-5, 5])
-    .onBegin(() => { startX.value = translateX.value; })
-    .onUpdate((e) => { translateX.value = startX.value + e.translationX; })
-    .onEnd((e) => {
-      if (e.translationX < -80) {
-        translateX.value = withTiming(-ACTIONS_WIDTH);
-      } else {
-        translateX.value = withSpring(0);
-      }
-    }),
-[]);
+const pan = useMemo(
+  () =>
+    Gesture.Pan()
+      .activeOffsetX([-10, 10])
+      .failOffsetY([-5, 5])
+      .onBegin(() => {
+        startX.value = translateX.value;
+      })
+      .onUpdate((e) => {
+        translateX.value = startX.value + e.translationX;
+      })
+      .onEnd((e) => {
+        if (e.translationX < -80) {
+          translateX.value = withTiming(-ACTIONS_WIDTH);
+        } else {
+          translateX.value = withSpring(0);
+        }
+      }),
+  [],
+);
 ```
 
 Use `activeOffsetX`/`failOffsetY` to distinguish horizontal swipe from vertical scroll.
@@ -148,8 +155,6 @@ On web, add `touchAction="pan-y"` to `GestureDetector` so browser vertical scrol
 
 ```tsx
 <GestureDetector gesture={pan} touchAction="pan-y">
-  <Animated.View style={[styles.row, animatedStyle]}>
-    {children}
-  </Animated.View>
+  <Animated.View style={[styles.row, animatedStyle]}>{children}</Animated.View>
 </GestureDetector>
 ```

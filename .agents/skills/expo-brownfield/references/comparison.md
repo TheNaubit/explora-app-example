@@ -22,7 +22,7 @@ When in doubt — and especially when the question is "can the native team avoid
 | ---------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | What ships to the native app                         | Prebuilt AAR + XCFramework                                              | React Native + Expo sources, autolinked into the existing build       |
 | Native team needs Node / Yarn / RN CLI               | **No**                                                                  | **Yes**                                                               |
-| Build-system footprint                               | Artifact dependency plus its required runtime libraries               | Pervasive — React Native Gradle plugin, Podfile, autolinking, codegen |
+| Build-system footprint                               | Artifact dependency plus its required runtime libraries                 | Pervasive — React Native Gradle plugin, Podfile, autolinking, codegen |
 | Iteration speed for RN devs                          | Fast in isolation; native rebuild needed to pick up new artifact        | Fast end-to-end; one combined build                                   |
 | Dev-time hot reload                                  | Yes (via Metro, when running the consumer app in debug)                 | Yes (native build embeds Metro detection)                             |
 | Production JS bundle location                        | Embedded in the AAR/XCFramework                                         | Embedded in the APK/IPA by the RN Gradle plugin / Xcode build phase   |

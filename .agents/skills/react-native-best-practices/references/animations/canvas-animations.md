@@ -13,6 +13,7 @@ npm install @shopify/react-native-skia
 ```
 
 With Expo:
+
 ```sh
 npx expo install @shopify/react-native-skia
 ```
@@ -26,14 +27,9 @@ Bundle size impact: ~6 MB on iOS, ~4 MB on Android, ~2.9 MB on Web.
 Skia components accept Reanimated shared values and derived values as props directly. There is no need for `createAnimatedComponent` or `useAnimatedProps`.
 
 ```tsx
-import { useEffect } from 'react';
-import { Canvas, Circle, Group } from '@shopify/react-native-skia';
-import {
-  useDerivedValue,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
+import { useEffect } from "react";
+import { Canvas, Circle, Group } from "@shopify/react-native-skia";
+import { useDerivedValue, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 
 export const AnimatedCircles = () => {
   const size = 256;
@@ -61,8 +57,8 @@ export const AnimatedCircles = () => {
 Use the `onSize` prop to get the canvas dimensions as a shared value, which updates whenever the canvas resizes:
 
 ```tsx
-import { useSharedValue, useDerivedValue } from 'react-native-reanimated';
-import { Canvas, Rect } from '@shopify/react-native-skia';
+import { useSharedValue, useDerivedValue } from "react-native-reanimated";
+import { Canvas, Rect } from "@shopify/react-native-skia";
 
 const Demo = () => {
   const size = useSharedValue({ width: 0, height: 0 });
@@ -88,35 +84,20 @@ const Demo = () => {
 Skia uses a different color storage format from Reanimated. `interpolateColor` from Reanimated will produce incorrect results. Use `interpolateColors` from `@shopify/react-native-skia` instead:
 
 ```tsx
-import {
-  Canvas,
-  LinearGradient,
-  Fill,
-  interpolateColors,
-  vec,
-} from '@shopify/react-native-skia';
-import {
-  useDerivedValue,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
-import { useEffect } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Canvas, LinearGradient, Fill, interpolateColors, vec } from "@shopify/react-native-skia";
+import { useDerivedValue, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
+import { useEffect } from "react";
+import { useWindowDimensions } from "react-native";
 
-const startColors = ['rgba(34,193,195,0.4)', 'rgba(63,94,251,1)'];
-const endColors = ['rgba(0,212,255,0.4)', 'rgba(252,70,107,1)'];
+const startColors = ["rgba(34,193,195,0.4)", "rgba(63,94,251,1)"];
+const endColors = ["rgba(0,212,255,0.4)", "rgba(252,70,107,1)"];
 
 export const AnimatedGradient = () => {
   const { width, height } = useWindowDimensions();
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withRepeat(
-      withTiming(startColors.length - 1, { duration: 4000 }),
-      -1,
-      true
-    );
+    progress.value = withRepeat(withTiming(startColors.length - 1, { duration: 4000 }), -1, true);
   }, []);
 
   const gradientColors = useDerivedValue(() => [
@@ -127,11 +108,7 @@ export const AnimatedGradient = () => {
   return (
     <Canvas style={{ flex: 1 }}>
       <Fill>
-        <LinearGradient
-          start={vec(0, 0)}
-          end={vec(width, height)}
-          colors={gradientColors}
-        />
+        <LinearGradient start={vec(0, 0)} end={vec(width, height)} colors={gradientColors} />
       </Fill>
     </Canvas>
   );
@@ -157,14 +134,9 @@ Issue drawing commands directly to a canvas on every frame. Use when the number 
 Best for: games, generative art, particle trails, any scene where entities are created/destroyed per frame.
 
 ```tsx
-import { Canvas, Picture, Skia } from '@shopify/react-native-skia';
-import {
-  useDerivedValue,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
-import { useEffect } from 'react';
+import { Canvas, Picture, Skia } from "@shopify/react-native-skia";
+import { useDerivedValue, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
+import { useEffect } from "react";
 
 const size = 256;
 const paint = Skia.Paint();
@@ -178,7 +150,7 @@ export const CircleTrail = () => {
   }, [progress]);
 
   const picture = useDerivedValue(() => {
-    'worklet';
+    "worklet";
     const canvas = recorder.beginRecording(Skia.XYWHRect(0, 0, size, size));
     const count = Math.floor(progress.value * 20);
     for (let i = 0; i < count; i++) {
@@ -216,13 +188,13 @@ Skia provides hooks for efficient path animation on the UI thread. For full API 
 Interpolates between path shapes based on a progress value. All paths must contain the same number and types of commands for proper interpolation. For paths with different structures, use the [flubber library](https://github.com/veltman/flubber) to generate compatible intermediate paths.
 
 ```tsx
-import { useEffect } from 'react';
-import { useSharedValue, withTiming } from 'react-native-reanimated';
-import { Skia, usePathInterpolation, Canvas, Path } from '@shopify/react-native-skia';
+import { useEffect } from "react";
+import { useSharedValue, withTiming } from "react-native-reanimated";
+import { Skia, usePathInterpolation, Canvas, Path } from "@shopify/react-native-skia";
 
-const angry = Skia.Path.MakeFromSVGString('M 16 25 C 32 27 ...')!;
-const normal = Skia.Path.MakeFromSVGString('M 21 31 C 31 32 ...')!;
-const happy = Skia.Path.MakeFromSVGString('M 21 45 C 21 37 ...')!;
+const angry = Skia.Path.MakeFromSVGString("M 16 25 C 32 27 ...")!;
+const normal = Skia.Path.MakeFromSVGString("M 21 31 C 31 32 ...")!;
+const happy = Skia.Path.MakeFromSVGString("M 21 45 C 21 37 ...")!;
 
 const MorphingFace = () => {
   const progress = useSharedValue(0);
@@ -245,9 +217,9 @@ const MorphingFace = () => {
 Animates a path using imperative commands inside a worklet. Supports 3D transforms via `processTransform3d`:
 
 ```tsx
-import { useSharedValue, withSpring } from 'react-native-reanimated';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { usePathValue, Canvas, Path, processTransform3d, Skia } from '@shopify/react-native-skia';
+import { useSharedValue, withSpring } from "react-native-reanimated";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { usePathValue, Canvas, Path, processTransform3d, Skia } from "@shopify/react-native-skia";
 
 const rrct = Skia.Path.Make();
 rrct.addRRect(Skia.RRectXY(Skia.XYWHRect(0, 0, 100, 100), 10, 10));
@@ -259,14 +231,14 @@ export const Card3D = () => {
   });
 
   const clip = usePathValue((path) => {
-    'worklet';
+    "worklet";
     path.transform(
       processTransform3d([
         { translate: [50, 50] },
         { perspective: 300 },
         { rotateY: rotateY.value },
         { translate: [-50, -50] },
-      ])
+      ]),
     );
   }, rrct);
 
@@ -285,8 +257,8 @@ export const Card3D = () => {
 Returns a continuously incrementing shared value (milliseconds since activation). Useful for parametric/time-based animations:
 
 ```tsx
-import { Canvas, useClock, vec, Circle } from '@shopify/react-native-skia';
-import { useDerivedValue } from 'react-native-reanimated';
+import { Canvas, useClock, vec, Circle } from "@shopify/react-native-skia";
+import { useDerivedValue } from "react-native-reanimated";
 
 export default function Lissajous() {
   const t = useClock();
@@ -314,10 +286,10 @@ export default function Lissajous() {
 Wrap the `Canvas` with `GestureDetector` from `react-native-gesture-handler`. Shared values updated in gesture callbacks drive Skia props on the UI thread:
 
 ```tsx
-import { Canvas, Circle, Fill } from '@shopify/react-native-skia';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import { useSharedValue, withDecay } from 'react-native-reanimated';
-import { useWindowDimensions } from 'react-native';
+import { Canvas, Circle, Fill } from "@shopify/react-native-skia";
+import { GestureDetector, Gesture } from "react-native-gesture-handler";
+import { useSharedValue, withDecay } from "react-native-reanimated";
+import { useWindowDimensions } from "react-native";
 
 export const DraggableCircle = () => {
   const { width } = useWindowDimensions();
@@ -350,10 +322,10 @@ export const DraggableCircle = () => {
 Gestures apply to the entire canvas by default. To target a specific drawn element, overlay an invisible `Animated.View` that mirrors the element's transforms and attach the gesture to that view:
 
 ```tsx
-import { View } from 'react-native';
-import { Canvas, Circle, Fill } from '@shopify/react-native-skia';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import Animated, { useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import { View } from "react-native";
+import { Canvas, Circle, Fill } from "@shopify/react-native-skia";
+import { GestureDetector, Gesture } from "react-native-gesture-handler";
+import Animated, { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
 
 const radius = 30;
 
@@ -362,7 +334,7 @@ export const TrackedCircle = () => {
   const y = useSharedValue(100);
 
   const overlayStyle = useAnimatedStyle(() => ({
-    position: 'absolute',
+    position: "absolute",
     top: -radius,
     left: -radius,
     width: radius * 2,
@@ -398,7 +370,7 @@ Skia provides a shading language (SKSL) similar to GLSL for per-pixel effects. C
 For full SKSL syntax, webfetch the [shading language docs](https://shopify.github.io/react-native-skia/docs/shaders/overview).
 
 ```tsx
-import { Canvas, Skia, Shader, Fill } from '@shopify/react-native-skia';
+import { Canvas, Skia, Shader, Fill } from "@shopify/react-native-skia";
 
 const source = Skia.RuntimeEffect.Make(`
 uniform vec2 resolution;
@@ -420,7 +392,7 @@ vec4 main(vec2 pos) {
 Apply SKSL shaders as image filters to existing drawings. The currently filtered image is passed as the `image` uniform:
 
 ```tsx
-import { Canvas, Skia, Group, Circle, RuntimeShader } from '@shopify/react-native-skia';
+import { Canvas, Skia, Group, Circle, RuntimeShader } from "@shopify/react-native-skia";
 
 const source = Skia.RuntimeEffect.Make(`
 uniform shader image;

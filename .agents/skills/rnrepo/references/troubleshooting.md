@@ -10,11 +10,13 @@ description: "Troubleshooting RNRepo build issues: C++ debug/release mismatch wi
 ### Android
 
 Run with `--info` and search for `[📦 RNRepo]` in the output:
+
 ```bash
 ./gradlew :app:assembleDebug --info
 ```
 
 Expected log:
+
 ```
 [📦 RNRepo] Found the following supported prebuilt packages:
 📦 react-native-safe-area-context@5.7.0
@@ -25,6 +27,7 @@ If the plugin is working, you will **not** see `compileDebugKotlin` tasks for th
 ### iOS
 
 During `pod install` or build, look for:
+
 ```
 [📦 RNRepo] ⬇ Downloaded from Maven...
 [📦 RNRepo] • react-native-safe-area-context
@@ -35,11 +38,13 @@ During `pod install` or build, look for:
 ## No supported packages found
 
 Log shows:
+
 ```
 [📦 RNRepo] Found the following supported prebuilt packages: None
 ```
 
 Causes:
+
 1. The RNRepo plugin is applied **before** the Maven repository is defined. Move the `maven { url "https://packages.rnrepo.org/releases" }` block to `allprojects` in root `build.gradle` and ensure it comes before the plugin is applied.
 2. All matching packages are in the deny list.
 3. The installed library or React Native version has no prebuild yet (expected — RNRepo falls back to source silently).
@@ -49,6 +54,7 @@ Causes:
 ## C++ debug/release mismatch (reanimated + worklets)
 
 Symptom — `--info` logs show:
+
 ```
 [📦 RNRepo] react-native-worklets is supported, checking if all packages depending on it are supported.
 [📦 RNRepo] react-native-reanimated depending on react-native-worklets is not available as a prebuild, building react-native-worklets from sources.
@@ -57,6 +63,7 @@ Symptom — `--info` logs show:
 Cause: One dependency uses a prebuilt (release variant) while another that depends on it builds from source (debug variant). The ABI differs for C++ libraries.
 
 Solutions:
+
 1. Keep build variants consistent — all dependencies should share the same build type.
 2. Add the problematic libraries to the `denyList` in `rnrepo.config.json` to force source builds.
 
@@ -65,6 +72,7 @@ Solutions:
 ## Duplicate `.so` file conflict
 
 Error:
+
 ```
 DuplicateRelativeFileException: 2 files found with path 'lib/arm64-v8a/libworklets.so'
 ```
@@ -72,6 +80,7 @@ DuplicateRelativeFileException: 2 files found with path 'lib/arm64-v8a/libworkle
 Cause: A library built from source includes native code from a provider library (e.g., `react-native-worklets`), causing a collision with the prebuilt version.
 
 The plugin automatically adds `pickFirsts` for known provider libraries:
+
 - `react-native-worklets` → `libworklets.so`
 - `react-native-nitro-modules` → `libNitroModules.so`
 
@@ -82,6 +91,7 @@ If another library triggers this, add it to the deny list and report the issue o
 ## iOS: Xcode version mismatch (Xcode < 26)
 
 Error:
+
 ```
 Undefined symbols for architecture arm64:
   "_OBJC_CLASS_$_UITabAccessory", referenced from: ...
@@ -90,12 +100,14 @@ Undefined symbols for architecture arm64:
 Cause: Prebuilt xcframeworks are compiled with Xcode 26. Building with an older Xcode version causes linker failures for packages that use newer APIs.
 
 Identify the culprit from the `.o` filename in the error:
+
 ```bash
 find ./node_modules -path "*RNSTabsBottomAccessoryHelper*"
 # → node_modules/react-native-screens/ios/...
 ```
 
 Solutions (in order of preference):
+
 1. **Upgrade Xcode** to 26 or newer.
 2. **Downgrade the library** to a version prebuilt with an older Xcode (if available in the registry).
 3. **Add to deny list** under `ios` in `rnrepo.config.json` to force source compilation.
@@ -107,6 +119,7 @@ Solutions (in order of preference):
 Cause: The CocoaPods plugin caches xcframeworks in `node_modules/<pkg>/.rnrepo-cache`, changing the directory hash between local and CI environments.
 
 Fix: Add to `.fingerprintignore`:
+
 ```text
 **/.rnrepo-cache
 ```
@@ -118,6 +131,7 @@ Fix: Add to `.fingerprintignore`:
 The plugin skips automatically for tasks it recognizes as non-build: `test`, `signing`, `clean`, `clear`, `init`, `dependencies`, `tasks`, `projects`, `connected`, `device`, `lint`, `check`, `properties`, `help`.
 
 If it still runs when it shouldn't:
+
 ```bash
 DISABLE_RNREPO=true ./gradlew clean
 DISABLE_RNREPO=true ./gradlew test

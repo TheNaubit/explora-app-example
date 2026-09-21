@@ -44,22 +44,22 @@ Then exercise the member from the example app or a test, because a binding can l
 
 Treat these as independent capabilities. Confirm each by compiling a minimal member that uses it, then calling it from JS:
 
-| Capability | Macro surface | Core hook to grep (internal) | Confirm by |
-| --- | --- | --- | --- |
-| Module functions/properties | `@ExpoModule`, `@JS` | `_decorateModule` and its call site | calling the function and reading the property from JS |
-| Module name | `@ExpoModule("Name")` | `_jsName` and the name lookup that reads it | resolving the module under its expected JS name |
-| Records | `@Record` | coding conformances and field decode/encode | round-tripping a record argument and a record return value |
-| Async events | `@Event` | `EventEmitter` on modules and shared objects | receiving an emitted event through the module's JS listener |
-| Shared-object instances | `@SharedObject`, `@JS` | `_decorateSharedObject(prototype:)`, construction hook | constructing one from JS and calling an instance member |
-| Shared-object static members | `@JS static` | `_decorateSharedObject(constructor:)`, distinct from the `prototype:` overload | calling the member on the JS class itself, not an instance |
-| Synchronous events | `@Event(sync:)` | `emitSync` overloads | observing the listener run before the emit call returns |
-| Task-returning functions | `@JS` returning `Task` | `JavaScriptEncodable` for `Task` (encode-only) | awaiting the returned promise in JS |
-| Views | `@ViewProps`, `@ExpoView` | `AnyViewProps`, `PropsDiff`, `_updateViewProps` | rendering the view and updating every prop from JS |
-| Module lifecycle methods | lifecycle members on the module class | `AnyModule` requirements and holder call sites | observing each hook fire |
-| Free-form `Any` arguments | `@JS` with `Any`, `[Any]`, `[String: Any]` | `decodeAny`, `decodeAnyArray`, `decodeAnyDictionary` | building it, then passing a JS object through |
-| Off-JS-thread async start | `@JS(.concurrent)` | `JSOptions` and the options-taking `@JS` overload (plugin `0.10.0`) | the `@JS` declaration accepting an options argument |
-| Typed N-case unions | `@Union` | `Union` macro declaration and `UnionCaseMismatch` (plugin `0.10.0`) | round-tripping each case through the JS boundary |
-| Autolinked `@ExpoModule` discovery | none, it is a build-time step | none, `scan-modules` plus the autolinking consumer | the module loading without an `expo-module.config.json` entry |
+| Capability                         | Macro surface                              | Core hook to grep (internal)                                                   | Confirm by                                                    |
+| ---------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| Module functions/properties        | `@ExpoModule`, `@JS`                       | `_decorateModule` and its call site                                            | calling the function and reading the property from JS         |
+| Module name                        | `@ExpoModule("Name")`                      | `_jsName` and the name lookup that reads it                                    | resolving the module under its expected JS name               |
+| Records                            | `@Record`                                  | coding conformances and field decode/encode                                    | round-tripping a record argument and a record return value    |
+| Async events                       | `@Event`                                   | `EventEmitter` on modules and shared objects                                   | receiving an emitted event through the module's JS listener   |
+| Shared-object instances            | `@SharedObject`, `@JS`                     | `_decorateSharedObject(prototype:)`, construction hook                         | constructing one from JS and calling an instance member       |
+| Shared-object static members       | `@JS static`                               | `_decorateSharedObject(constructor:)`, distinct from the `prototype:` overload | calling the member on the JS class itself, not an instance    |
+| Synchronous events                 | `@Event(sync:)`                            | `emitSync` overloads                                                           | observing the listener run before the emit call returns       |
+| Task-returning functions           | `@JS` returning `Task`                     | `JavaScriptEncodable` for `Task` (encode-only)                                 | awaiting the returned promise in JS                           |
+| Views                              | `@ViewProps`, `@ExpoView`                  | `AnyViewProps`, `PropsDiff`, `_updateViewProps`                                | rendering the view and updating every prop from JS            |
+| Module lifecycle methods           | lifecycle members on the module class      | `AnyModule` requirements and holder call sites                                 | observing each hook fire                                      |
+| Free-form `Any` arguments          | `@JS` with `Any`, `[Any]`, `[String: Any]` | `decodeAny`, `decodeAnyArray`, `decodeAnyDictionary`                           | building it, then passing a JS object through                 |
+| Off-JS-thread async start          | `@JS(.concurrent)`                         | `JSOptions` and the options-taking `@JS` overload (plugin `0.10.0`)            | the `@JS` declaration accepting an options argument           |
+| Typed N-case unions                | `@Union`                                   | `Union` macro declaration and `UnionCaseMismatch` (plugin `0.10.0`)            | round-tripping each case through the JS boundary              |
+| Autolinked `@ExpoModule` discovery | none, it is a build-time step              | none, `scan-modules` plus the autolinking consumer                             | the module loading without an `expo-module.config.json` entry |
 
 If a capability cannot be confirmed, keep that item in the 1.0 DSL.
 

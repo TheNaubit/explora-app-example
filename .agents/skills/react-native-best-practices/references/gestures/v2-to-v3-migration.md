@@ -204,11 +204,11 @@ The props you will use when migrating:
 
 ##### Replacing Gesture Handler buttons
 
-| Old component | Replace with (iOS / cross-platform default) |
-| ----------------- | --------------------------------------------------------- |
-| `BaseButton` | `<Touchable />` (default props) |
-| `RectButton` | `<Touchable underlayColor="black" animationDuration={0} />` |
-| `BorderlessButton`| `<Touchable activeOpacity={0.3} animationDuration={0} />` |
+| Old component      | Replace with (iOS / cross-platform default)                 |
+| ------------------ | ----------------------------------------------------------- |
+| `BaseButton`       | `<Touchable />` (default props)                             |
+| `RectButton`       | `<Touchable underlayColor="black" animationDuration={0} />` |
+| `BorderlessButton` | `<Touchable activeOpacity={0.3} animationDuration={0} />`   |
 
 **Android ripple:** legacy `RectButton`/`BorderlessButton` use the native theme ripple on Android, while `Touchable` disables the ripple unless `androidRipple` is set. To preserve the legacy Android feedback, set `androidRipple` on Android **instead of** `underlayColor`/`activeOpacity`/`animationDuration` (don't combine them — the ripple is the visual feedback on Android). The two configs are different:
 
@@ -218,28 +218,28 @@ The props you will use when migrating:
 Use `Platform.select` to apply different props per platform. Example for `RectButton`:
 
 ```jsx
-import { Platform } from 'react-native';
+import { Platform } from "react-native";
 
 <Touchable
   {...Platform.select({
     android: { androidRipple: {} },
-    default: { underlayColor: 'black', animationDuration: 0 },
+    default: { underlayColor: "black", animationDuration: 0 },
   })}
-/>
+/>;
 ```
 
 ##### Replacing legacy Touchables
 
-| Old component | Replace with |
-| --------------------------- | ---------------------------------------------------------------------------- |
-| `TouchableOpacity` | `<Touchable activeOpacity={0.2} animationDuration={{ in: 0, out: 150 }} />` |
-| `TouchableHighlight` | `<Touchable underlayColor={...} activeUnderlayOpacity={1} activeOpacity={...} />` — closest approximation only (not 1:1, see note below) |
-| `TouchableWithoutFeedback` | `<Touchable />` (plain, no visual feedback props) |
-| `TouchableNativeFeedback` | `<Touchable androidRipple={{ foreground: true }} />` (legacy default draws the ripple in the foreground; drop `foreground` if the original code passed `useForeground={false}`) |
+| Old component              | Replace with                                                                                                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TouchableOpacity`         | `<Touchable activeOpacity={0.2} animationDuration={{ in: 0, out: 150 }} />`                                                                                                     |
+| `TouchableHighlight`       | `<Touchable underlayColor={...} activeUnderlayOpacity={1} activeOpacity={...} />` — closest approximation only (not 1:1, see note below)                                        |
+| `TouchableWithoutFeedback` | `<Touchable />` (plain, no visual feedback props)                                                                                                                               |
+| `TouchableNativeFeedback`  | `<Touchable androidRipple={{ foreground: true }} />` (legacy default draws the ripple in the foreground; drop `foreground` if the original code passed `useForeground={false}`) |
 
 For `TouchableNativeFeedback`, `androidRipple` must be set explicitly — without it no ripple is rendered. The legacy component defaults to `useForeground: true`, so `{ foreground: true }` is the closest default replacement; omit `foreground` only when the original code set `useForeground={false}`. Add `color`, `radius`, or `borderless` if the original code customized the `background` prop.
 
-For `TouchableHighlight`, a perfect 1:1 replacement is **not possible** — in the legacy component the container's own background becomes the underlay (solid `underlayColor`) and `activeOpacity` dims just the children on top, so the underlay shows *through* the dimmed children. `Touchable` instead has a separate underlay layer between the background and children, and its `activeOpacity` dims the whole component (background + underlay + children together). The closest approximation: carry `underlayColor` and `activeOpacity` over unchanged, and add `activeUnderlayOpacity={1}` so the underlay layer is rendered solid. Inform the user that the visual feedback may differ from the legacy component because of the different layering.
+For `TouchableHighlight`, a perfect 1:1 replacement is **not possible** — in the legacy component the container's own background becomes the underlay (solid `underlayColor`) and `activeOpacity` dims just the children on top, so the underlay shows _through_ the dimmed children. `Touchable` instead has a separate underlay layer between the background and children, and its `activeOpacity` dims the whole component (background + underlay + children together). The closest approximation: carry `underlayColor` and `activeOpacity` over unchanged, and add `activeUnderlayOpacity={1}` so the underlay layer is rendered solid. Inform the user that the visual feedback may differ from the legacy component because of the different layering.
 
 Do not swap Gesture Handler buttons/touchables for React Native core components or vice versa during migration — keep them within `react-native-gesture-handler`.
 

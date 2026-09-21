@@ -7,13 +7,15 @@ By default, `pipeline.draw()` and `pipeline.dispatchWorkgroups()` each record th
 ## Typed command encoder and render passes
 
 ```ts
-const encoder = root['~unstable'].createCommandEncoder();
+const encoder = root["~unstable"].createCommandEncoder();
 
 const pass = encoder.beginRenderPass({
-  colorAttachments: [{
-    view: msaaTexture,        // TypeGPU texture/view, canvas context, or GPUTextureView
-    resolveTarget: context,
-  }],
+  colorAttachments: [
+    {
+      view: msaaTexture, // TypeGPU texture/view, canvas context, or GPUTextureView
+      resolveTarget: context,
+    },
+  ],
   depthStencilAttachment: {
     view: depthTexture,
   },
@@ -45,7 +47,7 @@ pass.setVertexBuffer(vertexLayout, vertexBuffer);
 pass.draw(3);
 ```
 
-Both styles share one pass state, applied lazily at draw time and following WebGPU ordering rules (state persists until overwritten). Footgun: `pipeline.with(pass).draw(...)` sets the pass's current pipeline — a subsequent bare `pass.draw(...)` runs *that* pipeline, not one set earlier via `setPipeline`.
+Both styles share one pass state, applied lazily at draw time and following WebGPU ordering rules (state persists until overwritten). Footgun: `pipeline.with(pass).draw(...)` sets the pass's current pipeline — a subsequent bare `pass.draw(...)` runs _that_ pipeline, not one set earlier via `setPipeline`.
 
 ## Compute passes
 
@@ -68,8 +70,8 @@ Caveat: guarded compute pipelines (`createGuardedComputePipeline` / `dispatchThr
 Pre-record a static draw sequence once, replay it cheaply every frame:
 
 ```ts
-const bundleEncoder = root['~unstable'].createRenderBundleEncoder({
-  colorFormats: ['rgba8unorm'],  // must match the pass it will run in
+const bundleEncoder = root["~unstable"].createRenderBundleEncoder({
+  colorFormats: ["rgba8unorm"], // must match the pass it will run in
 });
 scenePipeline.with(bundleEncoder).draw(vertexCount);
 const bundle = bundleEncoder.finish();

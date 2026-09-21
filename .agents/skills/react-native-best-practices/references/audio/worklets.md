@@ -11,11 +11,11 @@ For built-in effect nodes, see **`effects-and-analysis.md`**.
 
 Audio worklets let you run JavaScript code on the audio rendering thread for custom real-time processing. Three worklet node types are available:
 
-| Node | Purpose |
-|------|---------|
-| `WorkletNode` | **Read-only access** to audio data passing through the graph. Use for analysis, visualization, or driving UI from audio. |
-| `WorkletSourceNode` | **Generates audio** procedurally. Use for custom synthesizers, tone generators, or procedural soundscapes. |
-| `WorkletProcessingNode` | **Reads input and writes output**. Use for custom effects, filters, or signal transformations. |
+| Node                    | Purpose                                                                                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `WorkletNode`           | **Read-only access** to audio data passing through the graph. Use for analysis, visualization, or driving UI from audio. |
+| `WorkletSourceNode`     | **Generates audio** procedurally. Use for custom synthesizers, tone generators, or procedural soundscapes.               |
+| `WorkletProcessingNode` | **Reads input and writes output**. Use for custom effects, filters, or signal transformations.                           |
 
 All worklet nodes require `react-native-worklets` as a dependency:
 
@@ -36,6 +36,7 @@ Each worklet node takes a `workletRuntime` parameter selecting where the worklet
 Runs on the UI thread provided by `react-native-worklets`. Enables integration with Reanimated shared values and UI updates.
 
 **Use when:**
+
 - Updating UI elements from audio data (visualizations, meters)
 - Integrating with Reanimated shared values
 - Performance is less critical than UI responsiveness
@@ -45,6 +46,7 @@ Runs on the UI thread provided by `react-native-worklets`. Enables integration w
 Runs on the audio rendering thread for maximum performance and minimal latency.
 
 **Use when:**
+
 - Real-time audio processing without dropouts
 - Generating audio with precise timing
 - Latency and throughput are critical
@@ -58,16 +60,16 @@ Receives audio data for inspection without modifying it. The audio passes throug
 
 ```tsx
 const worklet = (audioData: Array<Float32Array>, inputChannelCount: number) => {
-  'worklet';
+  "worklet";
   // audioData[channel][sample] - read-only
   // Modifications are NOT reflected in the audio output
 };
 
 const workletNode = audioContext.createWorkletNode(
   worklet,
-  1024,           // bufferLength
-  2,              // inputChannelCount
-  'UIRuntime'     // or 'AudioRuntime'
+  1024, // bufferLength
+  2, // inputChannelCount
+  "UIRuntime", // or 'AudioRuntime'
 );
 
 source.connect(workletNode);
@@ -77,12 +79,12 @@ workletNode.connect(audioContext.destination);
 ### Driving Reanimated from Audio Data
 
 ```tsx
-import { useSharedValue } from 'react-native-reanimated';
+import { useSharedValue } from "react-native-reanimated";
 
 const volume = useSharedValue(0);
 
 const worklet = (audioData: Array<Float32Array>, channelCount: number) => {
-  'worklet';
+  "worklet";
   let sum = 0;
   const samples = audioData[0];
   for (let i = 0; i < samples.length; i++) {
@@ -119,9 +121,9 @@ const sineWave = (
   audioData: Array<Float32Array>,
   framesToProcess: number,
   currentTime: number,
-  startOffset: number
+  startOffset: number,
 ) => {
-  'worklet';
+  "worklet";
   const frequency = 440;
   const sampleRate = 44100;
 
@@ -133,7 +135,7 @@ const sineWave = (
   }
 };
 
-const sourceNode = audioContext.createWorkletSourceNode(sineWave, 'AudioRuntime');
+const sourceNode = audioContext.createWorkletSourceNode(sineWave, "AudioRuntime");
 sourceNode.connect(audioContext.destination);
 sourceNode.start();
 
@@ -159,9 +161,9 @@ const gainEffect = (
   inputData: Array<Float32Array>,
   outputData: Array<Float32Array>,
   framesToProcess: number,
-  currentTime: number
+  currentTime: number,
 ) => {
-  'worklet';
+  "worklet";
   const gain = 0.5;
 
   for (let ch = 0; ch < inputData.length; ch++) {
@@ -173,10 +175,7 @@ const gainEffect = (
   }
 };
 
-const processingNode = audioContext.createWorkletProcessingNode(
-  gainEffect,
-  'AudioRuntime'
-);
+const processingNode = audioContext.createWorkletProcessingNode(gainEffect, "AudioRuntime");
 
 source.connect(processingNode);
 processingNode.connect(audioContext.destination);

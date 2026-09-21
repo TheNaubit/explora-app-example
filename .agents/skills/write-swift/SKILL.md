@@ -343,7 +343,7 @@ Agents routinely write the older, longer form of all of these.
 | Blanket "warnings as errors"                                          | **`@diagnose`** per declaration / warning group                                                          | 6.4 ⚠ |
 | `@unchecked Sendable` because of a `weak var`                         | `weak let`; or state non-sendability with **`~Sendable`**                                                | 6.4 ⚠ |
 | Manually parsing binary formats with pointers                         | **Swift Binary Parsing** (`ParserSpan`, overflow-checked parsing initializers)                           | 6.2   |
-| Awkward test function names                                           | **raw identifiers**: `` @Test func `fruits have a tropical climate`() ``                                 | 6.0   |
+| Awkward test function names                                           | **raw identifiers**: ``@Test func `fruits have a tropical climate`()``                                   | 6.0   |
 
 Also worth knowing: **Swift Regex parsers compose with Foundation's real parsers** (`.date(...)`, `.currency(...)`) — never hand-roll date or number parsing inside a regex. Make the locale explicit rather than inheriting the system's. And use `NegativeLookahead` or `Local` (atomic groups) to stop a pattern backtracking across a whole input.
 
@@ -393,4 +393,3 @@ You can turn strict checking back off and ship; every fix you made is a genuine 
 | A temporarily broken test          | `withKnownIssue`                | `.disabled`, or commenting it out         |
 | Diagnostics in shipping code       | `Logger` + a correlation ID     | `print`                                   |
 | Deciding to optimize               | Instruments on a profiled test  | intuition                                 |
-

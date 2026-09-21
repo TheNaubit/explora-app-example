@@ -43,6 +43,7 @@ This skips the plugin entirely. Use for debugging build failures, not permanent 
 The CocoaPods plugin caches downloaded xcframeworks in `node_modules/<pkg>/.rnrepo-cache`, which changes the fingerprint between local and CI machines. Exclude it:
 
 **`.fingerprintignore`:**
+
 ```text
 **/.rnrepo-cache
 ```
@@ -56,11 +57,13 @@ Or in `fingerprint.config.js` — see the [Expo Fingerprint docs](https://docs.e
 When `node_modules/` or `rnrepo.config.json` is not at the standard path, tell the plugin where to look.
 
 Via environment variable (takes precedence):
+
 ```bash
 REACT_NATIVE_ROOT_DIR=/path/to/rn-root ./gradlew :app:assembleDebug
 ```
 
 Via `gradle.properties`:
+
 ```properties
 REACT_NATIVE_ROOT_DIR=/path/to/rn-root
 ```
@@ -70,11 +73,13 @@ REACT_NATIVE_ROOT_DIR=/path/to/rn-root
 ## Refreshing the Gradle cache
 
 Force re-download of all prebuilt artifacts:
+
 ```bash
 ./gradlew :app:assembleDebug --refresh-dependencies
 ```
 
 Manually clear the RNRepo Gradle cache:
+
 ```bash
 rm -rf ~/.gradle/caches/modules-2/metadata-2.107/descriptors/org.rnrepo.public
 rm -rf ~/.gradle/caches/modules-2/files-2.1/org.rnrepo.public

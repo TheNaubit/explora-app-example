@@ -93,8 +93,8 @@ const workletsPluginOptions = {
 };
 
 module.exports = {
-  presets: ['module:@react-native/babel-preset'],
-  plugins: [['react-native-worklets/plugin', workletsPluginOptions]],
+  presets: ["module:@react-native/babel-preset"],
+  plugins: [["react-native-worklets/plugin", workletsPluginOptions]],
 };
 ```
 
@@ -118,8 +118,8 @@ const workletsPluginOptions = {
 module.exports = function (api) {
   api.cache(true);
   return {
-    presets: ['babel-preset-expo'],
-    plugins: [['react-native-worklets/plugin', workletsPluginOptions]],
+    presets: ["babel-preset-expo"],
+    plugins: [["react-native-worklets/plugin", workletsPluginOptions]],
   };
 };
 ```
@@ -134,8 +134,8 @@ module.exports = function (api) {
 RN community CLI (`metro.config.js`):
 
 ```js
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const { bundleModeMetroConfig } = require('react-native-worklets/bundleMode');
+const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
+const { bundleModeMetroConfig } = require("react-native-worklets/bundleMode");
 
 const config = {
   // your existing metro config
@@ -163,8 +163,8 @@ npx expo customize metro.config.js
 Then wrap the config with the helper (`metro.config.js`):
 
 ```js
-const { getDefaultConfig } = require('expo/metro-config');
-const { getBundleModeMetroConfig } = require('react-native-worklets/bundleMode');
+const { getDefaultConfig } = require("expo/metro-config");
+const { getBundleModeMetroConfig } = require("react-native-worklets/bundleMode");
 
 let config = getDefaultConfig(__dirname);
 config = getBundleModeMetroConfig(config);

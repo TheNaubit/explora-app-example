@@ -106,11 +106,15 @@ The most common cross-component scenario. Create a Native gesture for the Scroll
 ```tsx
 // v2
 const nativeScroll = useMemo(() => Gesture.Native(), []);
-const pan = useMemo(() =>
-  Gesture.Pan()
-    .simultaneousWithExternalGesture(nativeScroll)
-    .onUpdate((e) => { offsetX.value = e.translationX; }),
-[nativeScroll]);
+const pan = useMemo(
+  () =>
+    Gesture.Pan()
+      .simultaneousWithExternalGesture(nativeScroll)
+      .onUpdate((e) => {
+        offsetX.value = e.translationX;
+      }),
+  [nativeScroll],
+);
 
 <GestureDetector gesture={nativeScroll}>
   <ScrollView>
@@ -118,7 +122,7 @@ const pan = useMemo(() =>
       <Animated.View style={animatedStyle} />
     </GestureDetector>
   </ScrollView>
-</GestureDetector>
+</GestureDetector>;
 ```
 
 For horizontal pan inside vertical ScrollView, use `activeOffsetX` and `failOffsetY` on the Pan to disambiguate:
@@ -166,6 +170,7 @@ import {
 ```
 
 Rules:
+
 - `VirtualGestureDetector` must be a descendant of `InterceptingGestureDetector`
 - `InterceptingGestureDetector`'s `gesture` prop is optional (it can serve solely as context)
 - `VirtualGestureDetector` with `Animated.event` only works with `useNativeDriver: false`
@@ -182,9 +187,7 @@ Gestures inside a React Native `<Modal>` need their own `GestureHandlerRootView`
 
 ```tsx
 <Modal>
-  <GestureHandlerRootView style={{ flex: 1 }}>
-    {/* gestures work here */}
-  </GestureHandlerRootView>
+  <GestureHandlerRootView style={{ flex: 1 }}>{/* gestures work here */}</GestureHandlerRootView>
 </Modal>
 ```
 

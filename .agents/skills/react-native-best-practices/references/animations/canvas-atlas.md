@@ -14,9 +14,9 @@ import {
   rect,
   useTexture,
   useRSXformBuffer,
-} from '@shopify/react-native-skia';
-import { useSharedValue } from 'react-native-reanimated';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+} from "@shopify/react-native-skia";
+import { useSharedValue } from "react-native-reanimated";
+import { GestureDetector, Gesture } from "react-native-gesture-handler";
 
 const size = { width: 25, height: 11.25 };
 const strokeWidth = 2;
@@ -29,10 +29,7 @@ export const SpriteGrid = () => {
   const pos = useSharedValue({ x: 0, y: 0 });
   const texture = useTexture(
     <Group>
-      <Rect
-        rect={rect(strokeWidth / 2, strokeWidth / 2, size.width, size.height)}
-        color="cyan"
-      />
+      <Rect rect={rect(strokeWidth / 2, strokeWidth / 2, size.width, size.height)} color="cyan" />
       <Rect
         rect={rect(strokeWidth / 2, strokeWidth / 2, size.width, size.height)}
         color="blue"
@@ -40,7 +37,7 @@ export const SpriteGrid = () => {
         strokeWidth={strokeWidth}
       />
     </Group>,
-    textureSize
+    textureSize,
   );
 
   const gesture = Gesture.Pan().onChange((e) => (pos.value = e));
@@ -52,7 +49,7 @@ export const SpriteGrid = () => {
     .map(() => rect(0, 0, textureSize.width, textureSize.height));
 
   const transforms = useRSXformBuffer(count, (val, i) => {
-    'worklet';
+    "worklet";
     const tx = 5 + ((i * size.width) % gridWidth);
     const ty = 25 + Math.floor(i / (gridWidth / size.width)) * size.width;
     const r = Math.atan2(pos.value.y - ty, pos.value.x - tx);

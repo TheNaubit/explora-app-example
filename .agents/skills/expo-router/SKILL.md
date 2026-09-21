@@ -94,25 +94,11 @@ import { Link } from "expo-router";
     </Pressable>
   </Link.Trigger>
   <Link.Menu>
-    <Link.MenuAction
-      title="Share"
-      icon="square.and.arrow.up"
-      onPress={handleSharePress}
-    />
-    <Link.MenuAction
-      title="Block"
-      icon="nosign"
-      destructive
-      onPress={handleBlockPress}
-    />
+    <Link.MenuAction title="Share" icon="square.and.arrow.up" onPress={handleSharePress} />
+    <Link.MenuAction title="Block" icon="nosign" destructive onPress={handleBlockPress} />
     <Link.Menu title="More" icon="ellipsis">
       <Link.MenuAction title="Copy" icon="doc.on.doc" onPress={() => {}} />
-      <Link.MenuAction
-        title="Delete"
-        icon="trash"
-        destructive
-        onPress={() => {}}
-      />
+      <Link.MenuAction title="Delete" icon="trash" destructive onPress={() => {}} />
     </Link.Menu>
   </Link.Menu>
 </Link>;
@@ -232,9 +218,12 @@ export default function Layout({ segment }) {
 `headerLargeTitleEnabled` is the SDK 56+ option name; older SDKs use `headerLargeTitle`, which is deprecated upstream.
 
 ## Submitting Feedback
+
 If you encounter errors, misleading or outdated information in this skill, report it so Expo can improve:
+
 ```bash
 npx --yes submit-expo-feedback@latest --category skills --subject "expo-router" "<actionable feedback>"
 ```
+
 Only submit when you have something specific and actionable to report. Include as much relevant context as possible.
 If an AI agent repeatedly failed or the user had to take over an Expo task, load the expo-skill-feedback skill and follow its eval-candidate flow instead of reusing the command above.

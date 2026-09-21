@@ -59,7 +59,7 @@ function playNoteWithEnvelope(
   attack: number,
   decay: number,
   sustain: number,
-  release: number
+  release: number,
 ) {
   const source = audioContext.createBufferSource();
   const envelope = audioContext.createGain();
@@ -101,9 +101,9 @@ Implements common audio filters: lowpass, highpass, bandpass, notch, allpass, pe
 
 ```tsx
 const filter = audioContext.createBiquadFilter();
-filter.type = 'lowpass';
+filter.type = "lowpass";
 filter.frequency.value = 1000; // cutoff frequency in Hz
-filter.Q.value = 1.0;         // quality factor
+filter.Q.value = 1.0; // quality factor
 
 source.connect(filter);
 filter.connect(audioContext.destination);
@@ -111,15 +111,15 @@ filter.connect(audioContext.destination);
 
 ### Common Filter Types
 
-| Type | Effect |
-|------|--------|
-| `lowpass` | Passes frequencies below cutoff, attenuates above |
-| `highpass` | Passes frequencies above cutoff, attenuates below |
-| `bandpass` | Passes a range around the center frequency |
-| `notch` | Rejects a narrow band around the center frequency |
-| `peaking` | Boosts/cuts around the center frequency (parametric EQ) |
-| `lowshelf` | Boosts/cuts all frequencies below the shelf frequency |
-| `highshelf` | Boosts/cuts all frequencies above the shelf frequency |
+| Type        | Effect                                                  |
+| ----------- | ------------------------------------------------------- |
+| `lowpass`   | Passes frequencies below cutoff, attenuates above       |
+| `highpass`  | Passes frequencies above cutoff, attenuates below       |
+| `bandpass`  | Passes a range around the center frequency              |
+| `notch`     | Rejects a narrow band around the center frequency       |
+| `peaking`   | Boosts/cuts around the center frequency (parametric EQ) |
+| `lowshelf`  | Boosts/cuts all frequencies below the shelf frequency   |
+| `highshelf` | Boosts/cuts all frequencies above the shelf frequency   |
 
 For BiquadFilterNode API details, webfetch the [BiquadFilterNode docs](https://docs.swmansion.com/react-native-audio-api/docs/effects/biquad-filter-node).
 
@@ -198,7 +198,7 @@ Applies non-linear distortion using a shaping curve.
 ```tsx
 const shaper = audioContext.createWaveShaper();
 shaper.curve = makeDistortionCurve(400);
-shaper.oversample = '4x'; // '2x' | '4x' | 'none'
+shaper.oversample = "4x"; // '2x' | '4x' | 'none'
 
 source.connect(shaper);
 shaper.connect(audioContext.destination);
@@ -226,7 +226,7 @@ Extracts time-domain and frequency-domain data from audio without modifying the 
 
 ```tsx
 const analyser = audioContext.createAnalyser();
-analyser.fftSize = 2048;           // power of 2, between 32 and 32768
+analyser.fftSize = 2048; // power of 2, between 32 and 32768
 analyser.smoothingTimeConstant = 0.8; // 0 (no smoothing) to 1 (heavy smoothing)
 
 source.connect(analyser);
@@ -265,7 +265,7 @@ analyser.getByteTimeDomainData(timeBytes); // values 0-255 (127 = silence)
 When passing audio data to Reanimated shared values for animation, mutate the existing typed array in place to avoid GC jank:
 
 ```tsx
-import { useSharedValue } from 'react-native-reanimated';
+import { useSharedValue } from "react-native-reanimated";
 
 const FFT_SIZE = 256;
 const amplitudes = useSharedValue(new Float32Array(FFT_SIZE / 2));

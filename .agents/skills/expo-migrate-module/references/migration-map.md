@@ -114,11 +114,11 @@ This is the highest-risk part of an async migration, because the code compiles a
 
 The two versions schedule async work from opposite starting points:
 
-| | 1.0 `AsyncFunction` | 2.0 `async` `@JS` |
-| --- | --- | --- |
-| Where the body starts | off the JS thread, from the first statement | on the JS thread |
-| When it leaves the JS thread | never runs there | at the first real suspension point |
-| A body with no `await` | still runs off the JS thread | runs entirely on the JS thread |
+|                              | 1.0 `AsyncFunction`                         | 2.0 `async` `@JS`                  |
+| ---------------------------- | ------------------------------------------- | ---------------------------------- |
+| Where the body starts        | off the JS thread, from the first statement | on the JS thread                   |
+| When it leaves the JS thread | never runs there                            | at the first real suspension point |
+| A body with no `await`       | still runs off the JS thread                | runs entirely on the JS thread     |
 
 A 2.0 async member is `@JavaScriptActor`-isolated and stays on the JS thread until it actually suspends. So the dangerous case is a function marked `async` whose body never awaits anything, or awaits only after doing substantial work. In 1.0 that body was off the JS thread from the start; migrated verbatim to 2.0, it now blocks the JS thread for its full duration. Nothing in the JS contract reveals this: the function still returns a promise.
 
@@ -278,7 +278,7 @@ Static members belong to shared objects, not modules: a module is exported to JS
 
 #### Static members
 
-A static member installs on the JS class object itself, so JS reaches it as `Download.supportedSchemes()`, not through an instance. The 1.0 DSL has dedicated components for this: `StaticFunction` and `StaticAsyncFunction`. Unlike `Function`, they do not receive the instance as their first argument. There is no static *property* component in 1.0, so a static value was exposed as a `StaticFunction` returning it.
+A static member installs on the JS class object itself, so JS reaches it as `Download.supportedSchemes()`, not through an instance. The 1.0 DSL has dedicated components for this: `StaticFunction` and `StaticAsyncFunction`. Unlike `Function`, they do not receive the instance as their first argument. There is no static _property_ component in 1.0, so a static value was exposed as a `StaticFunction` returning it.
 
 ```swift
 // 1.0
@@ -415,12 +415,12 @@ The planned shape is a class marked `@ExpoView` whose props and event callbacks 
 
 Module lifecycle is core-owned rather than macro-generated. The DSL components map to hook methods with no-op defaults:
 
-| 1.0 | 2.0 |
-| --- | --- |
-| `OnCreate` | `didCreate()` |
-| `OnDestroy` | `willDestroy()` |
+| 1.0                | 2.0                         |
+| ------------------ | --------------------------- |
+| `OnCreate`         | `didCreate()`               |
+| `OnDestroy`        | `willDestroy()`             |
 | `OnStartObserving` | `didStartListening(event:)` |
-| `OnStopObserving` | `didStopListening(event:)` |
+| `OnStopObserving`  | `didStopListening(event:)`  |
 
 Rules:
 
@@ -446,12 +446,12 @@ Before deleting `definition()`, verify that it contains no:
 
 For every migrated member compare before and after:
 
-| Concern | Must remain stable |
-| --- | --- |
-| Module | registration name and `requireNativeModule` key |
-| Function | JS name, accepted arity, omitted/default behavior, sync/Promise result |
-| Property | JS name, read/write behavior, evaluation/caching |
-| Event | listener string, payload shape, timing |
-| Record | field names, requiredness, nullability, defaults |
-| Shared object | constructor shape, prototype vs constructor placement, identity |
-| Execution | JS actor, main actor, background queue, ordering |
+| Concern       | Must remain stable                                                     |
+| ------------- | ---------------------------------------------------------------------- |
+| Module        | registration name and `requireNativeModule` key                        |
+| Function      | JS name, accepted arity, omitted/default behavior, sync/Promise result |
+| Property      | JS name, read/write behavior, evaluation/caching                       |
+| Event         | listener string, payload shape, timing                                 |
+| Record        | field names, requiredness, nullability, defaults                       |
+| Shared object | constructor shape, prototype vs constructor placement, identity        |
+| Execution     | JS actor, main actor, background queue, ordering                       |

@@ -48,27 +48,27 @@ Optional device capabilities are requested at init; `d.f16`/`vec*h` need `shader
 
 ```ts
 const root = await tgpu.init({
-  adapter: { powerPreference: 'high-performance' },  // GPURequestAdapterOptions
+  adapter: { powerPreference: "high-performance" }, // GPURequestAdapterOptions
   device: {
-    requiredFeatures: ['shader-f16'],       // init throws if unavailable
-    optionalFeatures: ['timestamp-query'],  // requested when available
+    requiredFeatures: ["shader-f16"], // init throws if unavailable
+    optionalFeatures: ["timestamp-query"], // requested when available
   },
 });
 
-root.enabledFeatures.has('timestamp-query'); // ReadonlySet<GPUFeatureName>
+root.enabledFeatures.has("timestamp-query"); // ReadonlySet<GPUFeatureName>
 ```
 
 **Every `requiredFeatures` entry shrinks the set of devices the app runs on** — init fails outright on hardware without it. Require a feature only when that trade-off is deliberate. Otherwise request it via `optionalFeatures` and write both paths, branching on a captured `root.enabledFeatures.has(...)` result. The result is comptime-known, so branch pruning emits only reachable statements for the selected path:
 
 ```ts
-const hasF16 = root.enabledFeatures.has('shader-f16');
+const hasF16 = root.enabledFeatures.has("shader-f16");
 
 const process = (x: number) => {
-  'use gpu';
+  "use gpu";
   if (hasF16) {
-    return fastF16Path(x);   // only the taken branch survives in WGSL
+    return fastF16Path(x); // only the taken branch survives in WGSL
   }
-  return f32Path(x);         // emitted only when this path remains reachable
+  return f32Path(x); // emitted only when this path remains reachable
 };
 ```
 
@@ -85,8 +85,8 @@ npm install --save-dev unplugin-typegpu
 ### Vite
 
 ```js title="vite.config.js"
-import { defineConfig } from 'vite';
-import typegpu from 'unplugin-typegpu/vite';
+import { defineConfig } from "vite";
+import typegpu from "unplugin-typegpu/vite";
 
 export default defineConfig({
   plugins: [typegpu()],
@@ -99,8 +99,8 @@ export default defineConfig({
 module.exports = (api) => {
   api.cache(true);
   return {
-    presets: ['babel-preset-expo'],
-    plugins: ['unplugin-typegpu/babel'],
+    presets: ["babel-preset-expo"],
+    plugins: ["unplugin-typegpu/babel"],
   };
 };
 ```
@@ -159,7 +159,7 @@ Match major.minor: if your project uses `typescript@5.8.x`, use `tsover@5.8.x`.
 No `tsconfig.json` changes. Operators typecheck inside `'use gpu'` functions as-is once tsover is the project's TypeScript. For CPU-side code outside `'use gpu'`, add a `'use tsover'` directive at file or function scope:
 
 ```ts
-'use tsover'; // file-level; or place inside a single function
+"use tsover"; // file-level; or place inside a single function
 const c = a + b; // d.v2f + d.v2f
 ```
 
@@ -168,7 +168,7 @@ const c = a + b; // d.v2f + d.v2f
 Only needed if you use operators outside `'use gpu'` blocks. Most projects can skip this.
 
 ```js title="vite.config.js"
-import tsoverPlugin from 'tsover/plugin/vite';
+import tsoverPlugin from "tsover/plugin/vite";
 // add to plugins array alongside typegpuPlugin()
 ```
 
@@ -191,6 +191,7 @@ Zed: set `tsdk` in `.zed/settings.json` for `vtsls` or `typescript-language-serv
 ## Troubleshooting
 
 **`'use gpu'` silently does nothing / `ResolutionError` about an untranspiled function** - the build plugin isn't running on that file. This is the #1 setup failure. Check, in order:
+
 1. The plugin is in the right config for your bundler (`unplugin-typegpu/vite` in `vite.config.js` vs `'unplugin-typegpu/babel'` in `babel.config.js`).
 2. The file matches the plugin's `include` pattern (default `[/\.m?[jt]sx?$/]`).
 3. The dev server was restarted after adding the plugin; on React Native, clear the Metro cache (`npx expo start --clear`).
@@ -212,13 +213,13 @@ npm install --save-dev eslint-plugin-typegpu
 ### ESLint (`eslint.config.js`)
 
 ```ts
-import { defineConfig } from 'eslint/config';
-import typegpu from 'eslint-plugin-typegpu';
+import { defineConfig } from "eslint/config";
+import typegpu from "eslint-plugin-typegpu";
 
 export default defineConfig([
   {
     ...typegpu.configs.recommended,
-    files: ['**/*.{js,mjs,ts,jsx,tsx}'],
+    files: ["**/*.{js,mjs,ts,jsx,tsx}"],
   },
 ]);
 ```
@@ -226,14 +227,14 @@ export default defineConfig([
 ### Oxlint (`oxlint.config.ts`)
 
 ```ts
-import { defineConfig } from 'oxlint';
-import typegpu from 'eslint-plugin-typegpu';
+import { defineConfig } from "oxlint";
+import typegpu from "eslint-plugin-typegpu";
 
 export default defineConfig({
-  jsPlugins: ['eslint-plugin-typegpu'],
+  jsPlugins: ["eslint-plugin-typegpu"],
   rules: {
     ...typegpu.configs.recommended.rules,
   },
-  ignorePatterns: ['node_modules'],
+  ignorePatterns: ["node_modules"],
 });
 ```

@@ -6,19 +6,19 @@ React Native's New Architecture offers three ways to expose native C++ to JavaSc
 
 ## Comparison Table
 
-| Axis | TurboModules | Pure JSI | Pure C++ + thin adapter |
-|------|-------------|---------|------------------------|
-| **Type safety** | Compile-time (codegen enforces spec) | Runtime (manual `isNumber()` checks) | N/A — no JS boundary in core |
-| **API style** | Flat named methods only | Methods + dynamic property dispatch | Adapter-defined |
-| **Boilerplate** | Low (generated); one-time spec setup | High (manual type guards, platform wiring) | Medium (thin adapter + full core) |
-| **Dynamic properties** | Not supported | Full `HostObject` get/set/enumerate | Adapter-dependent |
-| **Lifecycle control** | Framework-managed, unspecified destruction order | Explicit (`shared_ptr` + RAII destructors) | Fully manual |
-| **Platform wiring** | Scaffolded by codegen | Manual (Obj-C++, JNI, CMake) | Manual + adapter |
-| **C++ portability** | Tied to RN codegen types | Tied to `jsi::Runtime` | Any C++ platform |
-| **Unit testing** | Needs RN test infra or JSI mock | Needs `jsi::Runtime` mock | Plain C++ tests, no RN |
-| **Lazy loading** | Built-in (on first `TurboModuleRegistry.get`) | Manual factory functions | N/A |
-| **Hermes debugger** | Full module visibility | Global-scope functions only | Adapter-dependent |
-| **Prototyping speed** | Slow (spec → codegen → build) | Fast (edit C++ → rebuild) | Fastest for core logic |
+| Axis                   | TurboModules                                     | Pure JSI                                   | Pure C++ + thin adapter           |
+| ---------------------- | ------------------------------------------------ | ------------------------------------------ | --------------------------------- |
+| **Type safety**        | Compile-time (codegen enforces spec)             | Runtime (manual `isNumber()` checks)       | N/A — no JS boundary in core      |
+| **API style**          | Flat named methods only                          | Methods + dynamic property dispatch        | Adapter-defined                   |
+| **Boilerplate**        | Low (generated); one-time spec setup             | High (manual type guards, platform wiring) | Medium (thin adapter + full core) |
+| **Dynamic properties** | Not supported                                    | Full `HostObject` get/set/enumerate        | Adapter-dependent                 |
+| **Lifecycle control**  | Framework-managed, unspecified destruction order | Explicit (`shared_ptr` + RAII destructors) | Fully manual                      |
+| **Platform wiring**    | Scaffolded by codegen                            | Manual (Obj-C++, JNI, CMake)               | Manual + adapter                  |
+| **C++ portability**    | Tied to RN codegen types                         | Tied to `jsi::Runtime`                     | Any C++ platform                  |
+| **Unit testing**       | Needs RN test infra or JSI mock                  | Needs `jsi::Runtime` mock                  | Plain C++ tests, no RN            |
+| **Lazy loading**       | Built-in (on first `TurboModuleRegistry.get`)    | Manual factory functions                   | N/A                               |
+| **Hermes debugger**    | Full module visibility                           | Global-scope functions only                | Adapter-dependent                 |
+| **Prototyping speed**  | Slow (spec → codegen → build)                    | Fast (edit C++ → rebuild)                  | Fastest for core logic            |
 
 ---
 
@@ -53,8 +53,8 @@ Most real modules combine approaches: pure C++ for the performance-critical core
 
 ```ts
 // src/NativeMath.ts
-import type { TurboModule } from 'react-native';
-import { TurboModuleRegistry } from 'react-native';
+import type { TurboModule } from "react-native";
+import { TurboModuleRegistry } from "react-native";
 
 export interface Spec extends TurboModule {
   add(a: number, b: number): number;
@@ -62,7 +62,7 @@ export interface Spec extends TurboModule {
   sqrt(x: number): number;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('NativeMath');
+export default TurboModuleRegistry.getEnforcing<Spec>("NativeMath");
 ```
 
 **Step 2 — Codegen produces the abstract C++ class** (runs automatically during `pod install` / Gradle build):
@@ -283,22 +283,22 @@ Nitro Modules (by Marc Rousavy, author of `react-native-mmkv`) is a third-party 
 
 ### How it differs from TurboModules
 
-| | TurboModules | Nitro Modules |
-|--|-------------|--------------|
-| **Codegen tool** | `react-native-codegen` | Nitrogen |
-| **Generated bindings** | C++ abstract class | C++ + Swift protocols + Kotlin interfaces |
-| **JS-visible API** | Flat methods on a module object | `HybridObject` instances (objects with methods + properties) |
-| **Native attachment** | TurboModule registry | `jsi::NativeState` (avoids `HostObject` virtual dispatch overhead) |
-| **Platform implementation** | Obj-C++ or JNI required | Swift or Kotlin, no Obj-C++/JNI glue needed |
-| **Performance** | Good | ~16x faster than TurboModules for hot paths (per Nitro benchmarks) |
+|                             | TurboModules                    | Nitro Modules                                                      |
+| --------------------------- | ------------------------------- | ------------------------------------------------------------------ |
+| **Codegen tool**            | `react-native-codegen`          | Nitrogen                                                           |
+| **Generated bindings**      | C++ abstract class              | C++ + Swift protocols + Kotlin interfaces                          |
+| **JS-visible API**          | Flat methods on a module object | `HybridObject` instances (objects with methods + properties)       |
+| **Native attachment**       | TurboModule registry            | `jsi::NativeState` (avoids `HostObject` virtual dispatch overhead) |
+| **Platform implementation** | Obj-C++ or JNI required         | Swift or Kotlin, no Obj-C++/JNI glue needed                        |
+| **Performance**             | Good                            | ~16x faster than TurboModules for hot paths (per Nitro benchmarks) |
 
 ### HybridObject pattern
 
 ```ts
 // NativeCamera.nitro.ts — Nitrogen spec
-import { HybridObject } from 'react-native-nitro-modules';
+import { HybridObject } from "react-native-nitro-modules";
 
-export interface Camera extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
+export interface Camera extends HybridObject<{ ios: "swift"; android: "kotlin" }> {
   readonly isActive: boolean;
   start(): void;
   stop(): void;
@@ -333,4 +333,4 @@ The three approaches handle resource cleanup differently.
 
 **Pure C++:** Cleanup is entirely your responsibility. The C++ module's thread must be joined before its resources are freed. The JSI adapter's `shared_ptr` prevents premature destruction only if the background thread also holds a `shared_ptr` to the same object — a raw pointer from the thread captures is a crash waiting to happen.
 
-The architecture choice changes *where* resources live and *when* they're freed — it does not automatically fix ownership bugs. TurboModules keep modules alive until runtime shutdown (no GC-triggered destruction). Pure JSI ties lifetime to GC reachability. Pure C++ ties it to explicit thread shutdown. Within any approach, the thread still needs a `shared_ptr`, not a raw pointer, to the data it accesses.
+The architecture choice changes _where_ resources live and _when_ they're freed — it does not automatically fix ownership bugs. TurboModules keep modules alive until runtime shutdown (no GC-triggered destruction). Pure JSI ties lifetime to GC reachability. Pure C++ ties it to explicit thread shutdown. Within any approach, the thread still needs a `shared_ptr`, not a raw pointer, to the data it accesses.

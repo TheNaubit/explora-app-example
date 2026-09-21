@@ -24,10 +24,8 @@ npm install react-native-worklets
 ```js
 // babel.config.js
 module.exports = {
-  presets: ['module:@react-native/babel-preset'],
-  plugins: [
-    'react-native-worklets/plugin',
-  ],
+  presets: ["module:@react-native/babel-preset"],
+  plugins: ["react-native-worklets/plugin"],
 };
 ```
 
@@ -103,30 +101,30 @@ Configure by passing an options object to the Babel plugin:
 const workletsPluginOptions = {
   bundleMode: true,
   strictGlobal: true,
-  globals: ['myGlobalVar'],
+  globals: ["myGlobalVar"],
 };
 
 // babel.config.js
-plugins: [['react-native-worklets/plugin', workletsPluginOptions]];
+plugins: [["react-native-worklets/plugin", workletsPluginOptions]];
 ```
 
-| Option | Default | Purpose |
-|--------|---------|---------|
-| `bundleMode` | `false` | Enable Bundle Mode (full bundle on all runtimes) |
-| `strictGlobal` | `false` | Stricter access to global variables inside worklets. Recommended. |
-| `globals` | `[]` | Identifiers that should not be copied to worklet runtimes |
-| `importForwarding.moduleNames` | `[]` | Module names whose imports are forwarded into worklets (Bundle Mode) |
-| `importForwarding.relativePaths` | `[]` | Module paths whose relative imports are forwarded into worklets (Bundle Mode) |
-| `disableWorkletClasses` | `false` | Disable Worklet Classes (needed for Custom Serializables with `new`) |
-| `hermesBytecode` | `false` | Compile worklets to Hermes bytecode ahead of time instead of shipping source (Legacy Eval Mode) |
-| `getHBCBinary` | `undefined` | Returns the path to the Hermes bytecode compiler (required by `hermesBytecode`) |
-| `extraPlugins` | `[]` | Extra Babel plugins applied when transforming worklet code |
-| `extraPresets` | `[]` | Extra Babel presets applied when transforming worklet code |
-| `disableInlineStylesWarning` | `false` | Suppress warnings about `.value` access on shared values in Reanimated inline styles |
-| `disableSourceMaps` | `false` | Turn off source map generation for worklets |
-| `relativeSourceLocation` | `false` | Worklet file paths relative to `process.cwd()` for stable test snapshots |
-| `omitNativeOnlyData` | `false` | Smaller bundles for Web builds |
-| `substituteWebPlatformChecks` | `false` | Helps tree-shaking for Web builds |
+| Option                           | Default     | Purpose                                                                                         |
+| -------------------------------- | ----------- | ----------------------------------------------------------------------------------------------- |
+| `bundleMode`                     | `false`     | Enable Bundle Mode (full bundle on all runtimes)                                                |
+| `strictGlobal`                   | `false`     | Stricter access to global variables inside worklets. Recommended.                               |
+| `globals`                        | `[]`        | Identifiers that should not be copied to worklet runtimes                                       |
+| `importForwarding.moduleNames`   | `[]`        | Module names whose imports are forwarded into worklets (Bundle Mode)                            |
+| `importForwarding.relativePaths` | `[]`        | Module paths whose relative imports are forwarded into worklets (Bundle Mode)                   |
+| `disableWorkletClasses`          | `false`     | Disable Worklet Classes (needed for Custom Serializables with `new`)                            |
+| `hermesBytecode`                 | `false`     | Compile worklets to Hermes bytecode ahead of time instead of shipping source (Legacy Eval Mode) |
+| `getHBCBinary`                   | `undefined` | Returns the path to the Hermes bytecode compiler (required by `hermesBytecode`)                 |
+| `extraPlugins`                   | `[]`        | Extra Babel plugins applied when transforming worklet code                                      |
+| `extraPresets`                   | `[]`        | Extra Babel presets applied when transforming worklet code                                      |
+| `disableInlineStylesWarning`     | `false`     | Suppress warnings about `.value` access on shared values in Reanimated inline styles            |
+| `disableSourceMaps`              | `false`     | Turn off source map generation for worklets                                                     |
+| `relativeSourceLocation`         | `false`     | Worklet file paths relative to `process.cwd()` for stable test snapshots                        |
+| `omitNativeOnlyData`             | `false`     | Smaller bundles for Web builds                                                                  |
+| `substituteWebPlatformChecks`    | `false`     | Helps tree-shaking for Web builds                                                               |
 
 ### Pitfalls
 
@@ -157,7 +155,7 @@ Runtimes don't share state, so a module-level import used inside a worklet is am
 const workletsPluginOptions = {
   bundleMode: true,
   strictGlobal: true,
-  importForwarding: { moduleNames: ['my-library'] },
+  importForwarding: { moduleNames: ["my-library"] },
 };
 ```
 
@@ -189,11 +187,11 @@ Static feature flags go in `package.json` under `worklets.staticFeatureFlags`. C
 }
 ```
 
-| Flag | Default | Purpose |
-|------|---------|---------|
-| `IOS_DYNAMIC_FRAMERATE_ENABLED` | `true` | Auto-adjust frame rate for expensive animations (falls back from 120fps to 60fps) |
-| `FETCH_PREVIEW_ENABLED` | `false` | Enable `fetch` on Worklet Runtimes (only takes effect in Bundle Mode) |
-| `ENABLE_CROSS_RUNTIME_STACK_TRACES` | `true` | Stitch stack traces across runtimes in dev builds; can hurt performance in scheduling-heavy code paths |
+| Flag                                | Default | Purpose                                                                                                |
+| ----------------------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| `IOS_DYNAMIC_FRAMERATE_ENABLED`     | `true`  | Auto-adjust frame rate for expensive animations (falls back from 120fps to 60fps)                      |
+| `FETCH_PREVIEW_ENABLED`             | `false` | Enable `fetch` on Worklet Runtimes (only takes effect in Bundle Mode)                                  |
+| `ENABLE_CROSS_RUNTIME_STACK_TRACES` | `true`  | Stitch stack traces across runtimes in dev builds; can hurt performance in scheduling-heavy code paths |
 
 Static flags are unavailable in Expo Go and in RNRepo prebuilt configurations. Use Expo Prebuild or force source builds instead.
 
@@ -207,10 +205,10 @@ Dynamic flags can be toggled at runtime via `setDynamicFeatureFlag('FLAG_NAME', 
 
 ```js
 // TypeScript
-jest.mock('react-native-worklets', () => require('react-native-worklets/src/mock'));
+jest.mock("react-native-worklets", () => require("react-native-worklets/src/mock"));
 
 // JavaScript
-jest.mock('react-native-worklets', () => require('react-native-worklets/lib/module/mock'));
+jest.mock("react-native-worklets", () => require("react-native-worklets/lib/module/mock"));
 ```
 
 ### Web implementation (v0.8+)
@@ -220,7 +218,7 @@ Override the Jest resolver to use the Web implementation instead of native:
 ```js
 // jest.config.js
 module.exports = {
-  resolver: 'react-native-worklets/jest/resolver',
+  resolver: "react-native-worklets/jest/resolver",
 };
 ```
 
@@ -247,6 +245,7 @@ Expo apps disable `inlineRequires` by default, which breaks Worklets initializat
 ### "Tried to modify key of an object which has been converted to a serializable"
 
 The object was captured in a worklet's closure and later mutated. In dev builds, captured objects are frozen to surface this mistake. Solutions:
+
 - Use `useSharedValue` for values that change over time.
 - Destructure only the needed properties into local variables before the worklet captures them.
 

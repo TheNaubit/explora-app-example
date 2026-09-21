@@ -36,17 +36,19 @@ const OPT_IN_PATH = path.join(os.homedir(), ".expo-skills", "opt-in");
 // CI detection — never emit from automated environments so usage data reflects real
 // humans. Honors the common CI=true convention plus major providers' signals.
 function isCI() {
-  const ci = String(process.env.CI || "").trim().toLowerCase();
+  const ci = String(process.env.CI || "")
+    .trim()
+    .toLowerCase();
   if (ci && ci !== "0" && ci !== "false") return true;
   return Boolean(
     process.env.GITHUB_ACTIONS ||
-      process.env.GITLAB_CI ||
-      process.env.CIRCLECI ||
-      process.env.TRAVIS ||
-      process.env.BUILDKITE ||
-      process.env.JENKINS_URL ||
-      process.env.TEAMCITY_VERSION ||
-      process.env.TF_BUILD
+    process.env.GITLAB_CI ||
+    process.env.CIRCLECI ||
+    process.env.TRAVIS ||
+    process.env.BUILDKITE ||
+    process.env.JENKINS_URL ||
+    process.env.TEAMCITY_VERSION ||
+    process.env.TF_BUILD,
   );
 }
 
@@ -55,9 +57,13 @@ function isCI() {
 //   EXPO_SKILLS_TELEMETRY=0/off/false/no  -> off
 //   EXPO_SKILLS_TELEMETRY=1/on/true/yes   -> on
 function telemetryEnvSignal() {
-  const dnt = String(process.env.DO_NOT_TRACK || "").trim().toLowerCase();
+  const dnt = String(process.env.DO_NOT_TRACK || "")
+    .trim()
+    .toLowerCase();
   if (dnt && dnt !== "0" && dnt !== "false") return "off";
-  const flag = String(process.env.EXPO_SKILLS_TELEMETRY || "").trim().toLowerCase();
+  const flag = String(process.env.EXPO_SKILLS_TELEMETRY || "")
+    .trim()
+    .toLowerCase();
   if (["0", "false", "off", "no"].includes(flag)) return "off";
   if (["1", "true", "on", "yes"].includes(flag)) return "on";
   return null;
@@ -75,7 +81,9 @@ function telemetryActive() {
   if (env === "off") return false;
   if (isCI()) return false;
   if (env === "on") return true;
-  try { if (fs.existsSync(OPT_IN_PATH)) return true; } catch {}
+  try {
+    if (fs.existsSync(OPT_IN_PATH)) return true;
+  } catch {}
   return DEFAULT_ON;
 }
 
@@ -89,8 +97,12 @@ function telemetryConfigured() {
 // Best-effort agent-harness label for the event (default when --agent-harness isn't passed).
 function detectHarness() {
   if (process.env.CLAUDECODE) return "claude-code";
-  if (process.env.CODEX_SANDBOX || process.env.CODEX_SANDBOX_NETWORK_DISABLED ||
-      String(process.env.AGENT || "").toLowerCase() === "codex") return "codex";
+  if (
+    process.env.CODEX_SANDBOX ||
+    process.env.CODEX_SANDBOX_NETWORK_DISABLED ||
+    String(process.env.AGENT || "").toLowerCase() === "codex"
+  )
+    return "codex";
   return "unknown";
 }
 
@@ -109,15 +121,22 @@ function readInstallationId(create = true) {
     }
     if (!create) return null;
     fs.mkdirSync(path.dirname(INSTALLATION_ID_PATH), { recursive: true, mode: 0o700 });
-    try { fs.chmodSync(path.dirname(INSTALLATION_ID_PATH), 0o700); } catch {}
+    try {
+      fs.chmodSync(path.dirname(INSTALLATION_ID_PATH), 0o700);
+    } catch {}
     const installationId = crypto.randomUUID().replace(/-/g, "");
     try {
       // 'wx' = O_CREAT | O_EXCL | O_WRONLY — atomic create, fails if it exists.
       const fd = fs.openSync(INSTALLATION_ID_PATH, "wx", 0o600);
-      try { fs.writeFileSync(fd, installationId + "\n"); } finally { fs.closeSync(fd); }
+      try {
+        fs.writeFileSync(fd, installationId + "\n");
+      } finally {
+        fs.closeSync(fd);
+      }
       return installationId;
     } catch (err) {
-      if (err && err.code === "EEXIST") return fs.readFileSync(INSTALLATION_ID_PATH, "utf8").trim() || null;
+      if (err && err.code === "EEXIST")
+        return fs.readFileSync(INSTALLATION_ID_PATH, "utf8").trim() || null;
       throw err;
     }
   } catch {
@@ -128,7 +147,8 @@ function readInstallationId(create = true) {
 function telemetryIdentity(agentHarness, { createInstallation = true } = {}) {
   const id = readInstallationId(createInstallation);
   const installHash = id ? crypto.createHash("sha256").update(id).digest("hex").slice(0, 32) : null;
-  if (installHash) return [`expo-skills-installation:${installHash}`, { installation_id_hash: installHash }];
+  if (installHash)
+    return [`expo-skills-installation:${installHash}`, { installation_id_hash: installHash }];
   return [`expo-skills-events:${agentHarness}`, {}];
 }
 
@@ -136,19 +156,27 @@ function sendToPosthog(payload, { userAgent, timeoutMs }) {
   return new Promise((resolve, reject) => {
     const url = new URL("/i/v0/e/", POSTHOG_HOST);
     const body = Buffer.from(JSON.stringify(payload), "utf8");
-    const req = https.request(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Content-Length": body.length, "User-Agent": userAgent },
-      timeout: timeoutMs,
-    }, (res) => {
-      const chunks = [];
-      res.on("data", (c) => chunks.push(c));
-      res.on("end", () => {
-        const status = res.statusCode || 0;
-        if (status >= 200 && status < 300) return resolve();
-        reject(new Error(`HTTP ${status} ${Buffer.concat(chunks).toString("utf8")}`));
-      });
-    });
+    const req = https.request(
+      url,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Length": body.length,
+          "User-Agent": userAgent,
+        },
+        timeout: timeoutMs,
+      },
+      (res) => {
+        const chunks = [];
+        res.on("data", (c) => chunks.push(c));
+        res.on("end", () => {
+          const status = res.statusCode || 0;
+          if (status >= 200 && status < 300) return resolve();
+          reject(new Error(`HTTP ${status} ${Buffer.concat(chunks).toString("utf8")}`));
+        });
+      },
+    );
     req.on("timeout", () => req.destroy(new Error("request timed out")));
     req.on("error", reject);
     req.write(body);

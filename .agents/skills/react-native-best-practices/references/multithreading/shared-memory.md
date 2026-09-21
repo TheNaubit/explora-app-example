@@ -15,7 +15,7 @@ Closures get copies of references. Reassigning the original variable does not af
 ```tsx
 let count = 0;
 function logCount() {
-  'worklet';
+  "worklet";
   console.log(count);
 }
 
@@ -25,7 +25,7 @@ logCount(); // prints 0 (captured the original value)
 // But object mutations are shared:
 let obj = { value: 0 };
 function mutate() {
-  'worklet';
+  "worklet";
   obj.value += 1;
 }
 mutate();
@@ -39,7 +39,7 @@ The entire closure is serialized (deep-copied) at invocation time. Changes to th
 ```tsx
 let obj = { value: 0 };
 function logValue() {
-  'worklet';
+  "worklet";
   console.log(obj.value);
 }
 
@@ -56,7 +56,7 @@ global.someValue = 42;
 const localCopy = global.someValue;
 
 function readOnUI() {
-  'worklet';
+  "worklet";
   console.log(localCopy); // 42 (captured via closure)
 }
 ```
@@ -70,7 +70,7 @@ Serializable is an immutable reference that transfers JavaScript values between 
 **You rarely need to call `createSerializable` directly.** Functions like `scheduleOnUI`, `runOnUISync`, and `scheduleOnRuntime` automatically serialize arguments and closure values.
 
 ```tsx
-import { createSerializable } from 'react-native-worklets';
+import { createSerializable } from "react-native-worklets";
 
 const data = { x: 1, y: 2, z: 3 };
 const ref = createSerializable(data);
@@ -87,25 +87,30 @@ Primitives (`number`, `string`, `boolean`, `null`, `undefined`), plain objects, 
 For objects with custom prototypes that need to cross runtime boundaries, register pack/unpack logic:
 
 ```tsx
-import { registerCustomSerializable } from 'react-native-worklets';
+import { registerCustomSerializable } from "react-native-worklets";
 
 class Vector2D {
-  constructor(public x: number, public y: number) {}
-  magnitude() { return Math.sqrt(this.x ** 2 + this.y ** 2); }
+  constructor(
+    public x: number,
+    public y: number,
+  ) {}
+  magnitude() {
+    return Math.sqrt(this.x ** 2 + this.y ** 2);
+  }
 }
 
 registerCustomSerializable({
-  name: 'Vector2D',
+  name: "Vector2D",
   determine(value: object): value is Vector2D {
-    'worklet';
+    "worklet";
     return value instanceof Vector2D;
   },
   pack(value: Vector2D) {
-    'worklet';
+    "worklet";
     return { x: value.x, y: value.y };
   },
   unpack(packed: { x: number; y: number }) {
-    'worklet';
+    "worklet";
     return new Vector2D(packed.x, packed.y);
   },
 });
@@ -122,14 +127,14 @@ registerCustomSerializable({
 Synchronizable holds a mutable value accessible from any runtime without expensive synchronous messaging. Use it to share state that multiple runtimes need to read or write.
 
 ```tsx
-import { createSynchronizable, scheduleOnUI } from 'react-native-worklets';
+import { createSynchronizable, scheduleOnUI } from "react-native-worklets";
 
 const sharedCounter = createSynchronizable(0);
 
 // Read from UI Runtime
 scheduleOnUI(() => {
   const value = sharedCounter.getBlocking();
-  console.log('Counter:', value);
+  console.log("Counter:", value);
 });
 
 // Write from RN Runtime
@@ -138,13 +143,13 @@ sharedCounter.setBlocking(42);
 
 ### Methods
 
-| Method | Blocking | Description |
-|--------|----------|-------------|
-| `getBlocking()` | Yes | Exclusively obtains the value. Waits if another thread holds it. |
-| `getDirty()` | No | Returns the value without locking. May return stale data (dirty read). Good when eventual consistency is acceptable. |
-| `setBlocking(value)` | Yes | Exclusively sets the value. Accepts a direct value or an updater function. |
-| `lock()` | Yes | Manually locks the Synchronizable. Other threads block on `getBlocking`/`setBlocking`/`lock` until `unlock()`. |
-| `unlock()` | No | Releases the lock. Must be called from the same thread that locked it. Forgetting to unlock causes deadlocks. |
+| Method               | Blocking | Description                                                                                                          |
+| -------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| `getBlocking()`      | Yes      | Exclusively obtains the value. Waits if another thread holds it.                                                     |
+| `getDirty()`         | No       | Returns the value without locking. May return stale data (dirty read). Good when eventual consistency is acceptable. |
+| `setBlocking(value)` | Yes      | Exclusively sets the value. Accepts a direct value or an updater function.                                           |
+| `lock()`             | Yes      | Manually locks the Synchronizable. Other threads block on `getBlocking`/`setBlocking`/`lock` until `unlock()`.       |
+| `unlock()`           | No       | Releases the lock. Must be called from the same thread that locked it. Forgetting to unlock causes deadlocks.        |
 
 ### Updater function pattern
 
@@ -164,9 +169,9 @@ sharedCounter.setBlocking((prev) => prev + 1);
 ### Type guards
 
 ```tsx
-import { isSerializableRef, isSynchronizable } from 'react-native-worklets';
+import { isSerializableRef, isSynchronizable } from "react-native-worklets";
 
-isSerializableRef(value);       // true if value is a SerializableRef
+isSerializableRef(value); // true if value is a SerializableRef
 isSynchronizable<number>(value); // true if value is a Synchronizable (with type narrowing)
 ```
 
@@ -174,9 +179,9 @@ isSynchronizable<number>(value); // true if value is a Synchronizable (with type
 
 ## Decision: Serializable vs Synchronizable
 
-| Need | Use |
-|------|-----|
-| Pass data from RN to UI/Worker once (read-only) | Serializable (automatic via closure/args) |
-| Share mutable state between runtimes | Synchronizable |
-| Poll shared state from UI thread (e.g., progress) | Synchronizable with `getDirty()` |
-| Atomic read-modify-write across threads | Synchronizable with updater function |
+| Need                                              | Use                                       |
+| ------------------------------------------------- | ----------------------------------------- |
+| Pass data from RN to UI/Worker once (read-only)   | Serializable (automatic via closure/args) |
+| Share mutable state between runtimes              | Synchronizable                            |
+| Poll shared state from UI thread (e.g., progress) | Synchronizable with `getDirty()`          |
+| Atomic read-modify-write across threads           | Synchronizable with updater function      |

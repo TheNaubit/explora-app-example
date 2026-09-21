@@ -7,20 +7,20 @@ Pseudo-selectors drive interaction state (press, hover, focus) from inside the s
 Supported everywhere: `:hover`, `:active`, `:active-deepest`, `:focus` and `:focus-within`. The remaining CSS pseudo-classes (`:focus-visible`, `:disabled`, `:checked`, ...) work on web only; on native they are dropped with a dev-only warning.
 
 ```tsx
-import { Pressable } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
+import { Pressable } from "react-native-gesture-handler";
+import Animated from "react-native-reanimated";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 <AnimatedPressable
   onPress={onPress}
   style={{
-    backgroundColor: { default: '#eee', ':active': '#ccc' },
-    transform: { default: [{ scale: 1 }], ':active': [{ scale: 0.96 }] },
-    transitionProperty: ['backgroundColor', 'transform'],
+    backgroundColor: { default: "#eee", ":active": "#ccc" },
+    transform: { default: [{ scale: 1 }], ":active": [{ scale: 0.96 }] },
+    transitionProperty: ["backgroundColor", "transform"],
     transitionDuration: 150,
   }}
-/>
+/>;
 ```
 
 Selector keys go inside each property; a top-level `':active': { ... }` block is not valid. Pseudo-selectors style the pressed element itself. To style its descendants, the `Pressable` itself below 4.5.0, or an ancestor, use the `Pressable`-based approaches described under Simple gesture feedback in `animations.md`.

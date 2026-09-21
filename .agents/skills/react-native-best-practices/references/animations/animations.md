@@ -42,14 +42,14 @@ Default to CSS transitions and CSS animations. They are declarative, easier to r
 
 Check the installed version first (see `SKILL.md`). Everything below works from Reanimated 4.0.0 unless a row says otherwise; a feature used on an older version is silently ignored or throws.
 
-| Feature | From |
-|---|---|
+| Feature                                                                                                                                                                                                       | From  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | CSS transitions and CSS animations: all `transition*` and `animation*` properties, keyframes, and every timing function (the named ones like `'ease-in-out'`, plus `cubicBezier()`, `steps()` and `linear()`) | 4.0.0 |
-| `filter` and its functions (`blur`, `brightness`, `dropShadow`, ...) on iOS and Android; web has it from 4.0.0 | 4.2.0 |
-| CSS on `react-native-svg` components, iOS and Android (declarations go in `animatedProps`, see `svg-animations.md`; on 4.1.0-4.3.x only with the `EXPERIMENTAL_CSS_ANIMATIONS_FOR_SVG_COMPONENTS` flag) | 4.4.0 |
-| CSS on `react-native-svg` components, web | 4.5.0 |
-| Pseudo-selectors (`:hover`, `:active`, `:active-deepest`, `:focus`, `:focus-within`) | 4.5.0 |
-| CSS animation and transition callbacks (`onCSSAnimation*`, `onCSSTransition*`) | 4.6.0 |
+| `filter` and its functions (`blur`, `brightness`, `dropShadow`, ...) on iOS and Android; web has it from 4.0.0                                                                                                | 4.2.0 |
+| CSS on `react-native-svg` components, iOS and Android (declarations go in `animatedProps`, see `svg-animations.md`; on 4.1.0-4.3.x only with the `EXPERIMENTAL_CSS_ANIMATIONS_FOR_SVG_COMPONENTS` flag)       | 4.4.0 |
+| CSS on `react-native-svg` components, web                                                                                                                                                                     | 4.5.0 |
+| Pseudo-selectors (`:hover`, `:active`, `:active-deepest`, `:focus`, `:focus-within`)                                                                                                                          | 4.5.0 |
+| CSS animation and transition callbacks (`onCSSAnimation*`, `onCSSTransition*`)                                                                                                                                | 4.6.0 |
 
 ---
 
@@ -120,9 +120,9 @@ Use when a style property should animate whenever a state-driven value changes. 
 <Animated.View
   style={{
     width: isExpanded ? 200 : 100,
-    transitionProperty: 'width',
+    transitionProperty: "width",
     transitionDuration: 300,
-    transitionTimingFunction: 'ease-out',
+    transitionTimingFunction: "ease-out",
   }}
 />
 ```
@@ -144,23 +144,23 @@ Press feedback is a transition too. Which element gets the style decides the mec
 **The pressed element styles itself.** From 4.5.0 write the pressed value inline with the `:active` pseudo-selector. Pseudo-selectors work on any `Animated` component (and on `react-native-svg` elements from 4.6.0); the `Pressable` here only provides `onPress`. Nothing re-renders.
 
 ```tsx
-import { Pressable } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
+import { Pressable } from "react-native-gesture-handler";
+import Animated from "react-native-reanimated";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 <AnimatedPressable
   onPress={onPress}
   style={{
-    transform: { default: [{ scale: 1 }], ':active': [{ scale: 0.96 }] },
+    transform: { default: [{ scale: 1 }], ":active": [{ scale: 0.96 }] },
     boxShadow: {
-      default: '0px 6px 10px rgba(0, 0, 0, 0.3)',
-      ':active': '0px 1px 2px rgba(0, 0, 0, 0.3)',
+      default: "0px 6px 10px rgba(0, 0, 0, 0.3)",
+      ":active": "0px 1px 2px rgba(0, 0, 0, 0.3)",
     },
-    transitionProperty: ['transform', 'boxShadow'],
-    transitionDuration: '80ms',
+    transitionProperty: ["transform", "boxShadow"],
+    transitionDuration: "80ms",
   }}
-/>
+/>;
 ```
 
 `:active` matches the pressed element and every ancestor that declares `:active`, so a card with `:active` also reacts when a button inside it is pressed. `:active-deepest` matches only the innermost element under the finger that declares a press selector, never an ancestor: put it on a container that should react to presses on its own area but stay still while an inner control declaring `:active` or `:active-deepest` is pressed.
@@ -168,9 +168,9 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 **Descendants of the pressed element get styled.** Pseudo-selectors do not help here: a descendant matches `:active` only when the finger is on it. Use the approach that predates pseudo-selectors, `Pressable`'s render prop, which also covers every version below 4.5.0:
 
 ```tsx
-import { Text } from 'react-native';
-import { Pressable } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
+import { Text } from "react-native";
+import { Pressable } from "react-native-gesture-handler";
+import Animated from "react-native-reanimated";
 
 function PressableButton({ label, onPress }: { label: string; onPress: () => void }) {
   return (
@@ -178,11 +178,16 @@ function PressableButton({ label, onPress }: { label: string; onPress: () => voi
       {({ pressed }) => (
         <Animated.View
           style={{
-            transform: pressed ? [{ scale: 0.96 }, { translateY: 4 }] : [{ scale: 1 }, { translateY: 0 }],
-            boxShadow: pressed ? '0px 1px 2px rgba(0, 0, 0, 0.3)' : '0px 6px 10px rgba(0, 0, 0, 0.3)',
-            transitionProperty: ['transform', 'boxShadow'],
-            transitionDuration: '80ms',
-          }}>
+            transform: pressed
+              ? [{ scale: 0.96 }, { translateY: 4 }]
+              : [{ scale: 1 }, { translateY: 0 }],
+            boxShadow: pressed
+              ? "0px 1px 2px rgba(0, 0, 0, 0.3)"
+              : "0px 6px 10px rgba(0, 0, 0, 0.3)",
+            transitionProperty: ["transform", "boxShadow"],
+            transitionDuration: "80ms",
+          }}
+        >
           <Text>{label}</Text>
         </Animated.View>
       )}
@@ -194,9 +199,9 @@ function PressableButton({ label, onPress }: { label: string; onPress: () => voi
 **The `Pressable` itself, or an ancestor, gets styled without pseudo-selectors** (below 4.5.0, or when the pressed state must reach an ancestor): keep the pressed flag in React state set from `onPressIn`/`onPressOut` and drive the same transition from it:
 
 ```tsx
-import { useState } from 'react';
-import { Pressable } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
+import { useState } from "react";
+import { Pressable } from "react-native-gesture-handler";
+import Animated from "react-native-reanimated";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -210,9 +215,10 @@ function PressableCard({ children, onPress }: { children: React.ReactNode; onPre
       onPressOut={() => setPressed(false)}
       style={{
         transform: pressed ? [{ scale: 0.96 }] : [{ scale: 1 }],
-        transitionProperty: 'transform',
-        transitionDuration: '80ms',
-      }}>
+        transitionProperty: "transform",
+        transitionDuration: "80ms",
+      }}
+    >
       {children}
     </AnimatedPressable>
   );
@@ -246,19 +252,19 @@ Use when the animation follows a predefined keyframe sequence independent of ext
 
 ```tsx
 const pulse = {
-  '0%':   { opacity: 1 },
-  '50%':  { opacity: 0.4 },
-  '100%': { opacity: 1 },
+  "0%": { opacity: 1 },
+  "50%": { opacity: 0.4 },
+  "100%": { opacity: 1 },
 };
 
 <Animated.View
   style={{
     animationName: pulse,
-    animationDuration: '1200ms',
-    animationIterationCount: 'infinite',
-    animationTimingFunction: 'ease-in-out',
+    animationDuration: "1200ms",
+    animationIterationCount: "infinite",
+    animationTimingFunction: "ease-in-out",
   }}
-/>
+/>;
 ```
 
 Keyframe offsets are percentages, `from`/`to`, or numbers in 0..1. The element's current style is the implicit first keyframe, so you only need to define the frames that differ. At minimum, one keyframe is required.
@@ -273,7 +279,7 @@ CSS attaches after the first paint, so a mount animation needs its start value i
     opacity: 0,
     animationName: { to: { opacity: 1 } },
     animationDuration: 300,
-    animationFillMode: 'forwards',
+    animationFillMode: "forwards",
   }}
 />
 ```
@@ -281,16 +287,16 @@ CSS attaches after the first paint, so a mount animation needs its start value i
 ### Multiple animations
 
 ```tsx
-const fadeInOut = { '0%': { opacity: 0 }, '100%': { opacity: 1 } };
-const moveLeft = { '100%': { transform: [{ translateX: -100 }] } };
+const fadeInOut = { "0%": { opacity: 0 }, "100%": { opacity: 1 } };
+const moveLeft = { "100%": { transform: [{ translateX: -100 }] } };
 
 <Animated.View
   style={{
     animationName: [fadeInOut, moveLeft],
-    animationDuration: ['2.5s', '5s'],
-    animationIterationCount: ['infinite', 1],
+    animationDuration: ["2.5s", "5s"],
+    animationIterationCount: ["infinite", 1],
   }}
-/>
+/>;
 ```
 
 Every `animation*` setting takes a parallel array, one entry per animation. If multiple animations target the same property, the later animation in the array wins.
@@ -301,24 +307,28 @@ Prefer `css.keyframes()` (`css` imported from `react-native-reanimated`) called 
 
 ```tsx
 // Best: processed once, shared by every component that uses it
-const pulse = css.keyframes({ '50%': { opacity: 0.4 } });
+const pulse = css.keyframes({ "50%": { opacity: 0.4 } });
 
 function Dot() {
-  return <Animated.View style={{ animationName: pulse, animationDuration: '1200ms' }} />;
+  return <Animated.View style={{ animationName: pulse, animationDuration: "1200ms" }} />;
 }
 ```
 
 A plain keyframes object is matched by its content, so it never restarts the animation on re-render, but it is re-checked on every render and nothing is shared. Defining it outside the component changes nothing; these two are the same:
 
 ```tsx
-const pulse = { '50%': { opacity: 0.4 } };
+const pulse = { "50%": { opacity: 0.4 } };
 
 function Dot() {
-  return <Animated.View style={{ animationName: pulse, animationDuration: '1200ms' }} />;
+  return <Animated.View style={{ animationName: pulse, animationDuration: "1200ms" }} />;
 }
 
 function Dot() {
-  return <Animated.View style={{ animationName: { '50%': { opacity: 0.4 } }, animationDuration: '1200ms' }} />;
+  return (
+    <Animated.View
+      style={{ animationName: { "50%": { opacity: 0.4 } }, animationDuration: "1200ms" }}
+    />
+  );
 }
 ```
 
@@ -326,9 +336,9 @@ function Dot() {
 
 ```tsx
 function Dot() {
-  const pulse = css.keyframes({ '50%': { opacity: 0.4 } });
+  const pulse = css.keyframes({ "50%": { opacity: 0.4 } });
 
-  return <Animated.View style={{ animationName: pulse, animationDuration: '1200ms' }} />;
+  return <Animated.View style={{ animationName: pulse, animationDuration: "1200ms" }} />;
 }
 ```
 
@@ -345,6 +355,7 @@ function Dot() {
 ## Shared Value Animations
 
 Use when:
+
 - The animation is driven by a gesture or continuous input (scroll position, drag offset)
 - It requires math, trigonometric functions, or interpolation between computed values
 - It needs to read layout measurements on each frame (`measure`, `useAnimatedRef`)
@@ -374,23 +385,19 @@ Avoid updating `Animated.Text` content by changing state — it triggers a full 
 For animated numeric counters or any frequently-changing text, use `AnimatedTextInput` with `animatedProps`:
 
 ```tsx
-import Animated, { useAnimatedProps, type SharedValue } from 'react-native-reanimated';
-import { TextInput } from 'react-native';
+import Animated, { useAnimatedProps, type SharedValue } from "react-native-reanimated";
+import { TextInput } from "react-native";
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 function Counter({ progress }: { progress: SharedValue<number> }) {
   const animatedProps = useAnimatedProps(() => ({
     text: String(Math.round(progress.value)),
-    defaultValue: '0',
+    defaultValue: "0",
   }));
 
   return (
-    <AnimatedTextInput
-      animatedProps={animatedProps}
-      editable={false}
-      style={styles.counter}
-    />
+    <AnimatedTextInput animatedProps={animatedProps} editable={false} style={styles.counter} />
   );
 }
 ```
@@ -424,6 +431,7 @@ Never start infinite animations outside the component lifecycle (module scope, g
 Animating layout properties (`top`, `left`, `width`, `height`, `margin`, `padding`) forces a layout pass on every frame, which is expensive and causes jank.
 
 Prefer:
+
 - `transform: [{ translateX }, { translateY }, { scale }, { rotate }]`
 - `opacity`
 - `backgroundColor`

@@ -20,26 +20,44 @@ const startX = useSharedValue(0);
 
 // v3
 const pan = usePanGesture({
-  onBegin: () => { startX.value = offsetX.value; },
-  onUpdate: (e) => { offsetX.value = startX.value + e.translationX; },
-  onDeactivate: () => { offsetX.value = withSpring(0); },
+  onBegin: () => {
+    startX.value = offsetX.value;
+  },
+  onUpdate: (e) => {
+    offsetX.value = startX.value + e.translationX;
+  },
+  onDeactivate: () => {
+    offsetX.value = withSpring(0);
+  },
 });
 
 // v2
-const pan = useMemo(() =>
-  Gesture.Pan()
-    .onBegin(() => { startX.value = offsetX.value; })
-    .onUpdate((e) => { offsetX.value = startX.value + e.translationX; })
-    .onEnd(() => { offsetX.value = withSpring(0); }),
-[]);
+const pan = useMemo(
+  () =>
+    Gesture.Pan()
+      .onBegin(() => {
+        startX.value = offsetX.value;
+      })
+      .onUpdate((e) => {
+        offsetX.value = startX.value + e.translationX;
+      })
+      .onEnd(() => {
+        offsetX.value = withSpring(0);
+      }),
+  [],
+);
 ```
 
 **Alternative with `changeX`** (v3): Use incremental deltas instead of absolute translation. Simpler when accumulating position:
 
 ```tsx
 const pan = usePanGesture({
-  onUpdate: (e) => { offsetX.value += e.changeX; },
-  onDeactivate: () => { offsetX.value = withSpring(0); },
+  onUpdate: (e) => {
+    offsetX.value += e.changeX;
+  },
+  onDeactivate: () => {
+    offsetX.value = withSpring(0);
+  },
 });
 ```
 
@@ -52,22 +70,32 @@ Continue movement with momentum after the user lifts their finger. `withDecay` t
 ```tsx
 // v3
 const pan = usePanGesture({
-  onBegin: () => { startX.value = offsetX.value; },
-  onUpdate: (e) => { offsetX.value = startX.value + e.translationX; },
+  onBegin: () => {
+    startX.value = offsetX.value;
+  },
+  onUpdate: (e) => {
+    offsetX.value = startX.value + e.translationX;
+  },
   onDeactivate: (e) => {
     offsetX.value = withDecay({ velocity: e.velocityX, clamp: [0, maxX] });
   },
 });
 
 // v2
-const pan = useMemo(() =>
-  Gesture.Pan()
-    .onBegin(() => { startX.value = offsetX.value; })
-    .onUpdate((e) => { offsetX.value = startX.value + e.translationX; })
-    .onEnd((e) => {
-      offsetX.value = withDecay({ velocity: e.velocityX, clamp: [0, maxX] });
-    }),
-[]);
+const pan = useMemo(
+  () =>
+    Gesture.Pan()
+      .onBegin(() => {
+        startX.value = offsetX.value;
+      })
+      .onUpdate((e) => {
+        offsetX.value = startX.value + e.translationX;
+      })
+      .onEnd((e) => {
+        offsetX.value = withDecay({ velocity: e.velocityX, clamp: [0, maxX] });
+      }),
+  [],
+);
 ```
 
 `clamp` is required when using `rubberBandEffect: true`. The rubber band effect makes the animation bounce at clamp boundaries instead of stopping.
@@ -82,16 +110,22 @@ Restrict pan to horizontal or vertical using `activeOffsetX`/`activeOffsetY` and
 const horizontalPan = usePanGesture({
   activeOffsetX: [-10, 10],
   failOffsetY: [-5, 5],
-  onUpdate: (e) => { offsetX.value += e.changeX; },
+  onUpdate: (e) => {
+    offsetX.value += e.changeX;
+  },
 });
 
 // v2
-const horizontalPan = useMemo(() =>
-  Gesture.Pan()
-    .activeOffsetX([-10, 10])
-    .failOffsetY([-5, 5])
-    .onChange((e) => { offsetX.value += e.changeX; }),
-[]);
+const horizontalPan = useMemo(
+  () =>
+    Gesture.Pan()
+      .activeOffsetX([-10, 10])
+      .failOffsetY([-5, 5])
+      .onChange((e) => {
+        offsetX.value += e.changeX;
+      }),
+  [],
+);
 ```
 
 ### Multi-Touch Pan
@@ -118,24 +152,38 @@ const savedScale = useSharedValue(1);
 
 // v3
 const pinch = usePinchGesture({
-  onUpdate: (e) => { scale.value = savedScale.value * e.scale; },
-  onDeactivate: () => { savedScale.value = scale.value; },
+  onUpdate: (e) => {
+    scale.value = savedScale.value * e.scale;
+  },
+  onDeactivate: () => {
+    savedScale.value = scale.value;
+  },
 });
 
 // v2
-const pinch = useMemo(() =>
-  Gesture.Pinch()
-    .onUpdate((e) => { scale.value = savedScale.value * e.scale; })
-    .onEnd(() => { savedScale.value = scale.value; }),
-[]);
+const pinch = useMemo(
+  () =>
+    Gesture.Pinch()
+      .onUpdate((e) => {
+        scale.value = savedScale.value * e.scale;
+      })
+      .onEnd(() => {
+        savedScale.value = scale.value;
+      }),
+  [],
+);
 ```
 
 Alternatively use `e.scaleChange` to get multiplicative delta:
 
 ```tsx
 const pan = usePinchGesture({
-  onUpdate: (e) => { scale.value *= e.scaleChange; },
-  onDeactivate: () => { scale.value = withSpring(1); },
+  onUpdate: (e) => {
+    scale.value *= e.scaleChange;
+  },
+  onDeactivate: () => {
+    scale.value = withSpring(1);
+  },
 });
 ```
 
@@ -173,24 +221,38 @@ const savedRotation = useSharedValue(0);
 
 // v3
 const rotationGesture = useRotationGesture({
-  onUpdate: (e) => { rotation.value = savedRotation.value + e.rotation; },
-  onDeactivate: () => { savedRotation.value = rotation.value; },
+  onUpdate: (e) => {
+    rotation.value = savedRotation.value + e.rotation;
+  },
+  onDeactivate: () => {
+    savedRotation.value = rotation.value;
+  },
 });
 
 // v2
-const rotationGesture = useMemo(() =>
-  Gesture.Rotation()
-    .onUpdate((e) => { rotation.value = savedRotation.value + e.rotation; })
-    .onEnd(() => { savedRotation.value = rotation.value; }),
-[]);
+const rotationGesture = useMemo(
+  () =>
+    Gesture.Rotation()
+      .onUpdate((e) => {
+        rotation.value = savedRotation.value + e.rotation;
+      })
+      .onEnd(() => {
+        savedRotation.value = rotation.value;
+      }),
+  [],
+);
 ```
 
 Alternatively use `e.rotationChange` to get additive delta:
 
 ```tsx
 const pan = useRotationGesture({
-  onUpdate: (e) => { rotation.value *= e.rotationChange; },
-  onDeactivate: () => { rotation.value = withSpring(0); },
+  onUpdate: (e) => {
+    rotation.value *= e.rotationChange;
+  },
+  onDeactivate: () => {
+    rotation.value = withSpring(0);
+  },
 });
 ```
 
@@ -210,19 +272,33 @@ Use the Pan gesture's `activateAfterLongPress` instead of combining separate lon
 // v3
 const pan = usePanGesture({
   activateAfterLongPress: 500,
-  onActivate: () => { /* start dragging -- haptic feedback here */ },
-  onUpdate: (e) => { offsetY.value += e.changeY; },
-  onDeactivate: () => { offsetY.value = withSpring(snapPosition); },
+  onActivate: () => {
+    /* start dragging -- haptic feedback here */
+  },
+  onUpdate: (e) => {
+    offsetY.value += e.changeY;
+  },
+  onDeactivate: () => {
+    offsetY.value = withSpring(snapPosition);
+  },
 });
 
 // v2
-const pan = useMemo(() =>
-  Gesture.Pan()
-    .activateAfterLongPress(500)
-    .onStart(() => { /* start dragging */ })
-    .onChange((e) => { offsetY.value += e.changeY; })
-    .onEnd(() => { offsetY.value = withSpring(snapPosition); }),
-[]);
+const pan = useMemo(
+  () =>
+    Gesture.Pan()
+      .activateAfterLongPress(500)
+      .onStart(() => {
+        /* start dragging */
+      })
+      .onChange((e) => {
+        offsetY.value += e.changeY;
+      })
+      .onEnd(() => {
+        offsetY.value = withSpring(snapPosition);
+      }),
+  [],
+);
 ```
 
 ---
@@ -232,20 +308,26 @@ const pan = useMemo(() =>
 Detects quick directional movements. Configure with `direction` using the `Directions` flags. Activates upon recognition and ends when the finger is released. Fails if the finger lifts before activation.
 
 ```tsx
-import { Directions } from 'react-native-gesture-handler';
+import { Directions } from "react-native-gesture-handler";
 
 // v3
 const fling = useFlingGesture({
   direction: Directions.RIGHT | Directions.LEFT,
-  onDeactivate: () => { scheduleOnRN(handleSwipe); },
+  onDeactivate: () => {
+    scheduleOnRN(handleSwipe);
+  },
 });
 
 // v2
-const fling = useMemo(() =>
-  Gesture.Fling()
-    .direction(Directions.RIGHT | Directions.LEFT)
-    .onEnd(() => { scheduleOnRN(handleSwipe); }),
-[]);
+const fling = useMemo(
+  () =>
+    Gesture.Fling()
+      .direction(Directions.RIGHT | Directions.LEFT)
+      .onEnd(() => {
+        scheduleOnRN(handleSwipe);
+      }),
+  [],
+);
 ```
 
 For swipe-to-dismiss, combine with `withTiming` or `withSpring` to animate the view off-screen on fling detection.
@@ -261,16 +343,26 @@ Detects mouse or stylus hover over a view. Available on Android, iOS (Apple Penc
 ```tsx
 // v3
 const hover = useHoverGesture({
-  onActivate: () => { isHovered.value = true; },
-  onDeactivate: () => { isHovered.value = false; },
+  onActivate: () => {
+    isHovered.value = true;
+  },
+  onDeactivate: () => {
+    isHovered.value = false;
+  },
 });
 
 // v2
-const hover = useMemo(() =>
-  Gesture.Hover()
-    .onBegin(() => { isHovered.value = true; })
-    .onEnd(() => { isHovered.value = false; }),
-[]);
+const hover = useMemo(
+  () =>
+    Gesture.Hover()
+      .onBegin(() => {
+        isHovered.value = true;
+      })
+      .onEnd(() => {
+        isHovered.value = false;
+      }),
+  [],
+);
 ```
 
 iOS supports hover visual effects via `effect` config: `HoverEffect.LIFT` or `HoverEffect.HIGHLIGHT`.
@@ -284,17 +376,23 @@ Web: use the `activeCursor` property to set CSS cursor on hover (e.g., `"grab"`,
 Use `scheduleOnRN` from `react-native-worklets` to call React state setters from gesture callbacks (which run on the UI thread). `runOnJS` is deprecated in Reanimated 4:
 
 ```tsx
-import { scheduleOnRN } from 'react-native-worklets';
+import { scheduleOnRN } from "react-native-worklets";
 
 // v3
 const tap = useTapGesture({
-  onDeactivate: () => { scheduleOnRN(setState, value); },
+  onDeactivate: () => {
+    scheduleOnRN(setState, value);
+  },
 });
 
 // v2
-const tap = useMemo(() =>
-  Gesture.Tap().onEnd(() => { scheduleOnRN(setState, value); }),
-[]);
+const tap = useMemo(
+  () =>
+    Gesture.Tap().onEnd(() => {
+      scheduleOnRN(setState, value);
+    }),
+  [],
+);
 ```
 
 Arguments are passed directly (not curried like the deprecated `runOnJS`). Functions passed to `scheduleOnRN` must be defined in JS-thread scope.

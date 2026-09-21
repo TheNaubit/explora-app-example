@@ -97,7 +97,7 @@ The `install` here **uploads** the (~90MB) `.app` to the remote daemon over the 
 
 ## Mode B — EAS build (the VM downloads it; no credentials)
 
-**Explicit-only** (see the SKILL.md mode picker): a *static* EAS artifact for CI/sharing, or when the user names an existing EAS build. For no-Mac **live** iteration use Mode C with an EAS dev-client build (see Mode C below), not this. **Simulator builds are unsigned, so EAS asks for no credentials.**
+**Explicit-only** (see the SKILL.md mode picker): a _static_ EAS artifact for CI/sharing, or when the user names an existing EAS build. For no-Mac **live** iteration use Mode C with an EAS dev-client build (see Mode C below), not this. **Simulator builds are unsigned, so EAS asks for no credentials.**
 
 ⚠️ **Check for an existing build first.** Before triggering a new build, check if a fingerprint-matched one already exists — it saves ~15-20 min:
 
@@ -213,6 +213,7 @@ npx --yes eas-cli@latest simulator:exec npx agent-device@latest alert accept 250
 ### Dev-menu launch flags (both methods)
 
 The launch-args are iOS UserDefaults (`-Key Value`), verified in expo/expo `packages/expo-dev-menu`. By default the onboarding popup, auto-opened dev menu, and floating gear all show and clutter screenshots; these suppress them:
+
 - `-EXDevMenuIsOnboardingFinished 1` — skip the first-run onboarding popup (dev client **and** Expo Go)
 - `-EXDevMenuShowsAtLaunch 0` — don't auto-open the dev menu at launch (dev client)
 - `-EXDevMenuShowFloatingActionButton 0` — hide the floating gear (defaults visible on both)
@@ -234,6 +235,7 @@ Source: Expo CLI's [AsyncWsTunnel.ts](https://github.com/expo/expo/blob/main/pac
 #### Backend selection
 
 Start Metro on your OWN free port — each run gets its own tunnel URL, so never fight for or kill :8081 (#133's rule). BOTH backends accept ANY `--port`:
+
 - **ws-tunnel v2 (account-signed):** `EXPO_UNSTABLE_TUNNEL_V2=1` — signed URL for your EAS account, `on.expo.app` host, and the path for robot/EXPO_TOKEN/cloud agents (plain ngrok is blocked for them). Needs login / an EAS-linked project; if the signed URL fails, the CLI says to unset the flag and use ngrok.
 - **ngrok (plain `--tunnel`, no flag):** `<host>.exp.direct` host; blocked for robot/EXPO_TOKEN users.
 

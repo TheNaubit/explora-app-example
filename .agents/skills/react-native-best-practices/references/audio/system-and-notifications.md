@@ -14,7 +14,7 @@ For recording-specific setup, see **`recording.md`**.
 Import it as a static class:
 
 ```tsx
-import { AudioManager } from 'react-native-audio-api';
+import { AudioManager } from "react-native-audio-api";
 ```
 
 ---
@@ -25,49 +25,49 @@ Configure the audio session before creating an `AudioContext` or starting record
 
 ```tsx
 AudioManager.setAudioSessionOptions({
-  iosCategory: 'playback',
-  iosMode: 'default',
-  iosOptions: ['defaultToSpeaker', 'allowBluetoothA2DP'],
+  iosCategory: "playback",
+  iosMode: "default",
+  iosOptions: ["defaultToSpeaker", "allowBluetoothA2DP"],
 });
 ```
 
 ### Session Categories
 
-| Category | Use case |
-|----------|----------|
-| `playback` | Audio/music playback. Silences other apps. |
-| `record` | Recording only. No playback output. |
+| Category        | Use case                                                                                                     |
+| --------------- | ------------------------------------------------------------------------------------------------------------ |
+| `playback`      | Audio/music playback. Silences other apps.                                                                   |
+| `record`        | Recording only. No playback output.                                                                          |
 | `playAndRecord` | Simultaneous recording and playback. Use for voice chat, live monitoring, or graph processing with recorder. |
-| `ambient` | Non-essential audio (game sounds). Mixes with other apps, respects silent switch. |
-| `soloAmbient` | Like ambient but silences other apps. Default system category. |
-| `multiRoute` | Routes audio to multiple outputs simultaneously. |
+| `ambient`       | Non-essential audio (game sounds). Mixes with other apps, respects silent switch.                            |
+| `soloAmbient`   | Like ambient but silences other apps. Default system category.                                               |
+| `multiRoute`    | Routes audio to multiple outputs simultaneously.                                                             |
 
 ### Session Modes
 
-| Mode | Use case |
-|------|----------|
-| `default` | Standard mode for most use cases |
-| `voiceChat` | Optimized for voice communication |
-| `videoChat` | Optimized for video calls |
-| `gameChat` | Optimized for game voice chat |
-| `measurement` | Audio measurement and analysis |
-| `moviePlayback` | Movie/video playback |
-| `spokenAudio` | Podcasts, audiobooks |
-| `voicePrompt` | Short voice prompts |
-| `videoRecording` | Video recording |
+| Mode             | Use case                          |
+| ---------------- | --------------------------------- |
+| `default`        | Standard mode for most use cases  |
+| `voiceChat`      | Optimized for voice communication |
+| `videoChat`      | Optimized for video calls         |
+| `gameChat`       | Optimized for game voice chat     |
+| `measurement`    | Audio measurement and analysis    |
+| `moviePlayback`  | Movie/video playback              |
+| `spokenAudio`    | Podcasts, audiobooks              |
+| `voicePrompt`    | Short voice prompts               |
+| `videoRecording` | Video recording                   |
 
 ### Session Options
 
-| Option | Effect |
-|--------|--------|
-| `mixWithOthers` | Mix audio with other apps instead of silencing them |
-| `duckOthers` | Lower other apps' volume while yours plays |
-| `defaultToSpeaker` | Route playback to speaker instead of earpiece |
-| `allowBluetoothA2DP` | Enable high-quality Bluetooth audio output |
-| `allowBluetoothHFP` | Enable Bluetooth hands-free profile (for calls) |
-| `allowAirPlay` | Enable AirPlay streaming |
-| `interruptSpokenAudioAndMixWithOthers` | Interrupt spoken audio from other apps, then mix |
-| `overrideMutedMicrophoneInterruption` | Continue recording when another app mutes the mic |
+| Option                                 | Effect                                              |
+| -------------------------------------- | --------------------------------------------------- |
+| `mixWithOthers`                        | Mix audio with other apps instead of silencing them |
+| `duckOthers`                           | Lower other apps' volume while yours plays          |
+| `defaultToSpeaker`                     | Route playback to speaker instead of earpiece       |
+| `allowBluetoothA2DP`                   | Enable high-quality Bluetooth audio output          |
+| `allowBluetoothHFP`                    | Enable Bluetooth hands-free profile (for calls)     |
+| `allowAirPlay`                         | Enable AirPlay streaming                            |
+| `interruptSpokenAudioAndMixWithOthers` | Interrupt spoken audio from other apps, then mix    |
+| `overrideMutedMicrophoneInterruption`  | Continue recording when another app mutes the mic   |
 
 ### Session Activation
 
@@ -98,10 +98,10 @@ Other apps or system events (phone calls, alarms) can interrupt your audio sessi
 ```tsx
 AudioManager.observeAudioInterruptions(true);
 
-const sub = AudioManager.addSystemEventListener('interruption', (event) => {
-  if (event.type === 'began') {
+const sub = AudioManager.addSystemEventListener("interruption", (event) => {
+  if (event.type === "began") {
     // Another app took audio focus. Pause your playback.
-  } else if (event.type === 'ended' && event.shouldResume) {
+  } else if (event.type === "ended" && event.shouldResume) {
     // Interruption ended and you can resume.
     audioContext.resume();
   }
@@ -114,7 +114,7 @@ sub.remove();
 On Android, pass an `AudioFocusType` to `observeAudioInterruptions` to set the native audio focus:
 
 ```tsx
-AudioManager.observeAudioInterruptions('gain'); // 'gain' | 'gainTransient' | 'gainTransientExclusive' | 'gainTransientMayDuck'
+AudioManager.observeAudioInterruptions("gain"); // 'gain' | 'gainTransient' | 'gainTransientExclusive' | 'gainTransientMayDuck'
 ```
 
 ### Volume Changes
@@ -122,8 +122,8 @@ AudioManager.observeAudioInterruptions('gain'); // 'gain' | 'gainTransient' | 'g
 ```tsx
 AudioManager.observeVolumeChanges(true);
 
-const sub = AudioManager.addSystemEventListener('volumeChange', (event) => {
-  console.log('New volume:', event.value);
+const sub = AudioManager.addSystemEventListener("volumeChange", (event) => {
+  console.log("New volume:", event.value);
 });
 ```
 
@@ -132,8 +132,8 @@ const sub = AudioManager.addSystemEventListener('volumeChange', (event) => {
 Detect headphone connects/disconnects and other routing changes:
 
 ```tsx
-const sub = AudioManager.addSystemEventListener('routeChange', (event) => {
-  console.log('Route changed:', event.reason);
+const sub = AudioManager.addSystemEventListener("routeChange", (event) => {
+  console.log("Route changed:", event.reason);
   // Reasons: 'NewDeviceAvailable', 'OldDeviceUnavailable', 'CategoryChange', etc.
 });
 ```
@@ -141,7 +141,7 @@ const sub = AudioManager.addSystemEventListener('routeChange', (event) => {
 ### Audio Ducking
 
 ```tsx
-const sub = AudioManager.addSystemEventListener('duck', () => {
+const sub = AudioManager.addSystemEventListener("duck", () => {
   // System is asking your app to lower volume
 });
 ```
@@ -174,40 +174,34 @@ const devices = await AudioManager.getDevicesInfo();
 Manages system-level media notifications with playback controls (play, pause, next, previous, seek).
 
 ```tsx
-import { PlaybackNotificationManager } from 'react-native-audio-api';
+import { PlaybackNotificationManager } from "react-native-audio-api";
 
 // Show notification with metadata
 await PlaybackNotificationManager.show({
-  title: 'Song Title',
-  artist: 'Artist Name',
-  album: 'Album',
+  title: "Song Title",
+  artist: "Artist Name",
+  album: "Album",
   duration: 240,
-  state: 'playing',
+  state: "playing",
 });
 
 // Listen for control actions
-const playSub = PlaybackNotificationManager.addEventListener(
-  'playbackNotificationPlay',
-  () => {
-    audioContext.resume();
-    PlaybackNotificationManager.show({ state: 'playing' });
-  }
-);
+const playSub = PlaybackNotificationManager.addEventListener("playbackNotificationPlay", () => {
+  audioContext.resume();
+  PlaybackNotificationManager.show({ state: "playing" });
+});
 
-const pauseSub = PlaybackNotificationManager.addEventListener(
-  'playbackNotificationPause',
-  () => {
-    audioContext.suspend();
-    PlaybackNotificationManager.show({ state: 'paused' });
-  }
-);
+const pauseSub = PlaybackNotificationManager.addEventListener("playbackNotificationPause", () => {
+  audioContext.suspend();
+  PlaybackNotificationManager.show({ state: "paused" });
+});
 
 const seekSub = PlaybackNotificationManager.addEventListener(
-  'playbackNotificationSeekTo',
+  "playbackNotificationSeekTo",
   (event) => {
     // event.value is the seek position in seconds
     PlaybackNotificationManager.show({ elapsedTime: event.value });
-  }
+  },
 );
 
 // Update progress
@@ -229,8 +223,8 @@ await PlaybackNotificationManager.hide();
 ### Enable/Disable Controls
 
 ```tsx
-await PlaybackNotificationManager.enableControl('nextTrack', true);
-await PlaybackNotificationManager.enableControl('seekTo', false);
+await PlaybackNotificationManager.enableControl("nextTrack", true);
+await PlaybackNotificationManager.enableControl("seekTo", false);
 ```
 
 Available controls: `play`, `pause`, `stop`, `nextTrack`, `previousTrack`, `skipForward`, `skipBackward`, `seekTo`.
@@ -244,32 +238,29 @@ For PlaybackNotificationManager API details, webfetch the [PlaybackNotificationM
 Shows a system notification with pause/resume controls for recording.
 
 ```tsx
-import { RecordingNotificationManager } from 'react-native-audio-api';
+import { RecordingNotificationManager } from "react-native-audio-api";
 
 RecordingNotificationManager.show({
-  title: 'Recording',
-  contentText: 'Tap to pause',
+  title: "Recording",
+  contentText: "Tap to pause",
   paused: false,
-  smallIconResourceName: 'ic_mic',
-  pauseIconResourceName: 'ic_pause',
-  resumeIconResourceName: 'ic_play',
+  smallIconResourceName: "ic_mic",
+  pauseIconResourceName: "ic_pause",
+  resumeIconResourceName: "ic_play",
   color: 0xff6200,
 });
 
-const pauseSub = RecordingNotificationManager.addEventListener(
-  'recordingNotificationPause',
-  () => {
-    recorder.pause();
-    RecordingNotificationManager.show({ paused: true, contentText: 'Paused' });
-  }
-);
+const pauseSub = RecordingNotificationManager.addEventListener("recordingNotificationPause", () => {
+  recorder.pause();
+  RecordingNotificationManager.show({ paused: true, contentText: "Paused" });
+});
 
 const resumeSub = RecordingNotificationManager.addEventListener(
-  'recordingNotificationResume',
+  "recordingNotificationResume",
   () => {
     recorder.resume();
-    RecordingNotificationManager.show({ paused: false, contentText: 'Recording...' });
-  }
+    RecordingNotificationManager.show({ paused: false, contentText: "Recording..." });
+  },
 );
 
 // Cleanup
@@ -315,26 +306,24 @@ react-native-audio-api provides a comprehensive mock implementation for unit tes
 
 ```tsx
 // Option 1: Direct import
-import { AudioContext, AudioRecorder } from 'react-native-audio-api/mock';
+import { AudioContext, AudioRecorder } from "react-native-audio-api/mock";
 
 // Option 2: Module mock
-jest.mock('react-native-audio-api', () =>
-  require('react-native-audio-api/mock')
-);
+jest.mock("react-native-audio-api", () => require("react-native-audio-api/mock"));
 ```
 
 ### Testing Audio Graphs
 
 ```tsx
-import { AudioContext } from 'react-native-audio-api/mock';
+import { AudioContext } from "react-native-audio-api/mock";
 
-it('should build an audio effect chain', () => {
+it("should build an audio effect chain", () => {
   const ctx = new AudioContext();
   const osc = ctx.createOscillator();
   const filter = ctx.createBiquadFilter();
   const gain = ctx.createGain();
 
-  filter.type = 'lowpass';
+  filter.type = "lowpass";
   filter.frequency.value = 2000;
   gain.gain.value = 0.8;
 
@@ -342,7 +331,7 @@ it('should build an audio effect chain', () => {
   filter.connect(gain);
   gain.connect(ctx.destination);
 
-  expect(filter.type).toBe('lowpass');
+  expect(filter.type).toBe("lowpass");
   expect(gain.gain.value).toBe(0.8);
 });
 ```
@@ -350,18 +339,18 @@ it('should build an audio effect chain', () => {
 ### Testing Recording
 
 ```tsx
-import { AudioRecorder, FileFormat } from 'react-native-audio-api/mock';
+import { AudioRecorder, FileFormat } from "react-native-audio-api/mock";
 
-it('should record and stop', () => {
+it("should record and stop", () => {
   const recorder = new AudioRecorder();
   recorder.enableFileOutput({ format: FileFormat.M4A });
 
   const start = recorder.start();
-  expect(start.status).toBe('success');
+  expect(start.status).toBe("success");
   expect(recorder.isRecording()).toBe(true);
 
   const stop = recorder.stop();
-  expect(stop.status).toBe('success');
+  expect(stop.status).toBe("success");
   expect(recorder.isRecording()).toBe(false);
 });
 ```
@@ -369,27 +358,27 @@ it('should record and stop', () => {
 ### Testing Context Lifecycle
 
 ```tsx
-it('should manage context state', async () => {
+it("should manage context state", async () => {
   const ctx = new AudioContext();
-  expect(ctx.state).toBe('running');
+  expect(ctx.state).toBe("running");
 
   await ctx.suspend();
-  expect(ctx.state).toBe('suspended');
+  expect(ctx.state).toBe("suspended");
 
   await ctx.resume();
-  expect(ctx.state).toBe('running');
+  expect(ctx.state).toBe("running");
 
   await ctx.close();
-  expect(ctx.state).toBe('closed');
+  expect(ctx.state).toBe("closed");
 });
 ```
 
 ### Testing Offline Rendering
 
 ```tsx
-import { OfflineAudioContext } from 'react-native-audio-api/mock';
+import { OfflineAudioContext } from "react-native-audio-api/mock";
 
-it('should render offline', async () => {
+it("should render offline", async () => {
   const offCtx = new OfflineAudioContext({
     numberOfChannels: 2,
     length: 44100,

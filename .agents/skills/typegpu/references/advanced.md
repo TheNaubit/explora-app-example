@@ -6,21 +6,20 @@ Pass an existing `GPUBuffer` as `initialData` to create a TypeGPU buffer aliasin
 
 ```ts
 const packedBuffer = root
-  .createBuffer(d.disarrayOf(d.unorm8x4, N))   // compact vertex data
-  .$usage('vertex');
+  .createBuffer(d.disarrayOf(d.unorm8x4, N)) // compact vertex data
+  .$usage("vertex");
 
 // Add STORAGE to the underlying GPUBuffer BEFORE it is materialized:
 packedBuffer.$addFlags(GPUBufferUsage.STORAGE);
 
 // Alias the same memory, typed as u32 storage:
-const storageView = root
-  .createBuffer(d.arrayOf(d.u32, N), packedBuffer.buffer)
-  .$usage('storage'); // TypeGPU-level usability + typing; no effect on GPU flags
+const storageView = root.createBuffer(d.arrayOf(d.u32, N), packedBuffer.buffer).$usage("storage"); // TypeGPU-level usability + typing; no effect on GPU flags
 ```
 
 Pairs well with WGSL pack/unpack builtins (`std.pack4x8unorm`, `std.unpack4x8unorm`, `std.pack2x16float`, etc.) - reinterpret a buffer as `u32` storage and pack/unpack in the shader for compact vertex data, color encoding, or quantized weights.
 
 **Caveats:**
+
 - The original buffer's lifecycle is NOT transferred - keep it alive while the alias is in use.
 - Real GPU flags cannot be applied through the alias: accessing `.buffer` materializes the `GPUBuffer` with its flags baked, so the original must carry every needed raw flag (via `$usage`/`$addFlags`) before the alias is created. `$addFlags()` on the alias throws.
 - `$usage()` on the alias IS still required for each intended use - it never touches the GPU flags, but it satisfies TypeScript (`StorageFlag` etc.) and TypeGPU's runtime bind checks (`.as(...)`, bind group creation).
@@ -33,23 +32,23 @@ Indirect buffers let the GPU determine draw/dispatch counts - foundation of GPU-
 
 ### Required buffer contents
 
-| Call | Layout |
-|---|---|
-| `dispatchWorkgroupsIndirect` | 3x `u32`: x, y, z workgroup counts |
-| `drawIndirect` | 4x `u32`: vertexCount, instanceCount, firstVertex, firstInstance |
-| `drawIndexedIndirect` | indexCount(`u32`), instanceCount(`u32`), firstIndex(`u32`), baseVertex(`i32`), firstInstance(`u32`) |
+| Call                         | Layout                                                                                              |
+| ---------------------------- | --------------------------------------------------------------------------------------------------- |
+| `dispatchWorkgroupsIndirect` | 3x `u32`: x, y, z workgroup counts                                                                  |
+| `drawIndirect`               | 4x `u32`: vertexCount, instanceCount, firstVertex, firstInstance                                    |
+| `drawIndexedIndirect`        | indexCount(`u32`), instanceCount(`u32`), firstIndex(`u32`), baseVertex(`i32`), firstInstance(`u32`) |
 
 All indirect methods have two overloads: `(buffer)` (offset 0) and `(buffer, offsetInfo)`. When the indirect params start at the beginning of the buffer, prefer the no-offset overload - it's cleaner and equally safe.
 
 ```ts
 // Dedicated indirect buffer - no offset needed:
 const IndirectParams = d.struct({
-  vertexCount:   d.u32,
+  vertexCount: d.u32,
   instanceCount: d.u32,
-  firstVertex:   d.u32,
+  firstVertex: d.u32,
   firstInstance: d.u32,
 });
-const indirectBuf = root.createBuffer(IndirectParams).$usage('storage', 'indirect');
+const indirectBuf = root.createBuffer(IndirectParams).$usage("storage", "indirect");
 pipeline.drawIndirect(indirectBuf); // offset 0 implied
 ```
 
@@ -59,14 +58,14 @@ When indirect params are embedded in a larger struct, use `d.memoryLayoutOf` ins
 
 ```ts
 const Schema = d.struct({
-  someData:      d.arrayOf(d.vec3f, 10),
-  vertexCount:   d.u32,
+  someData: d.arrayOf(d.vec3f, 10),
+  vertexCount: d.u32,
   instanceCount: d.u32,
-  firstVertex:   d.u32,
+  firstVertex: d.u32,
   firstInstance: d.u32,
 });
 
-const MyBuffer = root.createBuffer(Schema).$usage('storage', 'indirect');
+const MyBuffer = root.createBuffer(Schema).$usage("storage", "indirect");
 
 const drawOffset = d.memoryLayoutOf(Schema, (s) => s.vertexCount); // compute once
 pipeline.drawIndirect(MyBuffer, drawOffset); // reuse every frame
@@ -78,7 +77,7 @@ pipeline.drawIndirect(MyBuffer, drawOffset); // reuse every frame
 
 ```ts
 const Schema = d.struct({
-  someData:   d.arrayOf(d.vec3f, 10),
+  someData: d.arrayOf(d.vec3f, 10),
   drawParams: d.vec4u, // [vertexCount, instanceCount, firstVertex, firstInstance]
 });
 
@@ -99,7 +98,7 @@ Typed command encoders, multi-pipeline passes, render bundles, and raw WebGPU en
 Top-level exports mirror `buffer.write`/`patch`/`read` but operate on a raw `ArrayBuffer` with an explicit schema — useful for pre-serializing schema-shaped data (workers, files, staging). All three are **synchronous** (pure CPU-side (de)serialization — no `await`, unlike `buffer.read()`):
 
 ```ts
-import { d, writeToArrayBuffer, patchArrayBuffer, readFromArrayBuffer } from 'typegpu';
+import { d, writeToArrayBuffer, patchArrayBuffer, readFromArrayBuffer } from "typegpu";
 
 const bytes = new ArrayBuffer(64);
 writeToArrayBuffer(bytes, d.vec4u, d.vec4u(1, 2, 3, 4));
@@ -119,8 +118,8 @@ Never reach for these unless integrating with an existing raw-WGSL codebase spec
 **`tgpu['~unstable'].declare(source)`** — emits a WGSL declaration whenever a depending object resolves (diagnostic directives, hand-written bindings). Reference TypeGPU resources with `.$uses({...})` (at most once); use slots/accessors when dependencies need to vary.
 
 ```ts
-const declaration = tgpu['~unstable']
-  .declare('@group(0) @binding(0) var<uniform> settings: Settings;')
+const declaration = tgpu["~unstable"]
+  .declare("@group(0) @binding(0) var<uniform> settings: Settings;")
   .$uses({ Settings });
 ```
 
@@ -143,12 +142,12 @@ const declaration = tgpu['~unstable']
 **Escape hatch.** Returns the underlying raw WebGPU object, letting you pass TypeGPU resources to APIs that require native handles:
 
 ```ts
-const gpuBuffer   = root.unwrap(tgpuBuffer);         // GPUBuffer
-const gpuPipeline = root.unwrap(computePipeline);    // GPUComputePipeline
-const gpuLayout   = root.unwrap(bindGroupLayout);    // GPUBindGroupLayout
-const gpuTexture  = root.unwrap(tgpuTexture);        // GPUTexture
-const gpuView     = root.unwrap(textureView);        // GPUTextureView
-const gpuSampler  = root.unwrap(tgpuSampler);        // GPUSampler
+const gpuBuffer = root.unwrap(tgpuBuffer); // GPUBuffer
+const gpuPipeline = root.unwrap(computePipeline); // GPUComputePipeline
+const gpuLayout = root.unwrap(bindGroupLayout); // GPUBindGroupLayout
+const gpuTexture = root.unwrap(tgpuTexture); // GPUTexture
+const gpuView = root.unwrap(textureView); // GPUTextureView
+const gpuSampler = root.unwrap(tgpuSampler); // GPUSampler
 // also: TgpuRenderPipeline, TgpuBindGroup, TgpuVertexLayout,
 //       TgpuComparisonSampler, TgpuQuerySet
 ```

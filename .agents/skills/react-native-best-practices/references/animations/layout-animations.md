@@ -11,13 +11,15 @@ For predefined animation lists, modifiers, and parameters, webfetch the linked d
 Animate elements when they are added to or removed from the view hierarchy:
 
 ```tsx
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
-{visible && (
-  <Animated.View entering={FadeIn} exiting={FadeOut}>
-    <Text>Hello</Text>
-  </Animated.View>
-)}
+{
+  visible && (
+    <Animated.View entering={FadeIn} exiting={FadeOut}>
+      <Text>Hello</Text>
+    </Animated.View>
+  );
+}
 ```
 
 Predefined animation families include Fade, Slide, Zoom, Bounce, Flip, Stretch, Roll, Rotate, LightSpeed, and Pinwheel. Each has directional variants (e.g., `FadeInRight`, `FadeInLeft`, `FadeInUp`, `FadeInDown`).
@@ -44,13 +46,13 @@ Time-based modifiers (`.duration()`, `.easing()`) are incompatible with spring-b
 Smooth animations when a component's position or size changes due to state updates:
 
 ```tsx
-import Animated, { LinearTransition } from 'react-native-reanimated';
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 <Animated.View layout={LinearTransition}>
   {items.map((item) => (
     <Item key={item.id} {...item} />
   ))}
-</Animated.View>
+</Animated.View>;
 ```
 
 Predefined transitions: `LinearTransition`, `SequencedTransition`, `FadingTransition`, `JumpingTransition`, `CurvedTransition`, `EntryExitTransition`.
@@ -66,19 +68,19 @@ The generic `Layout` transition from older Reanimated versions is deprecated. Us
 For complex multi-step entering/exiting animations beyond what presets offer:
 
 ```tsx
-import { Keyframe } from 'react-native-reanimated';
+import { Keyframe } from "react-native-reanimated";
 
 const enteringAnimation = new Keyframe({
-  0: { opacity: 0, transform: [{ scale: 0.5 }, { rotate: '-45deg' }] },
+  0: { opacity: 0, transform: [{ scale: 0.5 }, { rotate: "-45deg" }] },
   50: {
     opacity: 1,
-    transform: [{ scale: 1.2 }, { rotate: '0deg' }],
+    transform: [{ scale: 1.2 }, { rotate: "0deg" }],
     easing: Easing.out(Easing.quad),
   },
-  100: { transform: [{ scale: 1 }, { rotate: '0deg' }] },
+  100: { transform: [{ scale: 1 }, { rotate: "0deg" }] },
 });
 
-<Animated.View entering={enteringAnimation.duration(600)} />
+<Animated.View entering={enteringAnimation.duration(600)} />;
 ```
 
 ### Rules
@@ -97,11 +99,7 @@ const enteringAnimation = new Keyframe({
 Animate item layout changes in `FlatList` when items are added, removed, or reordered:
 
 ```tsx
-<Animated.FlatList
-  data={data}
-  renderItem={renderItem}
-  itemLayoutAnimation={LinearTransition}
-/>
+<Animated.FlatList data={data} renderItem={renderItem} itemLayoutAnimation={LinearTransition} />
 ```
 
 ### Rules
@@ -118,11 +116,11 @@ Animate item layout changes in `FlatList` when items are added, removed, or reor
 Skip entering/exiting animations for a subtree:
 
 ```tsx
-import { LayoutAnimationConfig } from 'react-native-reanimated';
+import { LayoutAnimationConfig } from "react-native-reanimated";
 
 <LayoutAnimationConfig skipEntering skipExiting>
   {children}
-</LayoutAnimationConfig>
+</LayoutAnimationConfig>;
 ```
 
 Can be nested. For FlatLists, use the `.skipEnteringExitingAnimations` modifier on `itemLayoutAnimation` instead.

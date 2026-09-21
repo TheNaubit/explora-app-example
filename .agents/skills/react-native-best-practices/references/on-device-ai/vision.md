@@ -11,11 +11,11 @@ Every hook accepts image input as one of: a remote URL (`https://…`), a local 
 ## Image classification — `useClassification`
 
 ```tsx
-import { useClassification, models } from 'react-native-executorch';
+import { useClassification, models } from "react-native-executorch";
 
 const model = useClassification({ model: models.classification.efficientnet_v2_s() });
 
-const labels = await model.forward('https://example.com/puppy.png');
+const labels = await model.forward("https://example.com/puppy.png");
 // labels: Record<string, number> — ImageNet1k label → probability
 
 const topThree = Object.entries(labels)
@@ -30,15 +30,15 @@ For the full ImageNet1k label set, import `Imagenet1kLabel`.
 ## Object detection — `useObjectDetection`
 
 ```tsx
-import { useObjectDetection, models } from 'react-native-executorch';
+import { useObjectDetection, models } from "react-native-executorch";
 
 const model = useObjectDetection({ model: models.object_detection.yolo26n() });
 
-const detections = await model.forward('https://example.com/street.jpg', {
+const detections = await model.forward("https://example.com/street.jpg", {
   detectionThreshold: 0.5, // minimum confidence (0–1)
-  iouThreshold: 0.45,      // NMS aggressiveness (0–1)
-  inputSize: 640,          // for multi-size YOLO models (384 / 512 / 640)
-  classesOfInterest: ['PERSON', 'CAR'], // filter
+  iouThreshold: 0.45, // NMS aggressiveness (0–1)
+  inputSize: 640, // for multi-size YOLO models (384 / 512 / 640)
+  classesOfInterest: ["PERSON", "CAR"], // filter
 });
 
 for (const d of detections) {
@@ -59,16 +59,16 @@ YOLO models support multiple input sizes — call `model.getAvailableInputSizes(
 Pixel-level classification.
 
 ```tsx
-import { useSemanticSegmentation, models, DeeplabLabel } from 'react-native-executorch';
+import { useSemanticSegmentation, models, DeeplabLabel } from "react-native-executorch";
 
 const model = useSemanticSegmentation({
   model: models.semantic_segmentation.deeplab_v3_resnet50(),
 });
 
 // Pass classesOfInterest + resizeToInput to also get per-class probability maps
-const out = await model.forward(imageUri, ['CAT', 'DOG', 'PERSON'], true);
-const argmax = out[DeeplabLabel.ARGMAX];        // class id per pixel
-const catProbs = out['CAT'];                    // probability per pixel
+const out = await model.forward(imageUri, ["CAT", "DOG", "PERSON"], true);
+const argmax = out[DeeplabLabel.ARGMAX]; // class id per pixel
+const catProbs = out["CAT"]; // probability per pixel
 ```
 
 **Tradeoff:** `resizeToInput: true` upsamples to the original image size — more memory and slower. With `false`, indices map to a 224×224 grid.
@@ -82,13 +82,13 @@ const catProbs = out['CAT'];                    // probability per pixel
 Per-instance masks (one mask per detected object).
 
 ```tsx
-import { useInstanceSegmentation, models } from 'react-native-executorch';
+import { useInstanceSegmentation, models } from "react-native-executorch";
 
 const model = useInstanceSegmentation({
   model: models.instance_segmentation.yolo26n(),
 });
 
-const instances = await model.forward('https://example.com/street.jpg');
+const instances = await model.forward("https://example.com/street.jpg");
 // instances: { bbox, label, score, mask }[]
 ```
 
@@ -101,16 +101,16 @@ const instances = await model.forward('https://example.com/street.jpg');
 Detects humans and their COCO 17-keypoint skeletons (nose, eyes, ears, shoulders, elbows, wrists, hips, knees, ankles).
 
 ```tsx
-import { usePoseEstimation, models, CocoKeypoint } from 'react-native-executorch';
+import { usePoseEstimation, models, CocoKeypoint } from "react-native-executorch";
 
 const model = usePoseEstimation({ model: models.pose_estimation.yolo26n() });
 
-const poses = await model.forward('https://example.com/person.jpg');
+const poses = await model.forward("https://example.com/person.jpg");
 // poses: { bbox, score, keypoints: { x, y, confidence }[] }[]
 
 for (const pose of poses) {
   const nose = pose.keypoints[CocoKeypoint.NOSE];
-  console.log('Nose at', nose.x, nose.y, 'conf', nose.confidence);
+  console.log("Nose at", nose.x, nose.y, "conf", nose.confidence);
 }
 ```
 
@@ -123,17 +123,18 @@ Use the `CocoKeypoint` enum to index into `keypoints` by name.
 The OCR pipeline ships a CRAFT detector plus per-alphabet CRNN recognizers. Pick one with a language code via `models.ocr.craft({ language })`.
 
 ```tsx
-import { useOCR, models } from 'react-native-executorch';
+import { useOCR, models } from "react-native-executorch";
 
-const ocr = useOCR({ model: models.ocr.craft({ language: 'en' }) });
+const ocr = useOCR({ model: models.ocr.craft({ language: "en" }) });
 
-const detections = await ocr.forward('https://example.com/receipt.jpg');
+const detections = await ocr.forward("https://example.com/receipt.jpg");
 for (const d of detections) {
   console.log(d.text, d.score, d.bbox); // bbox = 4-point polygon
 }
 ```
 
 `OCRDetection`:
+
 ```ts
 interface OCRDetection {
   bbox: { x: number; y: number }[]; // 4 corner points (supports rotated/skewed text)
@@ -145,10 +146,10 @@ interface OCRDetection {
 **Vertical / CJK text** — use `useVerticalOCR` with `independentCharacters: true`:
 
 ```tsx
-import { useVerticalOCR, models } from 'react-native-executorch';
+import { useVerticalOCR, models } from "react-native-executorch";
 
 const ocr = useVerticalOCR({
-  model: models.ocr.craft({ language: 'ch_sim' }),
+  model: models.ocr.craft({ language: "ch_sim" }),
   independentCharacters: true, // recommended for CJK; set false for vertical Latin
 });
 
@@ -164,7 +165,7 @@ const detections = await ocr.forward(imageUri);
 Apply one of four pre-trained artistic styles to an image.
 
 ```tsx
-import { useStyleTransfer, models } from 'react-native-executorch';
+import { useStyleTransfer, models } from "react-native-executorch";
 
 const model = useStyleTransfer({ model: models.style_transfer.candy() });
 
@@ -172,7 +173,7 @@ const model = useStyleTransfer({ model: models.style_transfer.candy() });
 const pixelData = await model.forward(imageUri);
 
 // Pass 'url' as second arg to get a file URI back
-const styledUri = await model.forward(imageUri, 'url');
+const styledUri = await model.forward(imageUri, "url");
 ```
 
 **Available accessors:** `models.style_transfer.candy` / `mosaic` / `rain_princess` / `udnie`.
@@ -186,11 +187,11 @@ Generated images are written to the app's temporary directory. Expect a few seco
 On-device Stable Diffusion (BK-SDM tiny).
 
 ```tsx
-import { useTextToImage, models } from 'react-native-executorch';
+import { useTextToImage, models } from "react-native-executorch";
 
 const model = useTextToImage({ model: models.image_generation.bk_sdm_tiny_vpred_256() });
 
-const image = await model.generate('a medieval castle by the sea', 256, 25);
+const image = await model.generate("a medieval castle by the sea", 256, 25);
 // image: base64 PNG. Render with <Image source={{ uri: `data:image/png;base64,${image}` }} />
 ```
 
@@ -203,7 +204,7 @@ Signature: `generate(prompt, imageSize?, numSteps?)`. Image size must be a multi
 CLIP-based image vectors for similarity / search. Pair with `useTextEmbeddings` (using the CLIP text encoder) for cross-modal retrieval.
 
 ```tsx
-import { useImageEmbeddings, models } from 'react-native-executorch';
+import { useImageEmbeddings, models } from "react-native-executorch";
 
 const model = useImageEmbeddings({
   model: models.image_embedding.clip_vit_base_patch32_image(),
@@ -225,26 +226,26 @@ Images are auto-resized to 224 × 224.
 Sentence-level embeddings for semantic search, similarity, clustering, or RAG. Listed under vision because the CLIP text encoder is the cross-modal pair to image embeddings.
 
 ```tsx
-import { useTextEmbeddings, models } from 'react-native-executorch';
+import { useTextEmbeddings, models } from "react-native-executorch";
 
 const model = useTextEmbeddings({
   model: models.text_embedding.all_minilm_l6_v2(),
 });
 
-const v1 = await model.forward('Hello world');
-const v2 = await model.forward('Greetings everyone');
+const v1 = await model.forward("Hello world");
+const v2 = await model.forward("Greetings everyone");
 const cosine = v1.reduce((s, x, i) => s + x * v2[i], 0); // pre-normalized
 ```
 
-| Accessor | Max tokens | Dim | Use case |
-|---|---|---|---|
-| `models.text_embedding.all_minilm_l6_v2` | 254 | 384 | General purpose |
-| `models.text_embedding.all_mpnet_base_v2` | 382 | 768 | Higher quality, slower |
-| `models.text_embedding.multi_qa_minilm_l6_cos_v1` | 509 | 384 | Q&A / semantic search |
-| `models.text_embedding.multi_qa_mpnet_base_dot_v1` | 510 | 768 | Q&A / semantic search |
-| `models.text_embedding.distiluse_base_multilingual_cased_v2` | 128 | 512 | Multilingual |
-| `models.text_embedding.paraphrase_multilingual_minilm_l12_v2` | 128 | 384 | Multilingual paraphrase |
-| `models.text_embedding.clip_vit_base_patch32_text` | 74 | 512 | Pair with image embeddings (CLIP) |
+| Accessor                                                      | Max tokens | Dim | Use case                          |
+| ------------------------------------------------------------- | ---------- | --- | --------------------------------- |
+| `models.text_embedding.all_minilm_l6_v2`                      | 254        | 384 | General purpose                   |
+| `models.text_embedding.all_mpnet_base_v2`                     | 382        | 768 | Higher quality, slower            |
+| `models.text_embedding.multi_qa_minilm_l6_cos_v1`             | 509        | 384 | Q&A / semantic search             |
+| `models.text_embedding.multi_qa_mpnet_base_dot_v1`            | 510        | 768 | Q&A / semantic search             |
+| `models.text_embedding.distiluse_base_multilingual_cased_v2`  | 128        | 512 | Multilingual                      |
+| `models.text_embedding.paraphrase_multilingual_minilm_l12_v2` | 128        | 384 | Multilingual paraphrase           |
+| `models.text_embedding.clip_vit_base_patch32_text`            | 74         | 512 | Pair with image embeddings (CLIP) |
 
 Text exceeding `Max tokens` is truncated. Use `useTokenizer` (see `setup.md`) to count first.
 

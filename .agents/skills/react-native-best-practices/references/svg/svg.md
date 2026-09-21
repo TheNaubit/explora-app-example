@@ -26,7 +26,7 @@ cd ios && pod install
 ### Inline components
 
 ```tsx
-import Svg, { Circle, Rect } from 'react-native-svg';
+import Svg, { Circle, Rect } from "react-native-svg";
 
 export default function InlineSvg() {
   return (
@@ -41,7 +41,7 @@ export default function InlineSvg() {
 ### From a remote URI
 
 ```tsx
-import { SvgUri } from 'react-native-svg';
+import { SvgUri } from "react-native-svg";
 
 export default function RemoteSvg() {
   return <SvgUri width="100%" height="100%" uri="https://example.com/image.svg" />;
@@ -65,7 +65,7 @@ If the remote SVG contains CSS in a `<style>` element, use `SvgCssUri` from `rea
 ### From an XML string
 
 ```tsx
-import { SvgXml } from 'react-native-svg';
+import { SvgXml } from "react-native-svg";
 
 const xml = `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="red" /></svg>`;
 
@@ -83,18 +83,18 @@ Use [react-native-svg-transformer](https://github.com/kristerkari/react-native-s
 `metro.config.js` (react-native >= 0.72):
 
 ```js
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
 
 const defaultConfig = getDefaultConfig(__dirname);
 const { assetExts, sourceExts } = defaultConfig.resolver;
 
 const config = {
   transformer: {
-    babelTransformerPath: require.resolve('react-native-svg-transformer'),
+    babelTransformerPath: require.resolve("react-native-svg-transformer"),
   },
   resolver: {
-    assetExts: assetExts.filter((ext) => ext !== 'svg'),
-    sourceExts: [...sourceExts, 'svg'],
+    assetExts: assetExts.filter((ext) => ext !== "svg"),
+    sourceExts: [...sourceExts, "svg"],
   },
 };
 
@@ -104,9 +104,9 @@ module.exports = mergeConfig(defaultConfig, config);
 Then import and use SVG files as components:
 
 ```tsx
-import Logo from './logo.svg';
+import Logo from "./logo.svg";
 
-<Logo width={120} height={40} />
+<Logo width={120} height={40} />;
 ```
 
 ---
@@ -116,13 +116,7 @@ import Logo from './logo.svg';
 SVG elements support `onPress`, `onPressIn`, `onPressOut`, `onLongPress`, `delayPressIn`, `delayPressOut`, `delayLongPress`, and `disabled`:
 
 ```tsx
-<Circle
-  cx="50%"
-  cy="50%"
-  r="38%"
-  fill="red"
-  onPress={() => alert('Pressed circle')}
-/>
+<Circle cx="50%" cy="50%" r="38%" fill="red" onPress={() => alert("Pressed circle")} />
 ```
 
 ---
@@ -134,7 +128,7 @@ Filter support is partial on native. The following filters work on all platforms
 - `FeBlend`, `FeComposite`, `FeColorMatrix`, `FeDropShadow`, `FeFlood`, `FeGaussianBlur`, `FeMerge`, `FeOffset`
 
 ```tsx
-import { FeColorMatrix, Filter, Rect, Svg } from 'react-native-svg';
+import { FeColorMatrix, Filter, Rect, Svg } from "react-native-svg";
 
 export default function FilteredRect() {
   return (
@@ -153,12 +147,12 @@ export default function FilteredRect() {
 `FilterImage` applies filters to raster images. Import from `react-native-svg/filter-image`. Filters can be applied via the `filters` prop (array) or via the CSS `filter` style property:
 
 ```tsx
-import { FilterImage } from 'react-native-svg/filter-image';
+import { FilterImage } from "react-native-svg/filter-image";
 
 <FilterImage
-  style={{ width: 200, height: 200, filter: 'saturate(3) grayscale(100%)' }}
-  source={require('./photo.jpg')}
-/>
+  style={{ width: 200, height: 200, filter: "saturate(3) grayscale(100%)" }}
+  source={require("./photo.jpg")}
+/>;
 ```
 
 ---

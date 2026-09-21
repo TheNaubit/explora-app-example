@@ -3,7 +3,7 @@
 **Always prefer this over hand-rolled hash functions or `fract(sin(...))` snippets** - those are fragile, biased, and a known source of banding/repetition artifacts.
 
 ```ts
-import { randf, perlin2d, perlin3d } from '@typegpu/noise';
+import { randf, perlin2d, perlin3d } from "@typegpu/noise";
 ```
 
 Works in TypeGPU shaders (auto-linked on pipeline resolve) and in raw WGSL via `tgpu.resolve({ template, externals: { randf } })` - see `references/pipelines.md` for the full resolve API.
@@ -26,12 +26,12 @@ const main = tgpu.fragmentFn({
 
 ### Seed functions
 
-| Function | Seed type |
-|---|---|
-| `randf.seed(x)` | `f32` |
-| `randf.seed2(v)` | `d.v2f` |
-| `randf.seed3(v)` | `d.v3f` |
-| `randf.seed4(v)` | `d.v4f` |
+| Function         | Seed type |
+| ---------------- | --------- |
+| `randf.seed(x)`  | `f32`     |
+| `randf.seed2(v)` | `d.v2f`   |
+| `randf.seed3(v)` | `d.v3f`   |
+| `randf.seed4(v)` | `d.v4f`   |
 
 Canonical compute-shader pattern: `seed2(d.vec2f(gid.xy))`.
 
@@ -45,34 +45,34 @@ Built on `randf.sample()` - they share the thread's PRNG state (no separate seed
 
 ### Discrete
 
-| Function | Returns | Notes |
-|---|---|---|
+| Function             | Returns               | Notes                             |
+| -------------------- | --------------------- | --------------------------------- |
 | `randf.bernoulli(p)` | `0` or `1` (as `f32`) | Biased coin flip; `p` in `[0, 1]` |
 
 ### Continuous
 
-| Function | Returns | Notes |
-|---|---|---|
-| `randf.sample()` | `f32` in `[0, 1)` | Base PRNG |
-| `randf.sampleExclusive()` | `f32` in `(0, 1)` | Use before `log` |
-| `randf.normal(mu, sigma)` | `f32` ~ `N(mu, sigma)` | Box-Muller; `sigma > 0` |
-| `randf.exponential(rate)` | `f32` >= 0 | `rate > 0` |
-| `randf.cauchy(x0, gamma)` | `f32` | Heavy-tailed; `gamma > 0` |
+| Function                  | Returns                | Notes                     |
+| ------------------------- | ---------------------- | ------------------------- |
+| `randf.sample()`          | `f32` in `[0, 1)`      | Base PRNG                 |
+| `randf.sampleExclusive()` | `f32` in `(0, 1)`      | Use before `log`          |
+| `randf.normal(mu, sigma)` | `f32` ~ `N(mu, sigma)` | Box-Muller; `sigma > 0`   |
+| `randf.exponential(rate)` | `f32` >= 0             | `rate > 0`                |
+| `randf.cauchy(x0, gamma)` | `f32`                  | Heavy-tailed; `gamma > 0` |
 
 ### Geometric
 
 Uniformly distributed vectors over shapes - bread and butter for path tracers, particle systems, AO, soft shadows.
 
-| Function | Returns | Shape |
-|---|---|---|
-| `randf.inUnitCircle()` | `d.v2f` | Inside the unit disc |
-| `randf.onUnitCircle()` | `d.v2f` | On the unit circle (perimeter) |
-| `randf.inUnitCube()` | `d.v3f` | Inside the unit cube |
-| `randf.onUnitCube()` | `d.v3f` | On the surface of the unit cube |
-| `randf.inUnitSphere()` | `d.v3f` | Inside the unit sphere |
-| `randf.onUnitSphere()` | `d.v3f` | On the unit sphere (uniform direction) |
-| `randf.inHemisphere(normal)` | `d.v3f` | Inside the upper hemisphere |
-| `randf.onHemisphere(normal)` | `d.v3f` | On the upper hemisphere |
+| Function                     | Returns | Shape                                  |
+| ---------------------------- | ------- | -------------------------------------- |
+| `randf.inUnitCircle()`       | `d.v2f` | Inside the unit disc                   |
+| `randf.onUnitCircle()`       | `d.v2f` | On the unit circle (perimeter)         |
+| `randf.inUnitCube()`         | `d.v3f` | Inside the unit cube                   |
+| `randf.onUnitCube()`         | `d.v3f` | On the surface of the unit cube        |
+| `randf.inUnitSphere()`       | `d.v3f` | Inside the unit sphere                 |
+| `randf.onUnitSphere()`       | `d.v3f` | On the unit sphere (uniform direction) |
+| `randf.inHemisphere(normal)` | `d.v3f` | Inside the upper hemisphere            |
+| `randf.onHemisphere(normal)` | `d.v3f` | On the upper hemisphere                |
 
 For diffuse BRDF sampling: `onHemisphere(normal)`. For uniform direction (Monte Carlo over sphere): `onUnitSphere()`.
 
@@ -83,14 +83,14 @@ For diffuse BRDF sampling: `onHemisphere(normal)`. For uniform direction (Monte 
 `perlin2d` and `perlin3d` return smooth gradient noise in `[-1, 1]`. Use for terrain, clouds, organic textures, FBM, domain warping.
 
 ```ts
-import { perlin2d } from '@typegpu/noise';
+import { perlin2d } from "@typegpu/noise";
 
 const main = tgpu.fragmentFn({
   in: { pos: d.builtin.position },
   out: d.vec4f,
 })(({ pos }) => {
-  const n = perlin2d.sample(pos.xy * 0.05);   // "interesting" scale ~1 unit/cell
-  return d.vec4f(n * 0.5 + 0.5, 0, 0, 1);     // remap [-1,1] to [0,1]
+  const n = perlin2d.sample(pos.xy * 0.05); // "interesting" scale ~1 unit/cell
+  return d.vec4f(n * 0.5 + 0.5, 0, 0, 1); // remap [-1,1] to [0,1]
 });
 ```
 
@@ -106,9 +106,7 @@ const cache = perlin3d.staticCache({
   size: d.vec3u(64, 64, 64),
 });
 
-const pipeline = root
-  .pipe(cache.inject())
-  .createComputePipeline({ compute: main });
+const pipeline = root.pipe(cache.inject()).createComputePipeline({ compute: main });
 ```
 
 `root.pipe(transform)` applies a configuration function (a bundle of slot/accessor bindings, like `cache.inject()` returns) to the root's configuration chain - equivalent to the corresponding `.with(...)` calls.

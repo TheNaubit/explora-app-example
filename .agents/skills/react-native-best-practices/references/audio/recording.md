@@ -22,7 +22,7 @@ All three modes can be active simultaneously.
 Create one `AudioRecorder` instance and reuse it. Switching between recorder instances has noticeable impact on device performance, memory, and battery.
 
 ```tsx
-import { AudioRecorder } from 'react-native-audio-api';
+import { AudioRecorder } from "react-native-audio-api";
 
 export const recorder = new AudioRecorder();
 ```
@@ -52,11 +52,11 @@ Recording requires microphone permissions. Configure them during app setup and r
 ### Runtime Permission Request
 
 ```tsx
-import { AudioManager } from 'react-native-audio-api';
+import { AudioManager } from "react-native-audio-api";
 
 const status = await AudioManager.requestRecordingPermissions();
-if (status !== 'Granted') {
-  console.warn('Microphone permission denied');
+if (status !== "Granted") {
+  console.warn("Microphone permission denied");
   return;
 }
 ```
@@ -70,11 +70,11 @@ Use `AudioManager.checkRecordingPermissions()` to check without prompting.
 The simplest mode. Audio is encoded and written directly to disk.
 
 ```tsx
-import { AudioRecorder, AudioManager } from 'react-native-audio-api';
+import { AudioRecorder, AudioManager } from "react-native-audio-api";
 
 AudioManager.setAudioSessionOptions({
-  iosCategory: 'record',
-  iosMode: 'default',
+  iosCategory: "record",
+  iosMode: "default",
   iosOptions: [],
 });
 
@@ -83,20 +83,20 @@ recorder.enableFileOutput(); // default: M4A, high quality, cache directory
 
 // Start recording
 const permissions = await AudioManager.requestRecordingPermissions();
-if (permissions !== 'Granted') return;
+if (permissions !== "Granted") return;
 
 await AudioManager.setAudioSessionActivity(true);
 const startResult = recorder.start();
-if (startResult.status === 'error') {
+if (startResult.status === "error") {
   console.warn(startResult.message);
   return;
 }
-console.log('Recording to:', startResult.path);
+console.log("Recording to:", startResult.path);
 
 // Stop recording
 const stopResult = recorder.stop();
-if (stopResult.status === 'success') {
-  console.log('File:', stopResult.path, 'Duration:', stopResult.duration);
+if (stopResult.status === "success") {
+  console.log("File:", stopResult.path, "Duration:", stopResult.duration);
 }
 AudioManager.setAudioSessionActivity(false);
 ```
@@ -104,35 +104,35 @@ AudioManager.setAudioSessionActivity(false);
 ### File Output Configuration
 
 ```tsx
-import { FileFormat, FilePreset, FileDirectory } from 'react-native-audio-api';
+import { FileFormat, FilePreset, FileDirectory } from "react-native-audio-api";
 
 recorder.enableFileOutput({
-  format: FileFormat.M4A,      // M4A | Wav | Caf | Flac
-  preset: FilePreset.High,     // Lossless | High | Medium | Low
+  format: FileFormat.M4A, // M4A | Wav | Caf | Flac
+  preset: FilePreset.High, // Lossless | High | Medium | Low
   directory: FileDirectory.Document, // Document | Cache (default)
-  subDirectory: 'recordings',
-  fileNamePrefix: 'voice_note',
+  subDirectory: "recordings",
+  fileNamePrefix: "voice_note",
   channelCount: 1,
 });
 ```
 
 ### File Format Guide
 
-| Format | Best for | Notes |
-|--------|----------|-------|
-| `M4A` | General recording, voice notes | Default. Good compression, wide compatibility |
-| `Wav` | Lossless capture | Large files, use with `Lossless` preset |
-| `Caf` | iOS lossless capture | Apple-specific container |
-| `Flac` | High quality with compression | Lossless compression, smaller than WAV |
+| Format | Best for                       | Notes                                         |
+| ------ | ------------------------------ | --------------------------------------------- |
+| `M4A`  | General recording, voice notes | Default. Good compression, wide compatibility |
+| `Wav`  | Lossless capture               | Large files, use with `Lossless` preset       |
+| `Caf`  | iOS lossless capture           | Apple-specific container                      |
+| `Flac` | High quality with compression  | Lossless compression, smaller than WAV        |
 
 ### Preset Guide
 
-| Preset | Use case |
-|--------|----------|
-| `Lossless` | Maximum quality, large files. Only with WAV or CAF |
-| `High` | Music, high-quality voice. Near-lossless perception |
-| `Medium` | Voice notes, podcasts. Good quality/size balance |
-| `Low` | Quick notes, diagnostics. Small files, speech-only |
+| Preset     | Use case                                            |
+| ---------- | --------------------------------------------------- |
+| `Lossless` | Maximum quality, large files. Only with WAV or CAF  |
+| `High`     | Music, high-quality voice. Near-lossless perception |
+| `Medium`   | Voice notes, podcasts. Good quality/size balance    |
+| `Low`      | Quick notes, diagnostics. Small files, speech-only  |
 
 ### Custom Preset
 
@@ -180,7 +180,7 @@ recorder.onAudioReady(
     // buffer is an AudioBuffer with PCM data
     // numFrames: number of audio frames in this chunk
     // when: timestamp relative to recording start
-  }
+  },
 );
 
 // Clean up when done
@@ -196,11 +196,11 @@ The `sampleRate`, `bufferLength`, and `channelCount` are preferred values. Actua
 Connects the recorder to the audio graph through a `RecorderAdapterNode` for real-time processing with effects, analysis, or worklets.
 
 ```tsx
-import { AudioRecorder, AudioContext, AudioManager } from 'react-native-audio-api';
+import { AudioRecorder, AudioContext, AudioManager } from "react-native-audio-api";
 
 AudioManager.setAudioSessionOptions({
-  iosCategory: 'playAndRecord',
-  iosMode: 'default',
+  iosCategory: "playAndRecord",
+  iosMode: "default",
   iosOptions: [],
 });
 
@@ -233,15 +233,15 @@ recorder.disconnect(); // disconnects from the audio graph
 ## Pause and Resume
 
 ```tsx
-recorder.pause();    // pauses without finalizing the file
-recorder.resume();   // resumes from where it paused
+recorder.pause(); // pauses without finalizing the file
+recorder.resume(); // resumes from where it paused
 ```
 
 ### State Queries
 
 ```tsx
 recorder.isRecording(); // true if actively recording
-recorder.isPaused();    // true if paused
+recorder.isPaused(); // true if paused
 recorder.getCurrentDuration(); // current recording duration (file output only)
 ```
 
@@ -251,7 +251,7 @@ recorder.getCurrentDuration(); // current recording duration (file output only)
 
 ```tsx
 recorder.onError((error) => {
-  console.error('Recording error:', error.message);
+  console.error("Recording error:", error.message);
 });
 
 // Clean up

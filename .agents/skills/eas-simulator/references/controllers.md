@@ -1,6 +1,6 @@
 # Controllers: agent-device, Appium, and argent
 
-`eas-cli` has no device verbs — it manages the *session*. Automation commands come from the interface selected by `simulator:start --type`:
+`eas-cli` has no device verbs — it manages the _session_. Automation commands come from the interface selected by `simulator:start --type`:
 
 - `agent-device` (Callstack, MIT) — used throughout this skill; runs on demand via `npx agent-device@latest`, nothing installed globally.
 - `appium` — exposes `APPIUM_URL` and `APPIUM_CAPS` for an Appium client.
@@ -85,6 +85,7 @@ npx --yes eas-cli@latest simulator:exec argent run debugger-connect --udid <udid
 ```
 
 Where argent is weaker than agent-device Mode C — so it's **capable, not as fast**:
+
 - **No launch-args.** `launch-app` takes only `--bundleId`; argent can't pre-seed `-EXDevMenuIsOnboardingFinished` / `-EXDevMenuShowsAtLaunch` the way agent-device's `open --launch-args` does. If the onboarding popup or dev menu blocks the screen, tap through it by **normalized 0.0–1.0 coordinates** (`gesture-tap`, positions from `describe` / `native-describe-screen`) — there's no element/ref tap.
 - **No Metro bind on launch.** No `--metro-host` / `--bundle-url` seed; point the client at Metro with the `open-url` deep link above, then `debugger-connect` / `debugger-reload-metro`.
 - **Whole-string text entry:** use `keyboard --text "<string>"` — it types the entire string in one call. Never type character by character.
@@ -93,7 +94,7 @@ Where argent is weaker than agent-device Mode C — so it's **capable, not as fa
 
 **Recording video on argent (`screen-recording-start`/`stop`).** The gotcha to know: argent **trims static stretches by default**, which drops the very frames you're measuring — turn that off when you care about cadence or timing (see argent's help for the flag). Recordings also carry a burned-in "Argent" watermark that can't be disabled on a hosted session — fine for diagnosis, mind it before sharing publicly. The stop call returns a video already downloaded locally; extract frames with `ffmpeg` (may need installing) to inspect motion frame by frame. The capture samples at ~30fps, so it shows visible jank but can't prove or disprove sub-frame hitches on 60/120Hz content.
 
-**Screenshot resolution and token cost.** Screenshots cost context tokens once the agent reads them, so resolution is a real tradeoff. **argent's `screenshot` has two independent levers.** `scale` sets the image resolution and defaults **low** (too coarse to judge layout), so pass a larger scale when you need to **read** the UI. `includeImageInContext:false` keeps an image **out of the agent's context entirely** (zero token cost) — use that for a baseline you'll only **diff** later, and keep *that* one at full resolution so the pixel diff stays accurate. So: scale down images you actually read; drop unread ones with `includeImageInContext`, don't just shrink them. Exact flags and the current default: argent's help.
+**Screenshot resolution and token cost.** Screenshots cost context tokens once the agent reads them, so resolution is a real tradeoff. **argent's `screenshot` has two independent levers.** `scale` sets the image resolution and defaults **low** (too coarse to judge layout), so pass a larger scale when you need to **read** the UI. `includeImageInContext:false` keeps an image **out of the agent's context entirely** (zero token cost) — use that for a baseline you'll only **diff** later, and keep _that_ one at full resolution so the pixel diff stays accurate. So: scale down images you actually read; drop unread ones with `includeImageInContext`, don't just shrink them. Exact flags and the current default: argent's help.
 
 **agent-device** screenshots default to full resolution — a crisp PNG you read from disk, token-heavier for its size, so match the capture to the question. From **v0.20.6** it gains the same lever argent has and drops the old one: `screenshot --scale <0.01–1>` proportionally resizes both dimensions (`1` = full resolution), with a token-conscious default via `AGENT_DEVICE_SCREENSHOT_SCALE` (or `screenshotScale` in config) that an explicit `--scale` overrides — keep it unset or `1` for pixel-diff baselines; the former `--max-size` is removed (older calls refused with migration guidance). Verify the version with `agent-device --version`. One caveat for remote sessions: the resize runs on the daemon, so a newer client against an older EAS session daemon can have `--scale` silently ignored and get full-res back.
 
@@ -131,5 +132,6 @@ Reload the agent after linking so its `argent mcp` process picks up the remote s
 MCP config file location: `.cursor/mcp.json` (Cursor), `.claude/mcp.json` (Claude Code), `mcp.json` in the Codex project root. It carries a session token — **add it to `.gitignore`**.
 
 **Known issues:**
+
 - `argent init --help` launches an interactive wizard regardless of the flag — use `--yes` to skip it, or read the package source for non-interactive flags.
 - Re-running `argent link` against an already-linked URL **without `--yes`** reports "Already linked. No changes." and keeps the old token — every call then fails with `401 Unauthorized`. Always pass `--yes` (as above) so a rotated token is actually written.

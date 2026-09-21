@@ -22,14 +22,14 @@ This avoids adding a Router shell just to export one component. For an existing 
 
 ## SDK requirements and build defaults
 
-| Surface | SDK 55 | SDK 57 |
-| --- | --- | --- |
-| React Native family | 0.83 | 0.86 |
-| iOS minimum in the Expo template | 15.1 | 16.4 |
-| Documented minimum Node / Xcode | 20.19.x / 26.2 | 22.13.x / 26.4 |
-| Brownfield React Native build default | Source | Prebuilt |
-| Precompiled Expo modules | Version/configuration dependent | Enabled by default in the native template |
-| Swift Package products | 55.0.28: separate feature and Hermes products | 57.0.18: one aggregate product when precompiled modules are detected; otherwise separate products |
+| Surface                               | SDK 55                                        | SDK 57                                                                                            |
+| ------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| React Native family                   | 0.83                                          | 0.86                                                                                              |
+| iOS minimum in the Expo template      | 15.1                                          | 16.4                                                                                              |
+| Documented minimum Node / Xcode       | 20.19.x / 26.2                                | 22.13.x / 26.4                                                                                    |
+| Brownfield React Native build default | Source                                        | Prebuilt                                                                                          |
+| Precompiled Expo modules              | Version/configuration dependent               | Enabled by default in the native template                                                         |
+| Swift Package products                | 55.0.28: separate feature and Hermes products | 57.0.18: one aggregate product when precompiled modules are detected; otherwise separate products |
 
 React Native prebuilt binaries and precompiled Expo modules are separate settings. Set React Native source mode on `expo-brownfield`'s `ios.buildReactNativeFromSource`. Expo module precompilation is controlled by `expo-build-properties`' `ios.usePrecompiledModules`. Do not disable defaults as a generic build fix; first inspect the failing dependency and toolchain requirement.
 

@@ -27,20 +27,17 @@ Add the RNGH mock to your Jest configuration:
 Use `fireGestureHandler` to simulate gesture event sequences:
 
 ```tsx
-import {
-  fireGestureHandler,
-  getByGestureTestId,
-} from 'react-native-gesture-handler/jest-utils';
-import { State } from 'react-native-gesture-handler';
+import { fireGestureHandler, getByGestureTestId } from "react-native-gesture-handler/jest-utils";
+import { State } from "react-native-gesture-handler";
 
 // v3 -- test gesture hooks directly with renderHook
-test('Pan gesture tracks translation', () => {
+test("Pan gesture tracks translation", () => {
   const onActivate = jest.fn();
   const panGesture = renderHook(() =>
     usePanGesture({
       disableReanimated: true,
       onActivate: (e) => onActivate(e),
-    })
+    }),
   ).result.current;
 
   fireGestureHandler(panGesture, [
@@ -68,10 +65,10 @@ Find gestures in rendered components by `testID`:
 
 ```tsx
 // In component
-const tap = useTapGesture({ testID: 'my-tap', onDeactivate: handleTap });
+const tap = useTapGesture({ testID: "my-tap", onDeactivate: handleTap });
 
 // In test
-const gesture = getByGestureTestId('my-tap');
+const gesture = getByGestureTestId("my-tap");
 fireGestureHandler(gesture, [{ state: State.ACTIVE }]);
 ```
 
@@ -96,6 +93,7 @@ Without this, callbacks run as worklets and may not execute during synchronous t
 Dependencies have installed their own copy of RNGH instead of using the app's version.
 
 **Fix with npm:**
+
 ```bash
 npm ls react-native-gesture-handler
 # Add to package.json:
@@ -104,6 +102,7 @@ npm install
 ```
 
 **Fix with yarn:**
+
 ```bash
 yarn why react-native-gesture-handler
 # Add to package.json:
