@@ -44,3 +44,18 @@ Docs: https://docs.expo.dev/eas/index.md
 
 - After making code changes, run `npx oxlint --fix`, then run `npx oxfmt`.
 - Before finishing, run `npx oxlint --deny-warnings --format=agent`.
+
+## Best practices
+- For local state and offline usage (local-first), we use Legends State v3 with `react-native-mmkv`. You can find its docs at https://legendapp.com/open-source/state/v3/intro/introduction/ & https://legendapp.com/open-source/state/v3/sync/persist-sync/#mmkv-rn
+- For lists, we use Legends List, you can check its docs at https://legendapp.com/open-source/list/v3/react-native/getting-started/ & https://legendapp.com/open-source/list/v3/react-native/keyboard-and-animated/
+- For handling the keyboard, we use `react-native-keyboard-controller`. We must always use at least version `1.21.7` since Legends List component `KeyboardAwareLegendList` requires at least that version.
+- For haptics, we use `react-native-pulsar` since it allows us to customize a lot the haptic patterns. Never use other libs like `expo-haptics`.
+- For animations we use `react-native-reanimated` v4.
+- When we want custom animated graphics, we use Lottie with the lib `lottie-react-native`. We always try to use dotLottie files but we can rely in other formats if not available.
+- For icons in the app, we always use native ones, using the Expo lib `expo-symbols`, which exposes SF Symbols in iOS and Material Symbols in Android: https://docs.expo.dev/versions/latest/sdk/symbols/
+- When we need to use native UI toolkits, we use `expo-ui` (https://docs.expo.dev/versions/latest/sdk/ui/universal/), with the universal components so they work both in iOS and Android. It also has many drop-in replacements (https://docs.expo.dev/versions/latest/sdk/ui/drop-in-replacements/) so we don't need third-party libs for many things like bottom sheets, masked views...
+- While in this app requeriments is to build a demo without having to use APIs, servers and so on, we want to build it like if it were a production app, so we build do "network requests" but mocking the API response. And for doing those API requests, we will use https://tanstack.com/query/latest/docs/framework/react/react-native. For the online status management, we use `expo-network`. In Legends State, there is also a plugin for React Query that can be useful for us: https://legendapp.com/open-source/state/v3/sync/tanstack-query/
+- We have also available `expo-glass-effect` so we can have glass effect in iOS 26+ (which is important to make the app feel native).
+- For blur, we have `expo-blur`.
+- For images and assets, we will use `expo-image` and `expo-asset`.
+- Since this is a demo app we will share, we will use Node with `npm`. No `yarn`, no `pnpm` and not `bun`, easier to share and run for others.
