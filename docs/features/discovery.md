@@ -20,7 +20,9 @@
 | Route         | `src/app/index.tsx`                                |
 | Screen        | `src/screens/home/`                                |
 | Supplied data | `src/data/activities.ts`, `assets/activities.json` |
-| Schema        | `src/schemas/activity.ts`                          |
+| Seed catalog  | `src/mocks/seed-catalog.ts` (1,012 items)          |
+| Mock list API | `src/mocks/api.ts` → `listActivities`              |
+| Schema        | `src/schemas/activity.ts`, `src/schemas/api.ts`    |
 
 ## Related
 

@@ -13,6 +13,7 @@ Architecture Decision Records (ADRs) for lasting choices. Each page is short: co
 | ADR-007 | [Async UI states and skeletons over spinners](./adr-007-async-ui-states-skeletons.md) | Accepted |
 | ADR-008 | [Mandatory Emil design skills and Expo skills](./adr-008-emil-and-expo-skills.md)     | Accepted |
 | ADR-009 | [Root design contract](./adr-009-root-design-contract.md)                             | Accepted |
+| ADR-010 | [Client mock API with review modes](./adr-010-client-mock-api.md)                     | Accepted |
 
 ## Template
 

@@ -11,6 +11,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 3   | 2026-09-21     | i18n: Lingui + expo-localization, RTL, Oxlint Lingui; a11y rules; React Compiler Babel order | [ai-sessions/session-003-i18n-foundation.md](./ai-sessions/session-003-i18n-foundation.md)                         | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
 | 4   | 2026-09-21     | Async UI states (skeletons); mandatory Emil + Expo skills; a11y assessment bar               | [ai-sessions/session-004-ui-states-and-design-skills.md](./ai-sessions/session-004-ui-states-and-design-skills.md) | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
 | 5   | 2026-09-22     | Product concept, Appllama research, generated UI boards, DESIGN.md, and light/dark theme     | [ai-sessions/session-005-design-concept-and-contract.md](./ai-sessions/session-005-design-concept-and-contract.md) | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 6   | 2026-09-22     | Mocked API schemas/handlers, named constants rule, Jest suite with 100% mock/schema coverage | [ai-sessions/session-006-mocked-api-schemas.md](./ai-sessions/session-006-mocked-api-schemas.md)                   | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
 
 ## How to add a later session
 

@@ -93,6 +93,12 @@ msgstr "The data from the server was invalid."
 msgid "errors.networkTimeout"
 msgstr "The request took too long. Try again."
 
+#. Shown when an activity id is missing from the catalog
+#. js-lingui-explicit-id
+#: src/i18n/error-keys.ts
+msgid "errors.notFound"
+msgstr "This activity was not found."
+
 #. Shown when the device has no network for a fetch that needs it
 #. js-lingui-explicit-id
 #: src/i18n/error-keys.ts

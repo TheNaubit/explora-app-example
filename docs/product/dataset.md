@@ -24,21 +24,22 @@ Load and validate with Zod in `src/data/activities.ts` and `src/schemas/activity
 Discovery must support scroll, search, and interaction with at least **1,000** local activities.
 
 - Keep the original 12 as the base.
-- Generate more items in the same shape with unique stable IDs.
-- A default list of about 1,012 items is acceptable.
-- Document size, generation, and reset in the README and in [operations](../operations/local-dev.md).
+- `seedCatalog` in `src/mocks/seed-catalog.ts` fills to **1,012** items (`SEEDED_CATALOG_SIZE` in `src/mocks/constants.ts`).
+- Generated ids use `gen-0001` … (`GENERATED_ACTIVITY_ID_PREFIX`) with a fixed Faker base seed (`CATALOG_FAKER_BASE_SEED`).
+- Reset with `resetCatalog()` from `src/mocks/catalog-store.ts`.
 
-Refresh is different. A successful refresh adds **one** activity only.
+Refresh is different. A successful refresh adds **one** activity only (`ref-0001`, … via `REFRESH_ACTIVITY_ID_PREFIX` / `REFRESH_FAKER_BASE_SEED`).
 
 ## Mocked network
 
-- Use production-shaped API calls (TanStack Query). Mock responses on the device.
+- Client mocks live in `src/mocks/api.ts` (`listActivities`, `getActivity`, `refreshCatalog`).
 - Validate every mock, fixture, and generated payload with **Zod** before app state or UI use it.
 - Do not require external accounts, API keys, or hosted services.
-- Support success, fail, and slow loads that a reviewer can reproduce. Document the steps in ops or the README.
+- Review modes: see [operations](../operations/local-dev.md) and [mock API](../features/mock-api.md).
 
 ## Related
 
 - Hard constraints: root `AGENTS.md` → Assessment
 - [Product overview](./overview.md)
 - [Architecture](../architecture/overview.md)
+- [Mock API feature](../features/mock-api.md)

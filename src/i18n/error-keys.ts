@@ -11,6 +11,7 @@ export const errorKeys = [
   "errors.networkOffline",
   "errors.refreshFailed",
   "errors.validationFailed",
+  "errors.notFound",
   "errors.unknown",
 ] as const;
 
@@ -37,6 +38,11 @@ export const errorMessages = {
     id: "errors.validationFailed",
     comment: "Shown when a Zod-validated payload is invalid",
     message: "The data from the server was invalid.",
+  }),
+  "errors.notFound": msg({
+    id: "errors.notFound",
+    comment: "Shown when an activity id is missing from the catalog",
+    message: "This activity was not found.",
   }),
   "errors.unknown": msg({
     id: "errors.unknown",

@@ -154,6 +154,15 @@ Follow Expo folder-structure best practices ([blog](https://expo.dev/blog/expo-a
 5. For pass-through wrappers, destructure fields you override and put the rest in `...rest`. Do not take a single undeconstructed `props` argument.
 6. Prefer the current `react-native-a11y` APIs. Do not use deprecated props such as `focusStyle` or `containerFocusStyle`. Use `style={(state) => …}` / `mergeFocusedStyle` instead.
 
+### Named constants (no magic values)
+
+Do not leave unexplained numeric or string literals in app logic when the value carries domain meaning (ids, seeds, sizes, delays, prefixes, limits).
+
+1. Put shared values in a nearby `constants.ts` (or an existing constants module) with a short JSDoc that states why the value exists.
+2. Import and use the named constant at the call site.
+3. Allowed inline literals: `0` / `1` in obvious counters, boolean flags, empty arrays/objects, and values already owned by a well-named local config object.
+4. Mock catalog values live in [`src/mocks/constants.ts`](./src/mocks/constants.ts).
+
 ### Styling
 
 - Support **light and dark** mode (system appearance; `userInterfaceStyle: "automatic"`). Put both palettes in `src/theme.ts` (or equal). Do not ship one-mode UI.
