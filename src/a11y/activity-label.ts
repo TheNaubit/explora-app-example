@@ -2,6 +2,7 @@ import type { MessageDescriptor } from "@lingui/core";
 import { i18n } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 
+import { translateCategory } from "@/i18n/category-labels";
 import type { Activity } from "@/types/activity";
 import { formatDuration } from "@/utils/format-duration";
 
@@ -40,7 +41,7 @@ function translate(descriptor: MessageDescriptor, values?: Record<string, unknow
 export function buildActivityAccessibilityLabel(activity: Activity): string {
   return translate(activityRow, {
     title: activity.title,
-    category: activity.category,
+    category: translateCategory(activity.category),
     duration: formatDuration(activity.durationMinutes),
     location: activity.location,
   });

@@ -7,6 +7,7 @@
  */
 
 export { activateFromDevice, activateLocale, i18n } from "@/i18n/activate";
+export { categoryMessages, translateCategory } from "@/i18n/category-labels";
 export {
   errorKeys,
   errorMessages,

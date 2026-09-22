@@ -13,12 +13,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#. Home meta line: how many supplied catalog activities are loaded
-#. js-lingui-explicit-id
-#: src/screens/home/index.tsx
-msgid "home.catalogSummary"
-msgstr "{count, plural, one {Catalog ready: # supplied activity} other {Catalog ready: # supplied activities}}"
-
 #. Spoken summary for an activity list row: title, category, duration, location
 #. js-lingui-explicit-id
 #: src/a11y/activity-label.ts
@@ -33,23 +27,125 @@ msgstr "{value, plural, one {# hr} other {# hr}}"
 msgid "{value, plural, one {# min} other {# min}}"
 msgstr "{value, plural, one {# min} other {# min}}"
 
-#. Home supporting line under the product name
+#. Screen reader status when the catalog list finished loading with results
 #. js-lingui-explicit-id
-#: src/screens/home/index.tsx
-msgid "home.subtitle"
-msgstr "Discover activities and save favorites for later."
+#: src/screens/explore/messages.ts
+msgid "explore.loadedAnnounce"
+msgstr "Activities loaded."
 
-#. Product name shown as the home screen heading
+#. Category chip that clears the category filter
 #. js-lingui-explicit-id
-#: src/screens/home/index.tsx
-msgid "home.brand"
-msgstr "Explora"
+#: src/i18n/category-labels.ts
+msgid "category.all"
+msgstr "All"
 
-#. Spoken screen title for the home / discovery entry screen
+#. Button that opens the Explore tab from an empty Saved list
 #. js-lingui-explicit-id
-#: src/screens/home/index.tsx
-msgid "home.screenTitle"
-msgstr "Explora home"
+#: src/screens/saved/messages.ts
+msgid "saved.emptyAction"
+msgstr "Browse activities"
+
+#. Screen reader status after a successful catalog refresh
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.refreshSuccessAnnounce"
+msgstr "Catalog refreshed. One activity added."
+
+#. Empty state action that clears search and category filters
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.emptyAction"
+msgstr "Clear filters"
+
+#. Spoken and visible label for clearing the discovery search field
+#. js-lingui-explicit-id
+#: src/components/search-field/index.tsx
+msgid "search.clear"
+msgstr "Clear search"
+
+#. Heading shown when a Suspense query first load fails
+#. js-lingui-explicit-id
+#: src/components/query-error-boundary/index.tsx
+msgid "queryError.title"
+msgstr "Could not load"
+
+#. Inline banner title when loading the next catalog page fails
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.nextPageFailedTitle"
+msgstr "Could not load more"
+
+#. Activity category chip label
+#. js-lingui-explicit-id
+#: src/i18n/category-labels.ts
+msgid "category.culture"
+msgstr "Culture"
+
+#. Native tab label for the discovery catalog
+#. js-lingui-explicit-id
+#: src/screens/tabs/messages.ts
+msgid "tabs.explore"
+msgstr "Explore"
+
+#. Spoken screen title for the Explore discovery screen
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.screenTitle"
+msgstr "Explore"
+
+#. Visible display title on the Explore screen
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.heading"
+msgstr "Explore"
+
+#. Activity category chip label
+#. js-lingui-explicit-id
+#: src/i18n/category-labels.ts
+msgid "category.leisure"
+msgstr "Leisure"
+
+#. Screen reader status while the catalog first load is pending
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.loadingAnnounce"
+msgstr "Loading activities."
+
+#. Screen reader status when search or filters return no activities
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.emptyAnnounce"
+msgstr "No activities match your search."
+
+#. Empty state heading when filters return no activities
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.emptyTitle"
+msgstr "No matching activities"
+
+#. Title when the user has no favorite activities
+#. js-lingui-explicit-id
+#: src/screens/saved/messages.ts
+msgid "saved.emptyTitle"
+msgstr "No saved activities"
+
+#. Screen reader announcement for an empty Saved list
+#. js-lingui-explicit-id
+#: src/screens/saved/messages.ts
+msgid "saved.emptyAnnounce"
+msgstr "No saved activities."
+
+#. Activity category chip label
+#. js-lingui-explicit-id
+#: src/i18n/category-labels.ts
+msgid "category.outdoors"
+msgstr "Outdoors"
+
+#. Inline banner title when catalog refresh fails
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.refreshFailedTitle"
+msgstr "Refresh failed"
 
 #. Shown when refresh fails and no new activity is added
 #. js-lingui-explicit-id
@@ -63,17 +159,65 @@ msgstr "Refresh failed. No new activity was added."
 msgid "a11y.favorite.remove"
 msgstr "Remove {title} from favorites"
 
+#. Retry label on Explore inline error banners
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.bannerRetry"
+msgstr "Retry"
+
 #. Spoken label for the favorite toggle when the activity is not a favorite
 #. js-lingui-explicit-id
 #: src/a11y/activity-label.ts
 msgid "a11y.favorite.save"
 msgstr "Save {title} to favorites"
 
+#. Body when the favorites list is empty
+#. js-lingui-explicit-id
+#: src/screens/saved/messages.ts
+msgid "saved.emptyBody"
+msgstr "Save an activity from Explore to find it here later."
+
+#. Native tab label for saved favorite activities
+#. js-lingui-explicit-id
+#: src/screens/tabs/messages.ts
+msgid "tabs.saved"
+msgstr "Saved"
+
+#. Spoken ScreenFrame title for the Saved favorites tab
+#. js-lingui-explicit-id
+#: src/screens/saved/messages.ts
+msgid "saved.screenTitle"
+msgstr "Saved"
+
+#. Visible display title on the Saved screen
+#. js-lingui-explicit-id
+#: src/screens/saved/messages.ts
+msgid "saved.heading"
+msgstr "Saved"
+
+#. Screen reader announcement when Saved favorites are shown
+#. js-lingui-explicit-id
+#: src/screens/saved/messages.ts
+msgid "saved.loadedAnnounce"
+msgstr "Saved activities loaded."
+
+#. Explains that saved activity details stay available offline
+#. js-lingui-explicit-id
+#: src/screens/saved/messages.ts
+msgid "saved.offlineHint"
+msgstr "Saved details stay available offline."
+
 #. Spoken label for the discovery search text field
 #. js-lingui-explicit-id
 #: src/a11y/activity-label.ts
 msgid "a11y.search.field"
 msgstr "Search activities by title"
+
+#. Placeholder text inside the discovery search field
+#. js-lingui-explicit-id
+#: src/components/search-field/index.tsx
+msgid "search.placeholder"
+msgstr "Search by title"
 
 #. Fallback when an error key is missing or unrecognized
 #. js-lingui-explicit-id
@@ -98,6 +242,24 @@ msgstr "The request took too long. Try again."
 #: src/i18n/error-keys.ts
 msgid "errors.notFound"
 msgstr "This activity was not found."
+
+#. Empty state body when filters return no activities
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.emptyBody"
+msgstr "Try a different search or clear your filters."
+
+#. Button label to retry a failed first catalog or detail load
+#. js-lingui-explicit-id
+#: src/components/query-error-boundary/index.tsx
+msgid "queryError.retry"
+msgstr "Try again"
+
+#. Activity category chip label
+#. js-lingui-explicit-id
+#: src/i18n/category-labels.ts
+msgid "category.workshops"
+msgstr "Workshops"
 
 #. Shown when the device has no network for a fetch that needs it
 #. js-lingui-explicit-id

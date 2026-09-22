@@ -10,6 +10,8 @@ This project is an Expo / React Native app (TypeScript). Prefer mobile-first des
 
 **Design system:** Open [`DESIGN.md`](./DESIGN.md) before every UI change. It is the canonical contract for tokens, components, materials, themes, states, and composition.
 
+**Friendly illustrations:** Empty states and category cues use the claymorphic (Airbnb-like clay) icon style in `DESIGN.md`. Generate new icons with GPT Image against [`assets/illustrations/style-reference-claymorphic-icons.jpeg`](./assets/illustrations/style-reference-claymorphic-icons.jpeg). Do not invent a second illustration style.
+
 ---
 
 ## Simplified Technical English (ASD-STE100)
@@ -145,6 +147,21 @@ Follow Expo folder-structure best practices ([blog](https://expo.dev/blog/expo-a
 - Colocate unit tests (`*.test.ts`). Put Maestro flows in `.maestro/` at the repo root.
 - For platform splits, use `.ios` / `.android` / `.native` / `.web` plus a default file. Import without the suffix.
 
+### Composition (screens, components, hooks)
+
+Keep layers thin. Prefer many small files over one large screen file.
+
+1. **Routes (`src/app/`):** Params, navigation options, and render one screen. No feature UI or data logic.
+2. **Screens (`src/screens/<name>/index.tsx`):** Compose layout only. Wire shared UI, screen-local pieces, and hooks. Do not nest large subcomponents or dense business logic in the screen file.
+3. **Screen-local UI:** Put pieces used by one screen under that screen folder (for example `explore-header.tsx`, `explore-list.tsx`). One primary component export per file. Do not put screen-only UI in `src/components/`.
+4. **Shared components (`src/components/`):** One reusable UI unit per folder or file. No screen-specific fetching, navigation, or multi-widget screens. A row that composes chips is its own component; the chip is a separate component.
+5. **Hooks:** Put reusable hooks in `src/hooks/`. Put screen-only hooks next to the screen as `use-<name>.ts` (for example `use-explore-list.ts`). Extract list loading, refresh, form state, and similar logic out of JSX files.
+6. **Pure helpers:** Keep non-React helpers as plain `.ts` files (colocated or under `utils/` / `data/`). Do not hide them inside component files.
+7. **Messages and types:** Colocate `messages.ts` and small `types.ts` with the screen or component that owns them.
+8. **File size signal:** If a screen or component file mixes unrelated concerns (header + list + refresh + announcements), split it before you add more features.
+
+Reference layout: [`docs/architecture/project-structure.md`](./docs/architecture/project-structure.md).
+
 ### TypeScript function and props style
 
 1. Use `function` / `export function` / `export default function` for components, hooks, and named utilities.
@@ -213,6 +230,11 @@ Hard rules for every screen, component, and feature:
 9. Keep RTL support on. Prefer `start` / `end` layout. Set `textAlign: "left"` on text so it mirrors in RTL.
 10. Lint uses `eslint-plugin-lingui` **as an Oxlint JS plugin**. Do not install or run the ESLint CLI for this project.
 11. Treat missing i18n on new or changed UI as incomplete work.
+12. **Message file layout:** Do not pile `msg()` descriptors at the top of a screen or large component file.
+    - Screens: put descriptors in a colocated `messages.ts` (for example `src/screens/explore/messages.ts`) and export one object such as `exploreMessages`.
+    - Shared components: use colocated `messages.ts` when the component has **three or more** descriptors, or when copy is reused by tests.
+    - Tiny components may keep one or two `msg()` values in the same file.
+    - Keep `StyleSheet.create` at the bottom of the UI file. Keep message catalogs out of that file when the list grows.
 
 ### Async UI states (loading / empty / not-found / error)
 

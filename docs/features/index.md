@@ -4,13 +4,14 @@ Index of product capabilities. Each feature page describes **current behavior**,
 
 | Feature                              | Status  | Page                                                 |
 | ------------------------------------ | ------- | ---------------------------------------------------- |
-| Discovery (browse / search / filter) | Partial | [discovery.md](./discovery.md)                       |
+| Discovery (browse / search / filter) | Shipped | [discovery.md](./discovery.md)                       |
+| Navigation (NativeTabs)              | Shipped | [navigation.md](./navigation.md)                     |
 | Mock API (schemas + handlers)        | Shipped | [mock-api.md](./mock-api.md)                         |
 | Data layer (Query + Legend)          | Shipped | [data-layer.md](./data-layer.md)                     |
 | Favorites + offline                  | Partial | [favorites-offline.md](./favorites-offline.md)       |
 | Accessibility                        | Partial | [accessibility.md](./accessibility.md)               |
 | Internationalization (i18n)          | Partial | [internationalization.md](./internationalization.md) |
-| Async UI states (skeleton / empty)   | Partial | [ui-states.md](./ui-states.md)                       |
+| Async UI states (skeleton / empty)   | Shipped | [ui-states.md](./ui-states.md)                       |
 | Activity detail                      | Planned | _(add when implemented)_                             |
 | Refresh + recovery                   | Partial | Mock + Query mutation shipped; UI planned            |
 | Native capability                    | Planned | _(add when chosen)_                                  |

@@ -14,10 +14,13 @@ Use editorial photography to create interest. Use the interface to create trust.
 
 - [Core journey concept](./docs/design/references/explora-core-journey-concept.png)
 - [Data states concept](./docs/design/references/explora-data-states-concept.png)
+- [Claymorphic icon style](./docs/design/references/claymorphic-icons-style.jpeg)
 
 Use these images for direction. Do not copy their pixels without checking this contract.
 
-The images show content hierarchy, photography style, and general density. They do not show the complete dark theme or Liquid Glass behavior.
+The journey images show content hierarchy, photography style, and general density. They do not show the complete dark theme or Liquid Glass behavior.
+
+The claymorphic board is the **canonical style for friendly 3D icons and empty-state illustrations**.
 
 ## Target devices
 
@@ -109,10 +112,13 @@ Use native `GlassView` only when both Liquid Glass availability checks succeed. 
 
 Use Liquid Glass for:
 
-- The floating bottom tab bar.
+- The floating bottom tab bar via Expo Router **NativeTabs** (system Liquid Glass on iOS 26+).
 - Hero-image back, share, and favorite controls.
 - The compact Review Controls launcher.
 - A floating toolbar that remains above scrolling content.
+
+Do not build a custom `GlassTabBar` when NativeTabs already provides the system tab bar.
+On Android, NativeTabs uses Material bottom navigation.
 
 Do not use Liquid Glass for:
 
@@ -139,22 +145,67 @@ Do not animate `GlassView` opacity. Use its glass animation configuration when t
 
 Do not add ratings, prices, or availability data that the dataset does not contain.
 
+## Claymorphic icons and illustrations
+
+Explora uses a friendly **3D claymorphism** icon style (Airbnb-like clay / soft plastic icons). This is mandatory for empty states, category cues, and other marketing-style illustrations.
+
+### Style rules
+
+1. Soft matte clay or soft-plastic material. No glossy chrome.
+2. Chunky rounded forms. No sharp corners.
+3. Isometric or 3/4 view looking slightly down.
+4. Soft diffused lighting from the top-front.
+5. Gentle drop shadow under the object.
+6. Muted premium palette that fits Explora tokens (cream, forest green, soft mustard, brick red, sky blue).
+7. One clear subject per asset. No text on the illustration.
+8. Prefer a transparent or clean white background for app assets.
+
+### When to use
+
+| Use                                                       | Prefer                                        |
+| --------------------------------------------------------- | --------------------------------------------- |
+| Empty, not-found, and friendly status illustrations       | Claymorphic PNG under `assets/illustrations/` |
+| Category media placeholders when the dataset has no photo | Matching category clay icon                   |
+| Compact chrome (search, clear, favorite, tab, toolbar)    | Platform symbols (`expo-symbols`)             |
+
+Do not use emoji as interface icons. Do not invent a second illustration style.
+
+### How to generate new assets
+
+1. Read this section and open the style reference board.
+2. Generate with GPT Image (Codex `image_gen` / Codex CLI `gpt-image-2`, or the project image tool). Pass the style reference as an input image.
+3. Save finals under [`assets/illustrations/`](./assets/illustrations/). Keep the style board at [`docs/design/references/claymorphic-icons-style.jpeg`](./docs/design/references/claymorphic-icons-style.jpeg).
+4. Wire assets through `expo-image`. Mark decorative images as hidden from the screen reader when the nearby title already explains the state.
+
+### Shipped illustration set
+
+| File                                                          | Purpose                                                    |
+| ------------------------------------------------------------- | ---------------------------------------------------------- |
+| `assets/illustrations/style-reference-claymorphic-icons.jpeg` | Canonical Airbnb clay style board for GPT Image generation |
+| `docs/design/references/claymorphic-icons-style.jpeg`         | Same board, linked from this contract                      |
+| `assets/illustrations/empty-search.png`                       | Explore empty search / filter result                       |
+| `assets/illustrations/category-outdoors.png`                  | Outdoors category cue                                      |
+| `assets/illustrations/category-culture.png`                   | Culture category cue                                       |
+| `assets/illustrations/category-workshops.png`                 | Workshops category cue                                     |
+| `assets/illustrations/category-leisure.png`                   | Leisure category cue                                       |
+
 ## Component kit
 
-| Component              | Purpose                         | Anatomy                                      | States                                      | Limits and rejected use                        |
-| ---------------------- | ------------------------------- | -------------------------------------------- | ------------------------------------------- | ---------------------------------------------- |
-| `ScreenFrame`          | Define the safe screen region   | Screen announcement and content region       | Light, dark, focused return                 | Use on every screen                            |
-| `SearchField`          | Search activity titles          | Search symbol, input, and clear action       | Idle, focused, typed, disabled              | Do not place inside a card                     |
-| `CategoryChip`         | Filter the catalog              | Text label and selected fill                 | Default, pressed, selected, focused         | Use only for the category selector             |
-| `ActivityCard`         | Open an activity                | Photo, title, location, duration, favorite   | Default, pressed, focused, saved, offline   | Do not nest another card                       |
-| `FavoriteButton`       | Save or remove an activity      | Heart symbol and 44-point target             | Unsaved, saved, pressed, focused            | Give it one clear spoken action                |
-| `PrimaryButton`        | Commit the main action          | Label and optional leading symbol            | Default, pressed, focused, busy, disabled   | Use one primary action per screen              |
-| `IconButton`           | Run a compact action            | System symbol and 44-point target            | Default, pressed, focused, disabled         | Use glass only above imagery or scrolling      |
-| `GlassTabBar`          | Move between Explore and Saved  | Two destinations and active indicator        | Light, dark, fallback, reduced transparency | Keep two peer tabs. Do not add a center action |
-| `InlineStatusBanner`   | Explain refresh status          | Status symbol, title, body, and retry action | Success, warning, error                     | Keep stale content visible below it            |
-| `ActivityCardSkeleton` | Reserve the activity card shape | Image block and three text blocks            | Loading pulse, reduced motion               | Do not use a full-screen spinner               |
-| `EmptyState`           | Explain a resolved empty result | Illustration, title, body, and action        | Search empty, favorites empty, not-found    | Give one next action                           |
-| `ReviewControlsSheet`  | Reproduce assessment states     | Mode groups, status summary, and reset       | Normal, slow, fail, offline, busy           | Include only in review builds                  |
+| Component                  | Purpose                         | Anatomy                                      | States                                    | Limits and rejected use                                                                      |
+| -------------------------- | ------------------------------- | -------------------------------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `ScreenFrame`              | Define the safe screen region   | Screen announcement and content region       | Light, dark, focused return               | Use on every screen                                                                          |
+| `SearchField`              | Search activity titles          | Search symbol, input, and clear action       | Idle, focused, typed, disabled            | Do not place inside a card                                                                   |
+| `CategoryChip`             | One category filter control     | Text label and selected fill                 | Default, pressed, selected, focused       | Prefer inside `CategoryChipRow`                                                              |
+| `CategoryChipRow`          | Category filter row             | All plus catalog categories                  | Default                                   | Owns selection wiring; uses `CategoryChip`                                                   |
+| `ActivityCard`             | Open an activity                | Photo, title, location, duration, favorite   | Default, pressed, focused, saved, offline | Do not nest another card                                                                     |
+| `FavoriteButton`           | Save or remove an activity      | Heart symbol and 44-point target             | Unsaved, saved, pressed, focused          | Give it one clear spoken action                                                              |
+| `PrimaryButton`            | Commit the main action          | Label and optional leading symbol            | Default, pressed, focused, busy, disabled | Use one primary action per screen                                                            |
+| `IconButton`               | Run a compact action            | System symbol and 44-point target            | Default, pressed, focused, disabled       | Use glass only above imagery or scrolling                                                    |
+| `NativeTabs` (Expo Router) | Move between Explore and Saved  | System tab bar (Liquid Glass on iOS 26+)     | Light, dark, minimize on scroll           | Use `expo-router/unstable-native-tabs`. Do not add a custom glass tab bar or a center action |
+| `InlineStatusBanner`       | Explain refresh status          | Status symbol, title, body, and retry action | Success, warning, error                   | Keep stale content visible below it                                                          |
+| `ActivityCardSkeleton`     | Reserve the activity card shape | Image block and three text blocks            | Loading pulse, reduced motion             | Do not use a full-screen spinner                                                             |
+| `EmptyState`               | Explain a resolved empty result | Illustration, title, body, and action        | Search empty, favorites empty, not-found  | Give one next action                                                                         |
+| `ReviewControlsSheet`      | Reproduce assessment states     | Mode groups, status summary, and reset       | Normal, slow, fail, offline, busy         | Include only in review builds                                                                |
 
 Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF Symbols on iOS and Material Symbols on Android.
 

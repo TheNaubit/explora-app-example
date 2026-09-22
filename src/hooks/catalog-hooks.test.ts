@@ -1,9 +1,6 @@
-/**
- * @jest-environment jsdom
- */
-import { createElement, type ReactNode } from "react";
+import { createElement, Suspense, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { act, renderHook, waitFor } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react-native";
 
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { useActivities } from "@/hooks/use-activities";
@@ -20,7 +17,7 @@ import { resetCatalog } from "@/mocks/catalog-store";
 import { resetReviewModeState, setRefreshMode } from "@/mocks/review-mode";
 import { createQueryClient } from "@/query/client";
 import { clearFavorites } from "@/state/favorites";
-import { resetDiscoveryFilters } from "@/state/discovery";
+import { resetDiscoveryFilters, setDiscoveryCategory, setDiscoverySearch } from "@/state/discovery";
 
 jest.mock("@/mocks/delay", () => ({
   MOCK_DELAY_MS: { normal: 1, slow: 2 },
@@ -29,7 +26,11 @@ jest.mock("@/mocks/delay", () => ({
 
 function createWrapper(queryClient: QueryClient) {
   return function Wrapper({ children }: { children: ReactNode }) {
-    return createElement(QueryClientProvider, { client: queryClient }, children);
+    return createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      createElement(Suspense, { fallback: null }, children),
+    );
   };
 }
 
@@ -41,14 +42,34 @@ describe("catalog and favorites hooks", () => {
     clearFavorites();
   });
 
-  it("loads paginated activities", async () => {
+  it("loads paginated activities with Suspense", async () => {
     const queryClient = createQueryClient();
-    const { result } = renderHook(() => useActivities(), {
+    const { result } = await renderHook(() => useActivities(), {
       wrapper: createWrapper(queryClient),
     });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(result.current.data?.pages[0]?.activities).toHaveLength(LIST_PAGE_SIZE);
+    await waitFor(() =>
+      expect(result.current.data.pages[0]?.activities).toHaveLength(LIST_PAGE_SIZE),
+    );
+  });
+
+  it("applies discovery search and category to the list query", async () => {
+    setDiscoverySearch(SUPPLIED_ACTIVITIES[0].title);
+    setDiscoveryCategory("Outdoors");
+
+    const queryClient = createQueryClient();
+    const { result } = await renderHook(() => useActivities(), {
+      wrapper: createWrapper(queryClient),
+    });
+
+    await waitFor(() => expect(result.current.data.pages.length).toBeGreaterThan(0));
+    expect(
+      result.current.data.pages[0]?.activities.every(
+        (activity) =>
+          activity.category === "Outdoors" &&
+          activity.title.toLowerCase().includes(SUPPLIED_ACTIVITIES[0].title.toLowerCase()),
+      ),
+    ).toBe(true);
   });
 
   it("loads activity detail with an offline snapshot placeholder", async () => {
@@ -56,7 +77,7 @@ describe("catalog and favorites hooks", () => {
     addFavorite(activity);
 
     const queryClient = createQueryClient();
-    const { result } = renderHook(() => useActivity(activity.id), {
+    const { result } = await renderHook(() => useActivity(activity.id), {
       wrapper: createWrapper(queryClient),
     });
 
@@ -66,9 +87,9 @@ describe("catalog and favorites hooks", () => {
     expect(result.current.data?.activity).toEqual(activity);
   });
 
-  it("does not fetch detail when the id is empty", () => {
+  it("does not fetch detail when the id is empty", async () => {
     const queryClient = createQueryClient();
-    const { result } = renderHook(() => useActivity(""), {
+    const { result } = await renderHook(() => useActivity(""), {
       wrapper: createWrapper(queryClient),
     });
 
@@ -81,10 +102,10 @@ describe("catalog and favorites hooks", () => {
     addFavorite(activity);
 
     const queryClient = createQueryClient();
-    const { result: refresh } = renderHook(() => useRefreshCatalog(), {
+    const { result: refresh } = await renderHook(() => useRefreshCatalog(), {
       wrapper: createWrapper(queryClient),
     });
-    const { result: favorites } = renderHook(() => ({
+    const { result: favorites } = await renderHook(() => ({
       ids: useFavoriteIds(),
       isFavorite: useIsFavorite(activity.id),
       snapshot: useOfflineSnapshot(activity.id),

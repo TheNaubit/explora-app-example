@@ -38,6 +38,7 @@ Explora keeps all user-facing copy in Lingui catalogs. Device locale drives cata
 | `src/i18n/error-keys.ts` | Stable mock / API error keys |
 | `src/locales/en/messages.po` | English message catalog |
 | `src/locales/native/en.json` | App name and permission usage strings |
+| `src/screens/<screen>/messages.ts` | Screen-local `msg()` descriptors (required for screens) |
 | `src/mocks/result.ts` | Mock success / failure shape with `errorKey` |
 | `lingui.config.ts` | Extract configuration |
 
@@ -56,6 +57,11 @@ Explora keeps all user-facing copy in Lingui catalogs. Device locale drives cata
 11. Do not add an in-app language picker. The OS / per-app language setting chooses the locale.
 12. Treat missing i18n on new or changed UI as incomplete work.
 13. Follow project Lingui skills: `lingui-best-practices`, `lingui-framework-setup`, `enhanced-message-context`, `find-unwrapped-strings`.
+14. **Organize message descriptors:**
+    - Screens use a colocated `messages.ts` that exports one object (for example `exploreMessages`).
+    - Do not leave a long list of `const x = msg(...)` at the top of a screen file.
+    - Shared components use colocated `messages.ts` when there are three or more descriptors.
+    - One or two descriptors may stay in a small component file.
 
 ## Error keys (mocks)
 

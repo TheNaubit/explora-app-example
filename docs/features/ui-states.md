@@ -4,12 +4,13 @@ Explora must show a clear UI for every async outcome. Users must never see a bla
 
 ## Status
 
-| Area                                       | Status                                             |
-| ------------------------------------------ | -------------------------------------------------- |
-| Rules in `AGENTS.md`                       | Shipped                                            |
-| Suspense + Error Boundary rules            | Shipped (ADR-012); components not built yet        |
-| Shared skeleton / empty / error components | Not implemented (add when first data screen ships) |
-| Discovery / detail / favorites / refresh   | Not implemented (use rules below when built)       |
+| Area                                       | Status                                                                                     |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| Rules in `AGENTS.md`                       | Shipped                                                                                    |
+| Suspense + Error Boundary rules            | Shipped (ADR-012)                                                                          |
+| Shared skeleton / empty / error components | Shipped (`ActivityCardSkeleton`, `EmptyState`, `QueryErrorBoundary`, `InlineStatusBanner`) |
+| Discovery Explore                          | Shipped (skeleton, empty, first-load error, refresh / next-page banner)                    |
+| Detail / Saved                             | Not implemented                                                                            |
 
 ## Required states
 
@@ -39,7 +40,7 @@ Use React Suspense and an Error Boundary for **first-load** catalog and detail q
 
 Do not catch mutation or event-handler failures only with an Error Boundary. Those paths need explicit UI state.
 
-When you ship the first data screen, add a shared Query Error Boundary and skeleton fallbacks under `src/components/`.
+Shared components live under `src/components/`. Explore wires them in `src/screens/explore/`.
 
 ## Skeleton preference
 

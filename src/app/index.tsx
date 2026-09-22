@@ -1,5 +1,6 @@
-import { Home } from "@/screens/home";
+import { Explore } from "@/screens/explore";
 
-export default function HomeScreen() {
-  return <Home />;
+/** Explore tab route. Thin route — screen lives in `src/screens/explore`. */
+export default function ExploreRoute() {
+  return <Explore />;
 }
