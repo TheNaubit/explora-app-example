@@ -11,6 +11,7 @@
 
 Make design craft and Expo development **mandatory** for UI and Expo work:
 
+- Read root `DESIGN.md` before UI work. Treat it as the canonical design contract.
 - Load Emil skills (`emil-design-eng`, motion skills, `apple-design` when iOS-facing) before building or polishing UI.
 - Load the matching Expo skill for the task, plus versioned Expo docs for this app’s SDK major.
 - Use `react-native-best-practices` when it applies.
@@ -18,5 +19,6 @@ Make design craft and Expo development **mandatory** for UI and Expo work:
 ## Consequences
 
 - UI work without these skills is incomplete process.
+- UI work that conflicts with `DESIGN.md` requires a contract update in the same change.
 - Skills guide judgment. They do not replace reading current Expo docs.
 - Detail lives in `AGENTS.md` under **Design craft and Expo skills**.

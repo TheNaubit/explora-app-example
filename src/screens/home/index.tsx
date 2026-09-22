@@ -5,7 +5,7 @@ import { Text, StyleSheet } from "react-native";
 
 import { ScreenFrame } from "@/components/screen-frame";
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
-import { colors, spacing, typography } from "@/theme";
+import { spacing, typography, useAppTheme } from "@/theme";
 
 const screenTitle = msg({
   id: "home.screenTitle",
@@ -16,6 +16,7 @@ const screenTitle = msg({
 /** Discovery entry screen. The thin route `src/app/index` renders this screen. */
 export function Home() {
   const { t } = useLingui();
+  const theme = useAppTheme();
   const count = SUPPLIED_ACTIVITIES.length;
   const catalogSummary = t({
     id: "home.catalogSummary",
@@ -27,44 +28,43 @@ export function Home() {
   });
 
   return (
-    <ScreenFrame title={t(screenTitle)} contentStyle={styles.content}>
-      <Text style={styles.title} accessibilityRole="header">
+    <ScreenFrame
+      title={t(screenTitle)}
+      contentStyle={[styles.content, { backgroundColor: theme.colors.background }]}
+    >
+      <Text style={[styles.title, { color: theme.colors.text }]} accessibilityRole="header">
         {t({
           id: "home.brand",
           comment: "Product name shown as the home screen heading",
           message: "Explora",
         })}
       </Text>
-      <Text style={styles.subtitle}>
+      <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
         {t({
           id: "home.subtitle",
           comment: "Home supporting line under the product name",
           message: "Discover activities and save favorites for later.",
         })}
       </Text>
-      <Text style={styles.meta}>{catalogSummary}</Text>
+      <Text style={[styles.meta, { color: theme.colors.textSecondary }]}>{catalogSummary}</Text>
     </ScreenFrame>
   );
 }
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: colors.background,
     justifyContent: "center",
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.space24,
   },
   meta: {
     ...typography.caption,
-    color: colors.textSecondary,
   },
   subtitle: {
     ...typography.body,
-    color: colors.textSecondary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.space16,
   },
   title: {
     ...typography.title,
-    color: colors.text,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.space8,
   },
 });

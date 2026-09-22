@@ -17,6 +17,8 @@ This page describes how Explora is structured. Update it when layering, data flo
 
 ## UI and platform
 
+- Design contract: root [`DESIGN.md`](../../DESIGN.md)
+- Theme tokens: `src/theme.ts`, with system light and dark themes
 - StyleSheet only. Support light and dark mode.
 - Lists: Legend List. Soft keyboard: `react-native-keyboard-controller`
 - Accessibility: [`react-native-a11y`](https://github.com/ArturKalach/react-native-a11y) via `@/a11y` and `ScreenFrame` / `a11y-*` wrappers. See [accessibility](../features/accessibility.md).

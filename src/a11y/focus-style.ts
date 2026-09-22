@@ -1,6 +1,6 @@
 import type { StyleProp, ViewStyle } from "react-native";
 
-import { colors } from "@/theme";
+import { primitiveColors } from "@/theme";
 
 /** Interaction state from `react-native-a11y` style callbacks. */
 export type KeyboardInteractionState = {
@@ -19,7 +19,7 @@ export type KeyboardInteractiveStyle =
  * Do not pass the deprecated `focusStyle` prop.
  */
 export const DEFAULT_KEYBOARD_FOCUS_STYLE: ViewStyle = {
-  borderColor: colors.tint,
+  borderColor: primitiveColors.forest400,
   borderWidth: 2,
 };
 

@@ -11,6 +11,7 @@ Write wiki pages in Simplified Technical English. See [meta/simplified-technical
 | Area              | Content                                 | Index                                                                          |
 | ----------------- | --------------------------------------- | ------------------------------------------------------------------------------ |
 | Product           | Goals, journeys, scope                  | [product/overview.md](./product/overview.md)                                   |
+| Design system     | Tokens, components, states, materials   | [../DESIGN.md](../DESIGN.md)                                                   |
 | Dataset           | Supplied JSON, 1k scale, mocks          | [product/dataset.md](./product/dataset.md)                                     |
 | Assessment        | Full requirements, delivery, AI session | [assessment/requirements.md](./assessment/requirements.md)                     |
 | Architecture      | Structure, data flow                    | [architecture/overview.md](./architecture/overview.md)                         |

@@ -8,6 +8,8 @@ This project is an Expo / React Native app (TypeScript). Prefer mobile-first des
 
 **Project wiki:** Open [`docs/INDEX.md`](./docs/INDEX.md) for product behavior, architecture, features, decisions, and verification. This file is the always-on **rulebook**. Link to the wiki. Do not copy long reference text here.
 
+**Design system:** Open [`DESIGN.md`](./DESIGN.md) before every UI change. It is the canonical contract for tokens, components, materials, themes, states, and composition.
+
 ---
 
 ## Simplified Technical English (ASD-STE100)
@@ -227,12 +229,13 @@ Hard rules for every data screen and async component:
 
 **Skills (required when building or polishing UI):**
 
-1. Read and follow `emil-design-eng` for polish, microinteractions, and interaction detail.
-2. Use `find-animation-opportunities`, then `animate-expo` (or `animate` when the motion is not Expo-specific). Use `animation-vocabulary` when you need named motion language. Use `improve-animations` / `review-animations` when polishing or reviewing motion.
-3. Use `apple-design` for iOS-facing HIG alignment when the screen or control is platform-sensitive.
-4. Use the matching **Expo** skill for the task. Examples: `expo-project-structure`, `expo-design-system`, `expo-native-ui`, `expo-data-fetching`, `expo-dev-client`, router / modules skills as needed. Also use `react-native-best-practices` when it applies.
-5. For Expo, EAS, or React Native APIs, still open the SDK docs for this app’s major version (see **Expo has changed** above). Skills do not replace versioned docs.
-6. Treat skipped design/Expo skills on UI work as incomplete process. Load them before you invent patterns.
+1. Read root `DESIGN.md`. Update it with `src/theme.ts` when design tokens change.
+2. Read and follow `emil-design-eng` for polish, microinteractions, and interaction detail.
+3. Use `find-animation-opportunities`, then `animate-expo` (or `animate` when the motion is not Expo-specific). Use `animation-vocabulary` when you need named motion language. Use `improve-animations` / `review-animations` when polishing or reviewing motion.
+4. Use `apple-design` for iOS-facing HIG alignment when the screen or control is platform-sensitive.
+5. Use the matching **Expo** skill for the task. Examples: `expo-project-structure`, `expo-design-system`, `expo-native-ui`, `expo-data-fetching`, `expo-dev-client`, router / modules skills as needed. Also use `react-native-best-practices` when it applies.
+6. For Expo, EAS, or React Native APIs, still open the SDK docs for this app’s major version (see **Expo has changed** above). Skills do not replace versioned docs.
+7. Treat skipped design/Expo skills on UI work as incomplete process. Load them before you invent patterns.
 
 ## Building with EAS
 
