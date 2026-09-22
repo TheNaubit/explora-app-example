@@ -51,3 +51,9 @@ export const MOCK_DELAY_NORMAL_MS = 40;
 
 /** Mock network delay for a slow response, in milliseconds. */
 export const MOCK_DELAY_SLOW_MS = 2_500;
+
+/**
+ * Default page size for paginated `listActivities`.
+ * Keeps infinite-scroll pages small enough to exercise many fetches on a 1k catalog.
+ */
+export const LIST_PAGE_SIZE = 20;

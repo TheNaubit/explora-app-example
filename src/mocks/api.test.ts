@@ -10,6 +10,7 @@ import {
 import {
   ACTIVITY_ID_PAD_LENGTH,
   ASSESSMENT_MIN_CATALOG_SIZE,
+  LIST_PAGE_SIZE,
   REFRESH_ACTIVITY_ID_PREFIX,
   SEEDED_CATALOG_SIZE,
 } from "@/mocks/constants";
@@ -18,6 +19,7 @@ import {
   getReviewModeState,
   resetReviewModeState,
   setInitialLoadMode,
+  setPageLoadMode,
   setRefreshMode,
   setReviewModeState,
 } from "@/mocks/review-mode";
@@ -52,10 +54,10 @@ describe("mock API", () => {
   });
 
   describe("listActivities", () => {
-    it(`returns ${SEEDED_CATALOG_SIZE} activities and keeps the supplied ids`, async () => {
+    it(`returns the first page of ${LIST_PAGE_SIZE} and reports total ${SEEDED_CATALOG_SIZE}`, async () => {
       setInitialLoadMode("normal");
 
-      const result = await listActivities();
+      const result = await listActivities({ cursor: null });
 
       expect(result.ok).toBe(true);
       if (!result.ok) {
@@ -64,29 +66,91 @@ describe("mock API", () => {
 
       expect(result.data.total).toBeGreaterThanOrEqual(ASSESSMENT_MIN_CATALOG_SIZE);
       expect(result.data.total).toBe(SEEDED_CATALOG_SIZE);
-      expect(result.data.activities).toHaveLength(SEEDED_CATALOG_SIZE);
+      expect(result.data.activities).toHaveLength(LIST_PAGE_SIZE);
+      expect(result.data.nextCursor).toBe(String(LIST_PAGE_SIZE));
       expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.normal);
 
       for (const supplied of SUPPLIED_ACTIVITIES) {
         const match = result.data.activities.find((activity) => activity.id === supplied.id);
-        expect(match).toEqual(supplied);
+        if (match) {
+          expect(match).toEqual(supplied);
+        }
+      }
+    });
+
+    it("returns the next page with pageLoad delay and a null cursor on the last page", async () => {
+      const first = await listActivities({ cursor: null });
+      expect(first.ok).toBe(true);
+      if (!first.ok) {
+        return;
+      }
+
+      mockedDelay.mockClear();
+      setPageLoadMode("slow");
+
+      const second = await listActivities({ cursor: first.data.nextCursor });
+      expect(second.ok).toBe(true);
+      if (!second.ok) {
+        return;
+      }
+
+      expect(second.data.activities).toHaveLength(LIST_PAGE_SIZE);
+      expect(second.data.nextCursor).toBe(String(LIST_PAGE_SIZE * 2));
+      expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.slow);
+
+      let cursor = second.data.nextCursor;
+      let lastPageLength = 0;
+      while (cursor !== null) {
+        const page = await listActivities({ cursor });
+        expect(page.ok).toBe(true);
+        if (!page.ok) {
+          return;
+        }
+        lastPageLength = page.data.activities.length;
+        cursor = page.data.nextCursor;
+      }
+
+      const expectedLastPage = SEEDED_CATALOG_SIZE % LIST_PAGE_SIZE;
+      expect(lastPageLength).toBe(expectedLastPage === 0 ? LIST_PAGE_SIZE : expectedLastPage);
+    });
+
+    it("filters by search and category across pages", async () => {
+      const category = SUPPLIED_ACTIVITIES[0].category;
+      const search = SUPPLIED_ACTIVITIES[0].title.slice(0, 4);
+
+      const result = await listActivities({
+        cursor: null,
+        search,
+        category,
+        limit: 5,
+      });
+
+      expect(result.ok).toBe(true);
+      if (!result.ok) {
+        return;
+      }
+
+      expect(result.data.total).toBeGreaterThan(0);
+      for (const activity of result.data.activities) {
+        expect(activity.category).toBe(category);
+        expect(activity.title.toLowerCase()).toContain(search.toLowerCase());
       }
     });
 
     it("uses the slow delay when initial load is slow", async () => {
       setInitialLoadMode("slow");
 
-      const result = await listActivities();
+      const result = await listActivities({ cursor: null });
 
       expect(result.ok).toBe(true);
       expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.slow);
     });
 
-    it("returns networkOffline and does not seed-mutate on initial load fail", async () => {
+    it("returns networkOffline on first-page fail without mutating the catalog", async () => {
       setInitialLoadMode("fail");
       const sizeBefore = getCatalogSize();
 
-      const result = await listActivities();
+      const result = await listActivities({ cursor: null });
 
       expect(result.ok).toBe(false);
       if (result.ok) {
@@ -98,17 +162,29 @@ describe("mock API", () => {
       expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.normal);
     });
 
-    it("returns validationFailed when the catalog payload is invalid", async () => {
-      replaceCatalogForTests([]);
+    it("returns networkOffline on next-page fail when pageLoad is fail", async () => {
+      setPageLoadMode("fail");
 
-      const result = await listActivities();
+      const result = await listActivities({ cursor: String(LIST_PAGE_SIZE) });
 
       expect(result.ok).toBe(false);
       if (result.ok) {
         return;
       }
 
-      expect(result.errorKey).toBe("errors.validationFailed");
+      expect(result.errorKey).toBe("errors.networkOffline");
+    });
+
+    it("treats an invalid cursor as offset zero", async () => {
+      const result = await listActivities({ cursor: "not-a-number" });
+
+      expect(result.ok).toBe(true);
+      if (!result.ok) {
+        return;
+      }
+
+      expect(result.data.activities[0]?.id).toBe(SUPPLIED_ACTIVITIES[0]?.id);
+      expect(result.data.nextCursor).toBe(String(LIST_PAGE_SIZE));
     });
   });
 
@@ -201,7 +277,7 @@ describe("mock API", () => {
       expect(getCatalogSize()).toBe(sizeBeforeFail + 1);
       expect(succeeded.data.activity.id).toMatch(refreshIdPattern);
 
-      const listed = await listActivities();
+      const listed = await listActivities({ cursor: null, limit: SEEDED_CATALOG_SIZE + 10 });
       expect(listed.ok).toBe(true);
       if (!listed.ok) {
         return;
@@ -251,7 +327,7 @@ describe("mock API", () => {
         throw new Error("unexpected list failure");
       });
 
-      await expect(listActivities()).rejects.toThrow("unexpected list failure");
+      await expect(listActivities({ cursor: null })).rejects.toThrow("unexpected list failure");
       spy.mockRestore();
     });
 
@@ -278,15 +354,28 @@ describe("mock API", () => {
 
   describe("review mode helpers", () => {
     it("updates and resets review mode state", () => {
-      setReviewModeState({ initialLoad: "fail", refresh: "fail" });
-      expect(getReviewModeState()).toEqual({ initialLoad: "fail", refresh: "fail" });
+      setReviewModeState({ initialLoad: "fail", pageLoad: "fail", refresh: "fail" });
+      expect(getReviewModeState()).toEqual({
+        initialLoad: "fail",
+        pageLoad: "fail",
+        refresh: "fail",
+      });
 
       setInitialLoadMode("slow");
+      setPageLoadMode("slow");
       setRefreshMode("slow");
-      expect(getReviewModeState()).toEqual({ initialLoad: "slow", refresh: "slow" });
+      expect(getReviewModeState()).toEqual({
+        initialLoad: "slow",
+        pageLoad: "slow",
+        refresh: "slow",
+      });
 
       resetReviewModeState();
-      expect(getReviewModeState()).toEqual({ initialLoad: "normal", refresh: "success" });
+      expect(getReviewModeState()).toEqual({
+        initialLoad: "normal",
+        pageLoad: "normal",
+        refresh: "success",
+      });
     });
   });
 });

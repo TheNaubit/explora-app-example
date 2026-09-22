@@ -7,6 +7,7 @@ Explora must show a clear UI for every async outcome. Users must never see a bla
 | Area                                       | Status                                             |
 | ------------------------------------------ | -------------------------------------------------- |
 | Rules in `AGENTS.md`                       | Shipped                                            |
+| Suspense + Error Boundary rules            | Shipped (ADR-012); components not built yet        |
 | Shared skeleton / empty / error components | Not implemented (add when first data screen ships) |
 | Discovery / detail / favorites / refresh   | Not implemented (use rules below when built)       |
 
@@ -23,6 +24,22 @@ Every screen that loads, lists, or looks up data must design these states:
 | Content   | Success                                          | The real screen                                    |
 
 Loading is not empty. Do not show an empty list while the first fetch still runs.
+
+## Suspense and Error Boundaries (Query)
+
+Use React Suspense and an Error Boundary for **first-load** catalog and detail queries. Pair them with `ApiError` from `@/query/errors`.
+
+| Outcome                                       | Mechanism                                                                                                               |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| First load waiting                            | `<Suspense fallback={skeleton}>` around `useSuspenseQuery` / `useSuspenseInfiniteQuery`                                 |
+| First load failed                             | Error Boundary catches thrown `ApiError`; resolve `errorKey` with Lingui; show retry                                    |
+| Empty list                                    | Query succeeded with zero items → designed empty UI (not a boundary)                                                    |
+| Detail not-found                              | Prefer designed not-found UI, or throw `ApiError` (`errors.notFound`) into the boundary when that path should fail hard |
+| Refetch / next page / refresh mutation failed | Inline non-blocking error; keep current content (ADR-007)                                                               |
+
+Do not catch mutation or event-handler failures only with an Error Boundary. Those paths need explicit UI state.
+
+When you ship the first data screen, add a shared Query Error Boundary and skeleton fallbacks under `src/components/`.
 
 ## Skeleton preference
 
@@ -49,4 +66,6 @@ When you build or change a data screen, load:
 
 - Assessment refresh and recovery: [`../assessment/requirements.md`](../assessment/requirements.md)
 - Accessibility announcements: [`accessibility.md`](./accessibility.md)
+- Data layer: [`data-layer.md`](./data-layer.md)
 - Decision: [`../decisions/adr-007-async-ui-states-skeletons.md`](../decisions/adr-007-async-ui-states-skeletons.md)
+- Decision: [`../decisions/adr-012-suspense-error-boundaries.md`](../decisions/adr-012-suspense-error-boundaries.md)

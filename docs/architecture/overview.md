@@ -13,9 +13,10 @@ This page describes how Explora is structured. Update it when layering, data flo
 - Supplied catalog: `assets/activities.json`, loaded in `src/data/activities.ts`
 - Seeded discovery catalog (1,012): `src/mocks/seed-catalog.ts` plus in-memory store
 - Runtime validation: Zod (`src/schemas/`), helpers in `src/utils/parse-with-schema.ts`
-- Mocked network: `src/mocks/api.ts` (list, get, refresh) plus review modes
-- TanStack Query hooks: not wired to screens yet
-- Local-first favorites and offline: Legend State plus MMKV (document stores here when you add them)
+- Mocked network: `src/mocks/api.ts` (paginated list, get, refresh) plus review modes
+- TanStack Query: list / detail / refresh hooks under `src/hooks/` and `src/query/`
+- Local-first favorites and offline snapshots: Legend State + MMKV in `src/state/favorites.ts`
+- Discovery search/filter (session): `src/state/discovery.ts`
 
 ## UI and platform
 

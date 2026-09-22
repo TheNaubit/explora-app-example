@@ -33,6 +33,7 @@ Refresh is different. A successful refresh adds **one** activity only (`ref-0001
 ## Mocked network
 
 - Client mocks live in `src/mocks/api.ts` (`listActivities`, `getActivity`, `refreshCatalog`).
+- `listActivities` returns cursor pages (default `LIST_PAGE_SIZE` = 20) with optional search and category.
 - Validate every mock, fixture, and generated payload with **Zod** before app state or UI use it.
 - Do not require external accounts, API keys, or hosted services.
 - Review modes: see [operations](../operations/local-dev.md) and [mock API](../features/mock-api.md).

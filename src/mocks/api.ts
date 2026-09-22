@@ -1,45 +1,100 @@
 import {
   getActivityResponseSchema,
+  listActivitiesRequestSchema,
   listActivitiesResponseSchema,
   refreshCatalogResponseSchema,
   type GetActivityResponse,
+  type ListActivitiesRequest,
   type ListActivitiesResponse,
   type RefreshCatalogResponse,
 } from "@/schemas/api";
+import type { Activity } from "@/schemas/activity";
 import type { MockResult } from "@/schemas/mock-result";
 import { parseWithSchema } from "@/utils/parse-with-schema";
 import { ZodError } from "zod";
 
 import * as catalogStore from "@/mocks/catalog-store";
+import { LIST_PAGE_SIZE } from "@/mocks/constants";
 import { delay, MOCK_DELAY_MS } from "@/mocks/delay";
 import { getReviewModeState } from "@/mocks/review-mode";
 import { mockFailure, mockSuccess } from "@/mocks/result";
 
-export type { GetActivityResponse, ListActivitiesResponse, RefreshCatalogResponse };
+export type {
+  GetActivityResponse,
+  ListActivitiesRequest,
+  ListActivitiesResponse,
+  RefreshCatalogResponse,
+};
 
 function validationFailure() {
   return mockFailure("errors.validationFailed");
 }
 
-/**
- * List the full discovery catalog.
- * Honors initial-load review modes (normal, slow, fail).
- */
-export async function listActivities(): Promise<MockResult<ListActivitiesResponse>> {
-  const { initialLoad } = getReviewModeState();
+function filterCatalog(
+  catalog: readonly Activity[],
+  search: string | undefined,
+  category: ListActivitiesRequest["category"],
+): Activity[] {
+  const normalizedSearch = search?.trim().toLowerCase() ?? "";
 
-  if (initialLoad === "fail") {
-    await delay(MOCK_DELAY_MS.normal);
-    return mockFailure("errors.networkOffline");
+  return catalog.filter((activity) => {
+    if (category && activity.category !== category) {
+      return false;
+    }
+
+    if (normalizedSearch.length > 0 && !activity.title.toLowerCase().includes(normalizedSearch)) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+function parseCursorOffset(cursor: string | null): number {
+  if (cursor === null) {
+    return 0;
   }
 
-  await delay(initialLoad === "slow" ? MOCK_DELAY_MS.slow : MOCK_DELAY_MS.normal);
+  const offset = Number.parseInt(cursor, 10);
+  if (!Number.isFinite(offset) || offset < 0) {
+    return 0;
+  }
 
+  return offset;
+}
+
+/**
+ * List one page of the discovery catalog.
+ * First page (`cursor === null`) honors `initialLoad`. Later pages honor `pageLoad`.
+ */
+export async function listActivities(
+  request: ListActivitiesRequest = { cursor: null },
+): Promise<MockResult<ListActivitiesResponse>> {
   try {
-    const activities = [...catalogStore.getCatalog()];
+    const parsedRequest = parseWithSchema(listActivitiesRequestSchema, request);
+    const { cursor, search, category } = parsedRequest;
+    const limit = parsedRequest.limit ?? LIST_PAGE_SIZE;
+    const isFirstPage = cursor === null;
+    const { initialLoad, pageLoad } = getReviewModeState();
+    const mode = isFirstPage ? initialLoad : pageLoad;
+
+    if (mode === "fail") {
+      await delay(MOCK_DELAY_MS.normal);
+      return mockFailure("errors.networkOffline");
+    }
+
+    await delay(mode === "slow" ? MOCK_DELAY_MS.slow : MOCK_DELAY_MS.normal);
+
+    const filtered = filterCatalog(catalogStore.getCatalog(), search, category);
+    const offset = parseCursorOffset(cursor);
+    const page = filtered.slice(offset, offset + limit);
+    const nextOffset = offset + page.length;
+    const nextCursor = nextOffset < filtered.length ? String(nextOffset) : null;
+
     const payload = parseWithSchema(listActivitiesResponseSchema, {
-      activities,
-      total: activities.length,
+      activities: page,
+      total: filtered.length,
+      nextCursor,
     });
     return mockSuccess(payload);
   } catch (error) {

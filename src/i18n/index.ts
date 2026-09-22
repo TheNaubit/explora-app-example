@@ -16,11 +16,13 @@ export {
 } from "@/i18n/error-keys";
 export { formatCurrency, formatDate, formatNumber, getFormatLocale } from "@/i18n/format";
 export { I18nBootstrap } from "@/i18n/i18n-bootstrap";
+export { readDeviceTextDirection } from "@/i18n/device-direction";
 export {
   getDirection,
   localeDisplayName,
   locales,
   resolveLocale,
+  resolveTextDirection,
   sourceLocale,
   type Locale,
 } from "@/i18n/locales";

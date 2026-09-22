@@ -3,7 +3,8 @@ import "@/i18n/polyfills";
 import { i18n, type Messages } from "@lingui/core";
 import { getLocales } from "expo-localization";
 
-import { getDirection, resolveLocale, sourceLocale, type Locale } from "@/i18n/locales";
+import { readDeviceTextDirection } from "@/i18n/device-direction";
+import { resolveLocale, sourceLocale, type Locale } from "@/i18n/locales";
 import { messages as enMessages } from "@/locales/en/messages.po";
 
 const catalogLoaders: Record<Locale, () => Promise<Messages>> = {
@@ -37,6 +38,8 @@ export async function activateLocale(
 /**
  * Pick the catalog locale from device preferences and activate it.
  * Formatting (numbers, dates) still uses device tags via `@/i18n/format`.
+ * When a catalog for the device language is not shipped yet, falls back to the source locale.
+ * Layout direction still follows the device (see `readDeviceTextDirection`).
  */
 export async function activateFromDevice(): Promise<{
   locale: Locale;
@@ -48,12 +51,11 @@ export async function activateFromDevice(): Promise<{
   const locale = resolveLocale(device?.languageCode ?? languageTag);
   await activateLocale(locale, languageTag);
 
-  const direction =
-    device?.textDirection === "rtl" || device?.textDirection === "ltr"
-      ? device.textDirection
-      : getDirection(languageTag);
-
-  return { locale, direction, languageTag };
+  return {
+    locale,
+    direction: readDeviceTextDirection(),
+    languageTag,
+  };
 }
 
 export { i18n };

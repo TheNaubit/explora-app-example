@@ -216,7 +216,7 @@ Hard rules for every screen, component, and feature:
 
 ### Async UI states (loading / empty / not-found / error)
 
-Full behavior: [`docs/features/ui-states.md`](./docs/features/ui-states.md). Decision: [`docs/decisions/adr-007-async-ui-states-skeletons.md`](./docs/decisions/adr-007-async-ui-states-skeletons.md).
+Full behavior: [`docs/features/ui-states.md`](./docs/features/ui-states.md). Decisions: [`docs/decisions/adr-007-async-ui-states-skeletons.md`](./docs/decisions/adr-007-async-ui-states-skeletons.md), [`docs/decisions/adr-012-suspense-error-boundaries.md`](./docs/decisions/adr-012-suspense-error-boundaries.md).
 
 **Mandatory scope:** Every screen that loads, lists, or looks up data must ship a designed UI for **loading**, **empty**, **not-found**, **error**, and **content**. Build these states in the same change as the screen. Do not leave blank views, silent failures, or spinner-only placeholders for later.
 
@@ -230,7 +230,8 @@ Hard rules for every data screen and async component:
 4. Keep stale content on refetch. Show a non-blocking error and retry. Do not replace content with a spinner while refreshing.
 5. Design empty and not-found with clear copy and a next action (clear filters, go back, retry). Do not show an empty list while the first fetch is still running.
 6. Pair every state with a11y announcements (`announceStatus`) and i18n copy. Use `errorKey` + `resolveErrorMessage` for failures.
-7. Treat missing state UI on new or changed screens as incomplete work. Fix it before you call the feature done.
+7. **Suspense + Error Boundaries (Query first load):** Prefer `useSuspenseQuery` / `useSuspenseInfiniteQuery` for first catalog and detail loads. Wrap with Suspense (skeleton fallback) and a shared Error Boundary that handles thrown `ApiError` (`errorKey` → Lingui). Do not use a boundary for empty lists, soft not-found, refetch failures, next-page failures, or refresh mutations — those stay designed inline UI. Ship the shared boundary and skeletons with the first data screen.
+8. Treat missing state UI on new or changed screens as incomplete work. Fix it before you call the feature done.
 
 ### Design craft and Expo skills
 
@@ -277,8 +278,9 @@ You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`
 - **Haptics:** `react-native-pulsar` only (skill: `pulsar-haptics`). Do not use `expo-haptics`.
 - **Animation:** Reanimated v4 · **Lottie:** `lottie-react-native` (prefer dotLottie)
 - **Icons:** `expo-symbols` · **Native UI:** `expo-ui` universal + drop-ins
-- **Fetching:** TanStack Query + mocks · **Online:** `expo-network` · optional Legend State React Query plugin
+- **Fetching:** TanStack Query + mocks · Suspense + Error Boundaries for first load (ADR-012) · **Online:** `expo-network` · optional Legend State React Query plugin
 - **Validation:** Zod in `src/schemas/` + `parseWithSchema` / `safeParseWithSchema`
+- **Errors:** `ApiError` class with `errorKey` (`src/query/errors.ts`); resolve in UI with Lingui
 - **Accessibility:** [`react-native-a11y`](https://github.com/ArturKalach/react-native-a11y) via `@/a11y` (pinned). Always use this library. Always support usable navigation, keyboard behavior, larger text, and screen-reader access on the main journey. Every screen, component, and feature must be a11y-compliant in the same change. See Accessibility section above.
 - **i18n:** [Lingui](https://lingui.dev/introduction) + [expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/) via `@/i18n`. Every user-facing string and permission string must use this system. Numbers and dates use device `Intl` formatting. See Internationalization section above.
 - **JSDoc:** selective. Document intent on shared exports only. Do not repeat TypeScript types. Do not enable a strict JSDoc lint plugin. Write JSDoc in Simplified Technical English.

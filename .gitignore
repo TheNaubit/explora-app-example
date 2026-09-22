@@ -36,6 +36,10 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# Jest coverage (generated locally / CI)
+coverage/
+*.lcov
+
 # Lingui: Metro compiles .po on import. Do not ignore the .po sources.
 # If you add `lingui compile` artifacts later, ignore only messages.js / messages.ts.
 

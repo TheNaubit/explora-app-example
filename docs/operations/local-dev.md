@@ -36,26 +36,34 @@ Agents must not wait for the commit hook alone. After a change batch, run:
 - Seeded discovery catalog: 1,012 activities via `src/mocks/seed-catalog.ts`
 - Reset in-memory catalog: `import { resetCatalog } from "@/mocks/catalog-store"`
 - Reset review modes: `import { resetReviewModeState } from "@/mocks/review-mode"`
+- Clear favorites: `import { clearFavorites } from "@/state/favorites"`
+- Reset discovery filters: `import { resetDiscoveryFilters } from "@/state/discovery"`
 
 ### Review modes (mock API)
 
 Until `ReviewControlsSheet` exists, set modes from the module API:
 
 ```ts
-import { setInitialLoadMode, setRefreshMode, resetReviewModeState } from "@/mocks/review-mode";
+import {
+  setInitialLoadMode,
+  setPageLoadMode,
+  setRefreshMode,
+  resetReviewModeState,
+} from "@/mocks/review-mode";
 import { resetCatalog } from "@/mocks/catalog-store";
 
-setInitialLoadMode("slow"); // normal | slow | fail
+setInitialLoadMode("slow"); // normal | slow | fail (first list page + get)
+setPageLoadMode("fail"); // normal | slow | fail (later list pages)
 setRefreshMode("fail"); // success | slow | fail
 resetCatalog();
 resetReviewModeState();
 ```
 
-| Mode             | Initial load                                | Refresh                                      |
-| ---------------- | ------------------------------------------- | -------------------------------------------- |
-| Normal / success | Short delay, returns catalog                | Short delay, appends one activity            |
-| Slow             | ~2.5s delay, then success                   | ~2.5s delay, then success (+1)               |
-| Fail             | Returns `errors.networkOffline`; no catalog | Returns `errors.refreshFailed`; adds nothing |
+| Mode             | Initial load (first page / get) | Page load (later pages)   | Refresh                              |
+| ---------------- | ------------------------------- | ------------------------- | ------------------------------------ |
+| Normal / success | Short delay, returns data       | Short delay, returns page | Short delay, appends one activity    |
+| Slow             | ~2.5s delay, then success       | ~2.5s delay, then success | ~2.5s delay, then success (+1)       |
+| Fail             | `errors.networkOffline`         | `errors.networkOffline`   | `errors.refreshFailed`; adds nothing |
 
 ## Related
 

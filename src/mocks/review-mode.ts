@@ -2,6 +2,7 @@ import {
   DEFAULT_REVIEW_MODE_STATE,
   reviewModeStateSchema,
   type InitialLoadMode,
+  type PageLoadMode,
   type RefreshMode,
   type ReviewModeState,
 } from "@/schemas/review-mode";
@@ -25,12 +26,17 @@ export function setInitialLoadMode(initialLoad: InitialLoadMode): ReviewModeStat
   return setReviewModeState({ ...state, initialLoad });
 }
 
+/** Set only the next-page load mode. */
+export function setPageLoadMode(pageLoad: PageLoadMode): ReviewModeState {
+  return setReviewModeState({ ...state, pageLoad });
+}
+
 /** Set only the refresh mode. */
 export function setRefreshMode(refresh: RefreshMode): ReviewModeState {
   return setReviewModeState({ ...state, refresh });
 }
 
-/** Reset review modes to defaults (normal initial load, successful refresh). */
+/** Reset review modes to defaults (normal loads, successful refresh). */
 export function resetReviewModeState(): ReviewModeState {
   state = { ...DEFAULT_REVIEW_MODE_STATE };
   return getReviewModeState();

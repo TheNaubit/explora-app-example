@@ -38,6 +38,21 @@ export function getDirection(locale: string): "ltr" | "rtl" {
   return RTL_LANGUAGE_CODES.has(base) ? "rtl" : "ltr";
 }
 
+/**
+ * Resolve layout direction from device fields.
+ * Prefer explicit `textDirection`. Fall back to the language tag.
+ */
+export function resolveTextDirection(
+  textDirection: "ltr" | "rtl" | null | undefined,
+  languageTag: string,
+): "ltr" | "rtl" {
+  if (textDirection === "rtl" || textDirection === "ltr") {
+    return textDirection;
+  }
+
+  return getDirection(languageTag);
+}
+
 /** Language display name in that language (for future selectors; app has none). */
 export function localeDisplayName(locale: string): string {
   return new Intl.DisplayNames([locale], { type: "language" }).of(locale) ?? locale;

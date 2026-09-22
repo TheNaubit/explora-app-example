@@ -4,13 +4,21 @@
 
 The app uses a client-side mock API. There is no real backend.
 
-| Operation    | Function         | Success payload         | Notes                            |
-| ------------ | ---------------- | ----------------------- | -------------------------------- |
-| List catalog | `listActivities` | `{ activities, total }` | Seeds to 1,012 items             |
-| Get by id    | `getActivity`    | `{ activity }`          | Missing id → `errors.notFound`   |
-| Refresh      | `refreshCatalog` | `{ activity }`          | Success appends exactly one item |
+| Operation         | Function         | Success payload                     | Notes                            |
+| ----------------- | ---------------- | ----------------------------------- | -------------------------------- |
+| List catalog page | `listActivities` | `{ activities, total, nextCursor }` | Cursor pages; default limit 20   |
+| Get by id         | `getActivity`    | `{ activity }`                      | Missing id → `errors.notFound`   |
+| Refresh           | `refreshCatalog` | `{ activity }`                      | Success appends exactly one item |
 
-Review modes control initial load (`normal` / `slow` / `fail`) and refresh (`success` / `slow` / `fail`).
+List requests accept `cursor`, optional `limit`, `search` (title substring), and `category`. Filter first, then page.
+
+Review modes:
+
+| Field         | Applies to                           | Values                      |
+| ------------- | ------------------------------------ | --------------------------- |
+| `initialLoad` | First list page and get-by-id        | `normal` / `slow` / `fail`  |
+| `pageLoad`    | Later list pages (`cursor !== null`) | `normal` / `slow` / `fail`  |
+| `refresh`     | Refresh mutation                     | `success` / `slow` / `fail` |
 
 ## Code map
 
@@ -31,4 +39,6 @@ Review modes control initial load (`normal` / `slow` / `fail`) and refresh (`suc
 
 - [Dataset](../product/dataset.md)
 - [Local ops](../operations/local-dev.md)
+- [Data layer](./data-layer.md)
 - [ADR-010](../decisions/adr-010-client-mock-api.md)
+- [ADR-011](../decisions/adr-011-query-legend-local-first.md)

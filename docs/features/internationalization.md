@@ -8,6 +8,7 @@ Explora keeps all user-facing copy in Lingui catalogs. Device locale drives cata
 | --------------------------- | ------------------------------------------- |
 | Lingui + expo-localization  | Shipped (English catalog only)              |
 | RTL skeleton                | Shipped (`supportsRTL`, `LocaleProvider`)   |
+| Live device locale / RTL    | Shipped (`useLocales` in root + bootstrap)  |
 | Native app metadata locales | Shipped (`src/locales/native/en.json`)      |
 | Mock error keys             | Shipped (`src/i18n/error-keys.ts`)          |
 | Extra UI languages          | Not shipped (add locale to `locales` array) |
@@ -25,18 +26,20 @@ Explora keeps all user-facing copy in Lingui catalogs. Device locale drives cata
 
 ## Project entry points
 
-| Path                          | Role                                               |
-| ----------------------------- | -------------------------------------------------- |
-| `src/i18n/index.ts`           | Canonical exports                                  |
-| `src/i18n/locales.ts`         | Supported locales, `resolveLocale`, `getDirection` |
-| `src/i18n/activate.ts`        | Load catalog from device preferences               |
-| `src/i18n/i18n-bootstrap.tsx` | Root `I18nProvider` bootstrap                      |
-| `src/i18n/format.ts`          | Number, date, currency formatting                  |
-| `src/i18n/error-keys.ts`      | Stable mock / API error keys                       |
-| `src/locales/en/messages.po`  | English message catalog                            |
-| `src/locales/native/en.json`  | App name and permission usage strings              |
-| `src/mocks/result.ts`         | Mock success / failure shape with `errorKey`       |
-| `lingui.config.ts`            | Extract configuration                              |
+| Path                           | Role                                              |
+| ------------------------------ | ------------------------------------------------- |
+| `src/i18n/index.ts`            | Canonical exports                                 |
+| `src/i18n/locales.ts`          | Supported locales, direction helpers              |
+| `src/i18n/device-direction.ts` | Sync device text direction                        |
+| `src/i18n/activate.ts`         | Load catalog from device preferences              |
+| `src/i18n/i18n-bootstrap.tsx`  | Root `I18nProvider`; refreshes on locale + resume |
+
+| `src/i18n/format.ts` | Number, date, currency formatting |
+| `src/i18n/error-keys.ts` | Stable mock / API error keys |
+| `src/locales/en/messages.po` | English message catalog |
+| `src/locales/native/en.json` | App name and permission usage strings |
+| `src/mocks/result.ts` | Mock success / failure shape with `errorKey` |
+| `lingui.config.ts` | Extract configuration |
 
 ## Rules for every screen, component, and feature
 
