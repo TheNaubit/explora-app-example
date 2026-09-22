@@ -260,6 +260,11 @@ You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`
 ## Linting and formatting
 
 - **Commit gate:** Husky runs `lint-staged` on pre-commit. Staged JS/TS files get `oxlint --fix --deny-warnings` and `oxfmt`. When any `.ts` / `.tsx` file is staged, run `npx tsc --noEmit` once. Staged JSON/Markdown get `oxfmt`. A commit fails if lint warnings, lint errors, or TypeScript errors remain.
+- **Commit messages:** Use [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/#summary). Husky `commit-msg` runs Commitlint (`@commitlint/config-conventional`, `commitlint.config.mjs`). Decision: [`docs/decisions/adr-013-conventional-commits.md`](./docs/decisions/adr-013-conventional-commits.md).
+  - Format: `<type>[optional scope]: <description>`
+  - Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `perf`, `ci`, `build`, `style`
+  - Subject: imperative mood ("add", not "added"), lowercase, no trailing period
+  - Header max length: 100 characters. Put detail in the body if needed.
 - **While coding:** Do not run a full-tree `npm run fix` after every small edit.
 - **After a change batch / before you say a task is done:** Run checks that agents can act on:
   1. `npx oxlint --fix --deny-warnings --format=agent`
@@ -267,7 +272,7 @@ You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`
   3. `npx tsc --noEmit`
      Use `--format=agent` so the agent can read findings and fix them without a human. Do not skip this when you only plan to commit later. The hook is a backup, not the only check.
 - **Manual full tree:** `npm run fix` or `npm run lint` when you need a whole-project lint check outside the agent loop.
-- Config: `oxlint.config.mjs`, `lint-staged.config.mjs`, `.husky/pre-commit`. Skip type-aware Sonar rules until Oxlint supports them.
+- Config: `oxlint.config.mjs`, `lint-staged.config.mjs`, `.husky/pre-commit`, `.husky/commit-msg`, `commitlint.config.mjs`. Skip type-aware Sonar rules until Oxlint supports them.
 - **Lingui lint:** `eslint-plugin-lingui` runs through Oxlint `jsPlugins` (same pattern as `eslint-plugin-sonarjs`). Do not add the ESLint CLI.
 - Ignore vendored skills with `.eslintignore`. Do not edit `.agents/` or `.claude/` to silence lint.
 

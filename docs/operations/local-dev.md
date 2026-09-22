@@ -14,6 +14,8 @@ See `AGENTS.md` (npm and Expo commands). Prefer `npm run lint` and `npm run fix`
 - Staged `.ts` / `.tsx`: also run `npx tsc --noEmit` once for the project.
 - Staged JSON/Markdown: `oxfmt`.
 - The commit stops if lint warnings, lint errors, or TypeScript errors remain.
+- Commit-msg runs Commitlint with `@commitlint/config-conventional`.
+- Messages must follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) (`commitlint.config.mjs`, ADR-013).
 
 ### Agent checks (during development)
 

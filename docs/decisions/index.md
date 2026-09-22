@@ -16,6 +16,7 @@ Architecture Decision Records (ADRs) for lasting choices. Each page is short: co
 | ADR-010 | [Client mock API with review modes](./adr-010-client-mock-api.md)                                 | Accepted |
 | ADR-011 | [TanStack Query for catalog, Legend State for local-first](./adr-011-query-legend-local-first.md) | Accepted |
 | ADR-012 | [Suspense and Error Boundaries for Query UI](./adr-012-suspense-error-boundaries.md)              | Accepted |
+| ADR-013 | [Conventional Commits](./adr-013-conventional-commits.md)                                         | Accepted |
 
 ## Template
 
