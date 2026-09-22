@@ -1,0 +1,297 @@
+diff --git a/node_modules/react-native-a11y/ios/extensions/RCTCustomScrollView+RCA11y/RCTCustomScrollView+RCA11y.mm b/node_modules/react-native-a11y/ios/extensions/RCTCustomScrollView+RCA11y/RCTCustomScrollView+RCA11y.mm
+index 70b04d4..e8d4852 100644
+--- a/node_modules/react-native-a11y/ios/extensions/RCTCustomScrollView+RCA11y/RCTCustomScrollView+RCA11y.mm
++++ b/node_modules/react-native-a11y/ios/extensions/RCTCustomScrollView+RCA11y/RCTCustomScrollView+RCA11y.mm
+@@ -4,7 +4,7 @@
+ //
+ #ifndef RCT_NEW_ARCH_ENABLED
+ 
+-#import "RCTScrollView.h"
++#import <React/RCTScrollView.h>
+ #import "RCA11ySwizzleInstanceMethod.h"
+ 
+ static void RCA11yRCTScrollViewSwizzle(void) {
+diff --git a/node_modules/react-native-a11y/ios/extensions/RCTEnhancedScrollView+RCA11y/RCTEnhancedScrollView+RCA11y.mm b/node_modules/react-native-a11y/ios/extensions/RCTEnhancedScrollView+RCA11y/RCTEnhancedScrollView+RCA11y.mm
+index 3a8c652..879beda 100644
+--- a/node_modules/react-native-a11y/ios/extensions/RCTEnhancedScrollView+RCA11y/RCTEnhancedScrollView+RCA11y.mm
++++ b/node_modules/react-native-a11y/ios/extensions/RCTEnhancedScrollView+RCA11y/RCTEnhancedScrollView+RCA11y.mm
+@@ -2,13 +2,26 @@
+ //  RCTEnhancedScrollView+RCA11y.mm
+ //  react-native-a11y
+ //
+-
++//  RN 0.88 / Expo SDK 58: RCTEnhancedScrollView.h and
++//  RCTScrollViewComponentView.h are not public React module headers when
++//  React Native Core is prebuilt. Declare minimal interfaces so swizzles
++//  still compile and attach at runtime.
++//
+ 
+ #ifdef RCT_NEW_ARCH_ENABLED
+ 
+-#import "RCTEnhancedScrollView.h"
++#import <UIKit/UIKit.h>
+ #import "RCA11ySwizzleInstanceMethod.h"
+-#import "RCTScrollViewComponentView.h"
++
++@interface RCTEnhancedScrollView : UIScrollView
++@end
++
++@interface RCTScrollViewComponentView : UIView
++@property (nonatomic, strong, readonly) UIView *containerView;
++@end
++
++@interface RCTEnhancedScrollView (RCA11y)
++@end
+ 
+ static void RCA11yEnhancedScrollViewSwizzle(void) {
+   RCA11ySwizzleInstanceMethod([RCTEnhancedScrollView class], @selector(initWithFrame:), @selector(rca11yInitWithFrame:));
+diff --git a/node_modules/react-native-a11y/ios/extensions/RCTModalHostViewComponentView+RCA11y/RCTModalHostViewComponentView+RCA11y.h b/node_modules/react-native-a11y/ios/extensions/RCTModalHostViewComponentView+RCA11y/RCTModalHostViewComponentView+RCA11y.h
+index 44995e6..37d878c 100644
+--- a/node_modules/react-native-a11y/ios/extensions/RCTModalHostViewComponentView+RCA11y/RCTModalHostViewComponentView+RCA11y.h
++++ b/node_modules/react-native-a11y/ios/extensions/RCTModalHostViewComponentView+RCA11y/RCTModalHostViewComponentView+RCA11y.h
+@@ -2,6 +2,10 @@
+ //  RCTModalHostViewComponentView+RCA11y.h
+ //  react-native-a11y
+ //
++//  RN 0.88 / Expo SDK 58: RCTModalHostViewComponentView.h is not a public
++//  React module header (prebuilds omit it). Declare a minimal interface so
++//  the category still compiles and runtime swizzles still attach.
++//
+ 
+ #ifndef RCTModalHostViewComponentView_RCA11y_h
+ #define RCTModalHostViewComponentView_RCA11y_h
+@@ -10,15 +14,24 @@
+ 
+ #ifdef RCT_NEW_ARCH_ENABLED
+ 
+-#import "RCTModalHostViewComponentView.h"
++#import <React/RCTViewComponentView.h>
+ 
++@interface RCTModalHostViewComponentView : RCTViewComponentView
++- (void)presentViewController:(UIViewController *)modalViewController
++                     animated:(BOOL)animated
++                   completion:(void (^)(void))completion;
++- (void)dismissViewController:(UIViewController *)modalViewController
++                     animated:(BOOL)animated
++                   completion:(void (^)(void))completion;
++@end
+ 
+ @interface RCTModalHostViewComponentView (RCA11y)
+ @end
+ 
+ #else
+ 
+-#import "RCTModalHostView.h"
++@interface RCTModalHostView : UIView
++@end
+ 
+ @interface RCTModalHostView (RCA11y)
+ @end
+diff --git a/node_modules/react-native-a11y/ios/extensions/RCTTextInputComponentView+RCA11y/RCTTextInputComponentView+RCA11y.mm b/node_modules/react-native-a11y/ios/extensions/RCTTextInputComponentView+RCA11y/RCTTextInputComponentView+RCA11y.mm
+index 10f6c57..7d07ec4 100644
+--- a/node_modules/react-native-a11y/ios/extensions/RCTTextInputComponentView+RCA11y/RCTTextInputComponentView+RCA11y.mm
++++ b/node_modules/react-native-a11y/ios/extensions/RCTTextInputComponentView+RCA11y/RCTTextInputComponentView+RCA11y.mm
+@@ -7,8 +7,8 @@
+ #import <React/RCTBackedTextInputViewProtocol.h>
+ #import <objc/runtime.h>
+ #import "RCA11yCustomFocusEffectProtocol.h"
+-#import "RCTUITextField.h"
+-#import "RCTUITextView.h"
++#import <React/RCTUITextField.h>
++#import <React/RCTUITextView.h>
+ 
+ @implementation RCTTextInputComponentView (RCA11y)
+ 
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yCardView/RCA11yCardView.mm b/node_modules/react-native-a11y/ios/views/RCA11yCardView/RCA11yCardView.mm
+index 930ca8a..2c77dba 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yCardView/RCA11yCardView.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yCardView/RCA11yCardView.mm
+@@ -8,8 +8,9 @@
+ #ifdef RCT_NEW_ARCH_ENABLED
+ 
+ #import <react/renderer/components/RNA11ySpec/ComponentDescriptors.h>
++#import <react/renderer/components/RNA11ySpec/Props.h>
+ #import <react/renderer/components/RNA11ySpec/RCTComponentViewHelpers.h>
+-#import "RCTFabricComponentsPlugins.h"
++#import <React/RCTFabricComponentsPlugins.h>
+ 
+ using namespace facebook::react;
+ 
+@@ -21,6 +22,16 @@ @implementation RCA11yCardView {
+   NSString *_contentFocusGroupIdentifier;
+ }
+ 
++- (instancetype)initWithFrame:(CGRect)frame {
++  if (self = [super initWithFrame:frame]) {
++#ifdef RCT_NEW_ARCH_ENABLED
++    // Fabric asserts subclasses initialize `_props` before the first update.
++    static const auto defaultProps = std::make_shared<const RCA11yCardProps>();
++    _props = defaultProps;
++#endif
++  }
++  return self;
++}
+ 
+ - (void)willRemoveSubview:(UIView *)subview {
+   [super willRemoveSubview:subview];
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yFocusGroup/RCA11yFocusGroup.mm b/node_modules/react-native-a11y/ios/views/RCA11yFocusGroup/RCA11yFocusGroup.mm
+index 8a1b202..eca2a94 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yFocusGroup/RCA11yFocusGroup.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yFocusGroup/RCA11yFocusGroup.mm
+@@ -14,7 +14,7 @@
+ #import <react/renderer/components/RNA11ySpec/Props.h>
+ #import <react/renderer/components/RNA11ySpec/RCTComponentViewHelpers.h>
+ 
+-#import "RCTFabricComponentsPlugins.h"
++#import <React/RCTFabricComponentsPlugins.h>
+ #import <React/RCTConversions.h>
+ 
+ using namespace facebook::react;
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yFocusGroup/RCA11yFocusGroupManager.mm b/node_modules/react-native-a11y/ios/views/RCA11yFocusGroup/RCA11yFocusGroupManager.mm
+index 0408011..db92dd9 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yFocusGroup/RCA11yFocusGroupManager.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yFocusGroup/RCA11yFocusGroupManager.mm
+@@ -7,7 +7,7 @@
+ #import <React/RCTUIManager.h>
+ #import "RCA11yFocusGroupManager.h"
+ #import "RCA11yFocusGroup.h"
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ 
+ @implementation RCA11yFocusGroupManager
+ 
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yLockView/RCA11yLockView.mm b/node_modules/react-native-a11y/ios/views/RCA11yLockView/RCA11yLockView.mm
+index 7576e5a..a39fc42 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yLockView/RCA11yLockView.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yLockView/RCA11yLockView.mm
+@@ -17,7 +17,7 @@
+ #import <react/renderer/components/RNA11ySpec/EventEmitters.h>
+ #import <react/renderer/components/RNA11ySpec/Props.h>
+ #import <react/renderer/components/RNA11ySpec/RCTComponentViewHelpers.h>
+-#import "RCTFabricComponentsPlugins.h"
++#import <React/RCTFabricComponentsPlugins.h>
+ 
+ using namespace facebook::react;
+ 
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yOrderView/RCA11yOrderView.mm b/node_modules/react-native-a11y/ios/views/RCA11yOrderView/RCA11yOrderView.mm
+index d1df92a..5a0a0d3 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yOrderView/RCA11yOrderView.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yOrderView/RCA11yOrderView.mm
+@@ -18,7 +18,7 @@
+ #import <react/renderer/components/RNA11ySpec/Props.h>
+ #import <react/renderer/components/RNA11ySpec/RCTComponentViewHelpers.h>
+ 
+-#import "RCTFabricComponentsPlugins.h"
++#import <React/RCTFabricComponentsPlugins.h>
+ 
+ using namespace facebook::react;
+ 
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yPaneTitleView/RCA11yPaneTitleView.mm b/node_modules/react-native-a11y/ios/views/RCA11yPaneTitleView/RCA11yPaneTitleView.mm
+index 79cfee3..1e87ff0 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yPaneTitleView/RCA11yPaneTitleView.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yPaneTitleView/RCA11yPaneTitleView.mm
+@@ -20,7 +20,7 @@
+ #import <react/renderer/components/RNA11ySpec/Props.h>
+ #import <react/renderer/components/RNA11ySpec/RCTComponentViewHelpers.h>
+ #import "RCA11yPropsHelper.h"
+-#import "RCTFabricComponentsPlugins.h"
++#import <React/RCTFabricComponentsPlugins.h>
+ 
+ using namespace facebook::react;
+ 
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yTextInputWrapper/RCA11yTextInputWrapper.mm b/node_modules/react-native-a11y/ios/views/RCA11yTextInputWrapper/RCA11yTextInputWrapper.mm
+index 62c6d5e..4c3a953 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yTextInputWrapper/RCA11yTextInputWrapper.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yTextInputWrapper/RCA11yTextInputWrapper.mm
+@@ -7,14 +7,15 @@
+ #import <UIKit/UIKit.h>
+ #import <React/RCTViewManager.h>
+ #import <React/RCTLog.h>
+-#import <React/RCTUITextView.h>
+-#import "RCTBaseTextInputView.h"
+ #import "UIViewController+RCA11y.h"
+ 
+ #ifdef RCT_NEW_ARCH_ENABLED
+ #import "RCTTextInputComponentView+RCA11y.h"
+ #import <React/RCTTextInputComponentView.h>
++#import <React/RCTUITextView.h>
++#import <React/RCTUITextField.h>
+ #else
++#import <React/RCTUITextView.h>
+ #import <React/RCTSinglelineTextInputView.h>
+ #import <React/RCTMultilineTextInputView.h>
+ #endif
+@@ -31,7 +32,7 @@
+ 
+ #import "RCA11yPropsHelper.h"
+ #import "RCTViewComponentView+RCA11y.h"
+-#import "RCTFabricComponentsPlugins.h"
++#import <React/RCTFabricComponentsPlugins.h>
+ #include "RCA11yNativeProps.h"
+ 
+ using namespace facebook::react;
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yTextInputWrapper/RCA11yTextInputWrapperManager.mm b/node_modules/react-native-a11y/ios/views/RCA11yTextInputWrapper/RCA11yTextInputWrapperManager.mm
+index 7f588ef..c8b1f8b 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yTextInputWrapper/RCA11yTextInputWrapperManager.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yTextInputWrapper/RCA11yTextInputWrapperManager.mm
+@@ -7,7 +7,7 @@
+ #import <React/RCTUIManager.h>
+ #import "RCA11yTextInputWrapperManager.h"
+ #import "RCA11yTextInputWrapper.h"
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ 
+ @implementation RCA11yTextInputWrapperManager
+ 
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yView/RCA11yView.mm b/node_modules/react-native-a11y/ios/views/RCA11yView/RCA11yView.mm
+index 9b52dbb..6352bb6 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yView/RCA11yView.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yView/RCA11yView.mm
+@@ -15,7 +15,7 @@
+ #include <string>
+ 
+ #import "RCA11yPropsHelper.h"
+-#import "RCTFabricComponentsPlugins.h"
++#import <React/RCTFabricComponentsPlugins.h>
+ #import "RCA11yFabricEventHelper.h"
+ #import <React/RCTConversions.h>
+ #import <stdlib.h>
+diff --git a/node_modules/react-native-a11y/ios/views/RCA11yView/RCA11yViewManager.mm b/node_modules/react-native-a11y/ios/views/RCA11yView/RCA11yViewManager.mm
+index f74cae1..32c1450 100644
+--- a/node_modules/react-native-a11y/ios/views/RCA11yView/RCA11yViewManager.mm
++++ b/node_modules/react-native-a11y/ios/views/RCA11yView/RCA11yViewManager.mm
+@@ -7,7 +7,7 @@
+ #import <React/RCTUIManager.h>
+ #import "RCA11yViewManager.h"
+ #import "RCA11yView.h"
+-#import "RCTBridge.h"
++#import <React/RCTBridge.h>
+ 
+ @implementation RCA11yViewManager
+ 
+diff --git a/node_modules/react-native-a11y/ios/views/base/RCA11yViewFocusRequestBase/RCA11yViewFocusRequestBase.mm b/node_modules/react-native-a11y/ios/views/base/RCA11yViewFocusRequestBase/RCA11yViewFocusRequestBase.mm
+index 4640fe3..f375492 100644
+--- a/node_modules/react-native-a11y/ios/views/base/RCA11yViewFocusRequestBase/RCA11yViewFocusRequestBase.mm
++++ b/node_modules/react-native-a11y/ios/views/base/RCA11yViewFocusRequestBase/RCA11yViewFocusRequestBase.mm
+@@ -6,7 +6,7 @@
+ #import <Foundation/Foundation.h>
+ #import "UIViewController+RCA11y.h"
+ 
+-#import "UIView+React.h"
++#import <React/UIView+React.h>
+ #import "RCA11yViewFocusRequestBase.h"
+ 
+ #ifdef RCT_NEW_ARCH_ENABLED
+diff --git a/node_modules/react-native-a11y/ios/views/base/RCA11yViewOrderGroupBase/RCA11yViewOrderGroupBase.mm b/node_modules/react-native-a11y/ios/views/base/RCA11yViewOrderGroupBase/RCA11yViewOrderGroupBase.mm
+index 4e51481..2f0a9fe 100644
+--- a/node_modules/react-native-a11y/ios/views/base/RCA11yViewOrderGroupBase/RCA11yViewOrderGroupBase.mm
++++ b/node_modules/react-native-a11y/ios/views/base/RCA11yViewOrderGroupBase/RCA11yViewOrderGroupBase.mm
+@@ -7,7 +7,7 @@
+ #import "RCA11yViewOrderGroupBase.h"
+ #import "RCA11yKbdOrderLinking.h"
+ #import "UIViewController+RCA11y.h"
+-#import "UIView+React.h"
++#import <React/UIView+React.h>
+ #import "RCA11yPropsHelper.h"
+ 
+ #ifdef RCT_NEW_ARCH_ENABLED

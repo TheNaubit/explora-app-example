@@ -41,7 +41,7 @@ Hard constraints for agents: [`AGENTS.md`](./AGENTS.md)
 
 You need an iOS Simulator and/or Android emulator (or a development build on a device) to run the app.
 
-Native modules may need a **development build** (`npx expo run:ios` / `run:android`). Expo Go alone may not be enough after you add native libraries.
+Native modules need a **local EAS build**. Expo Go alone is not enough. Full guide: [`docs/operations/eas-local-builds.md`](./docs/operations/eas-local-builds.md).
 
 ---
 
@@ -51,30 +51,30 @@ Native modules may need a **development build** (`npx expo run:ios` / `run:andro
 # 1. Install dependencies (also sets up Husky git hooks via `prepare`)
 npm install
 
-# 2. Start Metro
-npm start
-# same as: npx expo start
-```
+# 2. Build a development client (local EAS; first run can take a long time)
+npm run build:ios:dev:simulator
+# or: npm run build:android:dev:emulator
 
-Then open the app in a simulator, emulator, or development build from the Expo CLI menu.
-
-```bash
-npm run ios      # Expo → iOS
-npm run android  # Expo → Android
+# 3. Install the artifact, then start Metro for the dev client
+npm run start:dev-client
 ```
 
 ---
 
 ## Useful scripts
 
-| Script                            | Purpose                                |
-| --------------------------------- | -------------------------------------- |
-| `npm start`                       | Start Expo / Metro                     |
-| `npm run ios` / `npm run android` | Open on platform                       |
-| `npm run lint`                    | Oxlint (deny warnings)                 |
-| `npm run fix`                     | Oxlint `--fix` (deny warnings) + Oxfmt |
-| `npm run format`                  | Oxfmt only                             |
-| `npx tsc --noEmit`                | TypeScript check                       |
+| Script                              | Purpose                                |
+| ----------------------------------- | -------------------------------------- |
+| `npm start`                         | Start Expo / Metro                     |
+| `npm run start:dev-client`          | Metro for a development build          |
+| `npm run build:ios:dev:simulator`   | Local EAS iOS Simulator (dev client)   |
+| `npm run build:android:prod:device` | Local EAS release APK (assessment)     |
+| `npm run lint`                      | Oxlint (deny warnings)                 |
+| `npm run fix`                       | Oxlint `--fix` (deny warnings) + Oxfmt |
+| `npm run format`                    | Oxfmt only                             |
+| `npx tsc --noEmit`                  | TypeScript check                       |
+
+All `build:*` scripts use **local EAS**. See [`docs/operations/eas-local-builds.md`](./docs/operations/eas-local-builds.md).
 
 **Pre-commit:** Husky runs lint-staged (oxlint, oxfmt, and `tsc` when TypeScript files are staged).
 

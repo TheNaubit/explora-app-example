@@ -13,9 +13,73 @@ jest.mock("expo-network", () => ({
   })),
 }));
 
-jest.mock("expo-symbols", () => ({
-  SymbolView: "SymbolView",
+jest.mock("react-native-pulsar", () => require("react-native-pulsar/jest-mock"));
+
+jest.mock("expo-glass-effect", () => ({
+  GlassView: "GlassView",
+  isLiquidGlassAvailable: () => false,
+  isGlassEffectAPIAvailable: () => false,
 }));
+
+jest.mock("expo-blur", () => ({
+  BlurView: "BlurView",
+}));
+
+jest.mock("@expo/ui", () => {
+  const React = require("react");
+  const { View, Pressable, ScrollView, Text } = require("react-native");
+
+  function Host({ children, ...rest }) {
+    return React.createElement(View, rest, children);
+  }
+
+  function Button({ label, children, onPress, testID, ...rest }) {
+    return React.createElement(
+      Pressable,
+      { onPress, testID, accessibilityRole: "button", ...rest },
+      children ?? React.createElement(Text, null, label),
+    );
+  }
+
+  function Row({ children, ...rest }) {
+    return React.createElement(
+      View,
+      { ...rest, style: [{ flexDirection: "row", flexWrap: "wrap" }, rest.style] },
+      children,
+    );
+  }
+
+  function ExpoScrollView({ children, direction, ...rest }) {
+    return React.createElement(
+      ScrollView,
+      { horizontal: direction === "horizontal", ...rest },
+      children,
+    );
+  }
+
+  return {
+    Host,
+    Button,
+    Row,
+    ScrollView: ExpoScrollView,
+    Column: View,
+    Text,
+  };
+});
+
+jest.mock("expo-image", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  return {
+    Image: function MockExpoImage(props) {
+      return React.createElement(View, {
+        testID: props.testID,
+        accessibilityElementsHidden: props.accessibilityElementsHidden,
+        importantForAccessibility: props.importantForAccessibility,
+      });
+    },
+  };
+});
 
 jest.mock("@/i18n/polyfills", () => ({}));
 

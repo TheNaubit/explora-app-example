@@ -1,0 +1,6 @@
+{
+  "denyList": {
+    "ios": ["react-native-a11y"],
+    "android": ["react-native-a11y"]
+  }
+}

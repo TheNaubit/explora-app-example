@@ -12,12 +12,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   userInterfaceStyle: "automatic",
   platforms: ["ios", "android"],
   ios: {
+    bundleIdentifier: "com.adlerventures.explora",
     icon: "./assets/expo.icon",
     infoPlist: {
       CFBundleAllowMixedLocalizations: true,
     },
   },
   android: {
+    package: "com.adlerventures.explora",
     adaptiveIcon: {
       backgroundColor: "#E6F4FE",
       foregroundImage: "./assets/images/android-icon-foreground.png",
@@ -42,6 +44,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-asset",
     "expo-image",
     "expo-sharing",
+    [
+      "expo-build-properties",
+      {
+        // SDK 58 / RN 0.88 prebuilt Core omits private headers that
+        // react-native-a11y still imports. Build RN from source until a11y
+        // supports the public module map.
+        ios: {
+          buildReactNativeFromSource: true,
+        },
+      },
+    ],
     "@rnrepo/expo-config-plugin",
     [
       "expo-localization",
@@ -57,5 +70,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   experiments: {
     typedRoutes: true,
     reactCompiler: true,
+  },
+  extra: {
+    eas: {
+      projectId: "b87af5f4-ad99-4179-9e8b-8fa9ab193295",
+    },
   },
 });

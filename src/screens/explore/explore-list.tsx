@@ -6,6 +6,7 @@ import { ActivityCard } from "@/components/activity-card";
 import { EmptyState } from "@/components/empty-state";
 import { emptySearchIllustration } from "@/illustrations";
 import { resetDiscoveryFilters } from "@/state/discovery";
+import { ExploreHeader } from "@/screens/explore/explore-header";
 import { ExploreStatusBanner } from "@/screens/explore/explore-status-banner";
 import { exploreMessages } from "@/screens/explore/messages";
 import type { ExploreBannerState } from "@/screens/explore/types";
@@ -22,6 +23,7 @@ type ExploreListProps = {
 /**
  * Explore catalog body after Suspense resolves.
  * Shows empty state or the infinite activity list.
+ * Chips sit in the list header so the list is the first UIScrollView.
  */
 export function ExploreList({ banner, onBannerChange, refreshing, onRefresh }: ExploreListProps) {
   const { t } = useLingui();
@@ -40,14 +42,23 @@ export function ExploreList({ banner, onBannerChange, refreshing, onRefresh }: E
       />
     ) : null;
 
+  const listHeader = (
+    <>
+      <ExploreHeader />
+      {bannerNode}
+    </>
+  );
+
   if (activities.length === 0) {
     return (
       <ScrollView
         contentContainerStyle={styles.emptyScroll}
+        contentInsetAdjustmentBehavior="automatic"
+        style={{ backgroundColor: theme.colors.background, flex: 1 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         testID="explore-empty"
       >
-        {bannerNode}
+        {listHeader}
         <EmptyState
           title={t(exploreMessages.emptyTitle)}
           body={t(exploreMessages.emptyBody)}
@@ -70,7 +81,7 @@ export function ExploreList({ banner, onBannerChange, refreshing, onRefresh }: E
       onEndReached={handleEndReached}
       onEndReachedThreshold={0.4}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      ListHeaderComponent={bannerNode}
+      ListHeaderComponent={listHeader}
       ListFooterComponent={
         isFetchingNextPage ? (
           <View style={styles.footer}>
@@ -79,7 +90,8 @@ export function ExploreList({ banner, onBannerChange, refreshing, onRefresh }: E
         ) : null
       }
       contentContainerStyle={styles.listPad}
-      style={styles.list}
+      contentInsetAdjustmentBehavior="automatic"
+      style={[styles.list, { backgroundColor: theme.colors.background }]}
       testID="explore-list"
     />
   );
@@ -88,6 +100,7 @@ export function ExploreList({ banner, onBannerChange, refreshing, onRefresh }: E
 const styles = StyleSheet.create({
   emptyScroll: {
     flexGrow: 1,
+    paddingHorizontal: spacing.space24,
   },
   footer: {
     paddingVertical: spacing.space16,

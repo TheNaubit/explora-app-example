@@ -1,6 +1,6 @@
 import { DynamicColorIOS, Platform, useColorScheme } from "react-native";
 import { useLingui } from "@lingui/react/macro";
-import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { NativeTabs } from "expo-router/native-tabs";
 
 import { tabMessages } from "@/screens/tabs/messages";
 import { primitiveColors } from "@/theme";
@@ -43,7 +43,7 @@ export function AppTabs() {
         color: tabLabelColor,
       }}
     >
-      <NativeTabs.Trigger name="index" accessibilityLabel={t(tabMessages.explore)}>
+      <NativeTabs.Trigger name="(explore)" accessibilityLabel={t(tabMessages.explore)}>
         <NativeTabs.Trigger.Icon sf={{ default: "safari", selected: "safari.fill" }} md="explore" />
         <NativeTabs.Trigger.Label>{t(tabMessages.explore)}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>

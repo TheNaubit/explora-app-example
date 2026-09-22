@@ -13,13 +13,13 @@ Library setup alone is not enough. Every a11y rule in this project must serve th
 
 ## Status
 
-| Area                         | Status                                                                  |
-| ---------------------------- | ----------------------------------------------------------------------- |
-| Library + root provider      | Shipped (`react-native-a11y@0.9.0`; provider is a 0.9 passthrough shim) |
-| Screen shell + focus helpers | Shipped                                                                 |
-| Discovery list / search      | Not implemented (use rules below when built)                            |
-| Detail / favorites / refresh | Not implemented (use rules below when built)                            |
-| Scenario 8 evidence          | Not written                                                             |
+| Area                         | Status                                                                                 |
+| ---------------------------- | -------------------------------------------------------------------------------------- |
+| Library + root provider      | Shipped (`react-native-a11y@0.9.0` + SDK 58 patch; provider is a 0.9 passthrough shim) |
+| Screen shell + focus helpers | Shipped                                                                                |
+| Discovery list / search      | Shipped (Explore list, search field, category chips)                                   |
+| Detail / favorites / refresh | Partial (Saved + refresh on Explore; detail TBD)                                       |
+| Scenario 8 evidence          | Not written                                                                            |
 
 ## Stack
 
@@ -99,10 +99,25 @@ Map every change to the assessment bar.
 
 ## Notes
 
-- `A11yProvider` in 0.9.0 is a passthrough for older apps. Keep it at the root for a stable mount point.
-- Interactive wrappers (`A11yPressable`, `A11yInput`, `A11yCard`, traps) ship for future screens. Home has no controls yet.
+- List cards use seeded cover photos (`getActivityCoverImage`) with BlurHash placeholders because the catalog JSON has no image URLs. Clay icons stay for empty states and category cues.
+- `ScreenFrame` pads the top and horizontal safe areas on Saved and on web Explore. Native Explore uses the stack header for the top inset.
+- Explore uses a soft iOS 26+ scroll-edge header blur (`scrollEdgeEffects.top: soft`). Older iOS uses `headerBlurEffect`.
+- Category filters keep `A11yPressable` (labels, selected state, keyboard focus). Unselected chips use glass or system blur on iOS when available.
+- Chip row horizontal scroll uses React Native `ScrollView` so the offset does not reset.
+- Prefer `@expo/ui` only when a11y and i18n stay intact. Do not swap journey CTAs to `@expo/ui` Button while it lacks project a11y props.
 - Do not pass `focusStyle` or `containerFocusStyle`. Use `mergeFocusedStyle` or a `style` callback with `{ focused, pressed }`.
-- Native verification needs `npx expo prebuild` or `npx expo run:ios|android`. Expo Go alone is not enough.
+- Native verification needs a development or release build. Expo Go alone is not enough.
+
+### Expo SDK 58 / React Native 0.88
+
+`react-native-a11y@0.9.0` needs local patches for this SDK pair. Keep them in `patches/react-native-a11y+0.9.0.patch` and apply them with `patch-package` on install.
+
+1. Private React headers are missing from the prebuilt RN Core module map. The patch stubs or rewrites those imports.
+2. `RCA11yCardView` must set Fabric `_props` in `initWithFrame`. Without that, the first `updateProps` call aborts.
+3. iOS builds set `ios.buildReactNativeFromSource: true` in `expo-build-properties` until upstream a11y supports the public module map.
+4. Opt a11y out of RNRepo prebuilds in `rnrepo.config.json` because the native patch must compile from source.
+
+Until a rebuild includes the CardView fix, `src/components/a11y-card` may compose `A11y.View` + pressable instead of the native `A11y.Card` host. Restore native `A11y.Card` after that rebuild.
 
 ## Verification
 

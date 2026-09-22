@@ -1,0 +1,103 @@
+# When this file exists, EAS uses it instead of .gitignore.
+# Keep .gitignore rules here, then add extras that the native build does not need.
+# Docs: https://docs.expo.dev/build-reference/easignore/
+
+# --- mirrored from .gitignore ---
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# EAS local working dirs and credentials caches
+.eas/
+
+# Native (CNG — do not commit generated projects)
+.kotlin/
+/ios
+/android
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+credentials.json
+
+# Build / store artifacts
+*.apk
+*.aab
+*.ipa
+*.app/
+*.dSYM.zip
+*.dSYM/
+eas-build-*.tar.gz
+build-*.tar.gz
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+# Jest coverage
+coverage/
+*.lcov
+
+# Editor / OS scratch
+.idea/
+*.swp
+.tmp-review/
+
+# --- EAS upload only (not needed to compile the app) ---
+
+# Project wiki, agent rules, AI session notes
+/docs
+/ai-sessions
+AGENTS.md
+AI_SESSION.md
+CLAUDE.md
+DESIGN.md
+README.md
+
+# Vendored skill packs and editor tooling
+.agents/
+.claude/
+.vscode/
+.husky/
+.nvmrc
+.eslintignore
+.fingerprintignore
+.oxfmtrc.json
+commitlint.config.mjs
+lint-staged.config.mjs
+oxlint.config.mjs
+skills-lock.json
+
+# Unit / E2E tests (not part of the native binary)
+.maestro/
+**/__tests__/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+jest.config.js
+jest.setup.js
+jest.setup-after-env.js

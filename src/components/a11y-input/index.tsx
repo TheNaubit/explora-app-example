@@ -3,6 +3,7 @@ import { useState, type ComponentProps } from "react";
 import { A11y, DEFAULT_KEYBOARD_FOCUS_STYLE } from "@/a11y";
 
 type A11yInputProps = Omit<ComponentProps<typeof A11y.Input>, "focusStyle" | "containerFocusStyle">;
+type InputStyle = NonNullable<ComponentProps<typeof A11y.Input>["style"]>;
 
 /**
  * Project text field with keyboard focus support.
@@ -19,7 +20,7 @@ export function A11yInput({ style, onFocusChange, ...rest }: A11yInputProps) {
         setFocused(isFocused);
         onFocusChange?.(isFocused);
       }}
-      style={[style, focused ? DEFAULT_KEYBOARD_FOCUS_STYLE : null]}
+      style={[style, focused ? (DEFAULT_KEYBOARD_FOCUS_STYLE as InputStyle) : null]}
     />
   );
 }

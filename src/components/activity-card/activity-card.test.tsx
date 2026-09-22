@@ -20,8 +20,9 @@ describe("ActivityCard", () => {
     });
 
     expect(view.getByText(activity.title)).toBeTruthy();
-    expect(view.getByText(activity.location)).toBeTruthy();
+    expect(view.getByText(new RegExp(activity.location))).toBeTruthy();
     expect(view.getByText(activity.category)).toBeTruthy();
+    expect(view.getByTestId(`activity-card-image-${activity.id}`)).toBeTruthy();
     fireEvent.press(view.getByTestId(`activity-card-${activity.id}`));
     expect(onPress).toHaveBeenCalledTimes(1);
   });

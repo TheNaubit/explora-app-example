@@ -9,14 +9,30 @@ dist/
 web-build/
 expo-env.d.ts
 
-# Native
+# EAS local working dirs and credentials caches
+.eas/
+
+# Native (CNG — do not commit generated projects)
 .kotlin/
+/ios
+/android
 *.orig.*
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
+credentials.json
+
+# Build / store artifacts (any path; assessment delivery stays local)
+*.apk
+*.aab
+*.ipa
+*.app/
+*.dSYM.zip
+*.dSYM/
+eas-build-*.tar.gz
+build-*.tar.gz
 
 # Metro
 .metro-health-check*
@@ -31,6 +47,7 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
 
 # typescript
@@ -43,8 +60,7 @@ coverage/
 # Lingui: Metro compiles .po on import. Do not ignore the .po sources.
 # If you add `lingui compile` artifacts later, ignore only messages.js / messages.ts.
 
-example
-
-# generated native folders
-/ios
-/android
+# Editor / OS scratch
+.idea/
+*.swp
+.tmp-review/

@@ -1,4 +1,6 @@
 import { StyleSheet, Text } from "react-native";
+import { BlurView } from "expo-blur";
+import { GlassView, isGlassEffectAPIAvailable, isLiquidGlassAvailable } from "expo-glass-effect";
 
 import { A11yPressable } from "@/components/a11y-pressable";
 import { MIN_TOUCH_TARGET, PRESS_SCALE } from "@/components/constants";
@@ -11,13 +13,23 @@ type CategoryChipProps = {
   testID?: string;
 };
 
+function useGlassChrome(): boolean {
+  if (process.env.EXPO_OS !== "ios") {
+    return false;
+  }
+  return isLiquidGlassAvailable() && isGlassEffectAPIAvailable();
+}
+
 /**
- * Single category filter chip for the Explore selector row.
+ * Category filter control.
+ * Keeps `A11yPressable` for labels, roles, selected state, and keyboard focus.
+ * On iOS with Liquid Glass, unselected chips use glass chrome. Selected stays solid accent.
  */
 export function CategoryChip({ label, selected, onPress, testID }: CategoryChipProps) {
   const theme = useAppTheme();
-  const backgroundColor = selected ? theme.colors.accent : theme.colors.surfaceSecondary;
+  const glass = useGlassChrome();
   const color = selected ? theme.colors.onAccent : theme.colors.text;
+  const backgroundColor = selected ? theme.colors.accent : theme.colors.surfaceElevated;
 
   return (
     <A11yPressable
@@ -28,7 +40,7 @@ export function CategoryChip({ label, selected, onPress, testID }: CategoryChipP
       style={({ pressed }) => [
         styles.chip,
         {
-          backgroundColor,
+          backgroundColor: glass && !selected ? "transparent" : backgroundColor,
           borderColor: selected ? theme.colors.accent : theme.colors.border,
           opacity: pressed ? 0.9 : 1,
           transform: [{ scale: pressed ? PRESS_SCALE : 1 }],
@@ -36,6 +48,12 @@ export function CategoryChip({ label, selected, onPress, testID }: CategoryChipP
       ]}
       testID={testID}
     >
+      {glass && !selected ? (
+        <GlassView glassEffectStyle="regular" style={StyleSheet.absoluteFill} />
+      ) : null}
+      {!glass && !selected && process.env.EXPO_OS === "ios" ? (
+        <BlurView tint="systemChromeMaterial" intensity={80} style={StyleSheet.absoluteFill} />
+      ) : null}
       <Text style={[styles.label, { color }]}>{label}</Text>
     </A11yPressable>
   );
@@ -49,6 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginEnd: spacing.space8,
     minHeight: MIN_TOUCH_TARGET,
+    overflow: "hidden",
     paddingHorizontal: spacing.space16,
   },
   label: {

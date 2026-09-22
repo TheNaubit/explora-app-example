@@ -6,10 +6,14 @@ import { useLingui } from "@lingui/react/macro";
 import { buildActivityAccessibilityLabel } from "@/a11y";
 import { A11yCard } from "@/components/a11y-card";
 import { A11yPressable } from "@/components/a11y-pressable";
-import { ACTIVITY_CARD_MEDIA_HEIGHT, PRESS_SCALE } from "@/components/constants";
+import {
+  ACTIVITY_CARD_MEDIA_HEIGHT,
+  ACTIVITY_COVER_FADE_MS,
+  PRESS_SCALE,
+} from "@/components/constants";
 import { FavoriteButton } from "@/components/favorite-button";
 import { categoryMessages } from "@/i18n/category-labels";
-import { getCategoryIllustration } from "@/illustrations";
+import { getActivityCoverImage } from "@/data/activity-image";
 import type { Activity } from "@/schemas/activity";
 import { formatDuration } from "@/utils/format-duration";
 import { radii, spacing, typography, useAppTheme } from "@/theme";
@@ -42,8 +46,7 @@ function ActivityCardPressable({ style, ...rest }: PressableProps) {
 
 /**
  * Explore / Saved activity row.
- * The dataset has no image URLs, so the media block uses a claymorphic category icon.
- * Detail navigation is optional until the Detail screen ships.
+ * Cover photo fills the media block. BlurHash shows first, then the photo fades in.
  */
 export function ActivityCard({ activity, onPress, testID }: ActivityCardProps) {
   const { t } = useLingui();
@@ -52,6 +55,7 @@ export function ActivityCard({ activity, onPress, testID }: ActivityCardProps) {
   const duration = formatDuration(activity.durationMinutes);
   const categoryLabel = t(categoryMessages[activity.category]);
   const interactive = typeof onPress === "function";
+  const cover = getActivityCoverImage(activity);
 
   return (
     <A11yCard
@@ -74,27 +78,37 @@ export function ActivityCard({ activity, onPress, testID }: ActivityCardProps) {
       ]}
       testID={testID ?? `activity-card-${activity.id}`}
     >
-      <View style={[styles.media, { backgroundColor: theme.colors.surfaceSecondary }]}>
+      <View style={styles.media} testID={`activity-card-image-${activity.id}`}>
         <Image
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
-          source={getCategoryIllustration(activity.category)}
+          source={{ uri: cover.uri }}
+          placeholder={{ blurhash: cover.blurhash }}
+          placeholderContentFit="cover"
+          contentFit="cover"
+          transition={ACTIVITY_COVER_FADE_MS}
+          recyclingKey={activity.id}
           style={styles.mediaImage}
-          contentFit="contain"
         />
-        <Text style={[styles.category, { color: theme.colors.accent }]}>{categoryLabel}</Text>
+        <View
+          style={[styles.categoryBadge, { backgroundColor: theme.colors.surfaceElevated }]}
+          pointerEvents="none"
+        >
+          <Text style={[styles.category, { color: theme.colors.accent }]}>{categoryLabel}</Text>
+        </View>
+        <View style={styles.favorite}>
+          <FavoriteButton activity={activity} variant="overlay" />
+        </View>
       </View>
       <View style={styles.body}>
-        <View style={styles.titleRow}>
-          <Text style={[styles.title, { color: theme.colors.text }]} numberOfLines={2}>
-            {activity.title}
-          </Text>
-          <FavoriteButton activity={activity} />
-        </View>
+        <Text style={[styles.title, { color: theme.colors.text }]} numberOfLines={2}>
+          {activity.title}
+        </Text>
         <Text style={[styles.meta, { color: theme.colors.textSecondary }]} numberOfLines={1}>
           {activity.location}
+          {" · "}
+          {duration}
         </Text>
-        <Text style={[styles.meta, { color: theme.colors.textSecondary }]}>{duration}</Text>
       </View>
     </A11yCard>
   );
@@ -114,17 +128,27 @@ const styles = StyleSheet.create({
     ...typography.meta,
     textAlign: "left",
   },
+  categoryBadge: {
+    borderRadius: radii.full,
+    bottom: spacing.space12,
+    left: spacing.space12,
+    paddingHorizontal: spacing.space8,
+    paddingVertical: spacing.space4,
+    position: "absolute",
+  },
+  favorite: {
+    position: "absolute",
+    right: spacing.space8,
+    top: spacing.space8,
+  },
   media: {
-    alignItems: "center",
+    backgroundColor: "#DEDAD0",
     height: ACTIVITY_CARD_MEDIA_HEIGHT,
-    justifyContent: "center",
-    paddingBottom: spacing.space12,
-    paddingHorizontal: spacing.space16,
+    overflow: "hidden",
+    width: "100%",
   },
   mediaImage: {
-    flex: 1,
-    marginBottom: spacing.space4,
-    width: "55%",
+    ...StyleSheet.absoluteFill,
   },
   meta: {
     ...typography.caption,
@@ -133,12 +157,6 @@ const styles = StyleSheet.create({
   },
   title: {
     ...typography.headline,
-    flex: 1,
-    marginEnd: spacing.space8,
     textAlign: "left",
-  },
-  titleRow: {
-    alignItems: "flex-start",
-    flexDirection: "row",
   },
 });

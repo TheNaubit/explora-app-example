@@ -24,7 +24,7 @@ The claymorphic board is the **canonical style for friendly 3D icons and empty-s
 
 ## Target devices
 
-- Use iPhone 17 Pro as the primary design viewport: 393 × 852 points.
+- Use iPhone 18 Pro as the primary design viewport: 402 × 874 points.
 - Support Android phones with the same hierarchy and semantic tokens.
 - Respect safe areas, the Dynamic Island, and the home indicator.
 - Keep every interactive target at least 44 × 44 points.
@@ -162,11 +162,11 @@ Explora uses a friendly **3D claymorphism** icon style (Airbnb-like clay / soft 
 
 ### When to use
 
-| Use                                                       | Prefer                                        |
-| --------------------------------------------------------- | --------------------------------------------- |
-| Empty, not-found, and friendly status illustrations       | Claymorphic PNG under `assets/illustrations/` |
-| Category media placeholders when the dataset has no photo | Matching category clay icon                   |
-| Compact chrome (search, clear, favorite, tab, toolbar)    | Platform symbols (`expo-symbols`)             |
+| Use                                                       | Prefer                                                             |
+| --------------------------------------------------------- | ------------------------------------------------------------------ |
+| Empty, not-found, and friendly status illustrations       | Claymorphic PNG under `assets/illustrations/`                      |
+| Category media placeholders when the dataset has no photo | Matching category clay icon, or a seeded cover photo with BlurHash |
+| Compact chrome (search, clear, favorite, tab, toolbar)    | Platform symbols (`expo-symbols`)                                  |
 
 Do not use emoji as interface icons. Do not invent a second illustration style.
 
@@ -194,9 +194,9 @@ Do not use emoji as interface icons. Do not invent a second illustration style.
 | Component                  | Purpose                         | Anatomy                                      | States                                    | Limits and rejected use                                                                      |
 | -------------------------- | ------------------------------- | -------------------------------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `ScreenFrame`              | Define the safe screen region   | Screen announcement and content region       | Light, dark, focused return               | Use on every screen                                                                          |
-| `SearchField`              | Search activity titles          | Search symbol, input, and clear action       | Idle, focused, typed, disabled            | Do not place inside a card                                                                   |
-| `CategoryChip`             | One category filter control     | Text label and selected fill                 | Default, pressed, selected, focused       | Prefer inside `CategoryChipRow`                                                              |
-| `CategoryChipRow`          | Category filter row             | All plus catalog categories                  | Default                                   | Owns selection wiring; uses `CategoryChip`                                                   |
+| `SearchField`              | Web title search only           | Search symbol, input, and clear action       | Idle, focused, typed, disabled            | Prefer `Stack.SearchBar` on iOS and Android                                                  |
+| `CategoryChip`             | One category filter control     | Label, selected fill, glass when available   | Default, pressed, selected, focused       | `A11yPressable` required for labels and selected state                                       |
+| `CategoryChipRow`          | Category filter row             | All plus catalog categories                  | Default                                   | RN horizontal ScrollView keeps offset; owns selection wiring                                 |
 | `ActivityCard`             | Open an activity                | Photo, title, location, duration, favorite   | Default, pressed, focused, saved, offline | Do not nest another card                                                                     |
 | `FavoriteButton`           | Save or remove an activity      | Heart symbol and 44-point target             | Unsaved, saved, pressed, focused          | Give it one clear spoken action                                                              |
 | `PrimaryButton`            | Commit the main action          | Label and optional leading symbol            | Default, pressed, focused, busy, disabled | Use one primary action per screen                                                            |
@@ -270,6 +270,7 @@ Changing a mode does not silently reset favorites or generated activities.
 - Use a strong ease-out for timed entrances. Keep them below 300 milliseconds.
 - Use critically damped springs for direct manipulation.
 - Add haptics only for save, remove, successful refresh, and error outcomes.
+- Use `react-native-pulsar` only (`Presets.System.*` through `@/haptics/feedback`). Do not use `expo-haptics`.
 - Replace spatial motion with a short cross-fade when reduced motion is active.
 
 Do not animate recycled list rows on entry. Do not move content only for decoration.

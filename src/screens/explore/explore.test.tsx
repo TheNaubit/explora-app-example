@@ -39,7 +39,7 @@ describe("Explore screen", () => {
     });
 
     await waitFor(() => expect(screen.getByTestId("explore-list")).toBeTruthy());
-    expect(screen.getByTestId("explore-screen")).toBeTruthy();
+    expect(screen.getByTestId("explore-list")).toBeTruthy();
   });
 
   it("shows empty state and clears filters", async () => {

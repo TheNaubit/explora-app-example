@@ -15,8 +15,11 @@ export const MIN_TOUCH_TARGET = 44;
 /** Press scale for cards and chips (DESIGN motion). */
 export const PRESS_SCALE = 0.97;
 
-/** Activity card media block height when the dataset has no image URL. */
-export const ACTIVITY_CARD_MEDIA_HEIGHT = 140;
+/** Activity card media block height (editorial cover photo). */
+export const ACTIVITY_CARD_MEDIA_HEIGHT = 176;
+
+/** Cover photo fade-in after BlurHash (milliseconds). */
+export const ACTIVITY_COVER_FADE_MS = 420;
 
 /** Skeleton pulse duration in milliseconds. */
 export const SKELETON_PULSE_MS = 1000;

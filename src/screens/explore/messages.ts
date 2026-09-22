@@ -15,6 +15,11 @@ export const exploreMessages = {
     comment: "Visible display title on the Explore screen",
     message: "Explore",
   }),
+  searchPlaceholder: msg({
+    id: "explore.searchPlaceholder",
+    comment: "Placeholder in the native Explore header search bar",
+    message: "Search by title",
+  }),
   loadingAnnounce: msg({
     id: "explore.loadingAnnounce",
     comment: "Screen reader status while the catalog first load is pending",

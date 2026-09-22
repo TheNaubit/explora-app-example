@@ -3,6 +3,7 @@
 ## Current behavior
 
 - Users can save and remove favorites from activity cards (`FavoriteButton`).
+- Save and remove play Pulsar haptics (`hapticFavoriteSaved` / `hapticFavoriteRemoved`).
 - Each save stores the full `Activity` payload in MMKV for offline detail.
 - Favorites survive app relaunch.
 - Refresh success or failure does not clear favorites.

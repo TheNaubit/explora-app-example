@@ -3,6 +3,7 @@ import { useColorScheme } from "react-native";
 import { LocaleProvider, ThemeProvider, DarkTheme, DefaultTheme } from "expo-router";
 import { useLocales } from "expo-localization";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { A11yProvider } from "@/a11y";
 import { AppTabs } from "@/components/app-tabs";
@@ -25,16 +26,18 @@ export default function RootLayout() {
   }, [locales]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <A11yProvider>
-        <I18nBootstrap>
-          <LocaleProvider direction={direction}>
-            <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-              <AppTabs />
-            </ThemeProvider>
-          </LocaleProvider>
-        </I18nBootstrap>
-      </A11yProvider>
-    </QueryClientProvider>
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <A11yProvider>
+          <I18nBootstrap>
+            <LocaleProvider direction={direction}>
+              <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+                <AppTabs />
+              </ThemeProvider>
+            </LocaleProvider>
+          </I18nBootstrap>
+        </A11yProvider>
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 }

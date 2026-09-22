@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     ...typography.display,
     marginBottom: spacing.space8,
     marginHorizontal: spacing.space24,
-    marginTop: spacing.space8,
+    marginTop: spacing.space16,
     textAlign: "left",
   },
   hint: {

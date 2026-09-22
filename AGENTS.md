@@ -99,6 +99,7 @@ Do not forget these rules. Full text: [`docs/assessment/requirements.md`](./docs
 10. Make every screen, component, and feature i18n-compliant with Lingui in the same change. Do not defer translations.
 11. Ship loading, empty, not-found, and error UI for every data screen. Prefer skeletons over spinners when the success layout is known.
 12. Load Emil design/motion skills and the matching Expo skills before you build or change UI. Do not invent patterns from memory alone.
+13. Prefer `@expo/ui` for interactive controls on iOS and Android when it does **not** weaken accessibility or i18n. Load the `expo-ui` skill first. If `@expo/ui` cannot meet labels, roles, focus, selected state, keyboard behavior, or Lingui copy, keep `A11yPressable` / `A11yInput` / project wrappers instead.
 
 ---
 
@@ -265,18 +266,42 @@ Hard rules for every data screen and async component:
 2. Read and follow `emil-design-eng` for polish, microinteractions, and interaction detail.
 3. Use `find-animation-opportunities`, then `animate-expo` (or `animate` when the motion is not Expo-specific). Use `animation-vocabulary` when you need named motion language. Use `improve-animations` / `review-animations` when polishing or reviewing motion.
 4. Use `apple-design` for iOS-facing HIG alignment when the screen or control is platform-sensitive.
-5. Use the matching **Expo** skill for the task. Examples: `expo-project-structure`, `expo-design-system`, `expo-native-ui`, `expo-data-fetching`, `expo-dev-client`, router / modules skills as needed. Also use `react-native-best-practices` when it applies.
+5. Use the matching **Expo** skill for the task. Examples: `expo-project-structure`, `expo-design-system`, `expo-native-ui`, `expo-ui`, `expo-data-fetching`, `expo-dev-client`, router / modules skills as needed. Also use `react-native-best-practices` when it applies.
 6. For Expo, EAS, or React Native APIs, still open the SDK docs for this app’s major version (see **Expo has changed** above). Skills do not replace versioned docs.
 7. Treat skipped design/Expo skills on UI work as incomplete process. Load them before you invent patterns.
 
+### Native UI (`@expo/ui`) — prefer first, never over a11y or i18n
+
+Prefer [`@expo/ui`](https://docs.expo.dev/versions/latest/sdk/ui/) for interactive controls and native chrome on **iOS and Android**.
+
+**Hard priority:** Accessibility (`react-native-a11y` / `@/a11y` wrappers) and i18n (Lingui) always win. Do not adopt `@expo/ui` for a control if it removes or weakens labels, roles, hints, selected state, keyboard focus, announcements, or translated copy.
+
+1. Load the `expo-ui` skill before you build or change controls (buttons, chips, toggles, sliders, pickers, sheets, menus, grouped rows).
+2. Prefer **universal** imports from `@expo/ui` (`Host`, `Button`, `Row`, `Column`, `Switch`, `Slider`, `Picker`, `BottomSheet`, and similar) when those APIs still meet a11y and i18n.
+3. Wrap every `@expo/ui` tree in `Host`. Use `matchContents` when the host must size to its children.
+4. Adapt controls to the product when safe (for example a filter pill as `Button` with `variant="filled"` / `variant="outlined"`), instead of inventing a custom visual from scratch.
+5. Fall back to project wrappers (`A11yPressable`, `A11yInput`, `A11yCard`, and similar) when `@expo/ui` has no matching control, **or** when it cannot expose the required accessibility props and focus behavior.
+6. Do not reach for Reanimated sheets, community pickers, or RN `Switch` / `Picker` when `@expo/ui` covers the need **and** a11y/i18n stay intact.
+7. Treat a custom control that duplicates an available `@expo/ui` component as incomplete work **only when** the `@expo/ui` version also satisfies a11y and i18n.
+
 ## Building with EAS
 
-You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`). This assessment needs a local release APK and an iOS Simulator `.app`. EAS is optional if it helps. Docs: https://docs.expo.dev/eas/index.md
+This project builds **locally with EAS** (`eas build --local`). Do not use cloud EAS Build for routine work.
+
+1. Profiles: root [`eas.json`](./eas.json).
+2. Scripts: `npm run build:ios:…` / `npm run build:android:…` (see [`package.json`](./package.json)).
+3. Full guide: [`docs/operations/eas-local-builds.md`](./docs/operations/eas-local-builds.md).
+4. After a development build, run `npm run start:dev-client`.
+5. iOS 27 / iPhone 18 Pro: use **Expo SDK 58** (scene lifecycle is built in). Rebuild after SDK upgrades.
+
+Assessment needs a local release Android APK and an iOS Simulator `.app`. Prefer `build:android:prod:device` and `build:ios:prod:simulator`.
+
+Docs: https://docs.expo.dev/build-reference/local-builds/ and https://docs.expo.dev/eas/json/
 
 ## Rules
 
 - If `ios/` and `android/` are missing, Continuous Native Generation creates them. Do not edit them by hand. Use `app.config` and config plugins.
-- Native modules need a development build (`npx expo run:ios|android` or `eas build --profile development`). Do not rely on Expo Go alone.
+- Native modules need a development or release build (`npm run build:ios:dev:simulator` or equal). Do not rely on Expo Go alone.
 - Prefer Expo modules. Check project skills before you add dependencies.
 
 ## Linting and formatting
@@ -304,7 +329,7 @@ You may use EAS for cloud build, sign, submit, and OTA (`npx eas-cli@latest …`
 - **Lists:** Legend List · **Keyboard:** `react-native-keyboard-controller` ≥ `1.21.7`
 - **Haptics:** `react-native-pulsar` only (skill: `pulsar-haptics`). Do not use `expo-haptics`.
 - **Animation:** Reanimated v4 · **Lottie:** `lottie-react-native` (prefer dotLottie)
-- **Icons:** `expo-symbols` · **Native UI:** `expo-ui` universal + drop-ins
+- **Icons:** `expo-symbols` · **Native UI:** prefer `@expo/ui` when a11y and i18n stay intact (see Native UI section above)
 - **Fetching:** TanStack Query + mocks · Suspense + Error Boundaries for first load (ADR-012) · **Online:** `expo-network` · optional Legend State React Query plugin
 - **Validation:** Zod in `src/schemas/` + `parseWithSchema` / `safeParseWithSchema`
 - **Errors:** `ApiError` class with `errorKey` (`src/query/errors.ts`); resolve in UI with Lingui

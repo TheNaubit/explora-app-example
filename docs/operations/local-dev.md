@@ -69,6 +69,7 @@ resetReviewModeState();
 
 ## Related
 
+- [EAS local builds](./eas-local-builds.md) — profiles and `npm run build:*` scripts
 - [Architecture overview](../architecture/overview.md)
 - [Mock API](../features/mock-api.md)
 - Assessment reproducibility rules: root `AGENTS.md`

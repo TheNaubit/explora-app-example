@@ -213,6 +213,12 @@ msgstr "Saved details stay available offline."
 msgid "a11y.search.field"
 msgstr "Search activities by title"
 
+#. Placeholder in the native Explore header search bar
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.searchPlaceholder"
+msgstr "Search by title"
+
 #. Placeholder text inside the discovery search field
 #. js-lingui-explicit-id
 #: src/components/search-field/index.tsx

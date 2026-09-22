@@ -19,7 +19,8 @@ Write wiki pages in Simplified Technical English. See [meta/simplified-technical
 | Features          | Capability behavior                     | [features/index.md](./features/index.md)                                       |
 | Decisions         | ADR-style trade-offs                    | [decisions/index.md](./decisions/index.md)                                     |
 | Verification      | Scenarios, tests, evidence pointers     | [verification/index.md](./verification/index.md)                               |
-| Operations        | Local run, reset data, load modes       | [operations/local-dev.md](./operations/local-dev.md)                           |
+| Operations        | Local run, review modes                 | [operations/local-dev.md](./operations/local-dev.md)                           |
+| EAS local builds  | Profiles, npm scripts, install helpers  | [operations/eas-local-builds.md](./operations/eas-local-builds.md)             |
 | Wiki meta         | How to maintain this tree               | [meta/wiki-maintenance.md](./meta/wiki-maintenance.md)                         |
 | STE               | Simplified Technical English rules      | [meta/simplified-technical-english.md](./meta/simplified-technical-english.md) |
 

@@ -14,6 +14,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 6   | 2026-09-22     | Mocked API schemas/handlers, named constants rule, Jest suite with 100% mock/schema coverage     | [ai-sessions/session-006-mocked-api-schemas.md](./ai-sessions/session-006-mocked-api-schemas.md)                   | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
 | 7   | 2026-09-22     | Query + Legend/MMKV local-first; paginated mocks; coverage; device RTL; Suspense rules (ADR-012) | [ai-sessions/session-007-query-legend-local-first.md](./ai-sessions/session-007-query-legend-local-first.md)       | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
 | 8   | 2026-09-22     | Shared async UI + Explore; claymorphic icons; composition rules; RNTL coverage                   | [ai-sessions/session-008-shared-async-ui-explore.md](./ai-sessions/session-008-shared-async-ui-explore.md)         | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
+| 9   | 2026-09-22     | SDK 58 launch; covers + safe areas; native search; a11y-first @expo/ui rule; Pulsar + Emil       | [ai-sessions/session-009-sdk58-native-explore-polish.md](./ai-sessions/session-009-sdk58-native-explore-polish.md) | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
 
 ## How to add a later session
 
