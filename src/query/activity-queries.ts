@@ -16,7 +16,7 @@ export async function fetchActivitiesPage(
   const result = await listActivities({
     cursor: pageParam,
     search: filters.search.length > 0 ? filters.search : undefined,
-    category: filters.category,
+    categories: [...filters.categories],
   });
   return unwrapMockResult(result);
 }
@@ -44,9 +44,9 @@ export async function runRefreshCatalog(queryClient: QueryClient): Promise<GetAc
 /** Build list filters from discovery values. */
 export function toActivityListFilters(
   searchQuery: string,
-  category: ActivityCategory | null,
+  categories: readonly ActivityCategory[],
 ): ActivityListFilters {
-  return { search: searchQuery, category };
+  return { search: searchQuery, categories: [...categories].sort() as ActivityCategory[] };
 }
 
 export type ActivitiesInfiniteData = InfiniteData<ListActivitiesResponse, ActivitiesPageParam>;

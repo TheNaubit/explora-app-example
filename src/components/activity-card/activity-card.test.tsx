@@ -1,6 +1,7 @@
 import { createElement } from "react";
 import * as ReactNative from "react-native";
 import { cleanup, fireEvent, render } from "@testing-library/react-native";
+import { useSharedValue } from "react-native-reanimated";
 
 import { ActivityCard } from "@/components/activity-card";
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
@@ -40,6 +41,28 @@ describe("ActivityCard", () => {
     });
 
     expect(view.getByTestId(`activity-card-${activity.id}`)).toBeTruthy();
+  });
+
+  it("renders the optional focus blur layer", async () => {
+    const activity = SUPPLIED_ACTIVITIES[0];
+
+    function CardWithFocusBlur() {
+      const imageBlurOpacity = useSharedValue(0.82);
+
+      return (
+        <ActivityCard activity={activity} imageBlurOpacity={imageBlurOpacity} imageBlurRadius={7} />
+      );
+    }
+
+    const view = await render(createElement(CardWithFocusBlur), {
+      wrapper: createProviders(),
+    });
+
+    expect(
+      view.getByTestId(`activity-card-focus-blur-${activity.id}`, {
+        includeHiddenElements: true,
+      }),
+    ).toBeTruthy();
   });
 
   it("allows the title and metadata to wrap with large text", async () => {

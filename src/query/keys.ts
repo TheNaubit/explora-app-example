@@ -2,7 +2,7 @@ import type { ActivityCategory } from "@/schemas/activity";
 
 export type ActivityListFilters = {
   search: string;
-  category: ActivityCategory | null;
+  categories: readonly ActivityCategory[];
 };
 
 /**
@@ -13,7 +13,7 @@ export const activityKeys = {
   all: ["activities"] as const,
   lists: () => [...activityKeys.all, "list"] as const,
   list: (filters: ActivityListFilters) =>
-    [...activityKeys.lists(), filters.search, filters.category] as const,
+    [...activityKeys.lists(), filters.search, [...filters.categories].sort()] as const,
   details: () => [...activityKeys.all, "detail"] as const,
   detail: (id: string) => [...activityKeys.details(), id] as const,
 };

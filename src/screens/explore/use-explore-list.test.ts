@@ -13,6 +13,9 @@ i18n.activate("en");
 
 const mockFetchNextPage = jest.fn();
 const mockUseActivities = jest.fn();
+const defaultArgs = {
+  filters: { search: "", categories: [] },
+};
 
 jest.mock("@/hooks/use-activities", () => ({
   useActivities: () => mockUseActivities(),
@@ -70,7 +73,7 @@ describe("useExploreList", () => {
     mockFetchNextPage.mockRejectedValue(new ApiError("errors.networkTimeout"));
     const onBannerChange = jest.fn();
 
-    const { result } = await renderHook(() => useExploreList({ onBannerChange }), {
+    const { result } = await renderHook(() => useExploreList({ ...defaultArgs, onBannerChange }), {
       wrapper: createWrapper(),
     });
 
@@ -99,7 +102,7 @@ describe("useExploreList", () => {
     });
 
     const onBannerChange = jest.fn();
-    await renderHook(() => useExploreList({ onBannerChange }), {
+    await renderHook(() => useExploreList({ ...defaultArgs, onBannerChange }), {
       wrapper: createWrapper(),
     });
 
@@ -141,7 +144,7 @@ describe("useExploreList", () => {
     });
 
     const onBannerChange = jest.fn();
-    const { result } = await renderHook(() => useExploreList({ onBannerChange }), {
+    const { result } = await renderHook(() => useExploreList({ ...defaultArgs, onBannerChange }), {
       wrapper: createWrapper(),
     });
 
@@ -156,7 +159,7 @@ describe("useExploreList", () => {
     mockFetchNextPage.mockRejectedValue(new Error("boom"));
     const onBannerChange = jest.fn();
 
-    const { result } = await renderHook(() => useExploreList({ onBannerChange }), {
+    const { result } = await renderHook(() => useExploreList({ ...defaultArgs, onBannerChange }), {
       wrapper: createWrapper(),
     });
 
@@ -185,7 +188,7 @@ describe("useExploreList", () => {
     });
 
     const onBannerChange = jest.fn();
-    await renderHook(() => useExploreList({ onBannerChange }), {
+    await renderHook(() => useExploreList({ ...defaultArgs, onBannerChange }), {
       wrapper: createWrapper(),
     });
 

@@ -111,6 +111,18 @@ msgstr "Leisure"
 msgid "explore.loadingAnnounce"
 msgstr "Loading activities."
 
+#. Screen reader status when the unfiltered activity catalog is empty
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.browseEmptyAnnounce"
+msgstr "No activities are available."
+
+#. Empty state heading when the activity catalog has no items
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.browseEmptyTitle"
+msgstr "No activities available"
+
 #. Screen reader status when search or filters return no activities
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
@@ -141,6 +153,12 @@ msgstr "No saved activities."
 msgid "category.outdoors"
 msgstr "Outdoors"
 
+#. Button that refreshes an empty activity catalog
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.browseEmptyAction"
+msgstr "Refresh"
+
 #. Inline banner title when catalog refresh fails
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
@@ -152,6 +170,12 @@ msgstr "Refresh failed"
 #: src/i18n/error-keys.ts
 msgid "errors.refreshFailed"
 msgstr "Refresh failed. No new activity was added."
+
+#. Empty state body when the activity catalog has no items
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.browseEmptyBody"
+msgstr "Refresh the catalog to try again."
 
 #. Spoken label for the favorite toggle when the activity is already a favorite
 #. js-lingui-explicit-id
@@ -201,19 +225,13 @@ msgstr "Saved"
 msgid "saved.loadedAnnounce"
 msgstr "Saved activities loaded."
 
-#. Explains that saved activity details stay available offline
-#. js-lingui-explicit-id
-#: src/screens/saved/messages.ts
-msgid "saved.offlineHint"
-msgstr "Saved details stay available offline."
-
 #. Spoken label for the discovery search text field
 #. js-lingui-explicit-id
 #: src/a11y/activity-label.ts
 msgid "a11y.search.field"
 msgstr "Search activities by title"
 
-#. Placeholder in the native Explore header search bar
+#. Placeholder in the Explore header search bar
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
 msgid "explore.searchPlaceholder"

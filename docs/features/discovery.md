@@ -2,18 +2,16 @@
 
 ## Current behavior
 
-- Browse the paginated activity catalog on Explore.
-- iOS uses one custom header for the title, search field, and category filters.
-- Reanimated moves the complete iOS header panel from the normalized list scroll offset.
-- The chip row stays inside the same header surface during the collapse.
-- iOS 26 uses a soft native scroll-edge effect. Older iOS uses a low-intensity static blur.
-- Android keeps the native `Stack.SearchBar`. Its category filters stay in the list header.
-- The custom search field keeps one centered text line. Submit, filter selection, or scroll drag removes its focus.
+- Browse the complete paginated catalog on Explore.
+- Search and category filters stay on Explore.
+- iOS and web use the shared `SearchField` in the Explore header.
+- Android uses a stacked `Stack.SearchBar` in the Explore Stack header.
 - Category filters keep `A11yPressable` chips (a11y first). Chip row scroll uses RN `ScrollView` so the offset stays put.
 - Soft edge fades show when more chips exist beyond a horizontal edge. Each fade disappears at its scroll limit.
 - Each chip includes a decorative claymorphic image generated from the canonical illustration reference.
 - The selected chip keeps its glass texture and adds a light translucent accent tint.
-- Filter by category chips (All plus four catalog categories).
+- Select multiple category chips. A result can match any selected category.
+- All clears the category selection and becomes the only selected chip.
 - Combine search and filter. Filters stay in the discovery store for the session.
 - Activity cards show a seeded cover photo with a BlurHash fade-in (`getActivityCoverImage`).
 - Card text sits inside the lower cover region.
@@ -22,14 +20,15 @@
 - The card has no pale band or hard image-to-body seam.
 - Category stays as plain metadata. Category pills remain in the header filter row.
 - Native Explore uses a focused vertical card carousel through `AnimatedLegendList`.
-- Reanimated derives card scale and opacity from the list scroll offset.
+- Reanimated derives card scale, opacity, and image focus from the list scroll offset.
+- Unfocused card images use a light static blur layer. The layer fades out as each card reaches focus.
 - Fast interval snapping keeps one card focused and leaves adjacent cards visible.
 - A soft Pulsar detent plays once when a new card settles.
 - Reduced motion, web, and large text use the standard vertical list.
 - Pull to refresh runs `useRefreshCatalog` (+1 activity on success).
 - Refresh success and failure play Pulsar outcome haptics.
 - Infinite scroll loads the next page. Soft failures use an inline banner.
-- Explore and Saved use `ScreenFrame`. Explore turns off top padding on native because the stack header owns the top inset.
+- Native Explore uses its platform header and content insets. Web and Saved use `ScreenFrame`.
 
 ## Code map
 
@@ -39,8 +38,7 @@
 | Explore stack         | `src/app/(explore)/_layout.tsx`                                                    |
 | Screen                | `src/screens/explore/`                                                             |
 | Screen hooks          | `use-explore-list.ts`, `use-explore-refresh.ts`                                    |
-| Native search         | `explore-native-search.tsx` (`Stack.SearchBar`)                                    |
-| Custom iOS header     | `explore-custom-header.tsx` (`@bsky.app/expo-scroll-edge-effect`)                  |
+| Header search         | `explore-custom-header.tsx`, `explore-native-search.tsx`                           |
 | Focused card motion   | `explore-activity-card.tsx`, `explore-list.tsx`                                    |
 | Supplied data         | `src/data/activities.ts`, `assets/activities.json`                                 |
 | Seed catalog          | `src/mocks/seed-catalog.ts` (1,012 items)                                          |

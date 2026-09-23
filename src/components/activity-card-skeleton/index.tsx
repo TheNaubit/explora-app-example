@@ -11,6 +11,7 @@ import Animated, {
 
 import {
   ACTIVITY_CARD_MEDIA_HEIGHT,
+  MIN_TOUCH_TARGET,
   SKELETON_OPACITY_MAX,
   SKELETON_OPACITY_MIN,
   SKELETON_PULSE_MS,
@@ -18,14 +19,22 @@ import {
 import { radii, spacing, useAppTheme } from "@/theme";
 
 type ActivityCardSkeletonProps = {
+  bodyHeight?: number;
+  mediaHeight?: number;
   testID?: string;
+  variant?: "list" | "carousel";
 };
 
 /**
  * Card-shaped loading placeholder for the Explore list.
  * Pulses opacity unless the user prefers reduced motion.
  */
-export function ActivityCardSkeleton({ testID }: ActivityCardSkeletonProps) {
+export function ActivityCardSkeleton({
+  bodyHeight,
+  mediaHeight,
+  testID,
+  variant = "list",
+}: ActivityCardSkeletonProps) {
   const theme = useAppTheme();
   const reducedMotion = useReducedMotion();
   const opacity = useSharedValue(SKELETON_OPACITY_MAX);
@@ -51,6 +60,9 @@ export function ActivityCardSkeleton({ testID }: ActivityCardSkeletonProps) {
   }));
 
   const blockColor = theme.colors.skeleton;
+  const foregroundColor = theme.colors.surfaceElevated;
+  const resolvedMediaHeight = mediaHeight ?? ACTIVITY_CARD_MEDIA_HEIGHT;
+  const resolvedTestID = testID ?? "activity-card-skeleton";
 
   return (
     <Animated.View
@@ -58,6 +70,7 @@ export function ActivityCardSkeleton({ testID }: ActivityCardSkeletonProps) {
       importantForAccessibility="no-hide-descendants"
       style={[
         styles.card,
+        variant === "carousel" ? styles.carouselCard : null,
         {
           backgroundColor: theme.colors.surface,
           borderColor: theme.colors.border,
@@ -65,14 +78,26 @@ export function ActivityCardSkeleton({ testID }: ActivityCardSkeletonProps) {
         },
         animatedStyle,
       ]}
-      testID={testID}
+      testID={resolvedTestID}
     >
-      <View style={[styles.media, { backgroundColor: blockColor }]} />
-      <View style={styles.lines}>
-        <View style={[styles.lineWide, { backgroundColor: blockColor }]} />
+      <View
+        style={[styles.cover, { backgroundColor: blockColor }]}
+        testID={`${resolvedTestID}-cover`}
+      />
+      <View style={[styles.media, { height: resolvedMediaHeight }]}>
+        <View
+          style={[styles.favorite, { backgroundColor: foregroundColor }]}
+          testID={`${resolvedTestID}-favorite`}
+        />
+      </View>
+      <View
+        style={[styles.lines, bodyHeight === undefined ? null : { minHeight: bodyHeight }]}
+        testID={`${resolvedTestID}-copy`}
+      >
+        <View style={[styles.lineWide, { backgroundColor: foregroundColor }]} />
         <View style={styles.metaRow}>
-          <View style={[styles.lineShort, { backgroundColor: blockColor }]} />
-          <View style={[styles.lineMid, { backgroundColor: blockColor }]} />
+          <View style={[styles.lineShort, { backgroundColor: foregroundColor }]} />
+          <View style={[styles.lineMid, { backgroundColor: foregroundColor }]} />
         </View>
       </View>
     </Animated.View>
@@ -86,6 +111,20 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     marginBottom: spacing.space12,
     overflow: "hidden",
+  },
+  carouselCard: {
+    marginBottom: spacing.space4,
+  },
+  cover: {
+    ...StyleSheet.absoluteFill,
+  },
+  favorite: {
+    borderRadius: radii.full,
+    height: MIN_TOUCH_TARGET,
+    position: "absolute",
+    right: spacing.space8,
+    top: spacing.space8,
+    width: MIN_TOUCH_TARGET,
   },
   lineMid: {
     borderRadius: radii.small,
@@ -111,7 +150,7 @@ const styles = StyleSheet.create({
     gap: spacing.space8,
   },
   media: {
-    height: ACTIVITY_CARD_MEDIA_HEIGHT,
+    overflow: "hidden",
     width: "100%",
   },
 });

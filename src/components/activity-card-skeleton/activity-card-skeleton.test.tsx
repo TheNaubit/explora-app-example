@@ -14,10 +14,14 @@ afterEach(async () => {
 
 describe("ActivityCardSkeleton", () => {
   it("renders a skeleton card", async () => {
-    const view = await render(createElement(ActivityCardSkeleton, { testID: "skeleton" }), {
-      wrapper: createProviders(),
-    });
+    const view = await render(
+      createElement(ActivityCardSkeleton, { mediaHeight: 320, testID: "skeleton" }),
+      { wrapper: createProviders() },
+    );
     expect(view.getByTestId("skeleton", { includeHiddenElements: true })).toBeTruthy();
+    expect(view.getByTestId("skeleton-cover", { includeHiddenElements: true })).toBeTruthy();
+    expect(view.getByTestId("skeleton-favorite", { includeHiddenElements: true })).toBeTruthy();
+    expect(view.getByTestId("skeleton-copy", { includeHiddenElements: true })).toBeTruthy();
   });
 
   it("skips the pulse when reduced motion is preferred", async () => {

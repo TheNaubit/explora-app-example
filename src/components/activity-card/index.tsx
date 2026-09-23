@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLingui } from "@lingui/react/macro";
 import MaskedView from "@react-native-masked-view/masked-view";
+import Animated, { type SharedValue, useAnimatedStyle } from "react-native-reanimated";
 
 import { buildActivityAccessibilityLabel } from "@/a11y";
 import { A11yCard } from "@/components/a11y-card";
@@ -28,6 +29,10 @@ import { primitiveColors, radii, spacing, typography, useAppTheme } from "@/them
 
 type ActivityCardProps = {
   activity: Activity;
+  /** Optional scroll-linked opacity for the static image blur layer. */
+  imageBlurOpacity?: SharedValue<number>;
+  /** Optional static image blur used by a parent-owned focus transition. */
+  imageBlurRadius?: number;
   /** Optional Explore-only media height for the focused vertical card layout. */
   mediaHeight?: number;
   onPress?: () => void;
@@ -70,6 +75,8 @@ function ActivityCardPressable({ style, ...rest }: PressableProps) {
  */
 export function ActivityCard({
   activity,
+  imageBlurOpacity,
+  imageBlurRadius,
   mediaHeight,
   onPress,
   testID,
@@ -85,6 +92,9 @@ export function ActivityCard({
   const cover = getActivityCoverImage(activity);
   const resolvedMediaHeight = mediaHeight ?? ACTIVITY_CARD_MEDIA_HEIGHT;
   const usesLargeText = (measuredFontScale ?? 1) > ACTIVITY_CARD_LARGE_TEXT_SCALE;
+  const imageBlurStyle = useAnimatedStyle(() => ({
+    opacity: imageBlurOpacity?.get() ?? 0,
+  }));
 
   return (
     <A11yCard
@@ -122,6 +132,24 @@ export function ActivityCard({
           transition={ACTIVITY_COVER_FADE_MS}
         />
       </View>
+      {imageBlurRadius !== undefined && imageBlurOpacity !== undefined ? (
+        <Animated.View
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          pointerEvents="none"
+          style={[styles.cardImageLayer, imageBlurStyle]}
+          testID={`activity-card-focus-blur-${activity.id}`}
+        >
+          <Image
+            blurRadius={imageBlurRadius}
+            contentFit="cover"
+            priority="low"
+            recyclingKey={`${activity.id}-focus-blur`}
+            source={{ uri: cover.uri }}
+            style={styles.cardImage}
+          />
+        </Animated.View>
+      ) : null}
       <CrossPlatformMaskedView
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"

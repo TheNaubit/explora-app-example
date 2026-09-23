@@ -33,12 +33,12 @@ function validationFailure() {
 function filterCatalog(
   catalog: readonly Activity[],
   search: string | undefined,
-  category: ListActivitiesRequest["category"],
+  categories: ListActivitiesRequest["categories"],
 ): Activity[] {
   const normalizedSearch = search?.trim().toLowerCase() ?? "";
 
   return catalog.filter((activity) => {
-    if (category && activity.category !== category) {
+    if (categories && categories.length > 0 && !categories.includes(activity.category)) {
       return false;
     }
 
@@ -72,7 +72,7 @@ export async function listActivities(
 ): Promise<MockResult<ListActivitiesResponse>> {
   try {
     const parsedRequest = parseWithSchema(listActivitiesRequestSchema, request);
-    const { cursor, search, category } = parsedRequest;
+    const { cursor, search, categories } = parsedRequest;
     const limit = parsedRequest.limit ?? LIST_PAGE_SIZE;
     const isFirstPage = cursor === null;
     const { initialLoad, pageLoad } = getReviewModeState();
@@ -85,7 +85,7 @@ export async function listActivities(
 
     await delay(mode === "slow" ? MOCK_DELAY_MS.slow : MOCK_DELAY_MS.normal);
 
-    const filtered = filterCatalog(catalogStore.getCatalog(), search, category);
+    const filtered = filterCatalog(catalogStore.getCatalog(), search, categories);
     const offset = parseCursorOffset(cursor);
     const page = filtered.slice(offset, offset + limit);
     const nextOffset = offset + page.length;

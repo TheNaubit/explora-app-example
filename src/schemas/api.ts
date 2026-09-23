@@ -10,7 +10,7 @@ export const listActivitiesRequestSchema = z.object({
   cursor: z.string().nullable(),
   limit: z.number().int().positive().optional(),
   search: z.string().optional(),
-  category: activityCategorySchema.nullable().optional(),
+  categories: z.array(activityCategorySchema).optional(),
 });
 
 /**

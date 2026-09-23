@@ -5,12 +5,15 @@ import {
   useScrollEdgeEffectRef,
 } from "@bsky.app/expo-scroll-edge-effect";
 import { useLingui } from "@lingui/react/macro";
+import { useValue } from "@legendapp/state/react";
 import { type SharedValue, useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { A11y } from "@/a11y";
 import { QueryErrorBoundary } from "@/components/query-error-boundary";
 import { ScreenFrame } from "@/components/screen-frame";
+import { toActivityListFilters } from "@/query/activity-queries";
+import type { ActivityListFilters } from "@/query/keys";
 import {
   IOS_EXPLORE_HEADER_BODY_HEIGHT,
   IOS_EXPLORE_HEADER_FONT_SCALE_ALLOWANCE,
@@ -19,47 +22,46 @@ import { ExploreCustomHeader } from "@/screens/explore/explore-custom-header";
 import { ExploreList } from "@/screens/explore/explore-list";
 import { ExploreSkeleton } from "@/screens/explore/explore-skeleton";
 import { exploreMessages } from "@/screens/explore/messages";
+import type { DiscoveryMode } from "@/screens/explore/types";
 import { useExploreRefresh } from "@/screens/explore/use-explore-refresh";
+import { discovery$, getDiscoveryScrollOffset } from "@/state/discovery";
 import { useAppTheme } from "@/theme";
 
-/**
- * Discovery Explore screen.
- * iOS uses one custom scroll-linked header with a soft edge effect.
- * Android keeps its native header and renders filters in the list header.
- * Web keeps ScreenFrame and the in-screen search field.
- */
-export function Explore() {
-  if (process.env.EXPO_OS === "web") {
-    return <ExploreWeb />;
-  }
+/** Explore discovery catalog with header search and category filters. */
+export function Explore({ mode = "browse" }: { mode?: DiscoveryMode }) {
+  if (process.env.EXPO_OS === "web") return <ExploreWeb mode={mode} />;
   return (
     <ScrollEdgeEffectProvider>
-      <ExploreNative />
+      <ExploreNative mode={mode} />
     </ScrollEdgeEffectProvider>
   );
 }
 
-function ExploreWeb() {
+function ExploreWeb({ mode }: { mode: DiscoveryMode }) {
   const { t } = useLingui();
   const theme = useAppTheme();
   const refresh = useExploreRefresh();
+  const filters = useDiscoveryFilters();
+  const title = t(exploreMessages.screenTitle);
 
   return (
     <ScreenFrame
-      title={t(exploreMessages.screenTitle)}
+      title={title}
       contentStyle={{ backgroundColor: theme.colors.background }}
-      testID="explore-screen"
+      testID={mode === "search" ? "search-screen" : "explore-screen"}
     >
-      <ExploreBody refresh={refresh} />
+      <ExploreBody filters={filters} mode={mode} refresh={refresh} />
     </ScreenFrame>
   );
 }
 
-function ExploreNative() {
+function ExploreNative({ mode }: { mode: DiscoveryMode }) {
   const { t } = useLingui();
+  const theme = useAppTheme();
   const refresh = useExploreRefresh();
+  const filters = useDiscoveryFilters();
   const scrollEdgeRef = useScrollEdgeEffectRef();
-  const scrollOffset = useSharedValue(0);
+  const scrollOffset = useSharedValue(filters.search.length === 0 ? getDiscoveryScrollOffset() : 0);
   const insets = useSafeAreaInsets();
   const { fontScale: measuredFontScale } = useWindowDimensions();
   const fontScale = measuredFontScale ?? 1;
@@ -68,21 +70,29 @@ function ExploreNative() {
     IOS_EXPLORE_HEADER_BODY_HEIGHT +
     Math.max(0, fontScale - 1) * IOS_EXPLORE_HEADER_FONT_SCALE_ALLOWANCE;
   const headerHeight = usesCustomHeader ? insets.top + headerBodyHeight : 0;
+  const title = t(exploreMessages.screenTitle);
 
   return (
-    <View collapsable={false} style={styles.root} testID="explore-screen">
+    <View
+      collapsable={false}
+      style={[styles.root, { backgroundColor: theme.colors.background }]}
+      testID={mode === "search" ? "search-screen" : "explore-screen"}
+    >
       <ExploreBody
+        filters={filters}
+        mode={mode}
         refresh={refresh}
         filtersInOverlay={usesCustomHeader}
         headerHeight={headerHeight}
-        scrollRef={scrollEdgeRef}
-        scrollOffset={scrollOffset}
+        scrollRef={usesCustomHeader ? scrollEdgeRef : undefined}
+        scrollOffset={usesCustomHeader ? scrollOffset : undefined}
         skeletonFallback={
           <ExploreSkeleton
             filtersInOverlay={usesCustomHeader}
             headerHeight={headerHeight}
-            scrollRef={scrollEdgeRef}
-            scrollOffset={scrollOffset}
+            scrollRef={usesCustomHeader ? scrollEdgeRef : undefined}
+            scrollOffset={usesCustomHeader ? scrollOffset : undefined}
+            showFilters={!usesCustomHeader}
           />
         }
       />
@@ -91,16 +101,25 @@ function ExploreNative() {
           bodyHeight={headerBodyHeight}
           safeAreaTop={insets.top}
           scrollOffset={scrollOffset}
+          title={title}
         />
       ) : null}
-      <A11y.ScreenChange title={t(exploreMessages.screenTitle)} />
+      <A11y.ScreenChange title={title} />
     </View>
   );
+}
+
+function useDiscoveryFilters(): ActivityListFilters {
+  const searchQuery = useValue(discovery$.searchQuery);
+  const categories = useValue(discovery$.categories);
+  return toActivityListFilters(searchQuery, categories);
 }
 
 type RefreshState = ReturnType<typeof useExploreRefresh>;
 
 type ExploreBodyProps = {
+  filters: ActivityListFilters;
+  mode: DiscoveryMode;
   refresh: RefreshState;
   filtersInOverlay?: boolean;
   headerHeight?: number;
@@ -110,6 +129,8 @@ type ExploreBodyProps = {
 };
 
 function ExploreBody({
+  filters,
+  mode,
   refresh,
   filtersInOverlay = false,
   headerHeight = 0,
@@ -121,14 +142,14 @@ function ExploreBody({
 
   return (
     <QueryErrorBoundary onReset={handleQueryErrorReset}>
-      <Suspense fallback={skeletonFallback ?? <ExploreSkeleton />}>
+      <Suspense fallback={skeletonFallback ?? <ExploreSkeleton showFilters />}>
         <ExploreList
           banner={banner}
+          filters={filters}
+          mode={mode}
           onBannerChange={setBanner}
           refreshing={refreshing}
-          onRefresh={() => {
-            void handleRefresh();
-          }}
+          onRefresh={() => void handleRefresh()}
           filtersInOverlay={filtersInOverlay}
           headerHeight={headerHeight}
           scrollRef={scrollRef}
@@ -140,7 +161,5 @@ function ExploreBody({
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
+  root: { flex: 1 },
 });

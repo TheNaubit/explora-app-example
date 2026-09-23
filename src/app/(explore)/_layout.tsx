@@ -5,8 +5,7 @@ const IS_IOS = process.env.EXPO_OS === "ios";
 
 /**
  * Explore tab stack.
- * iOS uses one custom header so title, search, and filters share one surface.
- * Android keeps the native title and search bar.
+ * Explore keeps its custom header on iOS. Android uses the native Stack header.
  * Outer flex root helps the nested stack fill the Native Tabs scene.
  */
 export default function ExploreLayout() {

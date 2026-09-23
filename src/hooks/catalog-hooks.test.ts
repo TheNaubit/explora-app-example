@@ -17,7 +17,7 @@ import { resetCatalog } from "@/mocks/catalog-store";
 import { resetReviewModeState, setRefreshMode } from "@/mocks/review-mode";
 import { createQueryClient } from "@/query/client";
 import { clearFavorites } from "@/state/favorites";
-import { resetDiscoveryFilters, setDiscoveryCategory, setDiscoverySearch } from "@/state/discovery";
+import { resetDiscoveryFilters } from "@/state/discovery";
 
 jest.mock("@/mocks/delay", () => ({
   MOCK_DELAY_MS: { normal: 1, slow: 2 },
@@ -44,7 +44,7 @@ describe("catalog and favorites hooks", () => {
 
   it("loads paginated activities with Suspense", async () => {
     const queryClient = createQueryClient();
-    const { result } = await renderHook(() => useActivities(), {
+    const { result } = await renderHook(() => useActivities({ search: "", categories: [] }), {
       wrapper: createWrapper(queryClient),
     });
 
@@ -53,20 +53,24 @@ describe("catalog and favorites hooks", () => {
     );
   });
 
-  it("applies discovery search and category to the list query", async () => {
-    setDiscoverySearch(SUPPLIED_ACTIVITIES[0].title);
-    setDiscoveryCategory("Outdoors");
-
+  it("applies discovery search and categories to the list query", async () => {
     const queryClient = createQueryClient();
-    const { result } = await renderHook(() => useActivities(), {
-      wrapper: createWrapper(queryClient),
-    });
+    const { result } = await renderHook(
+      () =>
+        useActivities({
+          search: SUPPLIED_ACTIVITIES[0].title,
+          categories: ["Outdoors", "Culture"],
+        }),
+      {
+        wrapper: createWrapper(queryClient),
+      },
+    );
 
     await waitFor(() => expect(result.current.data.pages.length).toBeGreaterThan(0));
     expect(
       result.current.data.pages[0]?.activities.every(
         (activity) =>
-          activity.category === "Outdoors" &&
+          ["Outdoors", "Culture"].includes(activity.category) &&
           activity.title.toLowerCase().includes(SUPPLIED_ACTIVITIES[0].title.toLowerCase()),
       ),
     ).toBe(true);

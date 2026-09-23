@@ -15,18 +15,14 @@ jest.mock("expo-network", () => ({
 
 jest.mock("react-native-pulsar", () => require("react-native-pulsar/jest-mock"));
 
-jest.mock("@bsky.app/expo-scroll-edge-effect", () => {
-  const React = require("react");
-  const { View } = require("react-native");
-  return {
-    ScrollEdgeEffectProvider: ({ children }) => children,
-    ScrollEdgeEffect: ({ children, ...rest }) => React.createElement(View, rest, children),
-    useScrollEdgeEffectRef: () => () => {},
-  };
-});
-
 jest.mock("expo-blur", () => ({
   BlurView: "BlurView",
+}));
+
+jest.mock("@bsky.app/expo-scroll-edge-effect", () => ({
+  ScrollEdgeEffect: ({ children }) => children,
+  ScrollEdgeEffectProvider: ({ children }) => children,
+  useScrollEdgeEffectRef: () => ({ current: null }),
 }));
 
 jest.mock("@expo/ui", () => {
@@ -167,6 +163,9 @@ jest.mock("react-native-reanimated", () => {
         this.value = typeof next === "function" ? next(this.value) : next;
       },
     }),
+    useDerivedValue: (factory) => ({
+      get: factory,
+    }),
     useAnimatedScrollHandler: (handler) => handler,
     useAnimatedStyle: (factory) => factory(),
     useReducedMotion: jest.fn(() => false),
@@ -193,6 +192,8 @@ jest.mock("@legendapp/list/react-native", () => {
       keyboardShouldPersistTaps,
       onMomentumScrollEnd,
       onScrollBeginDrag,
+      onScrollEndDrag,
+      initialScrollOffset,
       snapToInterval,
       decelerationRate,
       disableIntervalMomentum,
@@ -206,6 +207,8 @@ jest.mock("@legendapp/list/react-native", () => {
           keyboardShouldPersistTaps,
           onMomentumScrollEnd,
           onScrollBeginDrag,
+          onScrollEndDrag,
+          initialScrollOffset,
           snapToInterval,
           decelerationRate,
           disableIntervalMomentum,

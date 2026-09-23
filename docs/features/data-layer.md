@@ -10,7 +10,7 @@ The client data layer has two owners:
 | Activity detail               | TanStack Query `useQuery`                 | `src/hooks/use-activity.ts`        |
 | Refresh (+1 on success)       | TanStack Query `useMutation`              | `src/hooks/use-refresh-catalog.ts` |
 | Favorites + offline snapshots | Legend State + MMKV                       | `src/state/favorites.ts`           |
-| Search / category filters     | Legend State (memory)                     | `src/state/discovery.ts`           |
+| Search / category filters     | Legend State arrays (memory)              | `src/state/discovery.ts`           |
 
 Mock handlers remain the only network layer. Review modes control first-page, next-page, and refresh latency or failure.
 

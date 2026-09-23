@@ -34,14 +34,14 @@ describe("activity query helpers", () => {
   });
 
   it("fetches the first catalog page", async () => {
-    const page = await fetchActivitiesPage(toActivityListFilters("", null), null);
+    const page = await fetchActivitiesPage(toActivityListFilters("", []), null);
     expect(page.activities).toHaveLength(LIST_PAGE_SIZE);
     expect(page.nextCursor).toBe(String(LIST_PAGE_SIZE));
     expect(getNextActivitiesPageParam(page)).toBe(String(LIST_PAGE_SIZE));
   });
 
   it("passes search text into the list request", async () => {
-    const page = await fetchActivitiesPage(toActivityListFilters("Walk", null), null);
+    const page = await fetchActivitiesPage(toActivityListFilters("Walk", []), null);
     expect(page.total).toBeGreaterThan(0);
     for (const activity of page.activities) {
       expect(activity.title.toLowerCase()).toContain("walk");

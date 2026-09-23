@@ -30,6 +30,13 @@ describe("Saved screen", () => {
   });
 
   it("lists saved activities", async () => {
+    const ReactNative = require("react-native");
+    const windowDimensions = jest.spyOn(ReactNative, "useWindowDimensions").mockReturnValue({
+      width: 402,
+      height: 874,
+      scale: 3,
+      fontScale: 1,
+    });
     addFavorite(SUPPLIED_ACTIVITIES[0]);
 
     await render(createElement(Saved), {
@@ -37,6 +44,16 @@ describe("Saved screen", () => {
     });
 
     await waitFor(() => expect(screen.getByTestId("saved-list")).toBeTruthy());
+    const list = screen.getByTestId("saved-list");
     expect(screen.getByText(SUPPLIED_ACTIVITIES[0].title)).toBeTruthy();
+    expect(screen.queryByText("Saved details stay available offline.")).toBeNull();
+    expect(list.props.snapToInterval).toBeGreaterThan(0);
+    expect(list.props.decelerationRate).toBe("fast");
+    expect(list.props.disableIntervalMomentum).toBe(true);
+    expect(screen.queryByTestId("search-field")).toBeNull();
+    expect(screen.queryByTestId("category-chip-row")).toBeNull();
+    expect(screen.queryByTestId("refresh-control")).toBeNull();
+    expect(screen.queryByTestId("list-end-reached")).toBeNull();
+    windowDimensions.mockRestore();
   });
 });

@@ -1,27 +1,21 @@
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
-import { useValue } from "@legendapp/state/react";
 
 import {
   fetchActivitiesPage,
   getNextActivitiesPageParam,
-  toActivityListFilters,
   type ActivitiesInfiniteData,
   type ActivitiesPageParam,
 } from "@/query/activity-queries";
 import type { ListActivitiesResponse } from "@/schemas/api";
 import { activityKeys } from "@/query/keys";
-import { discovery$ } from "@/state/discovery";
+import type { ActivityListFilters } from "@/query/keys";
 
 /**
  * Paginated discovery catalog (Suspense).
- * Search and category come from the discovery store so returning from detail keeps the same query.
+ * The caller supplies filters so Browse and Search keep independent query keys.
  * Wrap callers in Suspense and QueryErrorBoundary.
  */
-export function useActivities() {
-  const searchQuery = useValue(discovery$.searchQuery);
-  const category = useValue(discovery$.category);
-  const filters = toActivityListFilters(searchQuery, category);
-
+export function useActivities(filters: ActivityListFilters) {
   return useSuspenseInfiniteQuery<
     ListActivitiesResponse,
     Error,

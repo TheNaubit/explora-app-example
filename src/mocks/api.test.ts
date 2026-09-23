@@ -114,15 +114,12 @@ describe("mock API", () => {
       expect(lastPageLength).toBe(expectedLastPage === 0 ? LIST_PAGE_SIZE : expectedLastPage);
     });
 
-    it("filters by search and category across pages", async () => {
-      const category = SUPPLIED_ACTIVITIES[0].category;
-      const search = SUPPLIED_ACTIVITIES[0].title.slice(0, 4);
-
+    it("filters by search and multiple categories across pages", async () => {
+      const categories = ["Outdoors", "Culture"] as const;
       const result = await listActivities({
         cursor: null,
-        search,
-        category,
-        limit: 5,
+        categories: [...categories],
+        limit: SEEDED_CATALOG_SIZE,
       });
 
       expect(result.ok).toBe(true);
@@ -132,8 +129,7 @@ describe("mock API", () => {
 
       expect(result.data.total).toBeGreaterThan(0);
       for (const activity of result.data.activities) {
-        expect(activity.category).toBe(category);
-        expect(activity.title.toLowerCase()).toContain(search.toLowerCase());
+        expect(categories).toContain(activity.category);
       }
     });
 

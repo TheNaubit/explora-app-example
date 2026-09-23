@@ -45,6 +45,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-asset",
     "expo-image",
     "expo-sharing",
+    "expo-web-browser",
     [
       "expo-build-properties",
       {

@@ -4,12 +4,12 @@ import type { ActivityCategory } from "@/schemas/activity";
 
 export type DiscoveryState = {
   searchQuery: string;
-  category: ActivityCategory | null;
+  categories: ActivityCategory[];
 };
 
 const initialDiscoveryState: DiscoveryState = {
   searchQuery: "",
-  category: null,
+  categories: [],
 };
 
 /**
@@ -18,14 +18,36 @@ const initialDiscoveryState: DiscoveryState = {
  */
 export const discovery$ = observable<DiscoveryState>({ ...initialDiscoveryState });
 
+const discoveryScrollOffset$ = observable(0);
+
 /** Set the title search query used by the catalog list query key. */
 export function setDiscoverySearch(searchQuery: string): void {
   discovery$.searchQuery.set(searchQuery);
 }
 
-/** Set the category filter, or null for all categories. */
-export function setDiscoveryCategory(category: ActivityCategory | null): void {
-  discovery$.category.set(category);
+/** Store the shared catalog position used before a search query starts. */
+export function setDiscoveryScrollOffset(scrollOffset: number): void {
+  discoveryScrollOffset$.set(Math.max(0, scrollOffset));
+}
+
+/** Get the shared catalog position without subscribing a route to scroll changes. */
+export function getDiscoveryScrollOffset(): number {
+  return discoveryScrollOffset$.peek();
+}
+
+/** Toggle one category. An empty array represents the exclusive All selection. */
+export function toggleDiscoveryCategory(category: ActivityCategory | null): void {
+  if (category === null) {
+    discovery$.categories.set([]);
+    return;
+  }
+
+  const selected = discovery$.categories.peek();
+  discovery$.categories.set(
+    selected.includes(category)
+      ? selected.filter((selectedCategory) => selectedCategory !== category)
+      : [...selected, category],
+  );
 }
 
 /** Reset search and filter to empty defaults. */
@@ -37,6 +59,6 @@ export function resetDiscoveryFilters(): void {
 export function getDiscoveryFilters(): DiscoveryState {
   return {
     searchQuery: discovery$.searchQuery.get(),
-    category: discovery$.category.get(),
+    categories: discovery$.categories.get(),
   };
 }

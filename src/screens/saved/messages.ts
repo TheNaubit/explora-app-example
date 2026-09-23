@@ -11,11 +11,6 @@ export const savedMessages = {
     comment: "Visible display title on the Saved screen",
     message: "Saved",
   }),
-  offlineHint: msg({
-    id: "saved.offlineHint",
-    comment: "Explains that saved activity details stay available offline",
-    message: "Saved details stay available offline.",
-  }),
   emptyTitle: msg({
     id: "saved.emptyTitle",
     comment: "Title when the user has no favorite activities",

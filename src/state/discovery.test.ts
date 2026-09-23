@@ -1,8 +1,10 @@
 import {
+  getDiscoveryScrollOffset,
   getDiscoveryFilters,
   resetDiscoveryFilters,
-  setDiscoveryCategory,
+  setDiscoveryScrollOffset,
   setDiscoverySearch,
+  toggleDiscoveryCategory,
 } from "@/state/discovery";
 
 describe("discovery store", () => {
@@ -10,19 +12,44 @@ describe("discovery store", () => {
     resetDiscoveryFilters();
   });
 
-  it("stores search and category for the list query key", () => {
+  it("stores search and multiple categories for the list query key", () => {
     setDiscoverySearch("museum");
-    setDiscoveryCategory("Culture");
+    toggleDiscoveryCategory("Culture");
+    toggleDiscoveryCategory("Outdoors");
 
     expect(getDiscoveryFilters()).toEqual({
       searchQuery: "museum",
-      category: "Culture",
+      categories: ["Culture", "Outdoors"],
     });
 
     resetDiscoveryFilters();
     expect(getDiscoveryFilters()).toEqual({
       searchQuery: "",
-      category: null,
+      categories: [],
     });
+  });
+
+  it("returns to All when the final selected category is removed", () => {
+    toggleDiscoveryCategory("Culture");
+    toggleDiscoveryCategory("Culture");
+
+    expect(getDiscoveryFilters().categories).toEqual([]);
+  });
+
+  it("clears selected categories when All is selected", () => {
+    toggleDiscoveryCategory("Culture");
+    toggleDiscoveryCategory("Outdoors");
+    toggleDiscoveryCategory(null);
+
+    expect(getDiscoveryFilters().categories).toEqual([]);
+  });
+
+  it("shares a non-negative catalog scroll offset between discovery routes", () => {
+    setDiscoveryScrollOffset(248);
+
+    expect(getDiscoveryScrollOffset()).toBe(248);
+
+    setDiscoveryScrollOffset(-24);
+    expect(getDiscoveryScrollOffset()).toBe(0);
   });
 });

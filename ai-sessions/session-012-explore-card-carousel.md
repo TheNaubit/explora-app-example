@@ -58,3 +58,39 @@ The iOS Simulator cannot verify physical haptic quality. A physical device check
 Jest reports an existing open-handle warning after all tests pass.
 
 Expo Doctor passed 19 of 20 checks. It reports 12 existing Expo patch-version mismatches.
+
+## Follow-up: focused image blur
+
+The user asked for unfocused card images to stay slightly blurred during vertical scrolling.
+The blur must clear as each card reaches the focus point.
+
+- Added one static full-cover blur layer to carousel cards.
+- Derived its opacity from the existing Reanimated scroll offset.
+- Kept the focused card image sharp.
+- Crossfaded layer opacity instead of animating blur radius each frame.
+- Kept the standard list for reduced motion, web, and large text.
+- Updated the design contract and discovery documentation.
+- Added focused coverage for the optional blur layer.
+
+Oxlint passed with warnings denied.
+The focused Activity Card suite passed all four tests.
+The current full TypeScript and Explore checks contain unrelated category-filter errors from concurrent worktree changes.
+Device motion review remains necessary.
+
+## Follow-up: shared Saved presentation
+
+The user asked Saved to match Explore without search or category filters.
+
+- Extracted the focused activity carousel as a shared component.
+- Extracted the collapsing iOS header as a shared component.
+- Used both components on Explore and Saved.
+- Kept the Saved empty state.
+- Removed the Saved subtitle after user review.
+- Derived Saved header travel from the compact title height.
+- Kept later saved cards below the compact title after snapping.
+- Kept search, category filters, refresh, and pagination out of Saved.
+- Added Saved screen assertions for carousel snapping and excluded discovery controls.
+
+All 34 Jest suites passed. All 106 tests passed.
+Oxlint, Oxfmt, TypeScript, and the diff check passed.
+The iOS 27 Simulator showed the Saved header and saved card correctly.

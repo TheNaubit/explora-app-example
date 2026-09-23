@@ -5,8 +5,9 @@
 - Root layout wraps Query, a11y, i18n, SafeAreaProvider, and Expo Router `ThemeProvider`.
 - Primary navigation uses Expo Router **NativeTabs** (`expo-router/native-tabs` on SDK 58).
 - Tabs: **Explore** (`/(explore)`) and **Saved** (`/saved`).
-- Explore sits in a nested **Stack** so it can use the native header search bar and large title.
-- The Explore stack sets `contentStyle: { flex: 1 }` and a transparent iOS header. The catalog list sizes from the window and pads by header height under Native Tabs.
+- Search stays on the Explore route and does not select another tab.
+- iOS and web show the search field in the Explore header.
+- Android registers a stacked `Stack.SearchBar` in the Explore Stack.
 - iOS 26+: system Liquid Glass tab bar, `minimizeBehavior="onScrollDown"`.
 - Android: Material bottom navigation with `tabBarRespectsIMEInsets`.
 - Tint and label colors use `DynamicColorIOS` on iOS so Liquid Glass can adapt.

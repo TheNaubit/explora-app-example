@@ -17,7 +17,7 @@ export const exploreMessages = {
   }),
   searchPlaceholder: msg({
     id: "explore.searchPlaceholder",
-    comment: "Placeholder in the native Explore header search bar",
+    comment: "Placeholder in the Explore header search bar",
     message: "Search by title",
   }),
   loadingAnnounce: msg({
@@ -49,6 +49,26 @@ export const exploreMessages = {
     id: "explore.emptyAction",
     comment: "Empty state action that clears search and category filters",
     message: "Clear filters",
+  }),
+  browseEmptyAnnounce: msg({
+    id: "explore.browseEmptyAnnounce",
+    comment: "Screen reader status when the unfiltered activity catalog is empty",
+    message: "No activities are available.",
+  }),
+  browseEmptyTitle: msg({
+    id: "explore.browseEmptyTitle",
+    comment: "Empty state heading when the activity catalog has no items",
+    message: "No activities available",
+  }),
+  browseEmptyBody: msg({
+    id: "explore.browseEmptyBody",
+    comment: "Empty state body when the activity catalog has no items",
+    message: "Refresh the catalog to try again.",
+  }),
+  browseEmptyAction: msg({
+    id: "explore.browseEmptyAction",
+    comment: "Button that refreshes an empty activity catalog",
+    message: "Refresh",
   }),
   refreshFailedTitle: msg({
     id: "explore.refreshFailedTitle",

@@ -4,11 +4,13 @@ import { useLingui } from "@lingui/react/macro";
 import { announceStatus } from "@/a11y";
 import { useActivities } from "@/hooks/use-activities";
 import { isApiError } from "@/query/errors";
+import type { ActivityListFilters } from "@/query/keys";
 import { flattenActivityPages } from "@/screens/explore/flatten-activity-pages";
 import { exploreMessages } from "@/screens/explore/messages";
 import type { ExploreBannerState } from "@/screens/explore/types";
 
 type UseExploreListArgs = {
+  filters: ActivityListFilters;
   onBannerChange: (banner: ExploreBannerState) => void;
 };
 
@@ -16,7 +18,7 @@ type UseExploreListArgs = {
  * Suspense catalog list for Explore.
  * Flattens pages, announces empty or loaded, and loads the next page on scroll.
  */
-export function useExploreList({ onBannerChange }: UseExploreListArgs) {
+export function useExploreList({ filters, onBannerChange }: UseExploreListArgs) {
   const { t } = useLingui();
   const {
     data,
@@ -26,16 +28,22 @@ export function useExploreList({ onBannerChange }: UseExploreListArgs) {
     isFetchNextPageError,
     failureReason,
     fetchStatus,
-  } = useActivities();
+  } = useActivities(filters);
   const activities = flattenActivityPages(data);
 
   useEffect(() => {
     if (activities.length === 0) {
-      announceStatus(t(exploreMessages.emptyAnnounce));
+      announceStatus(
+        t(
+          filters.search.length > 0 || filters.categories.length > 0
+            ? exploreMessages.emptyAnnounce
+            : exploreMessages.browseEmptyAnnounce,
+        ),
+      );
       return;
     }
     announceStatus(t(exploreMessages.loadedAnnounce));
-  }, [activities.length, t]);
+  }, [activities.length, filters.categories.length, filters.search.length, t]);
 
   useEffect(() => {
     if (!isFetchNextPageError) {

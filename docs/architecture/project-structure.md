@@ -14,7 +14,7 @@ Based on [Expo folder-structure best practices](https://expo.dev/blog/expo-app-f
 │   ├── app/                 # Expo Router routes only (thin)
 │   │   ├── _layout.tsx              # providers + NativeTabs
 │   │   ├── (explore)/
-│   │   │   ├── _layout.tsx          # Stack (native search + large title)
+│   │   │   ├── _layout.tsx          # Explore Stack
 │   │   │   └── index.tsx            # Explore tab route
 │   │   └── saved.tsx                # Saved tab
 │   ├── screens/             # screen bodies + screen-local UI/hooks

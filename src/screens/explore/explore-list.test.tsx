@@ -12,12 +12,21 @@ import {
   EXPLORE_CARD_HAPTIC_AMPLITUDE,
   EXPLORE_CARD_HAPTIC_FREQUENCY,
 } from "@/screens/explore/constants";
+import { getDiscoveryScrollOffset, setDiscoveryScrollOffset } from "@/state/discovery";
 
 i18n.load("en", {});
 i18n.activate("en");
 
 const mockHandleEndReached = jest.fn();
 const mockUseExploreList = jest.fn();
+const defaultProps = {
+  banner: null,
+  filters: { search: "", categories: [] },
+  mode: "browse" as const,
+  onBannerChange: jest.fn(),
+  refreshing: false,
+  onRefresh: jest.fn(),
+};
 
 jest.mock("@/screens/explore/use-explore-list", () => ({
   useExploreList: (...args: unknown[]) => mockUseExploreList(...args),
@@ -28,15 +37,6 @@ jest.mock("@/components/activity-card", () => {
   const { Text } = require("react-native");
   return {
     ActivityCard: ({ activity }: { activity: { title: string } }) =>
-      React.createElement(Text, null, activity.title),
-  };
-});
-
-jest.mock("@/screens/explore/explore-activity-card", () => {
-  const React = require("react");
-  const { Text } = require("react-native");
-  return {
-    ExploreActivityCard: ({ activity }: { activity: { title: string } }) =>
       React.createElement(Text, null, activity.title),
   };
 });
@@ -58,6 +58,7 @@ describe("ExploreList", () => {
   });
 
   beforeEach(() => {
+    setDiscoveryScrollOffset(0);
     mockHandleEndReached.mockReset();
     mockUseExploreList.mockReset();
     mockUseExploreList.mockReturnValue({
@@ -65,6 +66,46 @@ describe("ExploreList", () => {
       isFetchingNextPage: false,
       handleEndReached: mockHandleEndReached,
     });
+  });
+
+  it("restores and updates the shared catalog position before search starts", async () => {
+    setDiscoveryScrollOffset(248);
+
+    await render(
+      createElement(ExploreList, {
+        ...defaultProps,
+      }),
+      { wrapper: createWrapper() },
+    );
+
+    const list = screen.getByTestId("explore-list");
+    expect(list.props.initialScrollOffset).toBe(248);
+
+    fireEvent(list, "scrollEndDrag", {
+      nativeEvent: { contentOffset: { y: 412 } },
+    });
+    expect(getDiscoveryScrollOffset()).toBe(412);
+  });
+
+  it("keeps the shared catalog position after search starts", async () => {
+    setDiscoveryScrollOffset(248);
+
+    await render(
+      createElement(ExploreList, {
+        ...defaultProps,
+        filters: { search: "museum", categories: [] },
+        mode: "search",
+      }),
+      { wrapper: createWrapper() },
+    );
+
+    const list = screen.getByTestId("search-list");
+    expect(list.props.initialScrollOffset).toBeUndefined();
+
+    fireEvent(list, "scrollEndDrag", {
+      nativeEvent: { contentOffset: { y: 412 } },
+    });
+    expect(getDiscoveryScrollOffset()).toBe(248);
   });
 
   it("shows a next-page footer spinner while fetching", async () => {
@@ -77,10 +118,7 @@ describe("ExploreList", () => {
 
     await render(
       createElement(ExploreList, {
-        banner: null,
-        onBannerChange: jest.fn(),
-        refreshing: false,
-        onRefresh: jest.fn(),
+        ...defaultProps,
       }),
       { wrapper: createWrapper() },
     );
@@ -99,9 +137,9 @@ describe("ExploreList", () => {
 
     await render(
       createElement(ExploreList, {
+        ...defaultProps,
         banner: { kind: "nextPage", errorKey: "errors.unknown" },
         onBannerChange,
-        refreshing: false,
         onRefresh,
       }),
       { wrapper: createWrapper() },
@@ -116,10 +154,7 @@ describe("ExploreList", () => {
   it("invokes end reached from the list footer control", async () => {
     await render(
       createElement(ExploreList, {
-        banner: null,
-        onBannerChange: jest.fn(),
-        refreshing: false,
-        onRefresh: jest.fn(),
+        ...defaultProps,
       }),
       { wrapper: createWrapper() },
     );
@@ -140,10 +175,7 @@ describe("ExploreList", () => {
 
     await render(
       createElement(ExploreList, {
-        banner: null,
-        onBannerChange: jest.fn(),
-        refreshing: false,
-        onRefresh: jest.fn(),
+        ...defaultProps,
       }),
       { wrapper: createWrapper() },
     );
@@ -181,10 +213,7 @@ describe("ExploreList", () => {
 
     await render(
       createElement(ExploreList, {
-        banner: null,
-        onBannerChange: jest.fn(),
-        refreshing: false,
-        onRefresh: jest.fn(),
+        ...defaultProps,
       }),
       { wrapper: createWrapper() },
     );

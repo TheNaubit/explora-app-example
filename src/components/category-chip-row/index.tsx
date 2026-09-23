@@ -27,8 +27,8 @@ const LEADING_EDGE_GRADIENT_LOCATIONS = [0, 0.35, 1] as const;
 const TRAILING_EDGE_GRADIENT_LOCATIONS = [0, 0.65, 1] as const;
 
 type CategoryChipRowProps = {
-  selected: ActivityCategory | null;
-  onSelect: (category: ActivityCategory | null) => void;
+  selectedCategories: readonly ActivityCategory[];
+  onToggle: (category: ActivityCategory | null) => void;
 };
 
 /**
@@ -36,7 +36,7 @@ type CategoryChipRowProps = {
  * RN horizontal ScrollView keeps scroll offset across list header updates.
  * Chips use `A11yPressable` so labels, selected state, and keyboard focus stay correct.
  */
-export function CategoryChipRow({ selected, onSelect }: CategoryChipRowProps) {
+export function CategoryChipRow({ selectedCategories, onToggle }: CategoryChipRowProps) {
   const { t } = useLingui();
   const theme = useAppTheme();
   const scrollOffset = useSharedValue(0);
@@ -97,7 +97,7 @@ export function CategoryChipRow({ selected, onSelect }: CategoryChipRowProps) {
 
   function handleSelect(category: ActivityCategory | null) {
     Keyboard.dismiss();
-    onSelect(category);
+    onToggle(category);
   }
 
   return (
@@ -118,7 +118,7 @@ export function CategoryChipRow({ selected, onSelect }: CategoryChipRowProps) {
         <CategoryChip
           icon={getCategoryChipIllustration(null)}
           label={t(categoryChipRowMessages.all)}
-          selected={selected === null}
+          selected={selectedCategories.length === 0}
           onPress={() => handleSelect(null)}
           testID="category-chip-all"
         />
@@ -127,7 +127,7 @@ export function CategoryChipRow({ selected, onSelect }: CategoryChipRowProps) {
             key={category}
             icon={getCategoryChipIllustration(category)}
             label={t(categoryChipRowMessages[category])}
-            selected={selected === category}
+            selected={selectedCategories.includes(category)}
             onPress={() => handleSelect(category)}
             testID={`category-chip-${category.toLowerCase()}`}
           />
