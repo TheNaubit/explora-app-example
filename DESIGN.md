@@ -176,6 +176,22 @@ Explora uses a friendly **3D claymorphism** icon style (Airbnb-like clay / soft 
 
 Do not use emoji as interface icons. Do not invent a second illustration style.
 
+### App icon
+
+The app icon uses one trail pin mark. The pin combines a location marker, a winding path, and a discovery spark.
+
+- Use forest green for the pin.
+- Use warm cream for the path and default background.
+- Use soft mustard for the discovery spark.
+- Keep the silhouette clear at small sizes.
+- Keep the material matte. Do not add glossy glass or chrome effects.
+
+The editable iOS source is [`assets/expo.icon`](./assets/expo.icon). It contains two Icon Composer groups.
+The first group contains the trail and spark. The second group contains the clay pin and shadow.
+
+The cross-platform vector sources are in [`assets/app-icon`](./assets/app-icon). Android uses separate foreground, background, and monochrome images.
+The initial generated concept is stored at [`docs/design/references/explora-app-icon-concept.png`](./docs/design/references/explora-app-icon-concept.png).
+
 ### How to generate new assets
 
 1. Read this section and open the style reference board.

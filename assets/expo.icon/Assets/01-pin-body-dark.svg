@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="forestClayDark" x1="320" y1="164" x2="704" y2="884" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#70B58D"/>
+      <stop offset="0.42" stop-color="#4F9F75"/>
+      <stop offset="0.78" stop-color="#2F6D50"/>
+      <stop offset="1" stop-color="#245940"/>
+    </linearGradient>
+    <radialGradient id="darkBloom" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(392 324) rotate(58) scale(404 374)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.18"/>
+      <stop offset="0.64" stop-color="#FFFFFF" stop-opacity="0.03"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <path d="M512 142C326 142 190 278 190 459C190 646 378 827 481 919C498 934 526 934 543 919C646 827 834 646 834 459C834 278 698 142 512 142Z" fill="url(#forestClayDark)"/>
+  <path d="M512 142C326 142 190 278 190 459C190 646 378 827 481 919C498 934 526 934 543 919C646 827 834 646 834 459C834 278 698 142 512 142Z" fill="url(#darkBloom)"/>
+</svg>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <radialGradient id="background" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(364 190) rotate(54) scale(1020)">
+      <stop stop-color="#FFFDF8"/>
+      <stop offset="1" stop-color="#F7F4EC"/>
+    </radialGradient>
+    <linearGradient id="forestClay" x1="328" y1="176" x2="689" y2="865" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F9F75"/><stop offset="0.34" stop-color="#367E5D"/><stop offset="0.72" stop-color="#2F6D50"/><stop offset="1" stop-color="#245940"/>
+    </linearGradient>
+    <radialGradient id="bodyBloom" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(406 336) rotate(59) scale(384 354)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.14"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="trail" x1="474" y1="330" x2="541" y2="836" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF8"/><stop offset="1" stop-color="#EEEAE1"/>
+    </linearGradient>
+    <linearGradient id="mustard" x1="701" y1="225" x2="779" y2="339" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0C978"/><stop offset="1" stop-color="#D99B31"/>
+    </linearGradient>
+    <radialGradient id="ground" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 878) rotate(90) scale(72 262)">
+      <stop stop-color="#101411" stop-opacity="0.20"/><stop offset="1" stop-color="#101411" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#background)"/>
+  <ellipse cx="512" cy="878" rx="262" ry="72" fill="url(#ground)"/>
+  <path d="M512 142C326 142 190 278 190 459C190 646 378 827 481 919C498 934 526 934 543 919C646 827 834 646 834 459C834 278 698 142 512 142Z" fill="url(#forestClay)"/>
+  <path d="M512 142C326 142 190 278 190 459C190 646 378 827 481 919C498 934 526 934 543 919C646 827 834 646 834 459C834 278 698 142 512 142Z" fill="url(#bodyBloom)"/>
+  <path d="M642 320C575 332 452 356 412 414C377 465 401 516 474 544C557 575 597 603 586 653C575 704 506 753 448 793L510 867C602 803 674 738 686 663C700 574 644 513 545 475C495 456 488 440 513 418C542 393 594 381 658 365L642 320Z" fill="#07140C" fill-opacity="0.10" transform="translate(0 10)"/>
+  <path d="M642 320C575 332 452 356 412 414C377 465 401 516 474 544C557 575 597 603 586 653C575 704 506 753 448 793L510 867C602 803 674 738 686 663C700 574 644 513 545 475C495 456 488 440 513 418C542 393 594 381 658 365L642 320Z" fill="url(#trail)"/>
+  <path d="M742 203C752 249 767 264 813 274C767 284 752 299 742 345C732 299 717 284 671 274C717 264 732 249 742 203Z" fill="url(#mustard)"/>
+</svg>

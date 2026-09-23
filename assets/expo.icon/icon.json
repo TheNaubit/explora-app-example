@@ -1,35 +1,91 @@
 {
-  "fill": {
-    "automatic-gradient": "extended-srgb:0.00000,0.47843,1.00000,1.00000"
-  },
-  "groups": [
+  "color-space-for-untagged-svg-colors": "display-p3",
+  "fill-specializations": [
     {
-      "layers": [
-        {
-          "image-name": "expo-symbol 2.svg",
-          "name": "expo-symbol 2",
-          "position": {
-            "scale": 1,
-            "translation-in-points": [1.1008400065293245e-5, -16.046875]
-          }
-        },
-        {
-          "image-name": "grid.png",
-          "name": "grid"
+      "value": {
+        "linear-gradient": [
+          "display-p3:1.00000,0.99216,0.97255,1.00000",
+          "display-p3:0.96863,0.95686,0.92549,1.00000"
+        ],
+        "orientation": {
+          "start": { "x": 0.36, "y": 0.18 },
+          "stop": { "x": 0.78, "y": 0.92 }
         }
-      ],
-      "shadow": {
-        "kind": "neutral",
-        "opacity": 0.5
-      },
-      "translucency": {
-        "enabled": true,
-        "value": 0.5
+      }
+    },
+    {
+      "appearance": "dark",
+      "value": {
+        "linear-gradient": [
+          "display-p3:0.09020,0.10980,0.09412,1.00000",
+          "display-p3:0.03922,0.07843,0.05490,1.00000"
+        ],
+        "orientation": {
+          "start": { "x": 0, "y": 0 },
+          "stop": { "x": 1, "y": 1 }
+        }
       }
     }
   ],
-  "supported-platforms": {
-    "circles": ["watchOS"],
-    "squares": "shared"
-  }
+  "groups": [
+    {
+      "blur-material": null,
+      "layers": [
+        {
+          "glass": false,
+          "image-name": "02-trail-and-spark.svg",
+          "name": "Trail and Discovery Spark",
+          "position": { "scale": 1, "translation-in-points": [0, 0] }
+        }
+      ],
+      "lighting": "combined",
+      "name": "Trail Details",
+      "shadow": { "kind": "neutral", "opacity": 0.08 },
+      "specular": false,
+      "translucency": { "enabled": false, "value": 0 }
+    },
+    {
+      "blur-material": null,
+      "layers": [
+        {
+          "glass": false,
+          "image-name": "01-pin-highlight.svg",
+          "name": "Soft Clay Highlight",
+          "position": { "scale": 1, "translation-in-points": [0, 0] }
+        },
+        {
+          "glass": false,
+          "image-name": "01-pin-body-dark.svg",
+          "name": "Dark Appearance Pin",
+          "opacity-specializations": [
+            { "value": 0 },
+            { "appearance": "dark", "idiom": "iOS", "value": 1 }
+          ],
+          "position": { "scale": 1, "translation-in-points": [0, 0] }
+        },
+        {
+          "glass": false,
+          "image-name": "01-pin-body.svg",
+          "name": "Forest Pin",
+          "opacity-specializations": [
+            { "value": 1 },
+            { "appearance": "dark", "idiom": "iOS", "value": 0 }
+          ],
+          "position": { "scale": 1, "translation-in-points": [0, 0] }
+        },
+        {
+          "glass": false,
+          "image-name": "00-pin-shadow.svg",
+          "name": "Grounding Shadow",
+          "position": { "scale": 1, "translation-in-points": [0, 0] }
+        }
+      ],
+      "lighting": "individual",
+      "name": "Clay Trail Pin",
+      "shadow": { "kind": "neutral", "opacity": 0.12 },
+      "specular": false,
+      "translucency": { "enabled": false, "value": 0 }
+    }
+  ],
+  "supported-platforms": { "squares": ["iOS"] }
 }

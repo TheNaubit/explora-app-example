@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="forestClay" x1="396" y1="260" x2="640" y2="745" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F9F75"/><stop offset="0.38" stop-color="#367E5D"/><stop offset="1" stop-color="#245940"/>
+    </linearGradient>
+    <linearGradient id="trail" x1="480" y1="350" x2="530" y2="704" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF8"/><stop offset="1" stop-color="#EEEAE1"/>
+    </linearGradient>
+    <linearGradient id="mustard" x1="653" y1="278" x2="711" y2="360" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F0C978"/><stop offset="1" stop-color="#D99B31"/>
+    </linearGradient>
+  </defs>
+  <path d="M512 224C376 224 276 324 276 456C276 594 414 726 489 793C501 804 523 804 535 793C610 726 748 594 748 456C748 324 648 224 512 224Z" fill="#101411" fill-opacity="0.18" transform="translate(0 18)"/>
+  <path d="M512 224C376 224 276 324 276 456C276 594 414 726 489 793C501 804 523 804 535 793C610 726 748 594 748 456C748 324 648 224 512 224Z" fill="url(#forestClay)"/>
+  <path d="M607 355C558 364 468 382 439 424C413 461 431 498 484 518C545 541 575 562 566 599C558 636 507 672 465 701L511 756C578 709 631 662 640 607C650 542 609 497 536 469C500 455 494 443 513 427C534 408 572 399 619 387L607 355Z" fill="url(#trail)"/>
+  <path d="M680 270C687 303 698 314 732 321C698 328 687 339 680 373C673 339 662 328 628 321C662 314 673 303 680 270Z" fill="url(#mustard)"/>
+</svg>

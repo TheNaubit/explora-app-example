@@ -20,8 +20,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     package: "com.adlerventures.explora",
+    icon: "./assets/images/icon.png",
     adaptiveIcon: {
-      backgroundColor: "#E6F4FE",
+      backgroundColor: "#F7F4EC",
       foregroundImage: "./assets/images/android-icon-foreground.png",
       backgroundImage: "./assets/images/android-icon-background.png",
       monochromeImage: "./assets/images/android-icon-monochrome.png",
@@ -36,9 +37,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-splash-screen",
       {
-        backgroundColor: "#208AEF",
+        backgroundColor: "#F7F4EC",
         image: "./assets/images/splash-icon.png",
-        imageWidth: 76,
+        imageWidth: 116,
       },
     ],
     "expo-asset",

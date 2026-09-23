@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="forestClay" x1="164" y1="88" x2="345" y2="433" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F9F75"/>
+      <stop offset="0.34" stop-color="#367E5D"/>
+      <stop offset="0.72" stop-color="#2F6D50"/>
+      <stop offset="1" stop-color="#245940"/>
+    </linearGradient>
+    <linearGradient id="trail" x1="237" y1="165" x2="271" y2="418" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF8"/>
+      <stop offset="1" stop-color="#EEEAE1"/>
+    </linearGradient>
+  </defs>
+  <path d="M256 71C163 71 95 139 95 229.5C95 323 189 413.5 240.5 459.5C249 467 263 467 271.5 459.5C323 413.5 417 323 417 229.5C417 139 349 71 256 71Z" fill="url(#forestClay)"/>
+  <path d="M321 160C287.5 166 226 178 206 207C188.5 232.5 200.5 258 237 272C278.5 287.5 298.5 301.5 293 326.5C287.5 352 253 376.5 224 396.5L255 433.5C301 401.5 337 369 343 331.5C350 287 322 256.5 272.5 237.5C247.5 228 244 220 256.5 209C271 196.5 297 190.5 329 182.5L321 160Z" fill="url(#trail)"/>
+  <path d="M371 102C376 125 383.5 132.5 406.5 137.5C383.5 142.5 376 150 371 173C366 150 358.5 142.5 335.5 137.5C358.5 132.5 366 125 371 102Z" fill="#E7B760"/>
+</svg>

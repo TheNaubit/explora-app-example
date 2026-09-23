@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="rim" x1="298" y1="214" x2="734" y2="838" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.54"/>
+      <stop offset="0.36" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="0.76" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.16"/>
+    </linearGradient>
+  </defs>
+  <path d="M512 154C333 154 203 284 203 459C203 639 385 815 489 907C502 919 522 919 535 907C639 815 821 639 821 459C821 284 691 154 512 154Z" stroke="url(#rim)" stroke-width="16"/>
+</svg>
