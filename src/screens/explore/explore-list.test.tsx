@@ -1,4 +1,5 @@
 import { createElement, Suspense, type ReactNode } from "react";
+import { Keyboard } from "react-native";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { I18nProvider } from "@lingui/react";
@@ -50,6 +51,7 @@ describe("ExploreList", () => {
   });
 
   it("shows a next-page footer spinner while fetching", async () => {
+    const dismissKeyboard = jest.spyOn(Keyboard, "dismiss");
     mockUseExploreList.mockReturnValue({
       activities: [SUPPLIED_ACTIVITIES[0]],
       isFetchingNextPage: true,
@@ -67,6 +69,11 @@ describe("ExploreList", () => {
     );
 
     expect(screen.getByTestId("explore-list")).toBeTruthy();
+    expect(screen.getByTestId("explore-list").props.keyboardDismissMode).toBe("on-drag");
+    expect(screen.getByTestId("explore-list").props.keyboardShouldPersistTaps).toBe("handled");
+    fireEvent(screen.getByTestId("explore-list"), "scrollBeginDrag");
+    expect(dismissKeyboard).toHaveBeenCalledTimes(1);
+    dismissKeyboard.mockRestore();
   });
 
   it("retries next page from the status banner", async () => {

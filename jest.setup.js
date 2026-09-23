@@ -141,15 +141,33 @@ jest.mock("react-native-a11y", () => {
 });
 
 jest.mock("react-native-reanimated", () => {
-  const { View } = require("react-native");
+  const { ScrollView, Text, View } = require("react-native");
   return {
     __esModule: true,
     default: {
       View,
+      ScrollView,
+      Text,
       createAnimatedComponent: (Component) => Component,
       call: () => {},
     },
-    useSharedValue: (value) => ({ value }),
+    Extrapolation: { CLAMP: "clamp" },
+    interpolate: (value, input, output) => {
+      if (value <= input[0]) return output[0];
+      if (value >= input[input.length - 1]) return output[output.length - 1];
+      const progress = (value - input[0]) / (input[input.length - 1] - input[0]);
+      return output[0] + progress * (output[output.length - 1] - output[0]);
+    },
+    useSharedValue: (value) => ({
+      value,
+      get() {
+        return this.value;
+      },
+      set(next) {
+        this.value = typeof next === "function" ? next(this.value) : next;
+      },
+    }),
+    useAnimatedScrollHandler: (handler) => handler,
     useAnimatedStyle: (factory) => factory(),
     useReducedMotion: jest.fn(() => false),
     withRepeat: (value) => value,
@@ -171,11 +189,14 @@ jest.mock("@legendapp/list/react-native", () => {
       testID,
       refreshControl,
       onEndReached,
+      keyboardDismissMode,
+      keyboardShouldPersistTaps,
+      onScrollBeginDrag,
     }) {
       const onRefresh = refreshControl?.props?.onRefresh;
       return React.createElement(
         View,
-        { testID },
+        { testID, keyboardDismissMode, keyboardShouldPersistTaps, onScrollBeginDrag },
         onRefresh
           ? React.createElement(Pressable, {
               testID: "refresh-control",
@@ -203,3 +224,7 @@ jest.mock("@legendapp/list/react-native", () => {
     },
   };
 });
+
+jest.mock("@legendapp/list/reanimated", () => ({
+  AnimatedLegendList: require("@legendapp/list/react-native").LegendList,
+}));

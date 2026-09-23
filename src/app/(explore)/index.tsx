@@ -11,7 +11,7 @@ import { ExploreNativeSearch } from "@/screens/explore/explore-native-search";
  */
 export default function ExploreRoute() {
   return (
-    <View style={styles.root}>
+    <View collapsable={false} style={styles.root}>
       <Explore />
       <ExploreNativeSearch />
     </View>

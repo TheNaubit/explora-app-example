@@ -49,6 +49,10 @@ export function SearchField({
   const clear = t(clearLabel);
 
   useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  useEffect(() => {
     const handle = setTimeout(() => {
       onDebouncedChange(value.trim());
     }, debounceMs);
@@ -76,11 +80,14 @@ export function SearchField({
         autoCapitalize="none"
         autoCorrect={false}
         clearButtonMode="never"
+        containerStyle={styles.inputContainer}
+        multiline={false}
         onChangeText={setValue}
         placeholder={t(placeholder)}
         placeholderTextColor={theme.colors.textSecondary}
         returnKeyType="search"
         style={[styles.input, { color: theme.colors.text }]}
+        submitBehavior="blurAndSubmit"
         testID="search-field-input"
         value={value}
       />
@@ -114,11 +121,18 @@ const styles = StyleSheet.create({
     marginEnd: spacing.space8,
   },
   input: {
-    ...typography.body,
-    flex: 1,
-    minHeight: MIN_TOUCH_TARGET,
-    paddingVertical: spacing.space8,
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.body.fontWeight,
+    height: MIN_TOUCH_TARGET,
+    includeFontPadding: false,
+    paddingVertical: 0,
     textAlign: "left",
+    textAlignVertical: "center",
+    width: "100%",
+  },
+  inputContainer: {
+    flex: 1,
+    minWidth: 0,
   },
   root: {
     alignItems: "center",
@@ -127,6 +141,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: spacing.space24,
     marginBottom: spacing.space12,
+    minHeight: MIN_TOUCH_TARGET,
     paddingHorizontal: spacing.space12,
   },
 });

@@ -101,8 +101,12 @@ Map every change to the assessment bar.
 
 - List cards use seeded cover photos (`getActivityCoverImage`) with BlurHash placeholders because the catalog JSON has no image URLs. Clay icons stay for empty states and category cues.
 - `ScreenFrame` pads the top and horizontal safe areas on Saved and on web Explore. Native Explore uses the stack header for the top inset.
-- Explore uses a soft iOS 26+ scroll-edge header blur (`scrollEdgeEffects.top: soft`). Older iOS uses `headerBlurEffect`.
-- Category filters keep `A11yPressable` (labels, selected state, keyboard focus). Unselected chips use glass or system blur on iOS when available.
+- Explore uses one custom iOS header for the title, search field, and category filters.
+- Search submit, filter selection, and list or chip drag remove search focus.
+- The header uses a soft iOS 26 scroll-edge effect. Older iOS uses a low-intensity static blur.
+- Category filters keep `A11yPressable` for labels, selected state, and keyboard focus.
+- Chip images are decorative. The translated chip label remains the spoken name.
+- Selected and unselected iOS chips keep glass or system blur when available.
 - Chip row horizontal scroll uses React Native `ScrollView` so the offset does not reset.
 - Prefer `@expo/ui` only when a11y and i18n stay intact. Do not swap journey CTAs to `@expo/ui` Button while it lacks project a11y props.
 - Do not pass `focusStyle` or `containerFocusStyle`. Use `mergeFocusedStyle` or a `style` callback with `{ focused, pressed }`.

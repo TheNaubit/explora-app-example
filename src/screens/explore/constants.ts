@@ -2,14 +2,14 @@
  * Explore screen layout constants.
  */
 
-/**
- * Extra points below the status bar for the expanded large title and search field.
- * Used when automatic scroll content insets do not apply under Native Tabs.
- */
-export const IOS_LARGE_TITLE_AND_SEARCH_BLOCK = 108;
+/** Expanded custom iOS header height below the safe area. */
+export const IOS_EXPLORE_HEADER_BODY_HEIGHT = 176;
 
-/**
- * Height of the floating category chip row under the native header.
- * Keeps list content clear of the ScrollEdgeEffect overlay.
- */
-export const EXPLORE_CHIP_OVERLAY_HEIGHT = 52;
+/** Scroll distance that completes the custom iOS header collapse. */
+export const IOS_EXPLORE_HEADER_COLLAPSE_DISTANCE = 96;
+
+/** Header travel that places the chip row below the compact title. */
+export const IOS_EXPLORE_HEADER_TRANSLATION = 68;
+
+/** Static blur intensity for iOS versions without the native soft edge effect. */
+export const IOS_EXPLORE_HEADER_BLUR_INTENSITY = 28;

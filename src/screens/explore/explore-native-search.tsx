@@ -70,9 +70,11 @@ export function ExploreNativeSearch() {
     });
   }, []);
 
-  const title = (
-    <Stack.Title large={process.env.EXPO_OS === "ios"}>{t(exploreMessages.heading)}</Stack.Title>
-  );
+  if (process.env.EXPO_OS === "ios") {
+    return null;
+  }
+
+  const title = <Stack.Title>{t(exploreMessages.heading)}</Stack.Title>;
 
   if (process.env.EXPO_OS === "web") {
     return title;

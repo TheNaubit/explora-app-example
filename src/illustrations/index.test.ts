@@ -1,7 +1,11 @@
 /**
  * @jest-environment node
  */
-import { getCategoryIllustration, emptySearchIllustration } from "@/illustrations";
+import {
+  emptySearchIllustration,
+  getCategoryChipIllustration,
+  getCategoryIllustration,
+} from "@/illustrations";
 
 describe("illustrations", () => {
   it("returns a source for every category", () => {
@@ -13,5 +17,13 @@ describe("illustrations", () => {
 
   it("exports the empty search illustration", () => {
     expect(emptySearchIllustration).toBeTruthy();
+  });
+
+  it("returns a compact source for All and every category", () => {
+    expect(getCategoryChipIllustration(null)).toBeTruthy();
+    expect(getCategoryChipIllustration("Outdoors")).toBeTruthy();
+    expect(getCategoryChipIllustration("Culture")).toBeTruthy();
+    expect(getCategoryChipIllustration("Workshops")).toBeTruthy();
+    expect(getCategoryChipIllustration("Leisure")).toBeTruthy();
   });
 });
