@@ -19,7 +19,8 @@ Keep header pills coherent. Use Liquid Glass on supported iOS chrome. Keep Andro
 - Inspected the supplied Perplexity recording and the existing card carousel.
 - Kept the original card frame and Reanimated wrapper unchanged.
 - Continued one cover image behind the image block and text body.
-- Added progressive static blur layers near the text region.
+- Added one alpha-masked blur copy near the text region.
+- Removed the stepped blur layers after visual review found horizontal bands.
 - Added a dark scrim for stable title and metadata contrast.
 - Removed the duplicate category pill from the card image.
 - Kept category as translated metadata below the title.
@@ -56,6 +57,7 @@ Keep header pills coherent. Use Liquid Glass on supported iOS chrome. Keep Andro
 - The iOS Simulator showed the card in light and dark modes.
 - The iOS Simulator showed the standard-list large-text layout.
 - The iOS Simulator snapped from the first card to the second card.
+- The iOS Simulator showed one continuous sharp-to-blur transition without a horizontal seam.
 
 Android runtime testing was not performed at the user request. The implementation uses cross-platform React Native and Expo Image APIs.
 

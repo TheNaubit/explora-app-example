@@ -17,7 +17,7 @@
 - Combine search and filter. Filters stay in the discovery store for the session.
 - Activity cards show a seeded cover photo with a BlurHash fade-in (`getActivityCoverImage`).
 - Card text sits inside the lower cover region.
-- Progressive static blur layers change that region from sharp to blurred.
+- One continuous alpha mask changes that region from the sharp cover to a blurred copy.
 - A dark translucent scrim keeps text readable and preserves the image color.
 - The card has no pale band or hard image-to-body seam.
 - Category stays as plain metadata. Category pills remain in the header filter row.

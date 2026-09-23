@@ -1,22 +1,18 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ComponentType, ReactElement } from "react";
 import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLingui } from "@lingui/react/macro";
+import MaskedView from "@react-native-masked-view/masked-view";
 
 import { buildActivityAccessibilityLabel } from "@/a11y";
 import { A11yCard } from "@/components/a11y-card";
 import { A11yPressable } from "@/components/a11y-pressable";
 import {
   ACTIVITY_CARD_BACKDROP_BLUR_RADIUS,
-  ACTIVITY_CARD_BLUR_MEDIUM_FRAME_HEIGHT,
-  ACTIVITY_CARD_BLUR_MEDIUM_IMAGE_HEIGHT,
-  ACTIVITY_CARD_BLUR_MEDIUM_OPACITY,
-  ACTIVITY_CARD_BLUR_SOFT_FRAME_HEIGHT,
-  ACTIVITY_CARD_BLUR_SOFT_IMAGE_HEIGHT,
-  ACTIVITY_CARD_BLUR_SOFT_OPACITY,
-  ACTIVITY_CARD_BLUR_STRONG_FRAME_HEIGHT,
-  ACTIVITY_CARD_BLUR_STRONG_IMAGE_HEIGHT,
+  ACTIVITY_CARD_BLUR_MASK_FULL,
+  ACTIVITY_CARD_BLUR_MASK_MID,
+  ACTIVITY_CARD_BLUR_MASK_START,
   ACTIVITY_CARD_LARGE_TEXT_SCALE,
   ACTIVITY_CARD_MEDIA_HEIGHT,
   ACTIVITY_CARD_SCRIM_START,
@@ -42,6 +38,14 @@ type ActivityCardProps = {
 
 type PressableProps = ComponentProps<typeof A11yPressable>;
 
+type MaskedViewProps = ComponentProps<typeof View> & {
+  androidRenderingMode?: "hardware" | "software";
+  maskElement: ReactElement;
+};
+
+// The package type still references React 18 component internals.
+const CrossPlatformMaskedView = MaskedView as unknown as ComponentType<MaskedViewProps>;
+
 /**
  * Card surface with press scale when the row is interactive.
  */
@@ -62,7 +66,7 @@ function ActivityCardPressable({ style, ...rest }: PressableProps) {
 
 /**
  * Explore / Saved activity row.
- * The cover continues behind the body through progressive static blur layers.
+ * The cover continues behind the body through one alpha-masked blur layer.
  */
 export function ActivityCard({
   activity,
@@ -118,56 +122,34 @@ export function ActivityCard({
           transition={ACTIVITY_COVER_FADE_MS}
         />
       </View>
-      <View
+      <CrossPlatformMaskedView
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
+        maskElement={
+          <LinearGradient
+            colors={["transparent", "transparent", "rgba(0, 0, 0, 0.5)", "black"]}
+            locations={[
+              0,
+              ACTIVITY_CARD_BLUR_MASK_START,
+              ACTIVITY_CARD_BLUR_MASK_MID,
+              ACTIVITY_CARD_BLUR_MASK_FULL,
+            ]}
+            style={styles.cardImage}
+          />
+        }
         pointerEvents="none"
         style={styles.cardImageLayer}
         testID={`activity-card-image-blend-${activity.id}`}
       >
-        <View style={[styles.blurSoftFrame, { height: ACTIVITY_CARD_BLUR_SOFT_FRAME_HEIGHT }]}>
-          <Image
-            blurRadius={ACTIVITY_CARD_BACKDROP_BLUR_RADIUS / 4}
-            contentFit="cover"
-            priority="low"
-            recyclingKey={`${activity.id}-blur-soft`}
-            source={{ uri: cover.uri }}
-            style={[
-              styles.blurImage,
-              {
-                height: ACTIVITY_CARD_BLUR_SOFT_IMAGE_HEIGHT,
-                opacity: ACTIVITY_CARD_BLUR_SOFT_OPACITY,
-              },
-            ]}
-          />
-        </View>
-        <View style={[styles.blurMediumFrame, { height: ACTIVITY_CARD_BLUR_MEDIUM_FRAME_HEIGHT }]}>
-          <Image
-            blurRadius={ACTIVITY_CARD_BACKDROP_BLUR_RADIUS / 2}
-            contentFit="cover"
-            priority="low"
-            recyclingKey={`${activity.id}-blur-medium`}
-            source={{ uri: cover.uri }}
-            style={[
-              styles.blurImage,
-              {
-                height: ACTIVITY_CARD_BLUR_MEDIUM_IMAGE_HEIGHT,
-                opacity: ACTIVITY_CARD_BLUR_MEDIUM_OPACITY,
-              },
-            ]}
-          />
-        </View>
-        <View style={[styles.blurStrongFrame, { height: ACTIVITY_CARD_BLUR_STRONG_FRAME_HEIGHT }]}>
-          <Image
-            blurRadius={ACTIVITY_CARD_BACKDROP_BLUR_RADIUS}
-            contentFit="cover"
-            priority="low"
-            recyclingKey={`${activity.id}-blur-strong`}
-            source={{ uri: cover.uri }}
-            style={[styles.blurImage, { height: ACTIVITY_CARD_BLUR_STRONG_IMAGE_HEIGHT }]}
-          />
-        </View>
-      </View>
+        <Image
+          blurRadius={ACTIVITY_CARD_BACKDROP_BLUR_RADIUS}
+          contentFit="cover"
+          priority="low"
+          recyclingKey={`${activity.id}-blur`}
+          source={{ uri: cover.uri }}
+          style={styles.cardImage}
+        />
+      </CrossPlatformMaskedView>
       <LinearGradient
         colors={["transparent", "transparent", "rgba(8, 12, 10, 0.86)"]}
         locations={[0, ACTIVITY_CARD_SCRIM_START, 1]}
@@ -214,33 +196,6 @@ export function ActivityCard({
 const styles = StyleSheet.create({
   body: {
     padding: spacing.space16,
-  },
-  blurImage: {
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-    width: "100%",
-  },
-  blurMediumFrame: {
-    bottom: 0,
-    left: 0,
-    overflow: "hidden",
-    position: "absolute",
-    right: 0,
-  },
-  blurSoftFrame: {
-    bottom: 0,
-    left: 0,
-    overflow: "hidden",
-    position: "absolute",
-    right: 0,
-  },
-  blurStrongFrame: {
-    bottom: 0,
-    left: 0,
-    overflow: "hidden",
-    position: "absolute",
-    right: 0,
   },
   cardImage: {
     height: "100%",

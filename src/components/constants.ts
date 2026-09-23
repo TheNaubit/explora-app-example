@@ -24,19 +24,10 @@ export const ACTIVITY_COVER_FADE_MS = 420;
 /** Static blur used for the activity card text region. */
 export const ACTIVITY_CARD_BACKDROP_BLUR_RADIUS = 36;
 
-/** Progressive blur frames, measured from the card bottom. */
-export const ACTIVITY_CARD_BLUR_SOFT_FRAME_HEIGHT = "54%";
-export const ACTIVITY_CARD_BLUR_MEDIUM_FRAME_HEIGHT = "42%";
-export const ACTIVITY_CARD_BLUR_STRONG_FRAME_HEIGHT = "30%";
-
-/** Image heights keep each cropped blur layer aligned with the full cover. */
-export const ACTIVITY_CARD_BLUR_SOFT_IMAGE_HEIGHT = "185%";
-export const ACTIVITY_CARD_BLUR_MEDIUM_IMAGE_HEIGHT = "238%";
-export const ACTIVITY_CARD_BLUR_STRONG_IMAGE_HEIGHT = "333%";
-
-/** Opacity steps soften the boundaries between blur layers. */
-export const ACTIVITY_CARD_BLUR_SOFT_OPACITY = 0.28;
-export const ACTIVITY_CARD_BLUR_MEDIUM_OPACITY = 0.56;
+/** Relative card positions for the continuous sharp-to-blur mask. */
+export const ACTIVITY_CARD_BLUR_MASK_START = 0.3;
+export const ACTIVITY_CARD_BLUR_MASK_MID = 0.6;
+export const ACTIVITY_CARD_BLUR_MASK_FULL = 0.82;
 
 /** Relative card position where the text contrast scrim starts. */
 export const ACTIVITY_CARD_SCRIM_START = 0.58;
