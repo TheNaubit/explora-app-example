@@ -18,6 +18,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 10  | 2026-09-22     | Explore search layout/scroll fix; transparent header; Bluesky scroll-edge chips; simulator rebuild | [ai-sessions/session-010-explore-search-scroll-edge.md](./ai-sessions/session-010-explore-search-scroll-edge.md)             | Cursor agent (Composer / Auto); exact model slug not recorded in this summary |
 | 11  | 2026-09-23     | Explore custom collapsing header; soft material; glass chips; generated clay filter icons          | [ai-sessions/session-011-explore-collapsing-header-motion.md](./ai-sessions/session-011-explore-collapsing-header-motion.md) | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 12  | 2026-09-23     | Explore focused card carousel; reference analysis; Reanimated snapping; Pulsar detent              | [ai-sessions/session-012-explore-card-carousel.md](./ai-sessions/session-012-explore-card-carousel.md)                       | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 13  | 2026-09-23     | Image-derived card surface; progressive cover blur; metadata cleanup; a11y and i18n checks         | [ai-sessions/session-013-image-derived-card-surface.md](./ai-sessions/session-013-image-derived-card-surface.md)             | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 

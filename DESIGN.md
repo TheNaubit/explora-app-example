@@ -108,6 +108,12 @@ Use one elevation reason per surface. Do not use shadows as decoration.
 
 Liquid Glass is functional chrome. It is not the page background or a card decoration.
 
+Activity card text sits inside the lower part of the cover image.
+Crossfade that region from the sharp cover into a blurred copy of the same cover.
+Place a dark translucent scrim above the blur, so text contrast does not depend on the photo.
+Do not use a pale band or a hard image-to-body seam.
+This image treatment is not Liquid Glass. Do not add `GlassView` or `BlurView` to the card surface.
+
 Use native `GlassView` only when both Liquid Glass availability checks succeed. This requires iOS 26 or later.
 
 Use Liquid Glass for:
@@ -196,21 +202,21 @@ Do not use emoji as interface icons. Do not invent a second illustration style.
 
 ## Component kit
 
-| Component                  | Purpose                         | Anatomy                                          | States                                             | Limits and rejected use                                                                      |
-| -------------------------- | ------------------------------- | ------------------------------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `ScreenFrame`              | Define the safe screen region   | Screen announcement and content region           | Light, dark, focused return                        | Use on every screen                                                                          |
-| `SearchField`              | Custom title search             | Symbol, centered single-line input, clear action | Idle, focused, typed, disabled                     | Use in the custom iOS header and web; keep native Android search                             |
-| `CategoryChip`             | One category filter control     | Clay icon, label, and glass material             | Default, pressed, lightly tinted selected, focused | `A11yPressable` required for labels and selected state                                       |
-| `CategoryChipRow`          | Category filter row             | All plus catalog categories and edge fades       | Start, middle, end                                 | Fade only an edge that has more content; RN horizontal ScrollView keeps offset               |
-| `ActivityCard`             | Open an activity                | Photo, title, location, duration, favorite       | Default, pressed, focused, saved, offline          | Do not nest another card                                                                     |
-| `FavoriteButton`           | Save or remove an activity      | Heart symbol and 44-point target                 | Unsaved, saved, pressed, focused                   | Give it one clear spoken action                                                              |
-| `PrimaryButton`            | Commit the main action          | Label and optional leading symbol                | Default, pressed, focused, busy, disabled          | Use one primary action per screen                                                            |
-| `IconButton`               | Run a compact action            | System symbol and 44-point target                | Default, pressed, focused, disabled                | Use glass only above imagery or scrolling                                                    |
-| `NativeTabs` (Expo Router) | Move between Explore and Saved  | System tab bar (Liquid Glass on iOS 26+)         | Light, dark, minimize on scroll                    | Use `expo-router/unstable-native-tabs`. Do not add a custom glass tab bar or a center action |
-| `InlineStatusBanner`       | Explain refresh status          | Status symbol, title, body, and retry action     | Success, warning, error                            | Keep stale content visible below it                                                          |
-| `ActivityCardSkeleton`     | Reserve the activity card shape | Image block and three text blocks                | Loading pulse, reduced motion                      | Do not use a full-screen spinner                                                             |
-| `EmptyState`               | Explain a resolved empty result | Illustration, title, body, and action            | Search empty, favorites empty, not-found           | Give one next action                                                                         |
-| `ReviewControlsSheet`      | Reproduce assessment states     | Mode groups, status summary, and reset           | Normal, slow, fail, offline, busy                  | Include only in review builds                                                                |
+| Component                  | Purpose                         | Anatomy                                              | States                                             | Limits and rejected use                                                                      |
+| -------------------------- | ------------------------------- | ---------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `ScreenFrame`              | Define the safe screen region   | Screen announcement and content region               | Light, dark, focused return                        | Use on every screen                                                                          |
+| `SearchField`              | Custom title search             | Symbol, centered single-line input, clear action     | Idle, focused, typed, disabled                     | Use in the custom iOS header and web; keep native Android search                             |
+| `CategoryChip`             | One category filter control     | Clay icon, label, and glass material                 | Default, pressed, lightly tinted selected, focused | `A11yPressable` required for labels and selected state                                       |
+| `CategoryChipRow`          | Category filter row             | All plus catalog categories and edge fades           | Start, middle, end                                 | Fade only an edge that has more content; RN horizontal ScrollView keeps offset               |
+| `ActivityCard`             | Open an activity                | Photo, image-derived body, title, metadata, favorite | Default, pressed, focused, saved, offline          | Do not nest another card or put Liquid Glass on its surface                                  |
+| `FavoriteButton`           | Save or remove an activity      | Heart symbol and 44-point target                     | Unsaved, saved, pressed, focused                   | Give it one clear spoken action                                                              |
+| `PrimaryButton`            | Commit the main action          | Label and optional leading symbol                    | Default, pressed, focused, busy, disabled          | Use one primary action per screen                                                            |
+| `IconButton`               | Run a compact action            | System symbol and 44-point target                    | Default, pressed, focused, disabled                | Use glass only above imagery or scrolling                                                    |
+| `NativeTabs` (Expo Router) | Move between Explore and Saved  | System tab bar (Liquid Glass on iOS 26+)             | Light, dark, minimize on scroll                    | Use `expo-router/unstable-native-tabs`. Do not add a custom glass tab bar or a center action |
+| `InlineStatusBanner`       | Explain refresh status          | Status symbol, title, body, and retry action         | Success, warning, error                            | Keep stale content visible below it                                                          |
+| `ActivityCardSkeleton`     | Reserve the activity card shape | Image block and three text blocks                    | Loading pulse, reduced motion                      | Do not use a full-screen spinner                                                             |
+| `EmptyState`               | Explain a resolved empty result | Illustration, title, body, and action                | Search empty, favorites empty, not-found           | Give one next action                                                                         |
+| `ReviewControlsSheet`      | Reproduce assessment states     | Mode groups, status summary, and reset               | Normal, slow, fail, offline, busy                  | Include only in review builds                                                                |
 
 Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF Symbols on iOS and Material Symbols on Android.
 
@@ -226,6 +232,7 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 - Keep adjacent cards visible as navigation cues.
 - Use the standard list for reduced motion and large text.
 - Keep the favorite action visible on every activity card.
+- Keep category text in the metadata row. Do not add a second category pill inside the card.
 - Keep content visible while a refresh is in progress.
 
 ### Activity detail
@@ -302,7 +309,7 @@ Do not animate recycled list rows on entry. Do not move content only for decorat
 - Use no more than one floating toolbar.
 - Use no more than one glass layer in the same visual region.
 - Use no nested cards.
-- Use no decorative gradients.
+- Use no decorative gradients. A short sharp-to-blur fade is allowed for card text contrast.
 - Use no emoji as interface icons.
 
 ## Required design process

@@ -58,7 +58,11 @@ export function ActivityCardSkeleton({ testID }: ActivityCardSkeletonProps) {
       importantForAccessibility="no-hide-descendants"
       style={[
         styles.card,
-        { backgroundColor: theme.colors.surface, borderColor: theme.colors.border },
+        {
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+          boxShadow: theme.elevation.raised,
+        },
         animatedStyle,
       ]}
       testID={testID}
@@ -66,8 +70,10 @@ export function ActivityCardSkeleton({ testID }: ActivityCardSkeletonProps) {
       <View style={[styles.media, { backgroundColor: blockColor }]} />
       <View style={styles.lines}>
         <View style={[styles.lineWide, { backgroundColor: blockColor }]} />
-        <View style={[styles.lineMid, { backgroundColor: blockColor }]} />
-        <View style={[styles.lineShort, { backgroundColor: blockColor }]} />
+        <View style={styles.metaRow}>
+          <View style={[styles.lineShort, { backgroundColor: blockColor }]} />
+          <View style={[styles.lineMid, { backgroundColor: blockColor }]} />
+        </View>
       </View>
     </Animated.View>
   );
@@ -75,6 +81,7 @@ export function ActivityCardSkeleton({ testID }: ActivityCardSkeletonProps) {
 
 const styles = StyleSheet.create({
   card: {
+    borderCurve: "continuous",
     borderRadius: radii.large,
     borderWidth: StyleSheet.hairlineWidth,
     marginBottom: spacing.space12,
@@ -83,8 +90,7 @@ const styles = StyleSheet.create({
   lineMid: {
     borderRadius: radii.small,
     height: spacing.space12,
-    marginBottom: spacing.space8,
-    width: "70%",
+    width: "52%",
   },
   lineShort: {
     borderRadius: radii.small,
@@ -99,6 +105,10 @@ const styles = StyleSheet.create({
   },
   lines: {
     padding: spacing.space16,
+  },
+  metaRow: {
+    flexDirection: "row",
+    gap: spacing.space8,
   },
   media: {
     height: ACTIVITY_CARD_MEDIA_HEIGHT,
