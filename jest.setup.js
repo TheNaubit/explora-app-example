@@ -191,12 +191,25 @@ jest.mock("@legendapp/list/react-native", () => {
       onEndReached,
       keyboardDismissMode,
       keyboardShouldPersistTaps,
+      onMomentumScrollEnd,
       onScrollBeginDrag,
+      snapToInterval,
+      decelerationRate,
+      disableIntervalMomentum,
     }) {
       const onRefresh = refreshControl?.props?.onRefresh;
       return React.createElement(
         View,
-        { testID, keyboardDismissMode, keyboardShouldPersistTaps, onScrollBeginDrag },
+        {
+          testID,
+          keyboardDismissMode,
+          keyboardShouldPersistTaps,
+          onMomentumScrollEnd,
+          onScrollBeginDrag,
+          snapToInterval,
+          decelerationRate,
+          disableIntervalMomentum,
+        },
         onRefresh
           ? React.createElement(Pressable, {
               testID: "refresh-control",
@@ -209,7 +222,7 @@ jest.mock("@legendapp/list/react-native", () => {
           React.createElement(
             View,
             { key: keyExtractor ? keyExtractor(item, index) : String(index) },
-            renderItem({ item }),
+            renderItem({ item, index }),
           ),
         ),
         onEndReached

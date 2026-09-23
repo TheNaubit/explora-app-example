@@ -1,0 +1,25 @@
+{
+  "sourceDurationSeconds": 5.4167,
+  "driver": "direct scroll position",
+  "phases": [
+    {
+      "name": "drag",
+      "start": "touch movement",
+      "end": "touch release",
+      "behavior": "Cards interpolate continuously from list offset."
+    },
+    {
+      "name": "decelerate",
+      "start": "touch release",
+      "end": "snap correction",
+      "behavior": "Fast native list deceleration continues the same interpolation."
+    },
+    {
+      "name": "settle",
+      "start": "snap correction",
+      "end": "momentum end",
+      "behavior": "One card reaches full scale and opacity."
+    }
+  ],
+  "limitation": "The recording has no touch indicator, so exact phase timestamps are not observable."
+}

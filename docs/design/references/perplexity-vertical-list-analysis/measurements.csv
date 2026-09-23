@@ -1,0 +1,7 @@
+property,focused_value,adjacent_value,unit,confidence
+card_width,292,270,pixels,medium
+card_height,432,,pixels,medium
+relative_scale,1.00,0.92,ratio,medium
+relative_opacity,1.00,0.52,ratio,low
+item_stride,463,463,pixels,medium
+visible_gap,31,31,pixels,medium

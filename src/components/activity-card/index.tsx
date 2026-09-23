@@ -20,8 +20,12 @@ import { radii, spacing, typography, useAppTheme } from "@/theme";
 
 type ActivityCardProps = {
   activity: Activity;
+  /** Optional Explore-only media height for the focused vertical card layout. */
+  mediaHeight?: number;
   onPress?: () => void;
   testID?: string;
+  /** Removes list spacing when a parent owns the carousel step. */
+  variant?: "list" | "carousel";
 };
 
 type PressableProps = ComponentProps<typeof A11yPressable>;
@@ -48,7 +52,13 @@ function ActivityCardPressable({ style, ...rest }: PressableProps) {
  * Explore / Saved activity row.
  * Cover photo fills the media block. BlurHash shows first, then the photo fades in.
  */
-export function ActivityCard({ activity, onPress, testID }: ActivityCardProps) {
+export function ActivityCard({
+  activity,
+  mediaHeight,
+  onPress,
+  testID,
+  variant = "list",
+}: ActivityCardProps) {
   const { t } = useLingui();
   const theme = useAppTheme();
   const label = buildActivityAccessibilityLabel(activity);
@@ -71,6 +81,7 @@ export function ActivityCard({ activity, onPress, testID }: ActivityCardProps) {
       PressableComponent={interactive ? ActivityCardPressable : A11yPressable}
       style={[
         styles.card,
+        variant === "carousel" ? styles.carouselCard : null,
         {
           backgroundColor: theme.colors.surface,
           borderColor: theme.colors.border,
@@ -78,7 +89,10 @@ export function ActivityCard({ activity, onPress, testID }: ActivityCardProps) {
       ]}
       testID={testID ?? `activity-card-${activity.id}`}
     >
-      <View style={styles.media} testID={`activity-card-image-${activity.id}`}>
+      <View
+        style={[styles.media, mediaHeight === undefined ? null : { height: mediaHeight }]}
+        testID={`activity-card-image-${activity.id}`}
+      >
         <Image
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
@@ -123,6 +137,9 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     marginBottom: spacing.space12,
     overflow: "hidden",
+  },
+  carouselCard: {
+    marginBottom: 0,
   },
   category: {
     ...typography.meta,

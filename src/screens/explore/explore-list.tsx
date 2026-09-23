@@ -1,7 +1,9 @@
-import type { Ref } from "react";
+import { useRef, type Ref } from "react";
 import {
   ActivityIndicator,
   Keyboard,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   Platform,
   RefreshControl,
   StyleSheet,
@@ -10,15 +12,32 @@ import {
 } from "react-native";
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
 import { useLingui } from "@lingui/react/macro";
-import Animated, { type SharedValue, useAnimatedScrollHandler } from "react-native-reanimated";
+import { Settings, HapticSupport, useRealtimeComposer } from "react-native-pulsar";
+import Animated, {
+  type SharedValue,
+  useAnimatedScrollHandler,
+  useReducedMotion,
+  useSharedValue,
+} from "react-native-reanimated";
 
 import { ActivityCard } from "@/components/activity-card";
 import { EmptyState } from "@/components/empty-state";
 import { emptySearchIllustration } from "@/illustrations";
 import { resetDiscoveryFilters } from "@/state/discovery";
+import { ExploreActivityCard } from "@/screens/explore/explore-activity-card";
 import { ExploreHeader } from "@/screens/explore/explore-header";
 import { ExploreStatusBanner } from "@/screens/explore/explore-status-banner";
 import { exploreMessages } from "@/screens/explore/messages";
+import {
+  EXPLORE_CARD_BODY_HEIGHT,
+  EXPLORE_CARD_CAROUSEL_MAX_FONT_SCALE,
+  EXPLORE_CARD_GAP,
+  EXPLORE_CARD_HAPTIC_AMPLITUDE,
+  EXPLORE_CARD_HAPTIC_FREQUENCY,
+  EXPLORE_CARD_MEDIA_ASPECT_RATIO,
+  EXPLORE_CARD_MEDIA_MAX_HEIGHT,
+  EXPLORE_CARD_TOP_SPACING,
+} from "@/screens/explore/constants";
 import type { ExploreBannerState } from "@/screens/explore/types";
 import { useExploreList } from "@/screens/explore/use-explore-list";
 import { spacing, useAppTheme } from "@/theme";
@@ -62,8 +81,22 @@ export function ExploreList({
 }: ExploreListProps) {
   const { t } = useLingui();
   const theme = useAppTheme();
-  const { width, height } = useWindowDimensions();
+  const { width, height, fontScale: measuredFontScale } = useWindowDimensions();
+  const fontScale = measuredFontScale ?? 1;
   const { activities, isFetchingNextPage, handleEndReached } = useExploreList({ onBannerChange });
+  const cardScrollOffset = useSharedValue(0);
+  const reduceMotion = useReducedMotion();
+  const settledIndex = useRef(0);
+  const { playDiscrete } = useRealtimeComposer();
+  const usesCardCarousel =
+    Platform.OS !== "web" && !reduceMotion && fontScale <= EXPLORE_CARD_CAROUSEL_MAX_FONT_SCALE;
+  const cardWidth = width - spacing.space48;
+  const mediaHeight = Math.min(
+    cardWidth * EXPLORE_CARD_MEDIA_ASPECT_RATIO,
+    EXPLORE_CARD_MEDIA_MAX_HEIGHT,
+  );
+  const itemExtent = mediaHeight + EXPLORE_CARD_BODY_HEIGHT * fontScale + EXPLORE_CARD_GAP;
+  const focusPadding = usesCardCarousel ? EXPLORE_CARD_TOP_SPACING : spacing.space8;
 
   const bannerNode =
     banner !== null ? (
@@ -86,17 +119,42 @@ export function ExploreList({
     </>
   );
 
-  const padTop = headerHeight + spacing.space8;
+  const padTop = headerHeight + focusPadding;
+  const endPadding = usesCardCarousel
+    ? Math.max(focusPadding, height - padTop - itemExtent)
+    : spacing.space32;
   const insetBehavior = Platform.OS === "ios" ? "never" : "automatic";
   const listStyle = [styles.list, { width, height, backgroundColor: theme.colors.background }];
   const contentStyle = [styles.listPad, { paddingTop: padTop }];
   const onScroll = useAnimatedScrollHandler((event) => {
-    if (scrollOffset === undefined) {
+    const normalizedOffset = event.contentOffset.y + (event.contentInset?.top ?? 0);
+    cardScrollOffset.set(Math.max(0, normalizedOffset));
+    scrollOffset?.set(Math.max(0, normalizedOffset));
+  });
+
+  function handleMomentumScrollEnd(event: NativeSyntheticEvent<NativeScrollEvent>) {
+    if (!usesCardCarousel) {
       return;
     }
-    const normalizedOffset = event.contentOffset.y + (event.contentInset?.top ?? 0);
-    scrollOffset.set(Math.max(0, normalizedOffset));
-  });
+
+    const normalizedOffset = Math.max(
+      0,
+      event.nativeEvent.contentOffset.y + (event.nativeEvent.contentInset?.top ?? 0),
+    );
+    const nextIndex = Math.round(normalizedOffset / itemExtent);
+    if (nextIndex === settledIndex.current) {
+      return;
+    }
+    settledIndex.current = nextIndex;
+
+    try {
+      if (Settings.getHapticsSupportLevel() >= HapticSupport.STANDARD_SUPPORT) {
+        playDiscrete(EXPLORE_CARD_HAPTIC_AMPLITUDE, EXPLORE_CARD_HAPTIC_FREQUENCY);
+      }
+    } catch {
+      // Keep scrolling usable when the device cannot play haptics.
+    }
+  }
 
   if (activities.length === 0) {
     return (
@@ -133,7 +191,20 @@ export function ExploreList({
       keyExtractor={(item) => item.id}
       recycleItems
       estimatedListSize={{ width, height }}
-      renderItem={({ item }) => <ActivityCard activity={item} />}
+      renderItem={({ item, index }) =>
+        usesCardCarousel ? (
+          <ExploreActivityCard
+            activity={item}
+            index={index}
+            itemExtent={itemExtent}
+            mediaHeight={mediaHeight}
+            scrollOffset={cardScrollOffset}
+            followsCollapsingHeader={filtersInOverlay}
+          />
+        ) : (
+          <ActivityCard activity={item} />
+        )
+      }
       onEndReached={handleEndReached}
       onEndReachedThreshold={0.4}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -145,12 +216,17 @@ export function ExploreList({
           </View>
         ) : null
       }
-      contentContainerStyle={contentStyle}
+      contentContainerStyle={[contentStyle, { paddingBottom: endPadding }]}
       contentInsetAdjustmentBehavior={insetBehavior}
+      decelerationRate={usesCardCarousel ? "fast" : "normal"}
+      disableIntervalMomentum={usesCardCarousel}
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
+      onMomentumScrollEnd={handleMomentumScrollEnd}
       onScroll={onScroll}
       onScrollBeginDrag={Keyboard.dismiss}
+      snapToAlignment={usesCardCarousel ? "start" : undefined}
+      snapToInterval={usesCardCarousel ? itemExtent : undefined}
       scrollEventThrottle={16}
       refScrollView={scrollRef as never}
       style={listStyle}

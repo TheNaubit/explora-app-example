@@ -1,5 +1,5 @@
 import { Suspense, type ReactNode, type Ref } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, useWindowDimensions, View } from "react-native";
 import {
   ScrollEdgeEffectProvider,
   useScrollEdgeEffectRef,
@@ -11,7 +11,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { A11y } from "@/a11y";
 import { QueryErrorBoundary } from "@/components/query-error-boundary";
 import { ScreenFrame } from "@/components/screen-frame";
-import { IOS_EXPLORE_HEADER_BODY_HEIGHT } from "@/screens/explore/constants";
+import {
+  IOS_EXPLORE_HEADER_BODY_HEIGHT,
+  IOS_EXPLORE_HEADER_FONT_SCALE_ALLOWANCE,
+} from "@/screens/explore/constants";
 import { ExploreCustomHeader } from "@/screens/explore/explore-custom-header";
 import { ExploreList } from "@/screens/explore/explore-list";
 import { ExploreSkeleton } from "@/screens/explore/explore-skeleton";
@@ -58,8 +61,13 @@ function ExploreNative() {
   const scrollEdgeRef = useScrollEdgeEffectRef();
   const scrollOffset = useSharedValue(0);
   const insets = useSafeAreaInsets();
+  const { fontScale: measuredFontScale } = useWindowDimensions();
+  const fontScale = measuredFontScale ?? 1;
   const usesCustomHeader = Platform.OS === "ios";
-  const headerHeight = usesCustomHeader ? insets.top + IOS_EXPLORE_HEADER_BODY_HEIGHT : 0;
+  const headerBodyHeight =
+    IOS_EXPLORE_HEADER_BODY_HEIGHT +
+    Math.max(0, fontScale - 1) * IOS_EXPLORE_HEADER_FONT_SCALE_ALLOWANCE;
+  const headerHeight = usesCustomHeader ? insets.top + headerBodyHeight : 0;
 
   return (
     <View collapsable={false} style={styles.root} testID="explore-screen">
@@ -79,7 +87,11 @@ function ExploreNative() {
         }
       />
       {usesCustomHeader ? (
-        <ExploreCustomHeader safeAreaTop={insets.top} scrollOffset={scrollOffset} />
+        <ExploreCustomHeader
+          bodyHeight={headerBodyHeight}
+          safeAreaTop={insets.top}
+          scrollOffset={scrollOffset}
+        />
       ) : null}
       <A11y.ScreenChange title={t(exploreMessages.screenTitle)} />
     </View>

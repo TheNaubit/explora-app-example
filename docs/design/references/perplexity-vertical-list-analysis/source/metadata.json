@@ -1,0 +1,21 @@
+{
+  "source": "../../perplexity-vertical-list-reference.mp4",
+  "width": 320,
+  "height": 694,
+  "source_width": 320,
+  "source_height": 694,
+  "pixel_format": "yuv420p",
+  "codec": "h264",
+  "time_base": "1/15360",
+  "nominal_fps": 60.0,
+  "average_fps": 60.0,
+  "duration_s": 5.416667,
+  "source_frame_count": 325,
+  "extracted_frame_count": 325,
+  "selected_start_s": 0.0,
+  "selected_end_s": 5.4,
+  "median_frame_delta_s": 0.016666999999999987,
+  "variable_frame_rate_suspected": false,
+  "crop": null,
+  "warnings": []
+}

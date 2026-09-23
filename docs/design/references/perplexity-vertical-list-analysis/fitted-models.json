@@ -1,0 +1,22 @@
+{
+  "scale": {
+    "model": "piecewise-linear",
+    "normalizedInput": [-1, 0, 1],
+    "output": [0.92, 1, 0.92],
+    "extrapolation": "clamp",
+    "confidence": "medium"
+  },
+  "opacity": {
+    "model": "piecewise-linear",
+    "normalizedInput": [-1, 0, 1],
+    "output": [0.52, 1, 0.52],
+    "extrapolation": "clamp",
+    "confidence": "low"
+  },
+  "timeCurve": {
+    "model": "native-scroll-deceleration",
+    "decelerationRate": "fast",
+    "snap": "item interval",
+    "confidence": "high"
+  }
+}

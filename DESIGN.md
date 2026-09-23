@@ -222,6 +222,9 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 - Keep search before filters.
 - Allow five category chips because this row is a selector.
 - Use one vertical activity list.
+- Use a focused, snapping card carousel on native devices.
+- Keep adjacent cards visible as navigation cues.
+- Use the standard list for reduced motion and large text.
 - Keep the favorite action visible on every activity card.
 - Keep content visible while a refresh is in progress.
 
@@ -274,8 +277,9 @@ Changing a mode does not silently reset favorites or generated activities.
 - Keep frequent feedback between 100 and 150 milliseconds.
 - Use a strong ease-out for timed entrances. Keep them below 300 milliseconds.
 - Use critically damped springs for direct manipulation.
-- Add haptics only for save, remove, successful refresh, and error outcomes.
-- Use `react-native-pulsar` only (`Presets.System.*` through `@/haptics/feedback`). Do not use `expo-haptics`.
+- Add haptics only for save, remove, refresh outcomes, errors, and a new settled Explore card.
+- Use `react-native-pulsar` only. Route system outcomes through `@/haptics/feedback`.
+- Use the realtime composer only for documented custom feedback. Do not use `expo-haptics`.
 - Replace spatial motion with a short cross-fade when reduced motion is active.
 
 Do not animate recycled list rows on entry. Do not move content only for decoration.

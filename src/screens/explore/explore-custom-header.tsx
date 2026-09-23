@@ -14,7 +14,6 @@ import { CategoryChipRow } from "@/components/category-chip-row";
 import { SearchField } from "@/components/search-field";
 import {
   IOS_EXPLORE_HEADER_BLUR_INTENSITY,
-  IOS_EXPLORE_HEADER_BODY_HEIGHT,
   IOS_EXPLORE_HEADER_COLLAPSE_DISTANCE,
   IOS_EXPLORE_HEADER_TRANSLATION,
 } from "@/screens/explore/constants";
@@ -23,6 +22,7 @@ import { discovery$, setDiscoveryCategory, setDiscoverySearch } from "@/state/di
 import { spacing, typography, useAppTheme } from "@/theme";
 
 type ExploreCustomHeaderProps = {
+  bodyHeight: number;
   safeAreaTop: number;
   scrollOffset: SharedValue<number>;
 };
@@ -38,12 +38,16 @@ const HAS_NATIVE_SOFT_EDGE = Platform.OS === "ios" && iosMajorVersion() >= 26;
  * Custom iOS discovery header.
  * Title, search, material, and filters move as one scroll-linked surface.
  */
-export function ExploreCustomHeader({ safeAreaTop, scrollOffset }: ExploreCustomHeaderProps) {
+export function ExploreCustomHeader({
+  bodyHeight,
+  safeAreaTop,
+  scrollOffset,
+}: ExploreCustomHeaderProps) {
   const { t } = useLingui();
   const theme = useAppTheme();
   const category = useValue(discovery$.category);
   const searchQuery = useValue(discovery$.searchQuery);
-  const height = safeAreaTop + IOS_EXPLORE_HEADER_BODY_HEIGHT;
+  const height = safeAreaTop + bodyHeight;
 
   const panelStyle = useAnimatedStyle(() => {
     const progress = interpolate(

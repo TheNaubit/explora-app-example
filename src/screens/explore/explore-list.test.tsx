@@ -1,6 +1,6 @@
 import { createElement, Suspense, type ReactNode } from "react";
 import { Keyboard } from "react-native";
-import { fireEvent, render, screen } from "@testing-library/react-native";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react-native";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { I18nProvider } from "@lingui/react";
 import { i18n } from "@lingui/core";
@@ -8,6 +8,10 @@ import { i18n } from "@lingui/core";
 import { ExploreList } from "@/screens/explore/explore-list";
 import { createQueryClient } from "@/query/client";
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
+import {
+  EXPLORE_CARD_HAPTIC_AMPLITUDE,
+  EXPLORE_CARD_HAPTIC_FREQUENCY,
+} from "@/screens/explore/constants";
 
 i18n.load("en", {});
 i18n.activate("en");
@@ -28,6 +32,15 @@ jest.mock("@/components/activity-card", () => {
   };
 });
 
+jest.mock("@/screens/explore/explore-activity-card", () => {
+  const React = require("react");
+  const { Text } = require("react-native");
+  return {
+    ExploreActivityCard: ({ activity }: { activity: { title: string } }) =>
+      React.createElement(Text, null, activity.title),
+  };
+});
+
 function createWrapper() {
   const queryClient = createQueryClient();
   return function Wrapper({ children }: { children: ReactNode }) {
@@ -40,6 +53,10 @@ function createWrapper() {
 }
 
 describe("ExploreList", () => {
+  afterEach(async () => {
+    await cleanup();
+  });
+
   beforeEach(() => {
     mockHandleEndReached.mockReset();
     mockUseExploreList.mockReset();
@@ -109,5 +126,74 @@ describe("ExploreList", () => {
 
     fireEvent.press(screen.getByTestId("list-end-reached"));
     expect(mockHandleEndReached).toHaveBeenCalled();
+  });
+
+  it("snaps cards and plays one custom haptic for a new settled card", async () => {
+    const { useRealtimeComposer } = require("react-native-pulsar");
+    const ReactNative = require("react-native");
+    const windowDimensions = jest.spyOn(ReactNative, "useWindowDimensions").mockReturnValue({
+      width: 402,
+      height: 874,
+      scale: 3,
+      fontScale: 1,
+    });
+
+    await render(
+      createElement(ExploreList, {
+        banner: null,
+        onBannerChange: jest.fn(),
+        refreshing: false,
+        onRefresh: jest.fn(),
+      }),
+      { wrapper: createWrapper() },
+    );
+
+    const list = screen.getByTestId("explore-list");
+    const composer = useRealtimeComposer.mock.results.at(-1).value;
+
+    expect(list.props.snapToInterval).toBeGreaterThan(0);
+    expect(list.props.decelerationRate).toBe("fast");
+    expect(list.props.disableIntervalMomentum).toBe(true);
+
+    await fireEvent(list, "momentumScrollEnd", {
+      nativeEvent: { contentOffset: { y: list.props.snapToInterval } },
+    });
+    await fireEvent(list, "momentumScrollEnd", {
+      nativeEvent: { contentOffset: { y: list.props.snapToInterval } },
+    });
+
+    expect(composer.playDiscrete).toHaveBeenCalledTimes(1);
+    expect(composer.playDiscrete).toHaveBeenCalledWith(
+      EXPLORE_CARD_HAPTIC_AMPLITUDE,
+      EXPLORE_CARD_HAPTIC_FREQUENCY,
+    );
+    windowDimensions.mockRestore();
+  });
+
+  it("keeps the automatic-height list at a large font scale", async () => {
+    const ReactNative = require("react-native");
+    const windowDimensions = jest.spyOn(ReactNative, "useWindowDimensions").mockReturnValue({
+      width: 402,
+      height: 874,
+      scale: 3,
+      fontScale: 1.4,
+    });
+
+    await render(
+      createElement(ExploreList, {
+        banner: null,
+        onBannerChange: jest.fn(),
+        refreshing: false,
+        onRefresh: jest.fn(),
+      }),
+      { wrapper: createWrapper() },
+    );
+
+    const list = screen.getByTestId("explore-list");
+
+    expect(list.props.snapToInterval).toBeUndefined();
+    expect(list.props.decelerationRate).toBe("normal");
+    expect(list.props.disableIntervalMomentum).toBe(false);
+    windowDimensions.mockRestore();
   });
 });
