@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useRef, useState } from "react";
+import { startTransition, useCallback, useEffect, useRef, useState } from "react";
 import { Stack } from "expo-router";
 import { useLingui } from "@lingui/react/macro";
 import { useValue } from "@legendapp/state/react";
@@ -11,6 +11,7 @@ import { discovery$, setDiscoverySearch } from "@/state/discovery";
 /**
  * Native stack title and search bar for Explore on iOS and Android.
  * Keeps the bar text in sync when filters clear from the empty state.
+ * Handlers stay stable so header options do not reconfigure on every keystroke.
  * Web returns only the title; the in-screen SearchField lives in ExploreHeader.
  */
 export function ExploreNativeSearch() {
@@ -48,6 +49,27 @@ export function ExploreNativeSearch() {
     return () => clearTimeout(handle);
   }, [draft]);
 
+  const onChangeText = useCallback((event: { nativeEvent: { text: string } }) => {
+    setDraft(event.nativeEvent.text);
+  }, []);
+
+  const onCancelButtonPress = useCallback(() => {
+    setDraft("");
+    lastPushed.current = "";
+    startTransition(() => {
+      setDiscoverySearch("");
+    });
+  }, []);
+
+  const onSearchButtonPress = useCallback((event: { nativeEvent: { text: string } }) => {
+    const next = event.nativeEvent.text.trim();
+    setDraft(next);
+    lastPushed.current = next;
+    startTransition(() => {
+      setDiscoverySearch(next);
+    });
+  }, []);
+
   const title = (
     <Stack.Title large={process.env.EXPO_OS === "ios"}>{t(exploreMessages.heading)}</Stack.Title>
   );
@@ -64,26 +86,15 @@ export function ExploreNativeSearch() {
         placeholder={t(exploreMessages.searchPlaceholder)}
         autoCapitalize="none"
         hideWhenScrolling
-        allowToolbarIntegration
-        placement="automatic"
-        onChangeText={(event) => {
-          setDraft(event.nativeEvent.text);
-        }}
-        onCancelButtonPress={() => {
-          setDraft("");
-          lastPushed.current = "";
-          startTransition(() => {
-            setDiscoverySearch("");
-          });
-        }}
-        onSearchButtonPress={(event) => {
-          const next = event.nativeEvent.text.trim();
-          setDraft(next);
-          lastPushed.current = next;
-          startTransition(() => {
-            setDiscoverySearch(next);
-          });
-        }}
+        // Stacked avoids iOS 26 toolbar integration with NativeTabs, which can
+        // break the screen width when the search controller activates.
+        placement="stacked"
+        allowToolbarIntegration={false}
+        obscureBackground={false}
+        hideNavigationBar={false}
+        onChangeText={onChangeText}
+        onCancelButtonPress={onCancelButtonPress}
+        onSearchButtonPress={onSearchButtonPress}
       />
     </>
   );

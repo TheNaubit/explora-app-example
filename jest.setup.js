@@ -15,11 +15,15 @@ jest.mock("expo-network", () => ({
 
 jest.mock("react-native-pulsar", () => require("react-native-pulsar/jest-mock"));
 
-jest.mock("expo-glass-effect", () => ({
-  GlassView: "GlassView",
-  isLiquidGlassAvailable: () => false,
-  isGlassEffectAPIAvailable: () => false,
-}));
+jest.mock("@bsky.app/expo-scroll-edge-effect", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  return {
+    ScrollEdgeEffectProvider: ({ children }) => children,
+    ScrollEdgeEffect: ({ children, ...rest }) => React.createElement(View, rest, children),
+    useScrollEdgeEffectRef: () => () => {},
+  };
+});
 
 jest.mock("expo-blur", () => ({
   BlurView: "BlurView",

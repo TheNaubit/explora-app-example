@@ -66,11 +66,14 @@ export function ScreenFrame({
 const styles = StyleSheet.create({
   body: {
     flex: 1,
+    minHeight: 0,
   },
   content: {
     flex: 1,
+    minHeight: 0,
   },
   root: {
     flex: 1,
+    minHeight: 0,
   },
 });

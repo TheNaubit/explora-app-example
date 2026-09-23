@@ -1,4 +1,12 @@
-import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import type { Ref } from "react";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { LegendList } from "@legendapp/list/react-native";
 import { useLingui } from "@lingui/react/macro";
 
@@ -6,28 +14,49 @@ import { ActivityCard } from "@/components/activity-card";
 import { EmptyState } from "@/components/empty-state";
 import { emptySearchIllustration } from "@/illustrations";
 import { resetDiscoveryFilters } from "@/state/discovery";
+import { EXPLORE_CHIP_OVERLAY_HEIGHT } from "@/screens/explore/constants";
 import { ExploreHeader } from "@/screens/explore/explore-header";
 import { ExploreStatusBanner } from "@/screens/explore/explore-status-banner";
 import { exploreMessages } from "@/screens/explore/messages";
 import type { ExploreBannerState } from "@/screens/explore/types";
 import { useExploreList } from "@/screens/explore/use-explore-list";
+import { useExploreTopInset } from "@/screens/explore/use-explore-top-inset";
 import { spacing, useAppTheme } from "@/theme";
+
+/** Scroll host ref for `@bsky.app/expo-scroll-edge-effect` (callback or object ref). */
+type ExploreScrollRef = Ref<unknown>;
 
 type ExploreListProps = {
   banner: ExploreBannerState;
   onBannerChange: (banner: ExploreBannerState) => void;
   refreshing: boolean;
   onRefresh: () => void;
+  /**
+   * When true, category chips render in the ScrollEdgeEffect overlay.
+   * List header keeps only the status banner.
+   */
+  filtersInOverlay?: boolean;
+  /** Scroll view ref for `@bsky.app/expo-scroll-edge-effect`. */
+  scrollRef?: ExploreScrollRef;
 };
 
 /**
  * Explore catalog body after Suspense resolves.
- * Shows empty state or the infinite activity list.
- * Chips sit in the list header so the list is the first UIScrollView.
+ * Uses an explicit window size so LegendList is not height 0 under Native Tabs.
+ * Native top inset clears the transparent header and optional chip overlay.
  */
-export function ExploreList({ banner, onBannerChange, refreshing, onRefresh }: ExploreListProps) {
+export function ExploreList({
+  banner,
+  onBannerChange,
+  refreshing,
+  onRefresh,
+  filtersInOverlay = false,
+  scrollRef,
+}: ExploreListProps) {
   const { t } = useLingui();
   const theme = useAppTheme();
+  const { width, height } = useWindowDimensions();
+  const topInset = useExploreTopInset();
   const { activities, isFetchingNextPage, handleEndReached } = useExploreList({ onBannerChange });
 
   const bannerNode =
@@ -42,19 +71,27 @@ export function ExploreList({ banner, onBannerChange, refreshing, onRefresh }: E
       />
     ) : null;
 
-  const listHeader = (
+  const listHeader = filtersInOverlay ? (
+    bannerNode
+  ) : (
     <>
       <ExploreHeader />
       {bannerNode}
     </>
   );
 
+  const overlayPad = filtersInOverlay ? EXPLORE_CHIP_OVERLAY_HEIGHT : 0;
+  const padTop = topInset + overlayPad + spacing.space8;
+  const listStyle = [styles.list, { width, height, backgroundColor: theme.colors.background }];
+  const contentStyle = [styles.listPad, { paddingTop: padTop }];
+
   if (activities.length === 0) {
     return (
       <ScrollView
-        contentContainerStyle={styles.emptyScroll}
-        contentInsetAdjustmentBehavior="automatic"
-        style={{ backgroundColor: theme.colors.background, flex: 1 }}
+        ref={scrollRef as never}
+        contentContainerStyle={[styles.emptyScroll, { paddingTop: padTop }]}
+        contentInsetAdjustmentBehavior="never"
+        style={listStyle}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         testID="explore-empty"
       >
@@ -77,6 +114,7 @@ export function ExploreList({ banner, onBannerChange, refreshing, onRefresh }: E
       data={activities}
       keyExtractor={(item) => item.id}
       recycleItems
+      estimatedListSize={{ width, height }}
       renderItem={({ item }) => <ActivityCard activity={item} />}
       onEndReached={handleEndReached}
       onEndReachedThreshold={0.4}
@@ -89,9 +127,10 @@ export function ExploreList({ banner, onBannerChange, refreshing, onRefresh }: E
           </View>
         ) : null
       }
-      contentContainerStyle={styles.listPad}
-      contentInsetAdjustmentBehavior="automatic"
-      style={[styles.list, { backgroundColor: theme.colors.background }]}
+      contentContainerStyle={contentStyle}
+      contentInsetAdjustmentBehavior="never"
+      refScrollView={scrollRef as never}
+      style={listStyle}
       testID="explore-list"
     />
   );
@@ -106,7 +145,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.space16,
   },
   list: {
-    flex: 1,
+    // Size comes from useWindowDimensions at the call site.
   },
   listPad: {
     paddingBottom: spacing.space32,
