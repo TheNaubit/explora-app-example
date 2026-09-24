@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLingui } from "@lingui/react/macro";
 
@@ -19,9 +19,15 @@ export function useExploreRefresh() {
   const { t } = useLingui();
   const queryClient = useQueryClient();
   const refresh = useRefreshCatalog();
+  const refreshInFlight = useRef(false);
   const [banner, setBanner] = useState<ExploreBannerState>(null);
 
   async function handleRefresh() {
+    if (refreshInFlight.current) {
+      return;
+    }
+
+    refreshInFlight.current = true;
     setBanner(null);
     try {
       await refresh.mutateAsync();
@@ -32,6 +38,8 @@ export function useExploreRefresh() {
       setBanner({ kind: "refresh", errorKey });
       hapticActionError();
       announceStatus(t(resolveErrorMessage(errorKey)));
+    } finally {
+      refreshInFlight.current = false;
     }
   }
 

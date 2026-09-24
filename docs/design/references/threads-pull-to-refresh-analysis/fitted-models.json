@@ -1,0 +1,38 @@
+{
+  "adaptation": "Explora app mark",
+  "models": {
+    "pullProgress": {
+      "formula": "clamp(-normalizedOffset / threshold, 0, 1)",
+      "thresholdPoints": 72
+    },
+    "markReveal": {
+      "strokeDashOffset": "pathLength * (1 - progress)",
+      "trackAlwaysVisible": true,
+      "interiorFill": false
+    },
+    "pullPresentation": {
+      "opacity": "progress",
+      "scale": "0.88 + 0.12 * progress",
+      "strokeColor": "interpolate(text, accent, progress)"
+    },
+    "haptic": {
+      "startProgress": 0.08,
+      "easing": "smoothstep",
+      "amplitude": {
+        "start": 0.06,
+        "end": 0.34
+      },
+      "frequency": {
+        "start": 0.18,
+        "end": 0.8
+      },
+      "reversible": true
+    },
+    "refreshLoop": {
+      "durationMilliseconds": 760,
+      "easing": "linear",
+      "activeStrokeFraction": 0.28,
+      "motion": "strokeDashOffset"
+    }
+  }
+}

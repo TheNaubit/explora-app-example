@@ -283,6 +283,7 @@ describe("mock API", () => {
         (activity) => activity.id === succeeded.data.activity.id,
       );
       expect(matches).toHaveLength(1);
+      expect(listed.data.activities[0]?.id).toBe(succeeded.data.activity.id);
     });
 
     it("adds one activity after the slow delay when refresh is slow", async () => {
@@ -303,7 +304,7 @@ describe("mock API", () => {
 
     it("returns validationFailed when the appended activity is invalid", async () => {
       const spy = jest
-        .spyOn(catalogStore, "appendRefreshActivity")
+        .spyOn(catalogStore, "prependRefreshActivity")
         .mockReturnValue(invalidActivity);
 
       const result = await refreshCatalog();

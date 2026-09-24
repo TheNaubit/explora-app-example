@@ -66,6 +66,32 @@ describe("useExploreRefresh", () => {
     expect(result.current.banner).toBeNull();
   });
 
+  it("ignores a second refresh request while the first request is pending", async () => {
+    let resolveRefresh: (() => void) | undefined;
+    mockMutateAsync.mockReturnValue(
+      new Promise<void>((resolve) => {
+        resolveRefresh = resolve;
+      }),
+    );
+    const { result } = await renderHook(() => useExploreRefresh(), {
+      wrapper: createWrapper(),
+    });
+
+    let firstRefresh: Promise<void> | undefined;
+    let secondRefresh: Promise<void> | undefined;
+    await act(async () => {
+      firstRefresh = result.current.handleRefresh();
+      secondRefresh = result.current.handleRefresh();
+      await Promise.resolve();
+    });
+
+    expect(mockMutateAsync).toHaveBeenCalledTimes(1);
+    resolveRefresh?.();
+    await act(async () => {
+      await Promise.all([firstRefresh, secondRefresh]);
+    });
+  });
+
   it("maps ApiError refresh failures to a banner", async () => {
     mockMutateAsync.mockRejectedValue(new ApiError("errors.refreshFailed"));
 

@@ -70,6 +70,11 @@ export const exploreMessages = {
     comment: "Button that refreshes an empty activity catalog",
     message: "Refresh",
   }),
+  refreshAction: msg({
+    id: "explore.refreshAction",
+    comment: "Accessible name for the Explore pull-to-refresh control",
+    message: "Refresh activities",
+  }),
   refreshFailedTitle: msg({
     id: "explore.refreshFailedTitle",
     comment: "Inline banner title when catalog refresh fails",

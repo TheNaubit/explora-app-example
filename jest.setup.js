@@ -181,6 +181,8 @@ jest.mock("react-native-reanimated", () => {
       const progress = (value - input[0]) / (input[input.length - 1] - input[0]);
       return output[0] + progress * (output[output.length - 1] - output[0]);
     },
+    interpolateColor: (value, input, output) =>
+      value >= input[input.length - 1] ? output[output.length - 1] : output[0],
     useSharedValue: (value) => ({
       value,
       get() {
@@ -193,7 +195,8 @@ jest.mock("react-native-reanimated", () => {
     useDerivedValue: (factory) => ({
       get: factory,
     }),
-    useAnimatedScrollHandler: (handler) => handler,
+    useAnimatedScrollHandler: (handler) => (event) => handler(event.nativeEvent ?? event),
+    useAnimatedProps: (factory) => factory(),
     useAnimatedStyle: (factory) => factory(),
     useReducedMotion: jest.fn(() => false),
     withRepeat: (value) => value,
@@ -201,7 +204,7 @@ jest.mock("react-native-reanimated", () => {
       callback?.(true);
       return value;
     },
-    Easing: { bezier: () => undefined, inOut: () => undefined, ease: undefined },
+    Easing: { bezier: () => undefined, inOut: () => undefined, ease: undefined, linear: undefined },
     LinearTransition: {
       duration: () => ({
         easing: () => undefined,
@@ -227,6 +230,7 @@ jest.mock("@legendapp/list/react-native", () => {
       keyboardDismissMode,
       keyboardShouldPersistTaps,
       onMomentumScrollEnd,
+      onScroll,
       onScrollBeginDrag,
       onScrollEndDrag,
       initialScrollOffset,
@@ -242,6 +246,7 @@ jest.mock("@legendapp/list/react-native", () => {
           keyboardDismissMode,
           keyboardShouldPersistTaps,
           onMomentumScrollEnd,
+          onScroll,
           onScrollBeginDrag,
           onScrollEndDrag,
           initialScrollOffset,

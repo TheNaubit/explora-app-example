@@ -25,7 +25,18 @@
 - Fast interval snapping keeps one card focused and leaves adjacent cards visible.
 - A soft Pulsar detent plays once when a new card settles.
 - Reduced motion, web, and large text use the standard vertical list.
-- Pull to refresh runs `useRefreshCatalog` (+1 activity on success).
+- Pull distance grows one stroke around a complete gray app-mark track.
+- Pull progress increases the mark opacity and scale. Partial pulls stay translucent and smaller.
+- The stroke blends from the primary text color to the accent color.
+- A completed pull shows the full hollow outline without a state jump.
+- Pulsar real-time feedback gains tension with the pull. It reverses when the pull distance decreases.
+- Reaching the complete pull threshold starts refresh immediately.
+- The gesture commits once. Later scroll and native release callbacks cannot start another request.
+- Incomplete pulls reset when the drag ends. Rebound scroll events cannot reopen the pull state.
+- Completed pulls reset after refresh ends.
+- The custom mark shows a loading sweep while the refresh request is pending.
+- A successful refresh adds one activity at the start of the catalog.
+- Refresh-added activities keep their order and stable IDs after a cold app launch.
 - Refresh success and failure play Pulsar outcome haptics.
 - Infinite scroll loads the next page. Soft failures use an inline banner.
 - Native Explore uses its platform header and content insets. Web and Saved use `ScreenFrame`.
@@ -40,8 +51,10 @@
 | Screen hooks          | `use-explore-list.ts`, `use-explore-refresh.ts`                                    |
 | Header search         | `explore-custom-header.tsx`, `explore-native-search.tsx`                           |
 | Focused card motion   | `explore-activity-card.tsx`, `explore-list.tsx`                                    |
+| Pull to refresh       | `src/components/pull-to-refresh/`, `use-explore-refresh.ts`                        |
 | Supplied data         | `src/data/activities.ts`, `assets/activities.json`                                 |
 | Seed catalog          | `src/mocks/seed-catalog.ts` (1,012 items)                                          |
+| Refresh persistence   | `src/mocks/catalog-store.ts`, MMKV                                                 |
 | Mock list API         | `src/mocks/api.ts` → `listActivities` (paginated)                                  |
 | List query            | `src/hooks/use-activities.ts` (`useSuspenseInfiniteQuery`)                         |
 | Search / filter store | `src/state/discovery.ts`                                                           |
@@ -55,3 +68,4 @@
 - [UI states](./ui-states.md)
 - [Data layer](./data-layer.md)
 - [Product overview](../product/overview.md)
+- [Threads pull-to-refresh reference](../design/references/threads-pull-to-refresh-analysis/animation-spec.md)

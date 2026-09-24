@@ -163,6 +163,82 @@ describe("ExploreList", () => {
     expect(mockHandleEndReached).toHaveBeenCalled();
   });
 
+  it("commits once at full pull and resets for the next gesture", async () => {
+    const { useRealtimeComposer } = require("react-native-pulsar");
+    const onRefresh = jest.fn();
+
+    const view = await render(
+      createElement(ExploreList, {
+        ...defaultProps,
+        onRefresh,
+      }),
+      { wrapper: createWrapper() },
+    );
+
+    const list = screen.getByTestId("explore-list");
+    const pullComposer = useRealtimeComposer.mock.results.at(-2).value;
+
+    await fireEvent(list, "scrollBeginDrag");
+    await fireEvent(list, "scroll", {
+      nativeEvent: { contentInset: { top: 0 }, contentOffset: { y: -36 } },
+    });
+    const forwardPull = pullComposer.set.mock.calls.at(-1);
+
+    await fireEvent(list, "scroll", {
+      nativeEvent: { contentInset: { top: 0 }, contentOffset: { y: -18 } },
+    });
+    const reversePull = pullComposer.set.mock.calls.at(-1);
+
+    expect(onRefresh).not.toHaveBeenCalled();
+    expect(forwardPull[0]).toBeGreaterThan(reversePull[0]);
+    expect(forwardPull[1]).toBeGreaterThan(reversePull[1]);
+
+    pullComposer.stop.mockClear();
+    await fireEvent(list, "scrollEndDrag", {
+      nativeEvent: { contentInset: { top: 0 }, contentOffset: { y: -18 } },
+    });
+    expect(pullComposer.stop).toHaveBeenCalled();
+
+    await fireEvent(list, "scrollBeginDrag");
+    await fireEvent(list, "scroll", {
+      nativeEvent: { contentInset: { top: 0 }, contentOffset: { y: -72 } },
+    });
+    await fireEvent(list, "scroll", {
+      nativeEvent: { contentInset: { top: 0 }, contentOffset: { y: -90 } },
+    });
+    expect(onRefresh).toHaveBeenCalledTimes(1);
+    await fireEvent.press(screen.getByTestId("refresh-control"));
+    expect(onRefresh).toHaveBeenCalledTimes(1);
+
+    await view.rerender(
+      createElement(ExploreList, {
+        ...defaultProps,
+        onRefresh,
+        refreshing: true,
+      }),
+    );
+    await view.rerender(
+      createElement(ExploreList, {
+        ...defaultProps,
+        onRefresh,
+        refreshing: false,
+      }),
+    );
+
+    await fireEvent(list, "scrollBeginDrag");
+    await fireEvent(list, "scroll", {
+      nativeEvent: { contentInset: { top: 0 }, contentOffset: { y: -72 } },
+    });
+    expect(onRefresh).toHaveBeenCalledTimes(2);
+    expect(
+      screen.getByTestId("pull-to-refresh-indicator", { includeHiddenElements: true }),
+    ).toBeTruthy();
+    expect(
+      screen.getByTestId("pull-to-refresh-progress-path", { includeHiddenElements: true }).props
+        .fill,
+    ).toBeNull();
+  });
+
   it("snaps cards and plays one custom haptic for a new settled card", async () => {
     const { useRealtimeComposer } = require("react-native-pulsar");
     const ReactNative = require("react-native");

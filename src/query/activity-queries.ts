@@ -37,7 +37,7 @@ export async function runRefreshCatalog(queryClient: QueryClient): Promise<GetAc
   const result = await refreshCatalog();
   const data = unwrapMockResult(result);
   queryClient.setQueryData(activityKeys.detail(data.activity.id), data);
-  void queryClient.invalidateQueries({ queryKey: activityKeys.lists() });
+  await queryClient.invalidateQueries({ queryKey: activityKeys.lists() });
   return data;
 }
 

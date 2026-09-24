@@ -28,7 +28,11 @@ Discovery must support scroll, search, and interaction with at least **1,000** l
 - Generated ids use `gen-0001` … (`GENERATED_ACTIVITY_ID_PREFIX`) with a fixed Faker base seed (`CATALOG_FAKER_BASE_SEED`).
 - Reset with `resetCatalog()` from `src/mocks/catalog-store.ts`.
 
-Refresh is different. A successful refresh adds **one** activity only (`ref-0001`, … via `REFRESH_ACTIVITY_ID_PREFIX` / `REFRESH_FAKER_BASE_SEED`).
+Refresh is different. A successful refresh adds **one** activity at the start of the catalog.
+
+Refresh ids use `ref-0001`, … through `REFRESH_ACTIVITY_ID_PREFIX` and `REFRESH_FAKER_BASE_SEED`.
+
+MMKV stores the refresh-added activities and their sequence. A cold launch restores them before the seeded catalog.
 
 ## Mocked network
 

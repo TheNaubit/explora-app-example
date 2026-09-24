@@ -20,7 +20,7 @@ export const CATALOG_FAKER_BASE_SEED = 42_001;
 
 /**
  * Fixed Faker base seed for refresh-created activities.
- * `appendRefreshActivity` uses `REFRESH_FAKER_BASE_SEED + sequence`.
+ * `prependRefreshActivity` uses `REFRESH_FAKER_BASE_SEED + sequence`.
  * Kept far above `CATALOG_FAKER_BASE_SEED` so refresh items do not collide with seed streams.
  */
 export const REFRESH_FAKER_BASE_SEED = 90_000;

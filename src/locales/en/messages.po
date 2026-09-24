@@ -218,6 +218,12 @@ msgstr "Outdoors"
 msgid "explore.browseEmptyAction"
 msgstr "Refresh"
 
+#. Accessible name for the Explore pull-to-refresh control
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.refreshAction"
+msgstr "Refresh activities"
+
 #. Inline banner title when catalog refresh fails
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts

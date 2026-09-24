@@ -50,6 +50,9 @@ type ActivityCardCarouselProps = {
   listFooterComponent?: ReactElement | null;
   listHeaderComponent?: ReactElement | null;
   onEndReached?: () => void;
+  onPullBegin?: () => void;
+  onPullEnd?: () => void;
+  onPullOffsetChange?: (normalizedOffset: number) => void;
   onScrollPositionChange?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   refreshControl?: ReactElement;
   scrollOffset?: SharedValue<number>;
@@ -68,6 +71,9 @@ export function ActivityCardCarousel({
   listFooterComponent,
   listHeaderComponent,
   onEndReached,
+  onPullBegin,
+  onPullEnd,
+  onPullOffsetChange,
   onScrollPositionChange,
   refreshControl,
   scrollOffset,
@@ -100,6 +106,7 @@ export function ActivityCardCarousel({
       cardScrollOffset.set(Math.max(0, normalizedOffset));
     }
     scrollOffset?.set(Math.max(0, normalizedOffset));
+    onPullOffsetChange?.(normalizedOffset);
   });
 
   useEffect(() => {
@@ -171,6 +178,16 @@ export function ActivityCardCarousel({
     }
   }
 
+  function handleScrollBeginDrag() {
+    Keyboard.dismiss();
+    onPullBegin?.();
+  }
+
+  function handleScrollEndDrag(event: NativeSyntheticEvent<NativeScrollEvent>) {
+    onScrollPositionChange?.(event);
+    onPullEnd?.();
+  }
+
   return (
     <AnimatedLegendList
       ref={listRef}
@@ -209,7 +226,7 @@ export function ActivityCardCarousel({
             )
           : undefined
       }
-      maintainVisibleContentPosition={favoriteRemovalEffect ? false : undefined}
+      maintainVisibleContentPosition={false}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.4}
       refreshControl={refreshControl}
@@ -223,8 +240,8 @@ export function ActivityCardCarousel({
       keyboardShouldPersistTaps="handled"
       onMomentumScrollEnd={handleMomentumScrollEnd}
       onScroll={onScroll}
-      onScrollBeginDrag={Keyboard.dismiss}
-      onScrollEndDrag={onScrollPositionChange}
+      onScrollBeginDrag={handleScrollBeginDrag}
+      onScrollEndDrag={handleScrollEndDrag}
       snapToAlignment={usesCardCarousel ? "start" : undefined}
       snapToInterval={usesCardCarousel ? itemExtent : undefined}
       scrollEventThrottle={16}

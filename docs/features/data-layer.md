@@ -9,10 +9,13 @@ The client data layer has two owners:
 | Paginated catalog list        | TanStack Query `useSuspenseInfiniteQuery` | `src/hooks/use-activities.ts`      |
 | Activity detail               | TanStack Query `useSuspenseQuery`         | `src/hooks/use-activity.ts`        |
 | Refresh (+1 on success)       | TanStack Query `useMutation`              | `src/hooks/use-refresh-catalog.ts` |
+| Refresh catalog delta         | MMKV                                      | `src/mocks/catalog-store.ts`       |
 | Favorites + offline snapshots | Legend State + MMKV                       | `src/state/favorites.ts`           |
 | Search / category filters     | Legend State arrays (memory)              | `src/state/discovery.ts`           |
 
 Mock handlers remain the only network layer. Review modes control first-page, next-page, and refresh latency or failure.
+
+MMKV stores only refresh-added activities and the refresh sequence. The app generates the fixed seed catalog at launch.
 
 Query errors use `ApiError` with `errorKey`. UI resolves keys with `resolveErrorMessage`.
 
@@ -37,13 +40,13 @@ The query converts a missing activity into a soft not-found result. Other first-
 
 ## Code map
 
-| Concern                          | Location                                     |
-| -------------------------------- | -------------------------------------------- |
-| QueryClient + provider           | `src/query/client.ts`, `src/app/_layout.tsx` |
-| Online manager                   | `src/query/online-manager.ts`                |
-| Query keys                       | `src/query/keys.ts`                          |
-| ApiError unwrap                  | `src/query/errors.ts`                        |
-| Favorites persist name / MMKV id | `src/state/constants.ts`                     |
+| Concern                    | Location                                     |
+| -------------------------- | -------------------------------------------- |
+| QueryClient + provider     | `src/query/client.ts`, `src/app/_layout.tsx` |
+| Online manager             | `src/query/online-manager.ts`                |
+| Query keys                 | `src/query/keys.ts`                          |
+| ApiError unwrap            | `src/query/errors.ts`                        |
+| Persistence keys / MMKV id | `src/state/constants.ts`                     |
 
 ## Related
 

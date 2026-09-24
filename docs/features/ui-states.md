@@ -51,6 +51,9 @@ Shared components live under `src/components/`. Explore and Activity Detail use 
 3. Allow a small spinner only when the layout is unknown, the wait is very short, or a single control is busy.
 4. On refetch, keep showing current content. Add non-blocking refresh feedback (for example pull-to-refresh), not a full-screen spinner.
 
+Explore uses the app mark as its pull and refresh indicator. Reaching the complete threshold starts one refresh immediately.
+Incomplete pulls reset when the drag ends. The completed state resets after the refresh ends.
+
 ## Accessibility and i18n
 
 1. Announce loading, empty, not-found, error, and success with `announceStatus` after the UI updates.

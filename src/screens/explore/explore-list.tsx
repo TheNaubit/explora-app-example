@@ -14,6 +14,8 @@ import Animated, { type SharedValue, useAnimatedScrollHandler } from "react-nati
 
 import { ActivityCardCarousel } from "@/components/activity-card-carousel";
 import { EmptyState } from "@/components/empty-state";
+import { PullToRefreshIndicator, usePullToRefreshMotion } from "@/components/pull-to-refresh";
+import { HIDDEN_REFRESH_CONTROL_COLOR } from "@/components/pull-to-refresh/constants";
 import { emptySearchIllustration } from "@/illustrations";
 import type { ActivityListFilters } from "@/query/keys";
 import {
@@ -70,6 +72,7 @@ export function ExploreList({
   const initialScrollOffset = useRef(
     sharesCatalogPosition ? getDiscoveryScrollOffset() : undefined,
   ).current;
+  const pullToRefresh = usePullToRefreshMotion(refreshing, onRefresh);
 
   const bannerNode =
     banner !== null ? (
@@ -97,9 +100,28 @@ export function ExploreList({
   const onScroll = useAnimatedScrollHandler((event) => {
     const normalizedOffset = event.contentOffset.y + (event.contentInset?.top ?? 0);
     scrollOffset?.set(Math.max(0, normalizedOffset));
+    pullToRefresh.updatePull(normalizedOffset);
   });
 
   const insetBehavior = filtersInOverlay ? "never" : "automatic";
+  const refreshControl = (
+    <RefreshControl
+      accessibilityLabel={t(exploreMessages.refreshAction)}
+      accessibilityState={{ busy: refreshing }}
+      colors={[HIDDEN_REFRESH_CONTROL_COLOR]}
+      progressBackgroundColor={HIDDEN_REFRESH_CONTROL_COLOR}
+      refreshing={refreshing}
+      tintColor={HIDDEN_REFRESH_CONTROL_COLOR}
+      onRefresh={pullToRefresh.requestRefresh}
+    />
+  );
+  const refreshIndicator = (
+    <PullToRefreshIndicator
+      progress={pullToRefresh.progress}
+      refreshing={refreshing}
+      top={padTop}
+    />
+  );
 
   function handleScrollPositionChange(event: NativeSyntheticEvent<NativeScrollEvent>) {
     if (!sharesCatalogPosition) {
@@ -109,68 +131,87 @@ export function ExploreList({
     setDiscoveryScrollOffset(event.nativeEvent.contentOffset.y);
   }
 
+  function handleScrollBeginDrag() {
+    Keyboard.dismiss();
+    pullToRefresh.beginPull();
+  }
+
+  function handleScrollEndDrag(event: NativeSyntheticEvent<NativeScrollEvent>) {
+    handleScrollPositionChange(event);
+    pullToRefresh.finishPull();
+  }
+
   if (activities.length === 0) {
     return (
-      <Animated.ScrollView
-        ref={scrollRef as never}
-        contentContainerStyle={[styles.emptyScroll, { paddingTop: padTop }]}
-        contentInsetAdjustmentBehavior={insetBehavior}
-        contentOffset={
-          initialScrollOffset === undefined ? undefined : { x: 0, y: initialScrollOffset }
-        }
-        keyboardDismissMode="on-drag"
-        keyboardShouldPersistTaps="handled"
-        onScroll={onScroll}
-        onScrollBeginDrag={Keyboard.dismiss}
-        onScrollEndDrag={handleScrollPositionChange}
-        scrollEventThrottle={16}
-        style={listStyle}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        testID={mode === "search" ? "search-empty" : "explore-empty"}
-      >
-        {listHeader}
-        <EmptyState
-          title={t(
-            hasActiveFilters ? exploreMessages.emptyTitle : exploreMessages.browseEmptyTitle,
-          )}
-          body={t(hasActiveFilters ? exploreMessages.emptyBody : exploreMessages.browseEmptyBody)}
-          actionLabel={t(
-            hasActiveFilters ? exploreMessages.emptyAction : exploreMessages.browseEmptyAction,
-          )}
-          illustration={emptySearchIllustration}
-          onAction={() => {
-            if (hasActiveFilters) {
-              resetDiscoveryFilters();
-              return;
-            }
-            onRefresh();
-          }}
-        />
-      </Animated.ScrollView>
+      <View style={styles.root}>
+        <Animated.ScrollView
+          ref={scrollRef as never}
+          contentContainerStyle={[styles.emptyScroll, { paddingTop: padTop }]}
+          contentInsetAdjustmentBehavior={insetBehavior}
+          contentOffset={
+            initialScrollOffset === undefined ? undefined : { x: 0, y: initialScrollOffset }
+          }
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          onScroll={onScroll}
+          onScrollBeginDrag={handleScrollBeginDrag}
+          onScrollEndDrag={handleScrollEndDrag}
+          refreshControl={refreshControl}
+          scrollEventThrottle={16}
+          style={listStyle}
+          testID={mode === "search" ? "search-empty" : "explore-empty"}
+        >
+          {listHeader}
+          <EmptyState
+            title={t(
+              hasActiveFilters ? exploreMessages.emptyTitle : exploreMessages.browseEmptyTitle,
+            )}
+            body={t(hasActiveFilters ? exploreMessages.emptyBody : exploreMessages.browseEmptyBody)}
+            actionLabel={t(
+              hasActiveFilters ? exploreMessages.emptyAction : exploreMessages.browseEmptyAction,
+            )}
+            illustration={emptySearchIllustration}
+            onAction={() => {
+              if (hasActiveFilters) {
+                resetDiscoveryFilters();
+                return;
+              }
+              onRefresh();
+            }}
+          />
+        </Animated.ScrollView>
+        {refreshIndicator}
+      </View>
     );
   }
 
   return (
-    <ActivityCardCarousel
-      activities={activities}
-      initialScrollOffset={initialScrollOffset}
-      followsCollapsingHeader={filtersInOverlay}
-      headerHeight={headerHeight}
-      onEndReached={handleEndReached}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      listHeaderComponent={listHeader}
-      listFooterComponent={
-        isFetchingNextPage ? (
-          <View style={styles.footer}>
-            <ActivityIndicator color={theme.colors.accent} />
-          </View>
-        ) : null
-      }
-      onScrollPositionChange={handleScrollPositionChange}
-      scrollOffset={scrollOffset}
-      scrollRef={scrollRef}
-      testID={mode === "search" ? "search-list" : "explore-list"}
-    />
+    <View style={styles.root}>
+      <ActivityCardCarousel
+        activities={activities}
+        initialScrollOffset={initialScrollOffset}
+        followsCollapsingHeader={filtersInOverlay}
+        headerHeight={headerHeight}
+        onEndReached={handleEndReached}
+        onPullBegin={pullToRefresh.beginPull}
+        onPullEnd={pullToRefresh.finishPull}
+        onPullOffsetChange={pullToRefresh.updatePull}
+        refreshControl={refreshControl}
+        listHeaderComponent={listHeader}
+        listFooterComponent={
+          isFetchingNextPage ? (
+            <View style={styles.footer}>
+              <ActivityIndicator color={theme.colors.accent} />
+            </View>
+          ) : null
+        }
+        onScrollPositionChange={handleScrollPositionChange}
+        scrollOffset={scrollOffset}
+        scrollRef={scrollRef}
+        testID={mode === "search" ? "search-list" : "explore-list"}
+      />
+      {refreshIndicator}
+    </View>
   );
 }
 
@@ -184,5 +225,8 @@ const styles = StyleSheet.create({
   },
   list: {
     // Size comes from useWindowDimensions at the call site.
+  },
+  root: {
+    flex: 1,
   },
 });

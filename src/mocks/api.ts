@@ -153,7 +153,7 @@ export async function refreshCatalog(): Promise<MockResult<RefreshCatalogRespons
   await delay(refresh === "slow" ? MOCK_DELAY_MS.slow : MOCK_DELAY_MS.normal);
 
   try {
-    const activity = catalogStore.appendRefreshActivity();
+    const activity = catalogStore.prependRefreshActivity();
     const payload = parseWithSchema(refreshCatalogResponseSchema, { activity });
     return mockSuccess(payload);
   } catch (error) {

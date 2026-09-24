@@ -1,0 +1,33 @@
+{
+  "source": "https://cdn.designspells.com/videos/threads.mp4",
+  "frameRate": 60,
+  "phases": [
+    {
+      "name": "refresh-loop",
+      "startFrame": 53,
+      "endFrame": 275,
+      "startSeconds": 0.8833,
+      "endSeconds": 4.5833,
+      "driver": "refresh-state",
+      "observation": "The dark segment moves around the gray mark while content stays visible."
+    },
+    {
+      "name": "pull-reset",
+      "startFrame": 280,
+      "endFrame": 294,
+      "startSeconds": 4.6667,
+      "endSeconds": 4.9,
+      "driver": "gesture-distance",
+      "observation": "The gray track is visible before the dark stroke starts."
+    },
+    {
+      "name": "measured-pull-reveal",
+      "startFrame": 295,
+      "endFrame": 330,
+      "startSeconds": 4.9167,
+      "endSeconds": 5.5,
+      "driver": "gesture-distance",
+      "observation": "The dark stroke grows continuously along the gray track. No completed-state swap is visible."
+    }
+  ]
+}

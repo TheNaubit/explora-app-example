@@ -3,6 +3,7 @@ import {
   clearCatalogForTests,
   getCatalog,
   getCatalogSize,
+  prependRefreshActivity,
   resetCatalog,
 } from "@/mocks/catalog-store";
 import { SEEDED_CATALOG_SIZE } from "@/mocks/constants";
@@ -37,5 +38,15 @@ describe("catalog store cold start", () => {
 
     expect(getCatalogSize()).toBe(SEEDED_CATALOG_SIZE);
     expect(getCatalog()).toHaveLength(SEEDED_CATALOG_SIZE);
+  });
+
+  it("restores refresh-added activities and their sequence after a cold start", () => {
+    const firstRefresh = prependRefreshActivity();
+
+    clearCatalogForTests();
+
+    expect(getCatalogSize()).toBe(SEEDED_CATALOG_SIZE + 1);
+    expect(getCatalog()[0]).toEqual(firstRefresh);
+    expect(prependRefreshActivity().id).toBe("ref-0002");
   });
 });

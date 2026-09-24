@@ -1,14 +1,67 @@
+import { createMMKV } from "react-native-mmkv";
+import { z } from "zod";
+
 import { REFRESH_FAKER_BASE_SEED } from "@/mocks/constants";
 import { generateActivity, refreshActivityId } from "@/mocks/generate-activity";
 import { seedCatalog } from "@/mocks/seed-catalog";
-import type { Activity } from "@/schemas/activity";
+import { activitySchema, type Activity } from "@/schemas/activity";
+import {
+  CATALOG_REFRESH_PERSIST_KEY,
+  CATALOG_REFRESH_PERSIST_VERSION,
+  EXPLORA_MMKV_ID,
+} from "@/state/constants";
+
+const persistedRefreshCatalogSchema = z.object({
+  activities: z.array(activitySchema),
+  refreshSequence: z.number().int().nonnegative(),
+  version: z.literal(CATALOG_REFRESH_PERSIST_VERSION),
+});
+
+type PersistedRefreshCatalog = z.infer<typeof persistedRefreshCatalogSchema>;
+
+const catalogStorage = createMMKV({ id: EXPLORA_MMKV_ID });
 
 let catalog: Activity[] | null = null;
+let refreshActivities: Activity[] = [];
 let refreshSequence = 0;
+
+function emptyPersistedRefreshCatalog(): PersistedRefreshCatalog {
+  return {
+    activities: [],
+    refreshSequence: 0,
+    version: CATALOG_REFRESH_PERSIST_VERSION,
+  };
+}
+
+function readPersistedRefreshCatalog(): PersistedRefreshCatalog {
+  const storedValue = catalogStorage.getString(CATALOG_REFRESH_PERSIST_KEY);
+  if (storedValue === undefined) {
+    return emptyPersistedRefreshCatalog();
+  }
+
+  try {
+    const result = persistedRefreshCatalogSchema.safeParse(JSON.parse(storedValue));
+    if (result.success) {
+      return result.data;
+    }
+  } catch {
+    // Remove invalid local data and restore the deterministic seed catalog.
+  }
+
+  catalogStorage.remove(CATALOG_REFRESH_PERSIST_KEY);
+  return emptyPersistedRefreshCatalog();
+}
+
+function persistRefreshCatalog(state: PersistedRefreshCatalog): void {
+  catalogStorage.set(CATALOG_REFRESH_PERSIST_KEY, JSON.stringify(state));
+}
 
 function ensureCatalog(): Activity[] {
   if (catalog === null) {
-    catalog = seedCatalog();
+    const persisted = readPersistedRefreshCatalog();
+    refreshActivities = [...persisted.activities];
+    refreshSequence = persisted.refreshSequence;
+    catalog = [...refreshActivities, ...seedCatalog()];
   }
 
   return catalog;
@@ -30,17 +83,27 @@ export function findActivityById(id: string): Activity | undefined {
 }
 
 /**
- * Append one refresh-generated activity.
+ * Insert one refresh-generated activity at the start of Explore.
  * Returns the new activity. Callers must only invoke this on a successful refresh path.
  */
-export function appendRefreshActivity(): Activity {
-  refreshSequence += 1;
+export function prependRefreshActivity(): Activity {
+  const currentCatalog = ensureCatalog();
+  const nextRefreshSequence = refreshSequence + 1;
   const activity = generateActivity({
-    id: refreshActivityId(refreshSequence),
-    seed: REFRESH_FAKER_BASE_SEED + refreshSequence,
+    id: refreshActivityId(nextRefreshSequence),
+    seed: REFRESH_FAKER_BASE_SEED + nextRefreshSequence,
+  });
+  const nextRefreshActivities = [activity, ...refreshActivities];
+
+  persistRefreshCatalog({
+    activities: nextRefreshActivities,
+    refreshSequence: nextRefreshSequence,
+    version: CATALOG_REFRESH_PERSIST_VERSION,
   });
 
-  ensureCatalog().push(activity);
+  refreshSequence = nextRefreshSequence;
+  refreshActivities = nextRefreshActivities;
+  currentCatalog.unshift(activity);
   return activity;
 }
 
@@ -49,7 +112,9 @@ export function appendRefreshActivity(): Activity {
  * Does not change review modes.
  */
 export function resetCatalog(): void {
+  catalogStorage.remove(CATALOG_REFRESH_PERSIST_KEY);
   catalog = seedCatalog();
+  refreshActivities = [];
   refreshSequence = 0;
 }
 
@@ -59,6 +124,7 @@ export function resetCatalog(): void {
  */
 export function replaceCatalogForTests(next: Activity[], nextRefreshSequence = 0): void {
   catalog = [...next];
+  refreshActivities = [];
   refreshSequence = nextRefreshSequence;
 }
 
@@ -67,5 +133,6 @@ export function replaceCatalogForTests(next: Activity[], nextRefreshSequence = 0
  */
 export function clearCatalogForTests(): void {
   catalog = null;
+  refreshActivities = [];
   refreshSequence = 0;
 }

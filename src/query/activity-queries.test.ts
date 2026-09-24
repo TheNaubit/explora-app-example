@@ -78,4 +78,31 @@ describe("activity query helpers", () => {
     await expect(runRefreshCatalog(queryClient)).rejects.toBeInstanceOf(ApiError);
     expect(listFavoriteIds()).toEqual([favorite.id]);
   });
+
+  it("keeps refresh pending until the visible list cache finishes updating", async () => {
+    let resolveInvalidation: (() => void) | undefined;
+    const invalidation = new Promise<void>((resolve) => {
+      resolveInvalidation = resolve;
+    });
+    const queryClient = createQueryClient();
+    const invalidateQueries = jest
+      .spyOn(queryClient, "invalidateQueries")
+      .mockReturnValue(invalidation);
+    let settled = false;
+
+    const refresh = runRefreshCatalog(queryClient).then(() => {
+      settled = true;
+    });
+
+    while (invalidateQueries.mock.calls.length === 0) {
+      await Promise.resolve();
+    }
+    await Promise.resolve();
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: activityKeys.lists() });
+    expect(settled).toBe(false);
+
+    resolveInvalidation?.();
+    await refresh;
+    expect(settled).toBe(true);
+  });
 });
