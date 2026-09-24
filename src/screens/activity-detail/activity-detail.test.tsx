@@ -6,6 +6,7 @@ import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { resetCatalog } from "@/mocks/catalog-store";
 import { resetReviewModeState, setInitialLoadMode } from "@/mocks/review-mode";
 import { ActivityDetail } from "@/screens/activity-detail";
+import { getCalendarStatusCopy } from "@/screens/activity-detail/add-to-calendar-section";
 import { addFavorite, clearFavorites, isFavorite } from "@/state/favorites";
 import { createProviders, createQueryClient } from "@/test/ui-test-utils";
 
@@ -21,6 +22,7 @@ jest.mock("expo-glass-effect", () => {
   return {
     GlassView: ({ children, ...rest }: { children: React.ReactNode }) =>
       React.createElement(View, rest, children),
+    isGlassEffectAPIAvailable: () => false,
     isLiquidGlassAvailable: () => false,
   };
 });
@@ -61,6 +63,13 @@ describe("ActivityDetail", () => {
     expect(screen.getByText(activity.title)).toBeTruthy();
     expect(screen.getByText(activity.description)).toBeTruthy();
     expect(screen.getByText(activity.location)).toBeTruthy();
+
+    const categoryBadge = screen.getByTestId("activity-detail-category");
+    expect(categoryBadge.props.focusable).toBe(false);
+    expect(
+      screen.getByTestId("activity-detail-category-icon", { includeHiddenElements: true }).props
+        .accessibilityElementsHidden,
+    ).toBe(true);
 
     const favoriteButton = screen.getByTestId("activity-detail-favorite");
 
@@ -127,6 +136,10 @@ describe("ActivityDetail", () => {
 
     fireEvent.press(screen.getByTestId("calendar-schedule-cancel"));
     await waitFor(() => expect(screen.queryByTestId("calendar-schedule-sheet")).toBeNull());
+  });
+
+  it("keeps native calendar cancellation silent", () => {
+    expect(getCalendarStatusCopy("canceled", jest.fn())).toBeNull();
   });
 
   it("keeps a saved snapshot visible when current detail loading fails", async () => {

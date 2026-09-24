@@ -66,7 +66,7 @@ The coordinator accepts one active operation. A second submission returns a dupl
 | Permission blocked     | Explain the system setting and offer **Open Settings**.     |
 | Native form active     | Disable the main action and show **Opening Calendar…**.     |
 | Saved on iOS           | Confirm that the system calendar saved the event.           |
-| Canceled on iOS        | Confirm that no event was added.                            |
+| Canceled on iOS        | Return to Activity Detail without a status message.         |
 | Form closed on Android | State that Android does not report the final form decision. |
 | Native error           | Keep the schedule and offer a retry.                        |
 

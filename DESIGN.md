@@ -225,6 +225,7 @@ The initial generated concept is stored at [`docs/design/references/explora-app-
 | `SearchField`              | Explore title search            | Symbol, centered single-line input, clear action     | Idle, focused, typed, disabled                       | Use in the iOS and web Explore header. Android uses `Stack.SearchBar` |
 | `CategoryChip`             | One category filter control     | Clay icon, label, and glass material                 | Default, pressed, lightly tinted selected, focused   | `A11yPressable` required for labels and selected state                |
 | `CategoryChipRow`          | Category filter row             | All plus catalog categories and edge fades           | All, multiple selected, start, middle, end           | All is exclusive; category selections combine with OR                 |
+| `ActivityCategoryBadge`    | Identify a detail category      | Clay icon, label, and filter-chip material           | Light, dark, glass, solid fallback                   | Static text; do not expose button semantics                           |
 | `ActivityCard`             | Open an activity                | Photo, image-derived body, title, metadata, favorite | Default, pressed, focused, unfocused, saved, offline | Do not nest another card or put Liquid Glass on its surface           |
 | `FavoriteButton`           | Save or remove an activity      | Heart symbol and 44-point target                     | Unsaved, saved, pressed, focused                     | Give it one clear spoken action                                       |
 | `PrimaryButton`            | Commit the main action          | Label and optional leading symbol                    | Default, pressed, focused, busy, disabled            | Use one primary action per screen                                     |
@@ -260,7 +261,7 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 - Push the detail screen from Explore or Saved.
 - Use one edge-to-edge hero image when an image exists.
 - Put glass controls above the hero image on supported iOS devices.
-- Show category, title, description, location, and duration in that order.
+- Show an illustrated category badge, title, description, location, and duration in that order.
 - Keep one primary save action.
 - Preserve the previous search, filter, and scroll position on back.
 

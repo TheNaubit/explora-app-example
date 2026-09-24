@@ -221,12 +221,6 @@ msgstr "Done"
 msgid "activityDetail.duration"
 msgstr "Duration"
 
-#. Heading after the user cancels the iOS calendar event form
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.canceledTitle"
-msgstr "Event not added"
-
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.invalidBody"
@@ -537,8 +531,3 @@ msgstr "Workshops"
 #: src/i18n/error-keys.ts
 msgid "errors.networkOffline"
 msgstr "You are offline. Check your connection and try again."
-
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.canceledBody"
-msgstr "You canceled the system calendar form. No event was added."

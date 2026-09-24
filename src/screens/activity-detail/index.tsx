@@ -14,6 +14,7 @@ import { getActivityCoverImage } from "@/data/activity-image";
 import { useActivity } from "@/hooks/use-activity";
 import { emptySearchIllustration } from "@/illustrations";
 import { categoryMessages } from "@/i18n/category-labels";
+import { ActivityCategoryBadge } from "@/screens/activity-detail/activity-category-badge";
 import { ActivityDetailControls } from "@/screens/activity-detail/activity-detail-controls";
 import { ActivityDetailSkeleton } from "@/screens/activity-detail/activity-detail-skeleton";
 import { AddToCalendarSection } from "@/screens/activity-detail/add-to-calendar-section";
@@ -185,9 +186,10 @@ function ActivityDetailLoaded({
               title={savedFallbackTitle}
             />
           ) : null}
-          <Text style={[styles.category, { color: theme.colors.accent }]}>
-            {t(categoryMessages[activity.category])}
-          </Text>
+          <ActivityCategoryBadge
+            category={activity.category}
+            label={t(categoryMessages[activity.category])}
+          />
           <Text accessibilityRole="header" style={[styles.title, { color: theme.colors.text }]}>
             {activity.title}
           </Text>
@@ -228,12 +230,6 @@ function DetailValue({ label, value }: DetailValueProps) {
 }
 
 const styles = StyleSheet.create({
-  category: {
-    ...typography.meta,
-    fontWeight: "700",
-    marginBottom: spacing.space8,
-    textAlign: "left",
-  },
   copy: {
     paddingHorizontal: spacing.space24,
     paddingTop: spacing.space24,

@@ -34,7 +34,7 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const lastStartDate = useRef<Date | null>(null);
   const { isActive, result, submit } = useAddToCalendar(activity);
-  const statusCopy = useMemo(() => getStatusCopy(result, t), [result, t]);
+  const statusCopy = useMemo(() => getCalendarStatusCopy(result, t), [result, t]);
 
   useEffect(() => {
     if (result === null) return;
@@ -134,7 +134,10 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
 
 type Translate = ReturnType<typeof useLingui>["t"];
 
-function getStatusCopy(result: AddToCalendarResult | null, t: Translate): StatusCopy | null {
+export function getCalendarStatusCopy(
+  result: AddToCalendarResult | null,
+  t: Translate,
+): StatusCopy | null {
   switch (result) {
     case "saved":
       return {
@@ -149,11 +152,7 @@ function getStatusCopy(result: AddToCalendarResult | null, t: Translate): Status
         title: t(activityDetailMessages.calendarSubmittedTitle),
       };
     case "canceled":
-      return {
-        body: t(activityDetailMessages.calendarCanceledBody),
-        isError: false,
-        title: t(activityDetailMessages.calendarCanceledTitle),
-      };
+      return null;
     case "permission-denied":
       return {
         actionLabel: t(activityDetailMessages.calendarTryAgain),

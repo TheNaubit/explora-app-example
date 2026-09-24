@@ -6,7 +6,7 @@
 - Both tabs push the route in their own Expo Router stack.
 - Back returns to the previous tab state.
 - Search, category filters, and Explore scroll position stay in memory.
-- The screen shows category, title, description, location, and duration.
+- The screen shows an illustrated category badge, title, description, location, and duration.
 - The right hero control saves or removes the activity.
 - The heart is filled when the activity is saved.
 - A saved activity snapshot appears immediately and remains available offline.

@@ -2,7 +2,7 @@
 
 ## Scope
 
-This session simplifies the Add to Calendar interface on Activity Detail.
+This session simplifies Add to Calendar and refines Activity Detail metadata.
 
 ## Requested work
 
@@ -19,6 +19,8 @@ This session simplifies the Add to Calendar interface on Activity Detail.
 - Replaced the planning section with one accessible action row.
 - Made the action fill the Activity Detail content width.
 - Removed the disclosure chevron from the action.
+- Removed the status banner and announcement after native form cancellation.
+- Replaced plain category text with an illustrated, non-interactive category badge.
 - Added a fitted native SwiftUI sheet on iOS.
 - Added one graphical SwiftUI date and time picker.
 - Added native Liquid Glass header buttons on iOS 26 and later.
@@ -29,14 +31,17 @@ This session simplifies the Add to Calendar interface on Activity Detail.
 
 ## Verification
 
-- Focused calendar and Activity Detail tests passed: 2 suites and 19 tests.
-- The full Jest suite passed: 44 suites and 150 tests.
+- Focused calendar and Activity Detail tests passed: 2 suites and 20 tests.
+- The full Jest suite passed: 44 suites and 151 tests.
 - Lingui extraction, Oxlint, Oxfmt, TypeScript, and Expo Doctor passed.
 - The iOS 27.0 Simulator showed the compact Activity Detail action.
 - The runtime accessibility tree exposed the action as a labeled button.
 - The simulator showed a fitted native sheet with Liquid Glass header buttons.
 - A downward gesture did not close or resize the sheet.
 - **Cancel** closed the sheet without a permission request.
+- Canceling the native event form returned silently to Activity Detail.
+- The simulator showed the category badge with its clay category image.
+- The runtime accessibility tree exposed the badge as text, not as a button.
 - Android runtime verification was not available on this machine.
 
 ## Tool and model

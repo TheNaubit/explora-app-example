@@ -38,7 +38,7 @@ When you specify or run a scenario, expand it here or add `scenarios/<name>.md` 
 | 7    | Deny permission.                                              | Explora shows the denied or blocked state.                           |
 | 8    | If blocked, open Settings and allow calendar write access.    | Explora returns to a retryable state.                                |
 | 9    | Submit again and inspect the system event form.               | Title, location, description, start, and calculated end are correct. |
-| 10   | Cancel the system event form.                                 | Explora confirms that no event was added.                            |
+| 10   | Cancel the system event form.                                 | Explora returns to Activity Detail without a status message.         |
 | 11   | Submit again and save the event.                              | Explora confirms success.                                            |
 | 12   | Try a second submit while the first operation remains active. | The action stays disabled and only one native form opens.            |
 
@@ -58,7 +58,7 @@ Passed on the iOS 27.0 Simulator.
 10. The system form showed the activity title, location, and description.
 11. The form showed 18:01–18:36 for a 35-minute activity.
 12. Two immediate submit taps opened one system form.
-13. Closing the form showed **Event not added**.
+13. Closing the form returned to Activity Detail without a status message.
 14. Saving the form showed **Added to Calendar**.
 
 The focused Jest tests cover past dates, malformed data, invalid durations, both denial states, native errors, and duplicate protection.
@@ -73,7 +73,6 @@ The focused Jest tests cover past dates, malformed data, invalid durations, both
 - Write-only prompt: [`ios-write-only-permission.jpg`](./evidence/native-calendar/ios-write-only-permission.jpg).
 - Blocked permission: [`ios-permission-blocked.jpg`](./evidence/native-calendar/ios-permission-blocked.jpg).
 - Pre-filled system form: [`ios-native-event-form.jpg`](./evidence/native-calendar/ios-native-event-form.jpg).
-- Canceled state: [`ios-canceled.jpg`](./evidence/native-calendar/ios-canceled.jpg).
 - Saved state: [`ios-saved.jpg`](./evidence/native-calendar/ios-saved.jpg).
 - Native build: `dist/eas-builds/build-1790261620671.tar.gz`.
 - Build metadata contains `NSCalendarsWriteOnlyAccessUsageDescription`.

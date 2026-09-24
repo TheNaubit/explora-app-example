@@ -117,15 +117,6 @@ export const activityDetailMessages = {
     id: "activityDetail.calendar.submittedBody",
     message: "Android does not report whether the event was saved or canceled.",
   }),
-  calendarCanceledTitle: msg({
-    id: "activityDetail.calendar.canceledTitle",
-    comment: "Heading after the user cancels the iOS calendar event form",
-    message: "Event not added",
-  }),
-  calendarCanceledBody: msg({
-    id: "activityDetail.calendar.canceledBody",
-    message: "You canceled the system calendar form. No event was added.",
-  }),
   calendarPermissionDeniedTitle: msg({
     id: "activityDetail.calendar.permissionDeniedTitle",
     comment: "Heading after a calendar permission denial that can be requested again",
