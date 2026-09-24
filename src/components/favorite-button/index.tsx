@@ -11,6 +11,8 @@ import { radii, useAppTheme } from "@/theme";
 
 type FavoriteButtonProps = {
   activity: Activity;
+  /** Optional removal owner for a screen-specific transition. Return false when no action starts. */
+  onRemove?: () => boolean | void;
   /** `plain` sits in text rows. `overlay` sits on cover photos. */
   variant?: "plain" | "overlay";
   testID?: string;
@@ -20,7 +22,12 @@ type FavoriteButtonProps = {
  * Save or remove an activity favorite. Keeps a 44-point target.
  * Press scale confirms the tap. Pulsar marks save and remove outcomes.
  */
-export function FavoriteButton({ activity, variant = "plain", testID }: FavoriteButtonProps) {
+export function FavoriteButton({
+  activity,
+  onRemove,
+  variant = "plain",
+  testID,
+}: FavoriteButtonProps) {
   const theme = useAppTheme();
   const favorited = useIsFavorite(activity.id);
   const label = buildFavoriteToggleLabel(activity.title, favorited);
@@ -28,9 +35,13 @@ export function FavoriteButton({ activity, variant = "plain", testID }: Favorite
 
   function handlePress() {
     if (favorited) {
-      removeFavorite(activity.id);
+      if (onRemove && onRemove() === false) return;
+
+      if (!onRemove) {
+        removeFavorite(activity.id);
+        announceStatus(buildFavoriteToggleLabel(activity.title, false));
+      }
       hapticFavoriteRemoved();
-      announceStatus(buildFavoriteToggleLabel(activity.title, false));
       return;
     }
 

@@ -15,6 +15,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundleIdentifier: "com.adlerventures.explora",
     icon: "./assets/expo.icon",
     infoPlist: {
+      CADisableMinimumFrameDurationOnPhone: true,
       CFBundleAllowMixedLocalizations: true,
     },
   },

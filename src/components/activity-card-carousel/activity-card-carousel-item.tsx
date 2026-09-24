@@ -19,6 +19,7 @@ import type { Activity } from "@/schemas/activity";
 
 type ActivityCardCarouselItemProps = {
   activity: Activity;
+  favoriteRemovalEffect?: "particle-dissolve";
   followsCollapsingHeader: boolean;
   headerTranslation: number;
   index: number;
@@ -30,6 +31,7 @@ type ActivityCardCarouselItemProps = {
 /** One focused card in the shared Explore and Saved carousel. */
 export function ActivityCardCarouselItem({
   activity,
+  favoriteRemovalEffect,
   followsCollapsingHeader,
   headerTranslation,
   index,
@@ -88,6 +90,7 @@ export function ActivityCardCarouselItem({
       <Animated.View style={cardStyle}>
         <ActivityCard
           activity={activity}
+          favoriteRemovalEffect={favoriteRemovalEffect}
           imageBlurOpacity={imageBlurOpacity}
           imageBlurRadius={ACTIVITY_CARD_INACTIVE_BLUR_RADIUS}
           mediaHeight={mediaHeight}

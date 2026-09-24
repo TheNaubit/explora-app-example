@@ -15,7 +15,7 @@ import {
   COLLAPSING_HEADER_DISTANCE,
   COLLAPSING_HEADER_TRANSLATION,
 } from "@/components/collapsing-screen-header/constants";
-import { spacing, typography, useAppTheme } from "@/theme";
+import { primitiveColors, spacing, typography, useAppTheme } from "@/theme";
 
 type CollapsingScreenHeaderProps = {
   bodyHeight: number;
@@ -106,7 +106,7 @@ export function CollapsingScreenHeader({
           pointerEvents="none"
           style={[
             styles.compactTitle,
-            { color: theme.colors.text, top: safeAreaTop },
+            { color: primitiveColors.white, top: safeAreaTop },
             compactTitleStyle,
           ]}
         >
@@ -126,6 +126,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: spacing.space48,
     textAlign: "center",
+    textShadowColor: "rgba(0, 0, 0, 0.55)",
+    textShadowOffset: { height: 0, width: 0 },
+    textShadowRadius: 3,
   },
   content: { flex: 1, paddingTop: spacing.space8 },
   effect: { flex: 1 },

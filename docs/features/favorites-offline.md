@@ -8,6 +8,12 @@
 - Favorites survive app relaunch.
 - Refresh success or failure does not clear favorites.
 - The **Saved** tab lists favorite snapshots and shows an empty state when none exist.
+- The Saved empty state uses a centered composition and a transparent clay illustration.
+- Removing a card from Saved dissolves its captured surface through a batched Skia particle atlas.
+- The dust remains visible for approximately 1.1 seconds and uses a dense iOS particle grid.
+- The list reflows for 800 milliseconds and scrolls smoothly to the selected replacement card.
+- Reduced Motion and web remove the card immediately without spatial particle motion.
+- The favorite changes only after the effect completes. A snapshot failure uses immediate removal.
 - Saved uses the same focused card carousel and collapsing header as Explore.
 - Saved shows only its title above the list. It does not show a subtitle.
 - Saved does not show search, category filters, refresh, or pagination.

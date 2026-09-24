@@ -12,6 +12,7 @@ type EmptyStateProps = {
   onAction: () => void;
   /** Decorative claymorphic illustration. Hidden from the screen reader. */
   illustration?: ImageSource;
+  presentation?: "leading" | "centered";
   testID?: string;
 };
 
@@ -25,13 +26,34 @@ export function EmptyState({
   actionLabel,
   onAction,
   illustration,
+  presentation = "leading",
   testID,
 }: EmptyStateProps) {
   const theme = useAppTheme();
+  const isCentered = presentation === "centered";
 
   return (
-    <View style={styles.root} testID={testID ?? "empty-state"}>
-      {illustration ? (
+    <View
+      style={[styles.root, isCentered ? styles.centeredRoot : undefined]}
+      testID={testID ?? "empty-state"}
+    >
+      {illustration && isCentered ? (
+        <View
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          style={[
+            styles.centeredIllustrationFrame,
+            { backgroundColor: theme.colors.surfaceSecondary },
+          ]}
+        >
+          <Image
+            source={illustration}
+            style={styles.centeredIllustration}
+            contentFit="contain"
+            testID="empty-state-illustration"
+          />
+        </View>
+      ) : illustration ? (
         <Image
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
@@ -41,18 +63,46 @@ export function EmptyState({
           testID="empty-state-illustration"
         />
       ) : null}
-      <Text style={[styles.title, { color: theme.colors.text }]} accessibilityRole="header">
+      <Text
+        style={[
+          styles.title,
+          isCentered ? styles.centeredText : undefined,
+          { color: theme.colors.text },
+        ]}
+        accessibilityRole="header"
+      >
         {title}
       </Text>
-      <Text style={[styles.body, { color: theme.colors.textSecondary }]}>{body}</Text>
+      <Text
+        style={[
+          styles.body,
+          isCentered ? styles.centeredBody : undefined,
+          { color: theme.colors.textSecondary },
+        ]}
+      >
+        {body}
+      </Text>
       <A11yPressable
         accessibilityRole="button"
         accessibilityLabel={actionLabel}
         onPress={onAction}
-        style={[styles.action, { backgroundColor: theme.colors.accent }]}
+        style={({ pressed }) => [
+          styles.action,
+          isCentered ? styles.centeredAction : undefined,
+          { backgroundColor: pressed ? theme.colors.accentPressed : theme.colors.accent },
+          pressed ? styles.pressedAction : undefined,
+        ]}
         testID="empty-state-action"
       >
-        <Text style={[styles.actionLabel, { color: theme.colors.onAccent }]}>{actionLabel}</Text>
+        <Text
+          style={[
+            styles.actionLabel,
+            isCentered ? styles.centeredText : undefined,
+            { color: theme.colors.onAccent },
+          ]}
+        >
+          {actionLabel}
+        </Text>
       </A11yPressable>
     </View>
   );
@@ -72,6 +122,36 @@ const styles = StyleSheet.create({
     ...typography.label,
     textAlign: "left",
   },
+  centeredAction: {
+    alignSelf: "center",
+    borderRadius: radii.full,
+    paddingHorizontal: spacing.space24,
+  },
+  centeredBody: {
+    marginBottom: spacing.space24,
+    maxWidth: 300,
+  },
+  centeredIllustration: {
+    height: 164,
+    width: 164,
+  },
+  centeredIllustrationFrame: {
+    alignItems: "center",
+    borderRadius: radii.full,
+    height: 184,
+    justifyContent: "center",
+    marginBottom: spacing.space24,
+    width: 184,
+  },
+  centeredRoot: {
+    alignItems: "center",
+    alignSelf: "center",
+    maxWidth: 360,
+    width: "100%",
+  },
+  centeredText: {
+    textAlign: "center",
+  },
   body: {
     ...typography.body,
     marginBottom: spacing.space16,
@@ -86,6 +166,9 @@ const styles = StyleSheet.create({
   root: {
     paddingHorizontal: spacing.space24,
     paddingVertical: spacing.space32,
+  },
+  pressedAction: {
+    transform: [{ scale: 0.97 }],
   },
   title: {
     ...typography.headline,

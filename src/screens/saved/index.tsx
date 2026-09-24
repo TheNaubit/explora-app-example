@@ -15,7 +15,7 @@ import { CollapsingScreenHeader } from "@/components/collapsing-screen-header";
 import { getCollapsingHeaderTranslation } from "@/components/collapsing-screen-header/constants";
 import { EmptyState } from "@/components/empty-state";
 import { ScreenFrame } from "@/components/screen-frame";
-import { emptySearchIllustration } from "@/illustrations";
+import { emptySavedIllustration } from "@/illustrations";
 import { savedMessages } from "@/screens/saved/messages";
 import { useSavedActivities } from "@/screens/saved/use-saved-activities";
 import { spacing, typography, useAppTheme } from "@/theme";
@@ -78,7 +78,13 @@ function SavedNative() {
       {activities.length === 0 ? (
         <Animated.ScrollView
           ref={scrollEdgeRef as never}
-          contentContainerStyle={[styles.emptyScroll, { paddingTop: headerHeight }]}
+          contentContainerStyle={[
+            styles.emptyScroll,
+            {
+              paddingBottom: insets.bottom + spacing.space48,
+              paddingTop: headerHeight,
+            },
+          ]}
           contentInsetAdjustmentBehavior="never"
           onScroll={onScroll}
           scrollEventThrottle={16}
@@ -88,13 +94,15 @@ function SavedNative() {
             title={t(savedMessages.emptyTitle)}
             body={t(savedMessages.emptyBody)}
             actionLabel={t(savedMessages.emptyAction)}
-            illustration={emptySearchIllustration}
+            illustration={emptySavedIllustration}
+            presentation="centered"
             onAction={() => router.navigate("/")}
           />
         </Animated.ScrollView>
       ) : (
         <ActivityCardCarousel
           activities={activities}
+          favoriteRemovalEffect="particle-dissolve"
           followsCollapsingHeader
           headerHeight={headerHeight}
           headerTranslation={headerTranslation}
@@ -134,21 +142,31 @@ function SavedStandard() {
             title={t(savedMessages.emptyTitle)}
             body={t(savedMessages.emptyBody)}
             actionLabel={t(savedMessages.emptyAction)}
-            illustration={emptySearchIllustration}
+            illustration={emptySavedIllustration}
+            presentation="centered"
             onAction={() => router.navigate("/")}
           />
         </View>
       ) : (
-        <ActivityCardCarousel activities={activities} testID="saved-list" />
+        <ActivityCardCarousel
+          activities={activities}
+          favoriteRemovalEffect="particle-dissolve"
+          testID="saved-list"
+        />
       )}
     </ScreenFrame>
   );
 }
 
 const styles = StyleSheet.create({
-  empty: { flex: 1 },
+  empty: {
+    flex: 1,
+    justifyContent: "center",
+    paddingBottom: spacing.space48,
+  },
   emptyScroll: {
     flexGrow: 1,
+    justifyContent: "center",
     paddingHorizontal: spacing.space24,
   },
   heading: {

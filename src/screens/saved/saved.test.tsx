@@ -1,5 +1,6 @@
 import { createElement } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
+import { useReducedMotion } from "react-native-reanimated";
 
 import { Saved } from "@/screens/saved";
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
@@ -12,9 +13,12 @@ jest.mock("expo-router", () => ({
   },
 }));
 
+const mockUseReducedMotion = useReducedMotion as jest.MockedFunction<typeof useReducedMotion>;
+
 describe("Saved screen", () => {
   beforeEach(() => {
     clearFavorites();
+    mockUseReducedMotion.mockReturnValue(false);
   });
 
   it("shows empty state and navigates to Explore", async () => {
@@ -55,5 +59,19 @@ describe("Saved screen", () => {
     expect(screen.queryByTestId("refresh-control")).toBeNull();
     expect(screen.queryByTestId("list-end-reached")).toBeNull();
     windowDimensions.mockRestore();
+  });
+
+  it("removes a saved card immediately when reduced motion is active", async () => {
+    mockUseReducedMotion.mockReturnValue(true);
+    const activity = SUPPLIED_ACTIVITIES[0];
+    addFavorite(activity);
+
+    await render(createElement(Saved), {
+      wrapper: createProviders(),
+    });
+
+    fireEvent.press(screen.getByTestId(`favorite-button-${activity.id}`));
+
+    await waitFor(() => expect(screen.getByTestId("saved-empty")).toBeTruthy());
   });
 });

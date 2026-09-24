@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 import {
+  emptySavedIllustration,
   emptySearchIllustration,
   getCategoryChipIllustration,
   getCategoryIllustration,
@@ -17,6 +18,10 @@ describe("illustrations", () => {
 
   it("exports the empty search illustration", () => {
     expect(emptySearchIllustration).toBeTruthy();
+  });
+
+  it("exports the empty Saved illustration", () => {
+    expect(emptySavedIllustration).toBeTruthy();
   });
 
   it("returns a compact source for All and every category", () => {

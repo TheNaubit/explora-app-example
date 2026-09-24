@@ -206,6 +206,7 @@ The initial generated concept is stored at [`docs/design/references/explora-app-
 | `assets/illustrations/style-reference-claymorphic-icons.jpeg` | Canonical Airbnb clay style board for GPT Image generation |
 | `docs/design/references/claymorphic-icons-style.jpeg`         | Same board, linked from this contract                      |
 | `assets/illustrations/empty-search.png`                       | Explore empty search / filter result                       |
+| `assets/illustrations/empty-saved.png`                        | Saved empty collection                                     |
 | `assets/illustrations/category-outdoors.png`                  | Outdoors category cue                                      |
 | `assets/illustrations/category-culture.png`                   | Culture category cue                                       |
 | `assets/illustrations/category-workshops.png`                 | Workshops category cue                                     |
@@ -249,6 +250,7 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 - Keep the favorite action visible on every activity card.
 - Keep category text in the metadata row. Do not add a second category pill inside the card.
 - Keep content visible while a refresh is in progress.
+- Use a white compact header title with a dark shadow when content scrolls below it.
 
 - Put category filters below the search field.
 - Allow multiple categories. Treat All as an exclusive reset.
@@ -270,6 +272,7 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 - Do not show search or category filters.
 - Do not show discovery refresh or pagination controls.
 - Show a composed empty state when no favorites exist.
+- Center the empty-state composition and use artwork with a transparent background.
 - Do not add folders, sorting, or collection management.
 
 ### Data states
@@ -306,6 +309,11 @@ Changing a mode does not silently reset favorites or generated activities.
 - Use a strong ease-out for timed entrances. Keep them below 300 milliseconds.
 - Use critically damped springs for direct manipulation.
 - Add haptics only for save, remove, refresh outcomes, errors, and a new settled Explore card.
+- Dissolve a card into sampled particles when the user removes it from Saved.
+- Keep visible dust near 1.1 seconds. Reflow the list over 800 milliseconds.
+- Animate the list to the replacement card. Do not use an instant offset correction.
+- Keep the replacement card selected throughout the list handoff.
+- Use one batched Skia canvas. Do not create one React Native view for each particle.
 - Use `react-native-pulsar` only. Route system outcomes through `@/haptics/feedback`.
 - Use the realtime composer only for documented custom feedback. Do not use `expo-haptics`.
 - Replace spatial motion with a short cross-fade when reduced motion is active.

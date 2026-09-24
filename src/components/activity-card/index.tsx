@@ -6,7 +6,7 @@ import { useLingui } from "@lingui/react/macro";
 import MaskedView from "@react-native-masked-view/masked-view";
 import Animated, { type SharedValue, useAnimatedStyle } from "react-native-reanimated";
 
-import { buildActivityAccessibilityLabel } from "@/a11y";
+import { announceStatus, buildActivityAccessibilityLabel, buildFavoriteToggleLabel } from "@/a11y";
 import { A11yCard } from "@/components/a11y-card";
 import { A11yPressable } from "@/components/a11y-pressable";
 import {
@@ -21,7 +21,9 @@ import {
   PRESS_SCALE,
 } from "@/components/constants";
 import { FavoriteButton } from "@/components/favorite-button";
+import { ParticleDissolve } from "@/components/particle-dissolve";
 import { categoryMessages } from "@/i18n/category-labels";
+import { removeFavorite } from "@/hooks/use-favorites";
 import { getActivityCoverImage } from "@/data/activity-image";
 import type { Activity } from "@/schemas/activity";
 import { formatDuration } from "@/utils/format-duration";
@@ -29,6 +31,8 @@ import { primitiveColors, radii, spacing, typography, useAppTheme } from "@/them
 
 type ActivityCardProps = {
   activity: Activity;
+  /** Saved-only removal treatment. Other favorite buttons update immediately. */
+  favoriteRemovalEffect?: "particle-dissolve";
   /** Optional scroll-linked opacity for the static image blur layer. */
   imageBlurOpacity?: SharedValue<number>;
   /** Optional static image blur used by a parent-owned focus transition. */
@@ -75,6 +79,7 @@ function ActivityCardPressable({ style, ...rest }: PressableProps) {
  */
 export function ActivityCard({
   activity,
+  favoriteRemovalEffect,
   imageBlurOpacity,
   imageBlurRadius,
   mediaHeight,
@@ -82,6 +87,58 @@ export function ActivityCard({
   testID,
   variant = "list",
 }: ActivityCardProps) {
+  if (favoriteRemovalEffect === "particle-dissolve") {
+    return (
+      <ParticleDissolve
+        onDissolveComplete={() => {
+          removeFavorite(activity.id);
+          announceStatus(buildFavoriteToggleLabel(activity.title, false));
+        }}
+        testID={`activity-card-dissolve-${activity.id}`}
+      >
+        {(startDissolve) => (
+          <ActivityCardSurface
+            activity={activity}
+            imageBlurOpacity={imageBlurOpacity}
+            imageBlurRadius={imageBlurRadius}
+            mediaHeight={mediaHeight}
+            onFavoriteRemove={startDissolve}
+            onPress={onPress}
+            testID={testID}
+            variant={variant}
+          />
+        )}
+      </ParticleDissolve>
+    );
+  }
+
+  return (
+    <ActivityCardSurface
+      activity={activity}
+      imageBlurOpacity={imageBlurOpacity}
+      imageBlurRadius={imageBlurRadius}
+      mediaHeight={mediaHeight}
+      onPress={onPress}
+      testID={testID}
+      variant={variant}
+    />
+  );
+}
+
+type ActivityCardSurfaceProps = Omit<ActivityCardProps, "favoriteRemovalEffect"> & {
+  onFavoriteRemove?: () => boolean | void;
+};
+
+function ActivityCardSurface({
+  activity,
+  imageBlurOpacity,
+  imageBlurRadius,
+  mediaHeight,
+  onFavoriteRemove,
+  onPress,
+  testID,
+  variant = "list",
+}: ActivityCardSurfaceProps) {
   const { t } = useLingui();
   const { fontScale: measuredFontScale } = useWindowDimensions();
   const theme = useAppTheme();
@@ -189,7 +246,7 @@ export function ActivityCard({
         testID={`activity-card-image-${activity.id}`}
       >
         <View style={styles.favorite}>
-          <FavoriteButton activity={activity} variant="overlay" />
+          <FavoriteButton activity={activity} onRemove={onFavoriteRemove} variant="overlay" />
         </View>
       </View>
       <View style={styles.body}>

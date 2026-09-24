@@ -19,6 +19,33 @@ jest.mock("expo-blur", () => ({
   BlurView: "BlurView",
 }));
 
+jest.mock("@shopify/react-native-skia", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+
+  function Canvas({ children, style, testID }) {
+    return React.createElement(View, { style, testID }, children);
+  }
+
+  return {
+    Atlas: () => null,
+    Canvas,
+    FilterMode: { Linear: "linear" },
+    MipmapMode: { None: "none" },
+    makeImageFromView: jest.fn(async () => ({
+      height: () => 300,
+      width: () => 300,
+    })),
+    rect: (x, y, width, height) => ({ height, width, x, y }),
+    useColorBuffer: () => ({ value: [] }),
+    useRSXformBuffer: () => ({ value: [] }),
+  };
+});
+
+jest.mock("react-native-worklets", () => ({
+  scheduleOnRN: (callback, ...args) => callback(...args),
+}));
+
 jest.mock("@bsky.app/expo-scroll-edge-effect", () => ({
   ScrollEdgeEffect: ({ children }) => children,
   ScrollEdgeEffectProvider: ({ children }) => children,
@@ -170,8 +197,17 @@ jest.mock("react-native-reanimated", () => {
     useAnimatedStyle: (factory) => factory(),
     useReducedMotion: jest.fn(() => false),
     withRepeat: (value) => value,
-    withTiming: (value) => value,
-    Easing: { inOut: () => undefined, ease: undefined },
+    withTiming: (value, _config, callback) => {
+      callback?.(true);
+      return value;
+    },
+    Easing: { bezier: () => undefined, inOut: () => undefined, ease: undefined },
+    LinearTransition: {
+      duration: () => ({
+        easing: () => undefined,
+      }),
+    },
+    cancelAnimation: jest.fn(),
   };
 });
 

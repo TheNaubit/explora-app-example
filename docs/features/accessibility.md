@@ -104,6 +104,7 @@ Map every change to the assessment bar.
 - Search uses the native Stack search field and accessible category controls.
 - Search submit, filter selection, and list or chip drag remove search focus.
 - The header uses a soft iOS 26 scroll-edge effect. Older iOS uses a low-intensity static blur.
+- The compact header title uses a white foreground and a dark shadow over scrolling content.
 - Category filters keep `A11yPressable` for labels, selected state, and keyboard focus.
 - Chip images are decorative. The translated chip label remains the spoken name.
 - Each selected category exposes its selected state. All is selected only when no category is selected.
