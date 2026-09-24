@@ -23,6 +23,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 15  | 2026-09-24     | Saved card particle dissolve; selected-card handoff; header contrast; empty-state redesign         | [ai-sessions/session-015-saved-particle-dissolve.md](./ai-sessions/session-015-saved-particle-dissolve.md)                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 16  | 2026-09-24     | Activity Detail route; native zoom transition; offline saved fallback; shared tab stacks           | [ai-sessions/session-016-activity-detail-zoom.md](./ai-sessions/session-016-activity-detail-zoom.md)                         | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 17  | 2026-09-24     | Explore pull-to-refresh; icon trace; reversible Pulsar feedback; persistence; reset fixes          | [ai-sessions/session-017-explore-pull-to-refresh.md](./ai-sessions/session-017-explore-pull-to-refresh.md)                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 18  | 2026-09-24     | Add to Calendar; write-only iOS permission; native event form; validation; runtime evidence        | [ai-sessions/session-018-native-calendar.md](./ai-sessions/session-018-native-calendar.md)                                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 

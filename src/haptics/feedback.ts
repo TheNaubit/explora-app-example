@@ -43,3 +43,10 @@ export function hapticActionError(): void {
     Presets.System.notificationError();
   });
 }
+
+/** Calendar event saved by the native form. */
+export function hapticCalendarSuccess(): void {
+  playSafe(() => {
+    Presets.System.notificationSuccess();
+  });
+}

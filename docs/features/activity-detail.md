@@ -14,6 +14,10 @@
 - Loading uses a hero and content skeleton.
 - An invalid activity id shows a not-found state with a back action.
 - Other first-load errors use the shared Query error boundary.
+- The calendar section lets the user choose a future date and start time.
+- Add to Calendar calculates the end time from the activity duration.
+- The system event form receives the title, location, and description.
+- The calendar flow handles validation, permission, cancel, success, and native error states.
 
 ## Zoom transition
 
@@ -32,17 +36,20 @@ Android uses the same route, content, actions, and state handling. Android runti
 - Back, favorite, and retry actions use accessible project controls.
 - Text scales with Dynamic Type and can wrap.
 - All user-facing copy uses Lingui messages.
+- The schedule trigger and calendar action support keyboard activation and clear focus styles.
+- The iOS schedule sheet traps focus while it is open.
 
 ## Code map
 
-| Concern            | Location                                    |
-| ------------------ | ------------------------------------------- |
-| Shared route       | `src/app/(explore,saved)/activity/[id].tsx` |
-| Screen             | `src/screens/activity-detail/`              |
-| Detail query       | `src/hooks/use-activity.ts`                 |
-| Card zoom source   | `src/components/activity-card/index.tsx`    |
-| Shared tab stacks  | `src/app/(explore,saved)/_layout.tsx`       |
-| Automated coverage | `src/screens/activity-detail/*.test.tsx`    |
+| Concern            | Location                                                                      |
+| ------------------ | ----------------------------------------------------------------------------- |
+| Shared route       | `src/app/(explore,saved)/activity/[id].tsx`                                   |
+| Screen             | `src/screens/activity-detail/`                                                |
+| Detail query       | `src/hooks/use-activity.ts`                                                   |
+| Card zoom source   | `src/components/activity-card/index.tsx`                                      |
+| Shared tab stacks  | `src/app/(explore,saved)/_layout.tsx`                                         |
+| Automated coverage | `src/screens/activity-detail/*.test.tsx`                                      |
+| Calendar feature   | `src/calendar/` and `src/screens/activity-detail/add-to-calendar-section.tsx` |
 
 ## Related
 
@@ -51,3 +58,4 @@ Android uses the same route, content, actions, and state handling. Android runti
 - [Data layer](./data-layer.md)
 - [Async UI states](./ui-states.md)
 - [Accessibility](./accessibility.md)
+- [Native calendar](./native-calendar.md)

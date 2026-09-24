@@ -13,7 +13,7 @@ Index of product capabilities. Each feature page describes **current behavior**,
 | Internationalization (i18n)          | Partial | [internationalization.md](./internationalization.md) |
 | Async UI states (skeleton / empty)   | Shipped | [ui-states.md](./ui-states.md)                       |
 | Activity detail                      | Shipped | [activity-detail.md](./activity-detail.md)           |
+| Native calendar                      | Partial | [native-calendar.md](./native-calendar.md)           |
 | Refresh + recovery                   | Partial | Mock + Query mutation shipped; UI planned            |
-| Native capability                    | Planned | _(add when chosen)_                                  |
 
 When you ship or change a feature, update its page and this table.

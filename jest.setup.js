@@ -19,6 +19,30 @@ jest.mock("expo-blur", () => ({
   BlurView: "BlurView",
 }));
 
+jest.mock("expo-calendar", () => ({
+  getDefaultCalendarSync: jest.fn(() => ({
+    addEventWithForm: jest.fn(async () => ({ action: "saved", id: "event-1" })),
+  })),
+  requestCalendarPermissions: jest.fn(async () => ({
+    canAskAgain: true,
+    status: "granted",
+  })),
+}));
+
+jest.mock("expo-calendar/legacy", () => ({
+  createEventInCalendarAsync: jest.fn(async () => ({ action: "done", id: null })),
+  isAvailableAsync: jest.fn(async () => true),
+}));
+
+jest.mock("@expo/ui/community/datetime-picker", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+
+  return function MockDateTimePicker(props) {
+    return React.createElement(View, props);
+  };
+});
+
 jest.mock("@shopify/react-native-skia", () => {
   const React = require("react");
   const { View } = require("react-native");
@@ -155,6 +179,7 @@ jest.mock("react-native-a11y", () => {
       },
       Input: passthrough(TextInput),
       Card: MockCard,
+      FocusTrap: passthrough(View),
       ScreenChange: () => null,
     },
     A11yProvider: ({ children }) => children,

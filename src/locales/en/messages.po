@@ -27,11 +27,23 @@ msgstr "{value, plural, one {# hr} other {# hr}}"
 msgid "{value, plural, one {# min} other {# min}}"
 msgstr "{value, plural, one {# min} other {# min}}"
 
+#. Screen reader status when a second calendar submission is blocked
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.duplicate"
+msgstr "A calendar operation is already active."
+
 #. Screen reader status when the catalog list finished loading with results
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
 msgid "explore.loadedAnnounce"
 msgstr "Activities loaded."
+
+#. Heading when local activity data cannot create a valid calendar event
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.invalidTitle"
+msgstr "Activity data is invalid"
 
 #. Spoken title for the Activity Detail screen
 #. js-lingui-explicit-id
@@ -57,11 +69,38 @@ msgstr "Activity unavailable"
 msgid "activityDetail.notFoundAnnounce"
 msgstr "Activity was not found."
 
+#. Button that opens the system calendar event form
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.add"
+msgstr "Add to Calendar"
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.unavailableBody"
+msgstr "Add to Calendar is available only in the native iOS and Android app."
+
+#. Heading after the user saves the event on iOS
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.savedTitle"
+msgstr "Added to Calendar"
+
 #. Category chip that clears the category filter
 #. js-lingui-explicit-id
 #: src/i18n/category-labels.ts
 msgid "category.all"
 msgstr "All"
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.permissionDeniedBody"
+msgstr "Allow calendar access when asked, then try again."
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.submittedBody"
+msgstr "Android does not report whether the event was saved or canceled."
 
 #. Button above the activity hero that returns to the previous screen
 #. js-lingui-explicit-id
@@ -75,11 +114,82 @@ msgstr "Back"
 msgid "saved.emptyAction"
 msgstr "Browse activities"
 
+#. Heading after a calendar permission denial that can be requested again
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.permissionDeniedTitle"
+msgstr "Calendar access denied"
+
+#. Heading when calendar permission must be changed in system Settings
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.permissionBlockedTitle"
+msgstr "Calendar access is off"
+
+#. Heading when the native calendar operation fails unexpectedly
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.errorTitle"
+msgstr "Calendar could not open"
+
+#. Heading after the Android calendar form closes
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.submittedTitle"
+msgstr "Calendar form closed"
+
+#. Heading when the native calendar feature is unavailable
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.unavailableTitle"
+msgstr "Calendar is unavailable"
+
+#. Button that closes the schedule picker without changing the schedule
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.cancel"
+msgstr "Cancel"
+
 #. Screen reader status after a successful catalog refresh
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
 msgid "explore.refreshSuccessAnnounce"
 msgstr "Catalog refreshed. One activity added."
+
+#. Placeholder before the user chooses an activity date and time
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.scheduleMissing"
+msgstr "Choose a date and time"
+
+#. Validation heading when no activity date is selected
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.missingTitle"
+msgstr "Choose a date and time"
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.body"
+msgstr "Choose a future start time. Explora sets the end time from the activity duration."
+
+#. Validation heading when the selected activity time is not in the future
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.pastTitle"
+msgstr "Choose a future time"
+
+#. Screen reader label for the activity date and time control
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.scheduleAccessibility"
+msgstr "Choose date and start time. Current value: {value}."
+
+#. Heading in the iOS activity schedule sheet
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.scheduleSheetTitle"
+msgstr "Choose date and time"
 
 #. Empty state action that clears search and category filters
 #. js-lingui-explicit-id
@@ -116,11 +226,40 @@ msgstr "Culture"
 msgid "activityDetail.savedFallbackBody"
 msgstr "Current details could not load. This saved copy remains available offline."
 
+#. Label above the native calendar date picker
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.dateLabel"
+msgstr "Date"
+
+#. Label above the selected calendar date and time
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.scheduleLabel"
+msgstr "Date and start time"
+
+#. Android time dialog button that confirms the schedule
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.done"
+msgstr "Done"
+
 #. Label for the activity duration value
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.duration"
 msgstr "Duration"
+
+#. Heading after the user cancels the iOS calendar event form
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.canceledTitle"
+msgstr "Event not added"
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.invalidBody"
+msgstr "Explora cannot create an event from this activity data."
 
 #. Native tab label for the discovery catalog
 #. js-lingui-explicit-id
@@ -170,6 +309,12 @@ msgstr "Loading activity details."
 msgid "activityDetail.location"
 msgstr "Location"
 
+#. Android date dialog button that opens the time dialog
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.next"
+msgstr "Next"
+
 #. Screen reader status when the unfiltered activity catalog is empty
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
@@ -206,11 +351,46 @@ msgstr "No saved activities"
 msgid "saved.emptyAnnounce"
 msgstr "No saved activities."
 
+#. Button that opens system Settings for calendar permission
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.openSettings"
+msgstr "Open Settings"
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.permissionBlockedBody"
+msgstr "Open Settings and allow Explora to add calendar events."
+
+#. Button label while calendar permission or the event form is active
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.busy"
+msgstr "Opening Calendar…"
+
+#. Screen reader hint for the activity date and time control
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.scheduleHint"
+msgstr "Opens the native date and time controls."
+
+#. Screen reader hint for the Add to Calendar button
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.addHint"
+msgstr "Opens the system event form with this activity pre-filled."
+
 #. Activity category chip label
 #. js-lingui-explicit-id
 #: src/i18n/category-labels.ts
 msgid "category.outdoors"
 msgstr "Outdoors"
+
+#. Heading for the calendar planning section on Activity Detail
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.title"
+msgstr "Plan this activity"
 
 #. Button that refreshes an empty activity catalog
 #. js-lingui-explicit-id
@@ -308,6 +488,11 @@ msgstr "Search by title"
 msgid "search.placeholder"
 msgstr "Search by title"
 
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.missingBody"
+msgstr "Select a future date and start time before you open Calendar."
+
 #. Heading when saved activity data appears after a detail refetch fails
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -320,6 +505,17 @@ msgstr "Showing saved details"
 msgid "errors.unknown"
 msgstr "Something went wrong. Try again."
 
+#. Label above the native calendar start time picker
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.timeLabel"
+msgstr "Start time"
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.pastBody"
+msgstr "The activity start time must be later than the current time."
+
 #. Shown when a Zod-validated payload is invalid
 #. js-lingui-explicit-id
 #: src/i18n/error-keys.ts
@@ -331,6 +527,16 @@ msgstr "The data from the server was invalid."
 #: src/i18n/error-keys.ts
 msgid "errors.networkTimeout"
 msgstr "The request took too long. Try again."
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.errorBody"
+msgstr "The system calendar returned an unexpected error. Try again."
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.savedBody"
+msgstr "The system calendar saved this activity."
 
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -355,11 +561,23 @@ msgstr "Try a different search or clear your filters."
 msgid "activityDetail.retry"
 msgstr "Try again"
 
+#. Button that retries the Add to Calendar operation
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.tryAgain"
+msgstr "Try again"
+
 #. Button label to retry a failed first catalog or detail load
 #. js-lingui-explicit-id
 #: src/components/query-error-boundary/index.tsx
 msgid "queryError.retry"
 msgstr "Try again"
+
+#. Button that confirms the selected activity date and time
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.confirmSchedule"
+msgstr "Use this time"
 
 #. Activity category chip label
 #. js-lingui-explicit-id
@@ -372,3 +590,8 @@ msgstr "Workshops"
 #: src/i18n/error-keys.ts
 msgid "errors.networkOffline"
 msgstr "You are offline. Check your connection and try again."
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.canceledBody"
+msgstr "You canceled the system calendar form. No event was added."

@@ -16,7 +16,9 @@ import { emptySearchIllustration } from "@/illustrations";
 import { categoryMessages } from "@/i18n/category-labels";
 import { ActivityDetailControls } from "@/screens/activity-detail/activity-detail-controls";
 import { ActivityDetailSkeleton } from "@/screens/activity-detail/activity-detail-skeleton";
+import { AddToCalendarSection } from "@/screens/activity-detail/add-to-calendar-section";
 import {
+  ACTIVITY_DETAIL_BOTTOM_CHROME_CLEARANCE,
   ACTIVITY_DETAIL_HERO_ASPECT_RATIO,
   ACTIVITY_DETAIL_HERO_MAX_HEIGHT,
 } from "@/screens/activity-detail/constants";
@@ -154,7 +156,7 @@ function ActivityDetailLoaded({
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingBottom: bottomInset + spacing.space32 },
+          { paddingBottom: bottomInset + ACTIVITY_DETAIL_BOTTOM_CHROME_CLEARANCE },
         ]}
         contentInsetAdjustmentBehavior="never"
         testID="activity-detail-content"
@@ -196,6 +198,7 @@ function ActivityDetailLoaded({
             <DetailValue label={t(activityDetailMessages.location)} value={activity.location} />
             <DetailValue label={t(activityDetailMessages.duration)} value={duration} />
           </View>
+          <AddToCalendarSection activity={activity} />
         </View>
       </ScrollView>
       <ActivityDetailControls

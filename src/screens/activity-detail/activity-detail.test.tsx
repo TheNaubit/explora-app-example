@@ -1,5 +1,5 @@
 import { createElement } from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { resetCatalog } from "@/mocks/catalog-store";
@@ -87,6 +87,25 @@ describe("ActivityDetail", () => {
     await waitFor(() => expect(screen.getByTestId("activity-detail-not-found")).toBeTruthy());
     expect(screen.getByText("Activity unavailable")).toBeTruthy();
     expect(screen.getByText("Go back")).toBeTruthy();
+  });
+
+  it("shows a clear validation state when no calendar schedule is selected", async () => {
+    const activity = SUPPLIED_ACTIVITIES[0];
+
+    await render(createElement(ActivityDetail, { id: activity.id }), {
+      wrapper: createProviders(createQueryClient()),
+    });
+
+    await waitFor(() => expect(screen.getByTestId("activity-detail-content")).toBeTruthy());
+    await act(async () => {
+      fireEvent.press(screen.getByTestId("add-to-calendar-button"));
+    });
+
+    await waitFor(() => expect(screen.getByTestId("calendar-status-banner")).toBeTruthy());
+    expect(screen.getAllByText("Choose a date and time")).toHaveLength(2);
+    expect(
+      screen.getByText("Select a future date and start time before you open Calendar."),
+    ).toBeTruthy();
   });
 
   it("keeps a saved snapshot visible when current detail loading fails", async () => {

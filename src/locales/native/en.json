@@ -1,7 +1,8 @@
 {
   "ios": {
     "CFBundleDisplayName": "Explora",
-    "NSLocationWhenInUseUsageDescription": "Explora uses your location to show nearby activities when you allow it."
+    "NSLocationWhenInUseUsageDescription": "Explora uses your location to show nearby activities when you allow it.",
+    "NSCalendarsWriteOnlyAccessUsageDescription": "Allow Explora to add activities to your calendars."
   },
   "android": {
     "app_name": "Explora"
