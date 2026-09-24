@@ -1,4 +1,8 @@
+import type { ReactElement } from "react";
+
 export type CalendarSchedulePickerProps = {
-  onChange: (value: Date) => void;
-  value: Date | null;
+  isOpen: boolean;
+  onCancel: () => void;
+  onConfirm: (value: Date) => void;
+  trigger: ReactElement;
 };

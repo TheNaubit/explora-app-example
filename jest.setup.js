@@ -43,6 +43,68 @@ jest.mock("@expo/ui/community/datetime-picker", () => {
   };
 });
 
+jest.mock("@expo/ui/swift-ui", () => {
+  const React = require("react");
+  const { Pressable, Text: NativeText, View } = require("react-native");
+
+  function Container({ children, ...rest }) {
+    return React.createElement(View, rest, children);
+  }
+
+  function BottomSheet({ anchor, children, isPresented }) {
+    return React.createElement(
+      View,
+      null,
+      anchor,
+      isPresented ? React.createElement(View, null, children) : null,
+    );
+  }
+
+  function Button({ label, onPress, testID }) {
+    return React.createElement(
+      Pressable,
+      { accessibilityRole: "button", onPress, testID },
+      React.createElement(NativeText, null, label),
+    );
+  }
+
+  function DatePicker(props) {
+    return React.createElement(View, props);
+  }
+
+  return {
+    BottomSheet,
+    Button,
+    DatePicker,
+    GlassEffectContainer: Container,
+    Group: Container,
+    Host: Container,
+    HStack: Container,
+    RNHostView: Container,
+    Spacer: View,
+    Text: NativeText,
+    VStack: Container,
+  };
+});
+
+jest.mock("@expo/ui/swift-ui/modifiers", () => {
+  const modifier =
+    (name) =>
+    (...args) => ({ args, name });
+
+  return {
+    buttonStyle: modifier("buttonStyle"),
+    datePickerStyle: modifier("datePickerStyle"),
+    font: modifier("font"),
+    frame: modifier("frame"),
+    interactiveDismissDisabled: modifier("interactiveDismissDisabled"),
+    padding: modifier("padding"),
+    presentationDragIndicator: modifier("presentationDragIndicator"),
+    presentationSizing: modifier("presentationSizing"),
+    tint: modifier("tint"),
+  };
+});
+
 jest.mock("@shopify/react-native-skia", () => {
   const React = require("react");
   const { View } = require("react-native");

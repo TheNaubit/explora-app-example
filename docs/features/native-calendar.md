@@ -9,9 +9,9 @@ The feature stays local. Explora does not send calendar data to a backend.
 ## Current behavior
 
 1. Open an activity.
-2. Select **Date and start time**.
+2. Select **Add to Calendar**.
 3. Choose a future date and start time.
-4. Select **Add to Calendar**.
+4. Select **Done** in the sheet header.
 5. Review the pre-filled event in the system calendar form.
 6. Save or cancel the event.
 
@@ -32,6 +32,12 @@ The coordinator accepts one active operation. A second submission returns a dupl
 
 ### iOS
 
+- Activity Detail shows one calendar action.
+- The action opens a fitted native SwiftUI sheet.
+- The sheet has no drag handle and does not allow swipe dismissal.
+- The header uses native Liquid Glass buttons on iOS 26 and later.
+- Earlier iOS versions use native bordered button styles.
+- One native SwiftUI picker selects both the date and time.
 - Explora requests write-only calendar access.
 - The config plugin omits full calendar access.
 - Explora uses the default write-only EventKit calendar proxy.
@@ -40,6 +46,8 @@ The coordinator accepts one active operation. A second submission returns a dupl
 
 ### Android
 
+- Android opens native date and time dialogs in sequence.
+- Expo UI has no combined Android date and time picker.
 - Explora opens the system calendar event form.
 - Explora does not request calendar read or write permission.
 - The form stays active in the same task, so duplicate protection remains active.
@@ -50,7 +58,8 @@ The coordinator accepts one active operation. A second submission returns a dupl
 
 | State                  | Result                                                      |
 | ---------------------- | ----------------------------------------------------------- |
-| No schedule            | Show a clear validation message.                            |
+| Schedule sheet open    | Show one fitted native picker and header actions on iOS.    |
+| Schedule canceled      | Close the controls and do not request permission.           |
 | Past schedule          | Ask for a future time.                                      |
 | Permission denied      | Explain the denial and offer a retry.                       |
 | Permission blocked     | Explain the system setting and offer **Open Settings**.     |
@@ -63,7 +72,7 @@ The coordinator accepts one active operation. A second submission returns a dupl
 ## Accessibility and localization
 
 - Project pressable controls provide labels, roles, hints, focus rings, and keyboard activation.
-- The iOS schedule sheet uses `A11yFocusTrap` while it is open.
+- The native iOS sheet contains focus until **Cancel** or **Done** closes it.
 - Date and time controls use native `@expo/ui` pickers.
 - Text supports Dynamic Type and wraps at larger sizes.
 - Status changes use alert semantics and spoken announcements.

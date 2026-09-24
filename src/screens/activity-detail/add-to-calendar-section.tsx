@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Linking, StyleSheet, Text, View } from "react-native";
 import { SymbolView } from "expo-symbols";
 import { useLingui } from "@lingui/react/macro";
@@ -29,8 +29,9 @@ type StatusCopy = {
 export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
   const { t } = useLingui();
   const theme = useAppTheme();
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const { isActive, result, submit } = useAddToCalendar(activity, startDate);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const lastStartDate = useRef<Date | null>(null);
+  const { isActive, result, submit } = useAddToCalendar(activity);
   const statusCopy = useMemo(() => getStatusCopy(result, t), [result, t]);
 
   useEffect(() => {
@@ -46,31 +47,71 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
     }
   }, [result, statusCopy, t]);
 
-  async function handleSubmit() {
-    await submit();
+  async function handleScheduleConfirm(startDate: Date) {
+    lastStartDate.current = startDate;
+    await submit(startDate);
+  }
+
+  function retryLastSchedule() {
+    const startDate = lastStartDate.current;
+    if (startDate) {
+      void submit(startDate);
+    } else {
+      setIsPickerOpen(true);
+    }
   }
 
   return (
-    <View style={[styles.root, { borderColor: theme.colors.border }]}>
-      <View style={styles.headingRow}>
-        <View style={[styles.icon, { backgroundColor: theme.colors.surfaceSecondary }]}>
-          <SymbolView
-            name={{ ios: "calendar.badge.plus", android: "event", web: "event" }}
-            size={24}
-            tintColor={theme.colors.accent}
-          />
-        </View>
-        <View style={styles.headingCopy}>
-          <Text accessibilityRole="header" style={[styles.title, { color: theme.colors.text }]}>
-            {t(activityDetailMessages.calendarTitle)}
-          </Text>
-          <Text style={[styles.body, { color: theme.colors.textSecondary }]}>
-            {t(activityDetailMessages.calendarBody)}
-          </Text>
-        </View>
-      </View>
-
-      <CalendarSchedulePicker onChange={setStartDate} value={startDate} />
+    <View style={styles.root}>
+      <CalendarSchedulePicker
+        isOpen={isPickerOpen}
+        onCancel={() => setIsPickerOpen(false)}
+        onConfirm={(startDate) => {
+          void handleScheduleConfirm(startDate);
+        }}
+        trigger={
+          <A11yPressable
+            accessibilityHint={t(activityDetailMessages.calendarAddHint)}
+            accessibilityLabel={
+              isActive
+                ? t(activityDetailMessages.calendarBusy)
+                : t(activityDetailMessages.calendarAdd)
+            }
+            accessibilityRole="button"
+            accessibilityState={{ busy: isActive, disabled: isActive }}
+            disabled={isActive}
+            onPress={() => setIsPickerOpen(true)}
+            style={(state) => [
+              styles.addButton,
+              {
+                backgroundColor: theme.colors.surfaceElevated,
+                borderColor: theme.colors.border,
+                opacity: isActive ? 0.64 : 1,
+                transform: [{ scale: state.pressed ? PRESS_SCALE : 1 }],
+              },
+            ]}
+            testID="add-to-calendar-button"
+          >
+            <View style={[styles.icon, { backgroundColor: theme.colors.surfaceSecondary }]}>
+              <SymbolView
+                name={{ ios: "calendar.badge.plus", android: "event", web: "event" }}
+                size={24}
+                tintColor={theme.colors.accent}
+              />
+            </View>
+            <Text style={[styles.addLabel, { color: theme.colors.text }]}>
+              {isActive
+                ? t(activityDetailMessages.calendarBusy)
+                : t(activityDetailMessages.calendarAdd)}
+            </Text>
+            <SymbolView
+              name={{ ios: "chevron.forward", android: "chevron_right", web: "chevron_right" }}
+              size={18}
+              tintColor={theme.colors.textSecondary}
+            />
+          </A11yPressable>
+        }
+      />
 
       {statusCopy && result !== "duplicate" ? (
         <CalendarStatusBanner
@@ -83,42 +124,12 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
                   void Linking.openSettings();
                 }
               : statusCopy.actionLabel
-                ? () => {
-                    void handleSubmit();
-                  }
+                ? retryLastSchedule
                 : undefined
           }
           title={statusCopy.title}
         />
       ) : null}
-
-      <A11yPressable
-        accessibilityHint={t(activityDetailMessages.calendarAddHint)}
-        accessibilityLabel={
-          isActive ? t(activityDetailMessages.calendarBusy) : t(activityDetailMessages.calendarAdd)
-        }
-        accessibilityRole="button"
-        accessibilityState={{ busy: isActive, disabled: isActive }}
-        disabled={isActive}
-        onPress={() => {
-          void handleSubmit();
-        }}
-        style={(state) => [
-          styles.addButton,
-          {
-            backgroundColor: theme.colors.accent,
-            opacity: isActive ? 0.64 : 1,
-            transform: [{ scale: state.pressed ? PRESS_SCALE : 1 }],
-          },
-        ]}
-        testID="add-to-calendar-button"
-      >
-        <Text style={[styles.addLabel, { color: theme.colors.onAccent }]}>
-          {isActive
-            ? t(activityDetailMessages.calendarBusy)
-            : t(activityDetailMessages.calendarAdd)}
-        </Text>
-      </A11yPressable>
     </View>
   );
 }
@@ -202,27 +213,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderCurve: "continuous",
     borderRadius: radii.medium,
+    borderWidth: StyleSheet.hairlineWidth,
+    flexDirection: "row",
+    gap: spacing.space12,
     justifyContent: "center",
     minHeight: MIN_TOUCH_TARGET,
-    paddingHorizontal: spacing.space20,
+    paddingHorizontal: spacing.space16,
     paddingVertical: spacing.space12,
   },
   addLabel: {
     ...typography.bodyStrong,
-    textAlign: "center",
-  },
-  body: {
-    ...typography.body,
-    textAlign: "left",
-  },
-  headingCopy: {
     flex: 1,
-    gap: spacing.space8,
-  },
-  headingRow: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    gap: spacing.space12,
+    textAlign: "left",
   },
   icon: {
     alignItems: "center",
@@ -232,12 +234,7 @@ const styles = StyleSheet.create({
     width: MIN_TOUCH_TARGET,
   },
   root: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    gap: spacing.space16,
+    gap: spacing.space12,
     paddingVertical: spacing.space24,
-  },
-  title: {
-    ...typography.headline,
-    textAlign: "left",
   },
 });

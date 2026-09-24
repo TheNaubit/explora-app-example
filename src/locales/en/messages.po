@@ -156,40 +156,17 @@ msgstr "Cancel"
 msgid "explore.refreshSuccessAnnounce"
 msgstr "Catalog refreshed. One activity added."
 
-#. Placeholder before the user chooses an activity date and time
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.scheduleMissing"
-msgstr "Choose a date and time"
-
 #. Validation heading when no activity date is selected
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.missingTitle"
 msgstr "Choose a date and time"
 
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.body"
-msgstr "Choose a future start time. Explora sets the end time from the activity duration."
-
 #. Validation heading when the selected activity time is not in the future
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.pastTitle"
 msgstr "Choose a future time"
-
-#. Screen reader label for the activity date and time control
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.scheduleAccessibility"
-msgstr "Choose date and start time. Current value: {value}."
-
-#. Heading in the iOS activity schedule sheet
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.scheduleSheetTitle"
-msgstr "Choose date and time"
 
 #. Empty state action that clears search and category filters
 #. js-lingui-explicit-id
@@ -226,17 +203,11 @@ msgstr "Culture"
 msgid "activityDetail.savedFallbackBody"
 msgstr "Current details could not load. This saved copy remains available offline."
 
-#. Label above the native calendar date picker
+#. Short heading in the iOS activity schedule sheet
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.dateLabel"
-msgstr "Date"
-
-#. Label above the selected calendar date and time
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.scheduleLabel"
-msgstr "Date and start time"
+msgid "activityDetail.calendar.scheduleSheetTitle"
+msgstr "Date and time"
 
 #. Android time dialog button that confirms the schedule
 #. js-lingui-explicit-id
@@ -368,12 +339,6 @@ msgstr "Open Settings and allow Explora to add calendar events."
 msgid "activityDetail.calendar.busy"
 msgstr "Opening Calendar…"
 
-#. Screen reader hint for the activity date and time control
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.scheduleHint"
-msgstr "Opens the native date and time controls."
-
 #. Screen reader hint for the Add to Calendar button
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -385,12 +350,6 @@ msgstr "Opens the system event form with this activity pre-filled."
 #: src/i18n/category-labels.ts
 msgid "category.outdoors"
 msgstr "Outdoors"
-
-#. Heading for the calendar planning section on Activity Detail
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.title"
-msgstr "Plan this activity"
 
 #. Button that refreshes an empty activity catalog
 #. js-lingui-explicit-id
@@ -505,12 +464,6 @@ msgstr "Showing saved details"
 msgid "errors.unknown"
 msgstr "Something went wrong. Try again."
 
-#. Label above the native calendar start time picker
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.timeLabel"
-msgstr "Start time"
-
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.pastBody"
@@ -572,12 +525,6 @@ msgstr "Try again"
 #: src/components/query-error-boundary/index.tsx
 msgid "queryError.retry"
 msgstr "Try again"
-
-#. Button that confirms the selected activity date and time
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.confirmSchedule"
-msgstr "Use this time"
 
 #. Activity category chip label
 #. js-lingui-explicit-id

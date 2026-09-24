@@ -64,59 +64,15 @@ export const activityDetailMessages = {
     comment: "Screen reader status while Activity Detail loads",
     message: "Loading activity details.",
   }),
-  calendarTitle: msg({
-    id: "activityDetail.calendar.title",
-    comment: "Heading for the calendar planning section on Activity Detail",
-    message: "Plan this activity",
-  }),
-  calendarBody: msg({
-    id: "activityDetail.calendar.body",
-    message: "Choose a future start time. Explora sets the end time from the activity duration.",
-  }),
-  calendarScheduleLabel: msg({
-    id: "activityDetail.calendar.scheduleLabel",
-    comment: "Label above the selected calendar date and time",
-    message: "Date and start time",
-  }),
-  calendarScheduleMissing: msg({
-    id: "activityDetail.calendar.scheduleMissing",
-    comment: "Placeholder before the user chooses an activity date and time",
-    message: "Choose a date and time",
-  }),
-  calendarScheduleAccessibility: msg({
-    id: "activityDetail.calendar.scheduleAccessibility",
-    comment: "Screen reader label for the activity date and time control",
-    message: "Choose date and start time. Current value: {value}.",
-  }),
-  calendarScheduleHint: msg({
-    id: "activityDetail.calendar.scheduleHint",
-    comment: "Screen reader hint for the activity date and time control",
-    message: "Opens the native date and time controls.",
-  }),
   calendarScheduleSheetTitle: msg({
     id: "activityDetail.calendar.scheduleSheetTitle",
-    comment: "Heading in the iOS activity schedule sheet",
-    message: "Choose date and time",
-  }),
-  calendarDateLabel: msg({
-    id: "activityDetail.calendar.dateLabel",
-    comment: "Label above the native calendar date picker",
-    message: "Date",
-  }),
-  calendarTimeLabel: msg({
-    id: "activityDetail.calendar.timeLabel",
-    comment: "Label above the native calendar start time picker",
-    message: "Start time",
+    comment: "Short heading in the iOS activity schedule sheet",
+    message: "Date and time",
   }),
   calendarCancel: msg({
     id: "activityDetail.calendar.cancel",
     comment: "Button that closes the schedule picker without changing the schedule",
     message: "Cancel",
-  }),
-  calendarConfirmSchedule: msg({
-    id: "activityDetail.calendar.confirmSchedule",
-    comment: "Button that confirms the selected activity date and time",
-    message: "Use this time",
   }),
   calendarNext: msg({
     id: "activityDetail.calendar.next",
@@ -136,7 +92,7 @@ export const activityDetailMessages = {
   calendarAddHint: msg({
     id: "activityDetail.calendar.addHint",
     comment: "Screen reader hint for the Add to Calendar button",
-    message: "Opens the system event form with this activity pre-filled.",
+    message: "Opens a sheet to choose the activity date and start time.",
   }),
   calendarBusy: msg({
     id: "activityDetail.calendar.busy",

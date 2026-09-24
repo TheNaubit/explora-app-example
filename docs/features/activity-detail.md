@@ -14,7 +14,11 @@
 - Loading uses a hero and content skeleton.
 - An invalid activity id shows a not-found state with a back action.
 - Other first-load errors use the shared Query error boundary.
-- The calendar section lets the user choose a future date and start time.
+- One **Add to Calendar** action opens the schedule controls.
+- The iOS sheet fits the native date and time picker without expanding to full height.
+- The fixed iOS sheet has no drag handle and does not allow swipe dismissal.
+- The iOS sheet puts Liquid Glass **Cancel** and **Done** buttons in its header on iOS 26 or later.
+- Android uses the platform date and time dialogs because it has no combined picker.
 - Add to Calendar calculates the end time from the activity duration.
 - The system event form receives the title, location, and description.
 - The calendar flow handles validation, permission, cancel, success, and native error states.
@@ -36,8 +40,8 @@ Android uses the same route, content, actions, and state handling. Android runti
 - Back, favorite, and retry actions use accessible project controls.
 - Text scales with Dynamic Type and can wrap.
 - All user-facing copy uses Lingui messages.
-- The schedule trigger and calendar action support keyboard activation and clear focus styles.
-- The iOS schedule sheet traps focus while it is open.
+- The calendar action and sheet header actions support keyboard activation and clear focus styles.
+- The native iOS sheet contains focus until a header action closes it.
 
 ## Code map
 

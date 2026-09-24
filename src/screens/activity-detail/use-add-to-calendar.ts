@@ -8,16 +8,16 @@ import type { Activity } from "@/schemas/activity";
 type AddToCalendarState = {
   isActive: boolean;
   result: AddToCalendarResult | null;
-  submit: () => Promise<AddToCalendarResult>;
+  submit: (startDate: Date) => Promise<AddToCalendarResult>;
 };
 
 /** Manage one Add to Calendar operation for the current Activity Detail screen. */
-export function useAddToCalendar(activity: Activity, startDate: Date | null): AddToCalendarState {
+export function useAddToCalendar(activity: Activity): AddToCalendarState {
   const coordinator = useRef(new AddToCalendarCoordinator(nativeCalendarAdapter));
   const [isActive, setIsActive] = useState(false);
   const [result, setResult] = useState<AddToCalendarResult | null>(null);
 
-  async function submit(): Promise<AddToCalendarResult> {
+  async function submit(startDate: Date): Promise<AddToCalendarResult> {
     setIsActive(true);
     let shouldClearActive = true;
 

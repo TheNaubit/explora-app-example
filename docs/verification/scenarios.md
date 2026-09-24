@@ -29,29 +29,37 @@ When you specify or run a scenario, expand it here or add `scenarios/<name>.md` 
 
 | Step | Action                                                        | Expected result                                                      |
 | ---- | ------------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1    | Open Activity Detail.                                         | The calendar section shows no selected schedule.                     |
-| 2    | Select **Add to Calendar** without a schedule.                | Explora rejects the input before a permission request.               |
-| 3    | Choose a past time and submit.                                | Explora asks for a future time.                                      |
-| 4    | Choose a future date and start time.                          | Explora shows the localized date and time.                           |
-| 5    | Select **Add to Calendar**, then deny permission.             | Explora shows the denied or blocked state.                           |
-| 6    | If blocked, open Settings and allow calendar write access.    | Explora returns to a retryable state.                                |
-| 7    | Submit again and inspect the system event form.               | Title, location, description, start, and calculated end are correct. |
-| 8    | Cancel the system event form.                                 | Explora confirms that no event was added.                            |
-| 9    | Submit again and save the event.                              | Explora confirms success.                                            |
-| 10   | Try a second submit while the first operation remains active. | The action stays disabled and only one native form opens.            |
+| 1    | Open Activity Detail.                                         | One **Add to Calendar** action appears.                              |
+| 2    | Select **Add to Calendar**.                                   | A schedule sheet opens.                                              |
+| 3    | Inspect the schedule sheet.                                   | A fitted native date and time picker appears with header actions.    |
+| 4    | Swipe down on the schedule sheet.                             | The fixed sheet stays open.                                          |
+| 5    | Select **Cancel**.                                            | The sheet closes without a permission request.                       |
+| 6    | Open the sheet, choose a future time, and select **Done**.    | The calendar permission or system event form opens.                  |
+| 7    | Deny permission.                                              | Explora shows the denied or blocked state.                           |
+| 8    | If blocked, open Settings and allow calendar write access.    | Explora returns to a retryable state.                                |
+| 9    | Submit again and inspect the system event form.               | Title, location, description, start, and calculated end are correct. |
+| 10   | Cancel the system event form.                                 | Explora confirms that no event was added.                            |
+| 11   | Submit again and save the event.                              | Explora confirms success.                                            |
+| 12   | Try a second submit while the first operation remains active. | The action stays disabled and only one native form opens.            |
 
 ### Observed result
 
 Passed on the iOS 27.0 Simulator.
 
-1. A submission without a schedule showed **Choose a date and time**.
-2. The permission prompt asked to add events only.
-3. Denial produced the blocked state and an **Open Settings** action.
-4. The system form showed the activity title, location, and description.
-5. The form showed 18:01–18:36 for a 35-minute activity.
-6. Two immediate submit taps opened one system form.
-7. Closing the form showed **Event not added**.
-8. Saving the form showed **Added to Calendar**.
+1. Activity Detail showed one **Add to Calendar** row.
+2. The row opened a fitted native SwiftUI sheet.
+3. The sheet showed one graphical date and time picker.
+4. Native Liquid Glass **Cancel** and **Done** buttons appeared in the header.
+5. The sheet showed no drag handle.
+6. A 200-point downward gesture did not close or resize the sheet.
+7. **Cancel** closed the sheet without a permission request.
+8. The permission prompt asked to add events only.
+9. Denial produced the blocked state and an **Open Settings** action.
+10. The system form showed the activity title, location, and description.
+11. The form showed 18:01–18:36 for a 35-minute activity.
+12. Two immediate submit taps opened one system form.
+13. Closing the form showed **Event not added**.
+14. Saving the form showed **Added to Calendar**.
 
 The focused Jest tests cover past dates, malformed data, invalid durations, both denial states, native errors, and duplicate protection.
 
@@ -59,6 +67,8 @@ The focused Jest tests cover past dates, malformed data, invalid durations, both
 
 - Automated: `src/calendar/add-to-calendar.test.ts`.
 - UI validation: `src/screens/activity-detail/activity-detail.test.tsx`.
+- Compact Activity Detail action: [`ios-compact-calendar-action.jpg`](./evidence/native-calendar/ios-compact-calendar-action.jpg).
+- Fitted Liquid Glass sheet: [`ios-fitted-liquid-glass-sheet.jpg`](./evidence/native-calendar/ios-fitted-liquid-glass-sheet.jpg).
 - Invalid input: [`ios-invalid-input.jpg`](./evidence/native-calendar/ios-invalid-input.jpg).
 - Write-only prompt: [`ios-write-only-permission.jpg`](./evidence/native-calendar/ios-write-only-permission.jpg).
 - Blocked permission: [`ios-permission-blocked.jpg`](./evidence/native-calendar/ios-permission-blocked.jpg).

@@ -1,5 +1,5 @@
 import { createElement } from "react";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { resetCatalog } from "@/mocks/catalog-store";
@@ -89,7 +89,7 @@ describe("ActivityDetail", () => {
     expect(screen.getByText("Go back")).toBeTruthy();
   });
 
-  it("shows a clear validation state when no calendar schedule is selected", async () => {
+  it("opens a compact calendar sheet from one Activity Detail action", async () => {
     const activity = SUPPLIED_ACTIVITIES[0];
 
     await render(createElement(ActivityDetail, { id: activity.id }), {
@@ -97,15 +97,22 @@ describe("ActivityDetail", () => {
     });
 
     await waitFor(() => expect(screen.getByTestId("activity-detail-content")).toBeTruthy());
-    await act(async () => {
-      fireEvent.press(screen.getByTestId("add-to-calendar-button"));
-    });
+    expect(screen.queryByText("Plan this activity")).toBeNull();
+    expect(screen.queryByText("Date and start time")).toBeNull();
 
-    await waitFor(() => expect(screen.getByTestId("calendar-status-banner")).toBeTruthy());
-    expect(screen.getAllByText("Choose a date and time")).toHaveLength(2);
-    expect(
-      screen.getByText("Select a future date and start time before you open Calendar."),
-    ).toBeTruthy();
+    fireEvent.press(screen.getByTestId("add-to-calendar-button"));
+
+    expect(await screen.findByTestId("calendar-schedule-sheet")).toBeTruthy();
+    expect(screen.getByText("Date and time")).toBeTruthy();
+    expect(screen.getByText("Cancel")).toBeTruthy();
+    expect(screen.getByText("Done")).toBeTruthy();
+    expect(screen.getByTestId("calendar-date-time-picker").props.displayedComponents).toEqual([
+      "date",
+      "hourAndMinute",
+    ]);
+
+    fireEvent.press(screen.getByTestId("calendar-schedule-cancel"));
+    await waitFor(() => expect(screen.queryByTestId("calendar-schedule-sheet")).toBeNull());
   });
 
   it("keeps a saved snapshot visible when current detail loading fails", async () => {
