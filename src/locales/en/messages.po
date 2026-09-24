@@ -13,6 +13,24 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. Accessible label for a Dev Tools data row and its current value
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.valueAccessibilityLabel"
+msgstr "{label}, {value}"
+
+#. Screen reader status after a request mode changes
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.modeChanged"
+msgstr "{setting} set to {option}."
+
+#. Accessible label for one request-mode radio option
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.modeOptionLabel"
+msgstr "{setting}: {option}"
+
 #. Spoken summary for an activity list row: title, category, duration, location
 #. js-lingui-explicit-id
 #: src/a11y/activity-label.ts
@@ -32,6 +50,12 @@ msgstr "{value, plural, one {# min} other {# min}}"
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.duplicate"
 msgstr "A calendar operation is already active."
+
+#. Section title for Dev Tools maintenance actions
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.actions"
+msgstr "Actions"
 
 #. Screen reader status when the catalog list finished loading with results
 #. js-lingui-explicit-id
@@ -102,6 +126,11 @@ msgstr "Allow calendar access when asked, then try again."
 msgid "activityDetail.calendar.submittedBody"
 msgstr "Android does not report whether the event was saved or canceled."
 
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.clearRequestCacheHint"
+msgstr "Applies the selected mode to the next matching request."
+
 #. Button above the activity hero that returns to the previous screen
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -144,11 +173,23 @@ msgstr "Calendar form closed"
 msgid "activityDetail.calendar.unavailableTitle"
 msgstr "Calendar is unavailable"
 
+#. Button that cancels local data reset
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.cancel"
+msgstr "Cancel"
+
 #. Button that closes the schedule picker without changing the schedule
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.cancel"
 msgstr "Cancel"
+
+#. Row label for the number of activities in the local catalog
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.catalogActivities"
+msgstr "Catalog activities"
 
 #. Screen reader status after a successful catalog refresh
 #. js-lingui-explicit-id
@@ -174,11 +215,37 @@ msgstr "Choose a future time"
 msgid "explore.emptyAction"
 msgstr "Clear filters"
 
+#. Action that removes cached catalog and activity responses
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.clearRequestCache"
+msgstr "Clear request cache"
+
 #. Spoken and visible label for clearing the discovery search field
 #. js-lingui-explicit-id
 #: src/components/search-field/index.tsx
 msgid "search.clear"
 msgstr "Clear search"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.resetLocalDataHint"
+msgstr "Clears generated activities, favorites, filters, and request cache."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.laterPageLoadHelp"
+msgstr "Controls later catalog pages during infinite scrolling."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.initialLoadHelp"
+msgstr "Controls the first catalog page and activity detail requests."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.refreshHelp"
+msgstr "Controls the next pull-to-refresh request."
 
 #. Heading shown when a Suspense query first load fails
 #. js-lingui-explicit-id
@@ -208,6 +275,18 @@ msgstr "Current details could not load. This saved copy remains available offlin
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.scheduleSheetTitle"
 msgstr "Date and time"
+
+#. Native tab label for assessment and developer controls
+#. js-lingui-explicit-id
+#: src/screens/tabs/messages.ts
+msgid "tabs.devTools"
+msgstr "Dev Tools"
+
+#. Screen title for assessment and developer controls
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.title"
+msgstr "Dev Tools"
 
 #. Android time dialog button that confirms the schedule
 #. js-lingui-explicit-id
@@ -250,6 +329,12 @@ msgstr "Explore"
 msgid "explore.heading"
 msgstr "Explore"
 
+#. Request mode that returns an error
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.mode.fail"
+msgstr "Fail"
+
 #. Screen reader announcement when favorite activities are shown
 #. js-lingui-explicit-id
 #: src/screens/favorites/messages.ts
@@ -274,6 +359,17 @@ msgstr "Favorites"
 msgid "favorites.heading"
 msgstr "Favorites"
 
+#. Row label for the number of saved favorite activities
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.favorites"
+msgstr "Favorites"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.lifecycleHelp"
+msgstr "For lifecycle checks, select Slow and background the app during the request."
+
 #. Button on the Activity Detail not-found state
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -285,6 +381,18 @@ msgstr "Go back"
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.nativeFeedbackTest.info"
 msgstr "Info"
+
+#. Setting for the first catalog or activity request
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.initialLoad"
+msgstr "Initial load"
+
+#. Setting for later pages during infinite catalog scrolling
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.laterPageLoad"
+msgstr "Later page load"
 
 #. Activity category chip label
 #. js-lingui-explicit-id
@@ -303,6 +411,17 @@ msgstr "Loading activities."
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.loadingAnnounce"
 msgstr "Loading activity details."
+
+#. Section title for local assessment data counts
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.localData"
+msgstr "Local data"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.localDataReset"
+msgstr "Local data reset."
 
 #. Label for the activity location value
 #. js-lingui-explicit-id
@@ -390,6 +509,12 @@ msgstr "No favorite activities."
 msgid "explore.emptyTitle"
 msgstr "No matching activities"
 
+#. Fast successful request mode
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.mode.normal"
+msgstr "Normal"
+
 #. Button that opens system Settings for calendar permission
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -425,6 +550,12 @@ msgstr "Outdoors"
 msgid "explore.browseEmptyAction"
 msgstr "Refresh"
 
+#. Setting for pull-to-refresh request behavior
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.refresh"
+msgstr "Refresh"
+
 #. Accessible name for the Explore pull-to-refresh control
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
@@ -454,6 +585,56 @@ msgstr "Refresh the catalog to try again."
 #: src/a11y/activity-label.ts
 msgid "a11y.favorite.remove"
 msgstr "Remove {title} from favorites"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.requestCacheCleared"
+msgstr "Request cache cleared."
+
+#. Section title for simulated request behavior
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.requestModes"
+msgstr "Request modes"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.offlineHelp"
+msgstr "Request modes do not simulate the device offline state."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.requestModesReset"
+msgstr "Request modes reset."
+
+#. Destructive confirmation button that resets local data
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.reset"
+msgstr "Reset"
+
+#. Destructive action that clears all local assessment data
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.resetLocalData"
+msgstr "Reset local data"
+
+#. Confirmation title before local assessment data is deleted
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.confirmResetTitle"
+msgstr "Reset local data?"
+
+#. Action that restores all request modes to their defaults
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.resetModes"
+msgstr "Reset request modes"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.resetModesHint"
+msgstr "Restores normal loads and successful refresh."
 
 #. Retry label on Explore inline error banners
 #. js-lingui-explicit-id
@@ -496,17 +677,34 @@ msgstr "Search by title"
 msgid "activityDetail.calendar.missingBody"
 msgstr "Select a future date and start time before you open Calendar."
 
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.modeOptionHint"
+msgstr "Selects this request mode."
+
 #. Heading when saved activity data appears after a detail refetch fails
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.savedFallbackTitle"
 msgstr "Showing saved details"
 
+#. Request mode with a deliberate delay
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.mode.slow"
+msgstr "Slow"
+
 #. Fallback when an error key is missing or unrecognized
 #. js-lingui-explicit-id
 #: src/i18n/error-keys.ts
 msgid "errors.unknown"
 msgstr "Something went wrong. Try again."
+
+#. Refresh mode that adds one activity
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.mode.success"
+msgstr "Success"
 
 #. Development button that presents a native success toast
 #. js-lingui-explicit-id
@@ -552,6 +750,11 @@ msgstr "This activity link is invalid or the activity is no longer available."
 msgid "errors.notFound"
 msgstr "This activity was not found."
 
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.confirmResetBody"
+msgstr "This removes generated activities, favorites, filters, and cached requests."
+
 #. Empty state body when filters return no activities
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
@@ -575,6 +778,11 @@ msgstr "Try again"
 #: src/components/query-error-boundary/index.tsx
 msgid "queryError.retry"
 msgstr "Try again"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.introduction"
+msgstr "Use these controls to reproduce assessment states."
 
 #. Development button that presents a native warning toast
 #. js-lingui-explicit-id

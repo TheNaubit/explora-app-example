@@ -120,7 +120,7 @@ Use Liquid Glass for:
 
 - The floating bottom tab bar via Expo Router **NativeTabs** (system Liquid Glass on iOS 26+).
 - Hero-image back, share, and favorite controls.
-- The compact Review Controls launcher.
+- Compact floating review controls when a temporary launcher is necessary.
 - A floating toolbar that remains above scrolling content.
 
 Do not build a custom `GlassTabBar` when NativeTabs already provides the system tab bar.
@@ -219,22 +219,22 @@ The initial generated concept is stored at [`docs/design/references/explora-app-
 
 ## Component kit
 
-| Component                  | Purpose                            | Anatomy                                              | States                                               | Limits and rejected use                                               |
-| -------------------------- | ---------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `ScreenFrame`              | Define the safe screen region      | Screen announcement and content region               | Light, dark, focused return                          | Use on every screen                                                   |
-| `SearchField`              | Explore title search               | Symbol, centered single-line input, clear action     | Idle, focused, typed, disabled                       | Use in the iOS and web Explore header. Android uses `Stack.SearchBar` |
-| `CategoryChip`             | One category filter control        | Clay icon, label, and glass material                 | Default, pressed, lightly tinted selected, focused   | `A11yPressable` required for labels and selected state                |
-| `CategoryChipRow`          | Category filter row                | All plus catalog categories and edge fades           | All, multiple selected, start, middle, end           | All is exclusive; category selections combine with OR                 |
-| `ActivityCategoryBadge`    | Identify a detail category         | Clay icon, label, and filter-chip material           | Light, dark, glass, solid fallback                   | Static text; do not expose button semantics                           |
-| `ActivityCard`             | Open an activity                   | Photo, image-derived body, title, metadata, favorite | Default, pressed, focused, unfocused, saved, offline | Do not nest another card or put Liquid Glass on its surface           |
-| `FavoriteButton`           | Save or remove an activity         | Heart symbol and 44-point target                     | Unsaved, saved, pressed, focused                     | Give it one clear spoken action                                       |
-| `PrimaryButton`            | Commit the main action             | Label and optional leading symbol                    | Default, pressed, focused, busy, disabled            | Use one primary action per screen                                     |
-| `IconButton`               | Run a compact action               | System symbol and 44-point target                    | Default, pressed, focused, disabled                  | Use glass only above imagery or scrolling                             |
-| `NativeTabs` (Expo Router) | Move between Explore and Favorites | System tab bar                                       | Light, dark, minimize on scroll                      | Use `expo-router/native-tabs`                                         |
-| `InlineStatusBanner`       | Explain refresh status             | Status symbol, title, body, and retry action         | Success, warning, error                              | Keep stale content visible below it                                   |
-| `ActivityCardSkeleton`     | Reserve the activity card shape    | Full cover, favorite target, and lower copy blocks   | Loading pulse, reduced motion                        | Match the full-image card. Do not use a full-screen spinner           |
-| `EmptyState`               | Explain a resolved empty result    | Illustration, title, body, and action                | Search empty, favorites empty, not-found             | Give one next action                                                  |
-| `ReviewControlsSheet`      | Reproduce assessment states        | Mode groups, status summary, and reset               | Normal, slow, fail, offline, busy                    | Include only in review builds                                         |
+| Component                  | Purpose                                        | Anatomy                                              | States                                               | Limits and rejected use                                               |
+| -------------------------- | ---------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `ScreenFrame`              | Define the safe screen region                  | Screen announcement and content region               | Light, dark, focused return                          | Use on every screen                                                   |
+| `SearchField`              | Explore title search                           | Symbol, centered single-line input, clear action     | Idle, focused, typed, disabled                       | Use in the iOS and web Explore header. Android uses `Stack.SearchBar` |
+| `CategoryChip`             | One category filter control                    | Clay icon, label, and glass material                 | Default, pressed, lightly tinted selected, focused   | `A11yPressable` required for labels and selected state                |
+| `CategoryChipRow`          | Category filter row                            | All plus catalog categories and edge fades           | All, multiple selected, start, middle, end           | All is exclusive; category selections combine with OR                 |
+| `ActivityCategoryBadge`    | Identify a detail category                     | Clay icon, label, and filter-chip material           | Light, dark, glass, solid fallback                   | Static text; do not expose button semantics                           |
+| `ActivityCard`             | Open an activity                               | Photo, image-derived body, title, metadata, favorite | Default, pressed, focused, unfocused, saved, offline | Do not nest another card or put Liquid Glass on its surface           |
+| `FavoriteButton`           | Save or remove an activity                     | Heart symbol and 44-point target                     | Unsaved, saved, pressed, focused                     | Give it one clear spoken action                                       |
+| `PrimaryButton`            | Commit the main action                         | Label and optional leading symbol                    | Default, pressed, focused, busy, disabled            | Use one primary action per screen                                     |
+| `IconButton`               | Run a compact action                           | System symbol and 44-point target                    | Default, pressed, focused, disabled                  | Use glass only above imagery or scrolling                             |
+| `NativeTabs` (Expo Router) | Move between Explore, Favorites, and Dev Tools | System tab bar                                       | Light, dark, minimize on scroll                      | Use `expo-router/native-tabs`                                         |
+| `InlineStatusBanner`       | Explain refresh status                         | Status symbol, title, body, and retry action         | Success, warning, error                              | Keep stale content visible below it                                   |
+| `ActivityCardSkeleton`     | Reserve the activity card shape                | Full cover, favorite target, and lower copy blocks   | Loading pulse, reduced motion                        | Match the full-image card. Do not use a full-screen spinner           |
+| `EmptyState`               | Explain a resolved empty result                | Illustration, title, body, and action                | Search empty, favorites empty, not-found             | Give one next action                                                  |
+| `DevTools`                 | Reproduce assessment states                    | Grouped settings, status summary, and reset          | Normal, slow, fail, success                          | Keep device offline testing separate                                  |
 
 Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF Symbols on iOS and Material Symbols on Android.
 
@@ -284,20 +284,21 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 - Refresh failure keeps stale content visible.
 - Every recovery state has one clear next action.
 
-## Review Controls
+## Dev Tools
 
-The assessment requires reproducible success, slow, and failure states. Provide an obvious control surface in review builds.
+The assessment requires reproducible success, slow, and failure states. Provide an obvious control surface in the assessment app.
 
-- Add a sliders icon to the Explore navigation bar.
-- Give it the spoken label `Open review controls`.
-- Open `ReviewControlsSheet` as a native form sheet.
+- Add a **Dev Tools** native tab with a tools icon.
+- Use an iOS-style grouped settings screen.
 - Include **Initial load:** Normal, Slow, Fail.
+- Include **Later page load:** Normal, Slow, Fail.
 - Include **Refresh:** Success, Slow, Fail.
-- Show the current catalog count.
+- Show the current catalog and favorite counts.
+- Include a request-cache action so the next request uses the selected mode.
+- Include a request-mode reset action.
 - Include `Reset local data` as a destructive action with confirmation.
 - Keep actual device offline testing separate from simulated request modes.
-- Persist the chosen mode only when this helps a reviewer repeat a scenario.
-- Exclude the launcher and sheet from store builds.
+- Keep selected modes in memory until the app restarts or the reviewer resets them.
 
 Changing a mode does not silently reset favorites or generated activities.
 
@@ -357,6 +358,6 @@ Do not animate recycled list rows on entry. Do not move content only for decorat
 
 - The concept boards do not show dark mode.
 - The concept boards do not show Liquid Glass.
-- The concept boards do not show `ReviewControlsSheet`.
+- The concept boards do not show the Dev Tools assessment screen.
 
 Treat these as missing visual references. Follow this contract until verified runtime captures replace them.

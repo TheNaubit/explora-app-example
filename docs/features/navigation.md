@@ -4,9 +4,9 @@
 
 - Root layout wraps Query, a11y, i18n, SafeAreaProvider, and Expo Router `ThemeProvider`.
 - Primary navigation uses Expo Router **NativeTabs** (`expo-router/native-tabs` on SDK 58).
-- Tabs: **Explore** (`/(explore)`) and **Favorites** (`/(favorites)`).
-- Both tabs use one array-route stack layout.
-- Both stacks push the shared `/activity/[id]` route.
+- Tabs: **Explore** (`/(explore)`), **Favorites** (`/(favorites)`), and **Dev Tools** (`/(dev-tools)`).
+- Explore and Favorites use one array-route stack layout.
+- Both content stacks push the shared `/activity/[id]` route.
 - Activity Detail uses `Link.AppleZoom` and `Link.AppleZoomTarget`.
 - iOS 18 and later use the native zoom transition.
 - Android and older iOS versions use the standard stack transition.
@@ -27,11 +27,13 @@
 | Shared stacks  | `src/app/(explore,favorites)/_layout.tsx`       |
 | Tab index      | `src/app/(explore,favorites)/index.tsx`         |
 | Detail route   | `src/app/(explore,favorites)/activity/[id].tsx` |
+| Dev Tools      | `src/app/(dev-tools)/`                          |
 
 ## Related
 
 - [Discovery](./discovery.md)
 - [Favorites + offline](./favorites-offline.md)
 - [Activity detail](./activity-detail.md)
+- [Dev Tools](./dev-tools.md)
 - Expo docs: https://docs.expo.dev/router/advanced/native-tabs/
 - Expo zoom docs: https://docs.expo.dev/router/advanced/zoom-transition/

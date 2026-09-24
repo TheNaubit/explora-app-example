@@ -6,7 +6,7 @@ import { tabMessages } from "@/screens/tabs/messages";
 import { primitiveColors } from "@/theme";
 
 /**
- * Native tab bar for Explore and Favorites.
+ * Native tab bar for Explore, Favorites, and Dev Tools.
  * iOS 26 uses Liquid Glass. Android uses Material bottom navigation.
  */
 export function AppTabs() {
@@ -50,6 +50,13 @@ export function AppTabs() {
       <NativeTabs.Trigger name="(favorites)" accessibilityLabel={t(tabMessages.favorites)}>
         <NativeTabs.Trigger.Icon sf={{ default: "heart", selected: "heart.fill" }} md="favorite" />
         <NativeTabs.Trigger.Label>{t(tabMessages.favorites)}</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="(dev-tools)" accessibilityLabel={t(tabMessages.devTools)}>
+        <NativeTabs.Trigger.Icon
+          sf={{ default: "wrench.and.screwdriver", selected: "wrench.and.screwdriver.fill" }}
+          md="build"
+        />
+        <NativeTabs.Trigger.Label>{t(tabMessages.devTools)}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );

@@ -1,6 +1,6 @@
 import { msg } from "@lingui/core/macro";
 
-/** Shared tab bar labels for Explore and Favorites. */
+/** Shared native tab bar labels. */
 export const tabMessages = {
   explore: msg({
     id: "tabs.explore",
@@ -11,5 +11,10 @@ export const tabMessages = {
     id: "tabs.favorites",
     comment: "Native tab label for favorite activities",
     message: "Favorites",
+  }),
+  devTools: msg({
+    id: "tabs.devTools",
+    comment: "Native tab label for assessment and developer controls",
+    message: "Dev Tools",
   }),
 } as const;

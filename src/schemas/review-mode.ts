@@ -13,8 +13,7 @@ export const pageLoadModeSchema = z.enum(["normal", "slow", "fail"]);
 export const refreshModeSchema = z.enum(["success", "slow", "fail"]);
 
 /**
- * Persistable review-control state.
- * The ReviewControlsSheet UI will read and write this shape later.
+ * Review-control state for the Dev Tools screen.
  */
 export const reviewModeStateSchema = z.object({
   initialLoad: initialLoadModeSchema,

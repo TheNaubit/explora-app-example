@@ -32,11 +32,12 @@ jest.mock("expo-router/native-tabs", () => {
 });
 
 describe("AppTabs", () => {
-  it("shows Explore and Favorites without a separate Search route", async () => {
+  it("shows Explore, Favorites, and Dev Tools without a separate Search route", async () => {
     await render(createElement(AppTabs), { wrapper: createProviders() });
 
     expect(screen.getByTestId("tab-(explore)")).toBeTruthy();
     expect(screen.getByTestId("tab-(favorites)")).toBeTruthy();
+    expect(screen.getByTestId("tab-(dev-tools)")).toBeTruthy();
     expect(screen.queryByTestId("tab-search")).toBeNull();
   });
 });

@@ -13,13 +13,12 @@ Based on [Expo folder-structure best practices](https://expo.dev/blog/expo-app-f
 ├── src/
 │   ├── app/                 # Expo Router routes only (thin)
 │   │   ├── _layout.tsx              # providers + NativeTabs
-│   │   ├── (explore)/
-│   │   │   ├── _layout.tsx          # Explore Stack
-│   │   │   └── index.tsx            # Explore tab route
-│   │   └── (explore,favorites)/     # Shared Explore and Favorites stacks
+│   │   ├── (explore,favorites)/     # Shared Explore and Favorites stacks
+│   │   └── (dev-tools)/             # Assessment controls stack
 │   ├── screens/             # screen bodies + screen-local UI/hooks
 │   │   ├── explore/
 │   │   ├── favorites/
+│   │   ├── dev-tools/
 │   │   └── tabs/messages.ts         # shared tab labels
 │   ├── components/          # shared UI (incl. app-tabs)
 │   ├── a11y/                # canonical react-native-a11y re-exports + helpers

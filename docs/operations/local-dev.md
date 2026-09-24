@@ -43,7 +43,7 @@ Agents must not wait for the commit hook alone. After a change batch, run:
 
 ### Review modes (mock API)
 
-Until `ReviewControlsSheet` exists, set modes from the module API:
+Use the **Dev Tools** tab in the assessment app. You can also set modes from the module API:
 
 ```ts
 import {
@@ -66,6 +66,10 @@ resetReviewModeState();
 | Normal / success | Short delay, returns data       | Short delay, returns page | Short delay, appends one activity    |
 | Slow             | ~2.5s delay, then success       | ~2.5s delay, then success | ~2.5s delay, then success (+1)       |
 | Fail             | `errors.networkOffline`         | `errors.networkOffline`   | `errors.refreshFailed`; adds nothing |
+
+Select **Clear request cache** after you change an initial or later-page mode. The next matching request uses the selected mode.
+
+Select **Reset local data** to clear generated activities, favorites, filters, and request cache. Request modes do not change.
 
 ## Related
 

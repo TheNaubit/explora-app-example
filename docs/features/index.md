@@ -15,6 +15,7 @@ Index of product capabilities. Each feature page describes **current behavior**,
 | Activity detail                      | Shipped | [activity-detail.md](./activity-detail.md)           |
 | Native calendar                      | Partial | [native-calendar.md](./native-calendar.md)           |
 | Native toast feedback                | Shipped | [native-feedback.md](./native-feedback.md)           |
-| Refresh + recovery                   | Partial | Mock + Query mutation shipped; UI planned            |
+| Refresh + recovery                   | Shipped | Pull-to-refresh and inline recovery shipped          |
+| Dev Tools                            | Shipped | [dev-tools.md](./dev-tools.md)                       |
 
 When you ship or change a feature, update its page and this table.

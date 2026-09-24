@@ -27,6 +27,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 19  | 2026-09-24     | Calendar UI refinement; silent cancellation; illustrated Activity Detail category badge            | [ai-sessions/session-019-calendar-ui-refinement.md](./ai-sessions/session-019-calendar-ui-refinement.md)                     | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 20  | 2026-09-24     | Native toast module; semantic haptics; refresh and calendar feedback; incremental native builds    | [ai-sessions/session-020-native-toast-feedback.md](./ai-sessions/session-020-native-toast-feedback.md)                       | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 21  | 2026-09-24     | Rename Saved tab, route, screen, files, identifiers, copy, illustration, and documentation         | [ai-sessions/session-021-favorites-rename.md](./ai-sessions/session-021-favorites-rename.md)                                 | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 22  | 2026-09-24     | Dev Tools tab; reproducible request modes; local reset controls; iOS Settings-style grouped UI     | [ai-sessions/session-022-dev-tools-tab.md](./ai-sessions/session-022-dev-tools-tab.md)                                       | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 

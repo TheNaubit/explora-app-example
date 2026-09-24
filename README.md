@@ -106,8 +106,8 @@ Details: [`docs/architecture/project-structure.md`](./docs/architecture/project-
 - Supplied dataset: `assets/activities.json` (12 activities, stable IDs)
 - Keep those 12 intact. Generate more local activities for the ≥1,000 performance case
 - Network calls are mocked (TanStack Query + local mocks). Validate payloads with Zod
-- Success / fail / slow load modes: document here and in [`docs/operations/local-dev.md`](./docs/operations/local-dev.md) when the mock layer exists
-- Reset local persisted data: document in ops when persistence exists
+- Use the **Dev Tools** tab for success, slow, and failure request modes.
+- Use **Reset local data** in Dev Tools to restore the local assessment baseline.
 
 ---
 
@@ -127,8 +127,8 @@ Write wiki pages and agent-facing docs in Simplified Technical English (see `AGE
 
 ## Current status
 
-Scaffold and foundations are in place (structure, Zod catalog load, wiki, lint/format hooks).  
-Discovery list, favorites, refresh, native capability, and submission artifacts are **not** complete yet. See [`docs/features/index.md`](./docs/features/index.md).
+The core journey, refresh, favorites, native calendar, and Dev Tools are implemented.
+Assessment scenario evidence and final release artifacts remain incomplete. See [`docs/verification/scenarios.md`](./docs/verification/scenarios.md).
 
 ---
 

@@ -9,7 +9,9 @@ The assessment needs production-shaped network calls, Zod validation, and reprod
 
 ## Decision
 
-Keep a client-side mock API under `src/mocks/`. Validate every payload with Zod schemas under `src/schemas/`. Drive initial-load and refresh behavior with an in-memory review-mode store that matches the Review Controls design.
+Keep a client-side mock API under `src/mocks/`. Validate every payload with Zod schemas under `src/schemas/`.
+
+Drive request behavior with an in-memory review-mode store. Expose the store through the Dev Tools tab.
 
 ## Consequences
 
