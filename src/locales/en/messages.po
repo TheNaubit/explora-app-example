@@ -33,11 +33,41 @@ msgstr "{value, plural, one {# min} other {# min}}"
 msgid "explore.loadedAnnounce"
 msgstr "Activities loaded."
 
+#. Spoken title for the Activity Detail screen
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.screenTitle"
+msgstr "Activity details"
+
+#. Screen reader status after Activity Detail loads
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.loadedAnnounce"
+msgstr "Activity details loaded for {title}."
+
+#. Heading when an activity id does not exist
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.unavailableTitle"
+msgstr "Activity unavailable"
+
+#. Screen reader status when an activity id does not exist
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.notFoundAnnounce"
+msgstr "Activity was not found."
+
 #. Category chip that clears the category filter
 #. js-lingui-explicit-id
 #: src/i18n/category-labels.ts
 msgid "category.all"
 msgstr "All"
+
+#. Button above the activity hero that returns to the previous screen
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.back"
+msgstr "Back"
 
 #. Button that opens the Explore tab from an empty Saved list
 #. js-lingui-explicit-id
@@ -81,6 +111,17 @@ msgstr "Could not load more"
 msgid "category.culture"
 msgstr "Culture"
 
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.savedFallbackBody"
+msgstr "Current details could not load. This saved copy remains available offline."
+
+#. Label for the activity duration value
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.duration"
+msgstr "Duration"
+
 #. Native tab label for the discovery catalog
 #. js-lingui-explicit-id
 #: src/screens/tabs/messages.ts
@@ -99,6 +140,12 @@ msgstr "Explore"
 msgid "explore.heading"
 msgstr "Explore"
 
+#. Button on the Activity Detail not-found state
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.unavailableAction"
+msgstr "Go back"
+
 #. Activity category chip label
 #. js-lingui-explicit-id
 #: src/i18n/category-labels.ts
@@ -110,6 +157,18 @@ msgstr "Leisure"
 #: src/screens/explore/messages.ts
 msgid "explore.loadingAnnounce"
 msgstr "Loading activities."
+
+#. Screen reader status while Activity Detail loads
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.loadingAnnounce"
+msgstr "Loading activity details."
+
+#. Label for the activity location value
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.location"
+msgstr "Location"
 
 #. Screen reader status when the unfiltered activity catalog is empty
 #. js-lingui-explicit-id
@@ -243,6 +302,12 @@ msgstr "Search by title"
 msgid "search.placeholder"
 msgstr "Search by title"
 
+#. Heading when saved activity data appears after a detail refetch fails
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.savedFallbackTitle"
+msgstr "Showing saved details"
+
 #. Fallback when an error key is missing or unrecognized
 #. js-lingui-explicit-id
 #: src/i18n/error-keys.ts
@@ -261,6 +326,11 @@ msgstr "The data from the server was invalid."
 msgid "errors.networkTimeout"
 msgstr "The request took too long. Try again."
 
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.unavailableBody"
+msgstr "This activity link is invalid or the activity is no longer available."
+
 #. Shown when an activity id is missing from the catalog
 #. js-lingui-explicit-id
 #: src/i18n/error-keys.ts
@@ -272,6 +342,12 @@ msgstr "This activity was not found."
 #: src/screens/explore/messages.ts
 msgid "explore.emptyBody"
 msgstr "Try a different search or clear your filters."
+
+#. Button that retries loading current activity details
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.retry"
+msgstr "Try again"
 
 #. Button label to retry a failed first catalog or detail load
 #. js-lingui-explicit-id

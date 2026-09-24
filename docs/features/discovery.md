@@ -34,8 +34,8 @@
 
 | Concern               | Location                                                                           |
 | --------------------- | ---------------------------------------------------------------------------------- |
-| Route                 | `src/app/(explore)/index.tsx`                                                      |
-| Explore stack         | `src/app/(explore)/_layout.tsx`                                                    |
+| Route                 | `src/app/(explore,saved)/index.tsx`                                                |
+| Explore stack         | `src/app/(explore,saved)/_layout.tsx`                                              |
 | Screen                | `src/screens/explore/`                                                             |
 | Screen hooks          | `use-explore-list.ts`, `use-explore-refresh.ts`                                    |
 | Header search         | `explore-custom-header.tsx`, `explore-native-search.tsx`                           |

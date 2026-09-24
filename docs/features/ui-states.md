@@ -10,7 +10,7 @@ Explora must show a clear UI for every async outcome. Users must never see a bla
 | Suspense + Error Boundary rules            | Shipped (ADR-012)                                                                          |
 | Shared skeleton / empty / error components | Shipped (`ActivityCardSkeleton`, `EmptyState`, `QueryErrorBoundary`, `InlineStatusBanner`) |
 | Discovery Explore                          | Shipped (skeleton, empty, first-load error, refresh / next-page banner)                    |
-| Detail / Saved                             | Not implemented                                                                            |
+| Detail / Saved                             | Shipped (detail skeleton and recovery states; Saved empty and content states)              |
 
 ## Required states
 
@@ -26,6 +26,8 @@ Every screen that loads, lists, or looks up data must design these states:
 
 Loading is not empty. Do not show an empty list while the first fetch still runs.
 
+Explore uses one shared carousel geometry helper for loaded cards and card skeletons.
+
 ## Suspense and Error Boundaries (Query)
 
 Use React Suspense and an Error Boundary for **first-load** catalog and detail queries. Pair them with `ApiError` from `@/query/errors`.
@@ -40,7 +42,7 @@ Use React Suspense and an Error Boundary for **first-load** catalog and detail q
 
 Do not catch mutation or event-handler failures only with an Error Boundary. Those paths need explicit UI state.
 
-Shared components live under `src/components/`. Explore wires them in `src/screens/explore/`.
+Shared components live under `src/components/`. Explore and Activity Detail use them in their screen folders.
 
 ## Skeleton preference
 

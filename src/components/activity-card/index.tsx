@@ -1,6 +1,7 @@
 import type { ComponentProps, ComponentType, ReactElement } from "react";
 import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
+import { Link, type Href } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLingui } from "@lingui/react/macro";
 import MaskedView from "@react-native-masked-view/masked-view";
@@ -31,6 +32,8 @@ import { primitiveColors, radii, spacing, typography, useAppTheme } from "@/them
 
 type ActivityCardProps = {
   activity: Activity;
+  /** Detail route used by the card press and the iOS zoom transition. */
+  detailHref?: Href;
   /** Saved-only removal treatment. Other favorite buttons update immediately. */
   favoriteRemovalEffect?: "particle-dissolve";
   /** Optional scroll-linked opacity for the static image blur layer. */
@@ -79,6 +82,7 @@ function ActivityCardPressable({ style, ...rest }: PressableProps) {
  */
 export function ActivityCard({
   activity,
+  detailHref,
   favoriteRemovalEffect,
   imageBlurOpacity,
   imageBlurRadius,
@@ -99,6 +103,7 @@ export function ActivityCard({
         {(startDissolve) => (
           <ActivityCardSurface
             activity={activity}
+            detailHref={detailHref}
             imageBlurOpacity={imageBlurOpacity}
             imageBlurRadius={imageBlurRadius}
             mediaHeight={mediaHeight}
@@ -115,6 +120,7 @@ export function ActivityCard({
   return (
     <ActivityCardSurface
       activity={activity}
+      detailHref={detailHref}
       imageBlurOpacity={imageBlurOpacity}
       imageBlurRadius={imageBlurRadius}
       mediaHeight={mediaHeight}
@@ -131,6 +137,7 @@ type ActivityCardSurfaceProps = Omit<ActivityCardProps, "favoriteRemovalEffect">
 
 function ActivityCardSurface({
   activity,
+  detailHref,
   imageBlurOpacity,
   imageBlurRadius,
   mediaHeight,
@@ -145,15 +152,40 @@ function ActivityCardSurface({
   const label = buildActivityAccessibilityLabel(activity);
   const duration = formatDuration(activity.durationMinutes);
   const categoryLabel = t(categoryMessages[activity.category]);
-  const interactive = typeof onPress === "function";
+  const interactive = typeof onPress === "function" || detailHref !== undefined;
   const cover = getActivityCoverImage(activity);
   const resolvedMediaHeight = mediaHeight ?? ACTIVITY_CARD_MEDIA_HEIGHT;
   const usesLargeText = (measuredFontScale ?? 1) > ACTIVITY_CARD_LARGE_TEXT_SCALE;
+  const surfaceStyle = StyleSheet.flatten([
+    styles.card,
+    variant === "carousel" ? styles.carouselCard : null,
+    {
+      backgroundColor: theme.colors.surface,
+      borderColor: theme.colors.border,
+      boxShadow: theme.elevation.raised,
+    },
+  ]);
   const imageBlurStyle = useAnimatedStyle(() => ({
     opacity: imageBlurOpacity?.get() ?? 0,
   }));
 
-  return (
+  const sharpImage = (
+    <View collapsable={false} pointerEvents="none" style={styles.cardImageLayer}>
+      <Image
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+        contentFit="cover"
+        placeholder={{ blurhash: cover.blurhash }}
+        placeholderContentFit="cover"
+        recyclingKey={`${activity.id}-cover`}
+        source={{ uri: cover.uri }}
+        style={styles.cardImage}
+        transition={ACTIVITY_COVER_FADE_MS}
+      />
+    </View>
+  );
+
+  const surface = (
     <A11yCard
       accessibility={{
         accessibilityLabel: label,
@@ -165,30 +197,10 @@ function ActivityCardSurface({
         focusable: interactive,
       }}
       PressableComponent={interactive ? ActivityCardPressable : A11yPressable}
-      style={[
-        styles.card,
-        variant === "carousel" ? styles.carouselCard : null,
-        {
-          backgroundColor: theme.colors.surface,
-          borderColor: theme.colors.border,
-          boxShadow: theme.elevation.raised,
-        },
-      ]}
+      style={surfaceStyle}
       testID={testID ?? `activity-card-${activity.id}`}
     >
-      <View pointerEvents="none" style={styles.cardImageLayer}>
-        <Image
-          accessibilityElementsHidden
-          importantForAccessibility="no-hide-descendants"
-          contentFit="cover"
-          placeholder={{ blurhash: cover.blurhash }}
-          placeholderContentFit="cover"
-          recyclingKey={`${activity.id}-cover`}
-          source={{ uri: cover.uri }}
-          style={styles.cardImage}
-          transition={ACTIVITY_COVER_FADE_MS}
-        />
-      </View>
+      {detailHref ? <Link.AppleZoom>{sharpImage}</Link.AppleZoom> : sharpImage}
       {imageBlurRadius !== undefined && imageBlurOpacity !== undefined ? (
         <Animated.View
           accessibilityElementsHidden
@@ -276,6 +288,16 @@ function ActivityCardSurface({
       </View>
     </A11yCard>
   );
+
+  if (detailHref) {
+    return (
+      <Link href={detailHref} asChild>
+        {surface}
+      </Link>
+    );
+  }
+
+  return surface;
 }
 
 const styles = StyleSheet.create({

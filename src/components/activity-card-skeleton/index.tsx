@@ -16,10 +16,10 @@ import {
   SKELETON_OPACITY_MIN,
   SKELETON_PULSE_MS,
 } from "@/components/constants";
-import { radii, spacing, useAppTheme } from "@/theme";
+import { radii, spacing, typography, useAppTheme } from "@/theme";
 
 type ActivityCardSkeletonProps = {
-  bodyHeight?: number;
+  fontScale?: number;
   mediaHeight?: number;
   testID?: string;
   variant?: "list" | "carousel";
@@ -30,7 +30,7 @@ type ActivityCardSkeletonProps = {
  * Pulses opacity unless the user prefers reduced motion.
  */
 export function ActivityCardSkeleton({
-  bodyHeight,
+  fontScale = 1,
   mediaHeight,
   testID,
   variant = "list",
@@ -63,6 +63,8 @@ export function ActivityCardSkeleton({
   const foregroundColor = theme.colors.surfaceElevated;
   const resolvedMediaHeight = mediaHeight ?? ACTIVITY_CARD_MEDIA_HEIGHT;
   const resolvedTestID = testID ?? "activity-card-skeleton";
+  const titleLineHeight = typography.headline.lineHeight * fontScale;
+  const metadataLineHeight = typography.caption.lineHeight * fontScale;
 
   return (
     <Animated.View
@@ -90,14 +92,23 @@ export function ActivityCardSkeleton({
           testID={`${resolvedTestID}-favorite`}
         />
       </View>
-      <View
-        style={[styles.lines, bodyHeight === undefined ? null : { minHeight: bodyHeight }]}
-        testID={`${resolvedTestID}-copy`}
-      >
-        <View style={[styles.lineWide, { backgroundColor: foregroundColor }]} />
+      <View style={styles.lines} testID={`${resolvedTestID}-copy`}>
+        <View
+          style={[styles.lineWide, { backgroundColor: foregroundColor, height: titleLineHeight }]}
+        />
         <View style={styles.metaRow}>
-          <View style={[styles.lineShort, { backgroundColor: foregroundColor }]} />
-          <View style={[styles.lineMid, { backgroundColor: foregroundColor }]} />
+          <View
+            style={[
+              styles.lineShort,
+              { backgroundColor: foregroundColor, height: metadataLineHeight },
+            ]}
+          />
+          <View
+            style={[
+              styles.lineMid,
+              { backgroundColor: foregroundColor, height: metadataLineHeight },
+            ]}
+          />
         </View>
       </View>
     </Animated.View>
@@ -113,7 +124,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   carouselCard: {
-    marginBottom: spacing.space4,
+    marginBottom: 0,
   },
   cover: {
     ...StyleSheet.absoluteFill,
@@ -128,18 +139,15 @@ const styles = StyleSheet.create({
   },
   lineMid: {
     borderRadius: radii.small,
-    height: spacing.space12,
     width: "52%",
   },
   lineShort: {
     borderRadius: radii.small,
-    height: spacing.space12,
     width: "45%",
   },
   lineWide: {
     borderRadius: radii.small,
-    height: spacing.space16,
-    marginBottom: spacing.space8,
+    marginBottom: spacing.space4,
     width: "88%",
   },
   lines: {

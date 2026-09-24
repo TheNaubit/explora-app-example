@@ -36,7 +36,7 @@ describe("AppTabs", () => {
     await render(createElement(AppTabs), { wrapper: createProviders() });
 
     expect(screen.getByTestId("tab-(explore)")).toBeTruthy();
-    expect(screen.getByTestId("tab-saved")).toBeTruthy();
+    expect(screen.getByTestId("tab-(saved)")).toBeTruthy();
     expect(screen.queryByTestId("tab-search")).toBeNull();
   });
 });

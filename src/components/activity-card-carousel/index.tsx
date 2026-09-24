@@ -31,15 +31,11 @@ import {
   PARTICLE_DISSOLVE_REFLOW_EASING,
 } from "@/components/particle-dissolve/constants";
 import {
-  ACTIVITY_CARD_BODY_HEIGHT,
   ACTIVITY_CARD_CAROUSEL_MAX_FONT_SCALE,
-  ACTIVITY_CARD_GAP,
   ACTIVITY_CARD_HAPTIC_AMPLITUDE,
   ACTIVITY_CARD_HAPTIC_FREQUENCY,
-  ACTIVITY_CARD_MEDIA_ASPECT_RATIO,
-  ACTIVITY_CARD_MEDIA_MAX_HEIGHT,
-  ACTIVITY_CARD_TOP_SPACING,
 } from "@/components/activity-card-carousel/constants";
+import { getActivityCardCarouselLayout } from "@/components/activity-card-carousel/layout";
 import type { Activity } from "@/schemas/activity";
 import { COLLAPSING_HEADER_TRANSLATION } from "@/components/collapsing-screen-header/constants";
 import { spacing, useAppTheme } from "@/theme";
@@ -89,19 +85,15 @@ export function ActivityCardCarousel({
   const { playDiscrete } = useRealtimeComposer();
   const usesCardCarousel =
     Platform.OS !== "web" && !reduceMotion && fontScale <= ACTIVITY_CARD_CAROUSEL_MAX_FONT_SCALE;
-  const cardWidth = width - spacing.space48;
-  const mediaHeight = Math.min(
-    cardWidth * ACTIVITY_CARD_MEDIA_ASPECT_RATIO,
-    ACTIVITY_CARD_MEDIA_MAX_HEIGHT,
-  );
-  const itemExtent = mediaHeight + ACTIVITY_CARD_BODY_HEIGHT * fontScale + ACTIVITY_CARD_GAP;
+  const { endPadding, itemExtent, mediaHeight, padTop } = getActivityCardCarouselLayout({
+    fontScale,
+    headerHeight,
+    height,
+    usesCardCarousel,
+    width,
+  });
   const activityOrderKey = activities.map(({ id }) => id).join("|");
   const settledIndex = useRef(Math.round((initialScrollOffset ?? 0) / itemExtent));
-  const focusPadding = usesCardCarousel ? ACTIVITY_CARD_TOP_SPACING : spacing.space8;
-  const padTop = headerHeight + focusPadding;
-  const endPadding = usesCardCarousel
-    ? Math.max(focusPadding, height - padTop - itemExtent)
-    : spacing.space32;
   const onScroll = useAnimatedScrollHandler((event) => {
     const normalizedOffset = event.contentOffset.y + (event.contentInset?.top ?? 0);
     if (isReconcilingFocus.get() === 0) {
@@ -192,6 +184,7 @@ export function ActivityCardCarousel({
         usesCardCarousel ? (
           <ActivityCardCarouselItem
             activity={item}
+            detailHref={{ pathname: "/activity/[id]", params: { id: item.id } }}
             favoriteRemovalEffect={favoriteRemovalEffect}
             followsCollapsingHeader={followsCollapsingHeader}
             headerTranslation={headerTranslation}
@@ -202,7 +195,11 @@ export function ActivityCardCarousel({
             scrollOffset={cardScrollOffset}
           />
         ) : (
-          <ActivityCard activity={item} favoriteRemovalEffect={favoriteRemovalEffect} />
+          <ActivityCard
+            activity={item}
+            detailHref={{ pathname: "/activity/[id]", params: { id: item.id } }}
+            favoriteRemovalEffect={favoriteRemovalEffect}
+          />
         )
       }
       itemLayoutAnimation={

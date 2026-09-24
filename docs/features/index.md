@@ -12,7 +12,7 @@ Index of product capabilities. Each feature page describes **current behavior**,
 | Accessibility                        | Partial | [accessibility.md](./accessibility.md)               |
 | Internationalization (i18n)          | Partial | [internationalization.md](./internationalization.md) |
 | Async UI states (skeleton / empty)   | Shipped | [ui-states.md](./ui-states.md)                       |
-| Activity detail                      | Planned | _(add when implemented)_                             |
+| Activity detail                      | Shipped | [activity-detail.md](./activity-detail.md)           |
 | Refresh + recovery                   | Partial | Mock + Query mutation shipped; UI planned            |
 | Native capability                    | Planned | _(add when chosen)_                                  |
 

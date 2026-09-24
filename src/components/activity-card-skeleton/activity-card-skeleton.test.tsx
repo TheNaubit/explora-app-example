@@ -1,4 +1,5 @@
 import { createElement } from "react";
+import { StyleSheet } from "react-native";
 import { cleanup, render } from "@testing-library/react-native";
 import { useReducedMotion } from "react-native-reanimated";
 
@@ -22,6 +23,22 @@ describe("ActivityCardSkeleton", () => {
     expect(view.getByTestId("skeleton-cover", { includeHiddenElements: true })).toBeTruthy();
     expect(view.getByTestId("skeleton-favorite", { includeHiddenElements: true })).toBeTruthy();
     expect(view.getByTestId("skeleton-copy", { includeHiddenElements: true })).toBeTruthy();
+    expect(
+      StyleSheet.flatten(view.getByTestId("skeleton", { includeHiddenElements: true }).props.style),
+    ).toMatchObject({ marginBottom: 12 });
+  });
+
+  it("removes list margin when the carousel item frame owns spacing", async () => {
+    const view = await render(
+      createElement(ActivityCardSkeleton, { testID: "skeleton-carousel", variant: "carousel" }),
+      { wrapper: createProviders() },
+    );
+
+    expect(
+      StyleSheet.flatten(
+        view.getByTestId("skeleton-carousel", { includeHiddenElements: true }).props.style,
+      ),
+    ).toMatchObject({ marginBottom: 0 });
   });
 
   it("skips the pulse when reduced motion is preferred", async () => {

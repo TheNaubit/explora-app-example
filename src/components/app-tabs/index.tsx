@@ -47,7 +47,7 @@ export function AppTabs() {
         <NativeTabs.Trigger.Icon sf={{ default: "safari", selected: "safari.fill" }} md="explore" />
         <NativeTabs.Trigger.Label>{t(tabMessages.explore)}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="saved" role="favorites" accessibilityLabel={t(tabMessages.saved)}>
+      <NativeTabs.Trigger name="(saved)" accessibilityLabel={t(tabMessages.saved)}>
         <NativeTabs.Trigger.Icon sf={{ default: "heart", selected: "heart.fill" }} md="favorite" />
         <NativeTabs.Trigger.Label>{t(tabMessages.saved)}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>

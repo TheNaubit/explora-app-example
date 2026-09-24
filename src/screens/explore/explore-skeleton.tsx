@@ -1,23 +1,25 @@
 import { useEffect, type Ref } from "react";
 import { Keyboard, Platform, StyleSheet, useWindowDimensions, View } from "react-native";
+import { AnimatedLegendList } from "@legendapp/list/reanimated";
 import { useLingui } from "@lingui/react/macro";
-import Animated, {
+import {
   type SharedValue,
   useAnimatedScrollHandler,
   useReducedMotion,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { announceStatus } from "@/a11y";
 import { ActivityCardSkeleton } from "@/components/activity-card-skeleton";
+import {
+  ACTIVITY_CARD_INACTIVE_OPACITY,
+  ACTIVITY_CARD_INACTIVE_SCALE,
+} from "@/components/activity-card-carousel/constants";
+import { getActivityCardCarouselLayout } from "@/components/activity-card-carousel/layout";
 import { SKELETON_LIST_ROW_COUNT } from "@/components/constants";
 import { ExploreHeader } from "@/screens/explore/explore-header";
 import { exploreMessages } from "@/screens/explore/messages";
-import {
-  EXPLORE_CARD_BODY_HEIGHT,
-  EXPLORE_CARD_CAROUSEL_MAX_FONT_SCALE,
-  EXPLORE_CARD_MEDIA_ASPECT_RATIO,
-  EXPLORE_CARD_MEDIA_MAX_HEIGHT,
-} from "@/screens/explore/constants";
+import { EXPLORE_CARD_CAROUSEL_MAX_FONT_SCALE } from "@/screens/explore/constants";
 import { spacing } from "@/theme";
 
 type ExploreSkeletonProps = {
@@ -27,6 +29,8 @@ type ExploreSkeletonProps = {
   scrollRef?: Ref<unknown>;
   scrollOffset?: SharedValue<number>;
 };
+
+const SKELETON_ROWS = Array.from({ length: SKELETON_LIST_ROW_COUNT }, (_, index) => index);
 
 /**
  * Suspense fallback for the Explore catalog list.
@@ -41,16 +45,20 @@ export function ExploreSkeleton({
 }: ExploreSkeletonProps) {
   const { t } = useLingui();
   const { width, height, fontScale: measuredFontScale } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const reduceMotion = useReducedMotion();
   const fontScale = measuredFontScale ?? 1;
-  const cardWidth = width - spacing.space48;
-  const mediaHeight = Math.min(
-    cardWidth * EXPLORE_CARD_MEDIA_ASPECT_RATIO,
-    EXPLORE_CARD_MEDIA_MAX_HEIGHT,
-  );
   const usesCardCarousel =
     Platform.OS !== "web" && !reduceMotion && fontScale <= EXPLORE_CARD_CAROUSEL_MAX_FONT_SCALE;
-  const padTop = headerHeight + spacing.space8;
+  const { itemExtent, mediaHeight, padTop } = getActivityCardCarouselLayout({
+    // A Suspense list starts below the safe area before it replaces the loaded list.
+    contentOriginInset: filtersInOverlay ? insets.top : 0,
+    fontScale,
+    headerHeight,
+    height,
+    usesCardCarousel,
+    width,
+  });
   const insetBehavior = filtersInOverlay ? "never" : "automatic";
   const onScroll = useAnimatedScrollHandler((event) => {
     if (scrollOffset === undefined) return;
@@ -63,8 +71,28 @@ export function ExploreSkeleton({
   }, [t]);
 
   return (
-    <Animated.ScrollView
-      ref={scrollRef as never}
+    <AnimatedLegendList
+      data={SKELETON_ROWS}
+      estimatedListSize={{ width, height }}
+      initialScrollOffset={0}
+      keyExtractor={(index) => `skeleton-${index}`}
+      renderItem={({ item: index }) => (
+        <View
+          style={usesCardCarousel ? [styles.carouselItem, { height: itemExtent }] : undefined}
+          testID={`activity-card-skeleton-item-${index}`}
+        >
+          <View style={usesCardCarousel && index > 0 ? styles.inactiveCard : undefined}>
+            <ActivityCardSkeleton
+              fontScale={fontScale}
+              mediaHeight={usesCardCarousel ? mediaHeight : undefined}
+              testID={`activity-card-skeleton-${index}`}
+              variant={usesCardCarousel ? "carousel" : "list"}
+            />
+          </View>
+        </View>
+      )}
+      ListHeaderComponent={showFilters ? <ExploreHeader /> : null}
+      refScrollView={scrollRef as never}
       contentInsetAdjustmentBehavior={insetBehavior}
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
@@ -74,24 +102,18 @@ export function ExploreSkeleton({
       contentContainerStyle={[styles.listPad, { paddingTop: padTop }]}
       style={[styles.list, { width, height }]}
       testID="explore-skeleton"
-    >
-      {showFilters ? <ExploreHeader /> : null}
-      <View>
-        {Array.from({ length: SKELETON_LIST_ROW_COUNT }, (_, index) => (
-          <ActivityCardSkeleton
-            bodyHeight={usesCardCarousel ? EXPLORE_CARD_BODY_HEIGHT * fontScale : undefined}
-            key={`skeleton-${index}`}
-            mediaHeight={usesCardCarousel ? mediaHeight : undefined}
-            testID={`activity-card-skeleton-${index}`}
-            variant={usesCardCarousel ? "carousel" : "list"}
-          />
-        ))}
-      </View>
-    </Animated.ScrollView>
+    />
   );
 }
 
 const styles = StyleSheet.create({
+  carouselItem: {
+    justifyContent: "center",
+  },
+  inactiveCard: {
+    opacity: ACTIVITY_CARD_INACTIVE_OPACITY,
+    transform: [{ scale: ACTIVITY_CARD_INACTIVE_SCALE }],
+  },
   list: {},
   listPad: {
     paddingBottom: spacing.space32,

@@ -1,4 +1,5 @@
 import { StyleSheet, View } from "react-native";
+import type { Href } from "expo-router";
 import Animated, {
   Extrapolation,
   interpolate,
@@ -19,6 +20,7 @@ import type { Activity } from "@/schemas/activity";
 
 type ActivityCardCarouselItemProps = {
   activity: Activity;
+  detailHref: Href;
   favoriteRemovalEffect?: "particle-dissolve";
   followsCollapsingHeader: boolean;
   headerTranslation: number;
@@ -31,6 +33,7 @@ type ActivityCardCarouselItemProps = {
 /** One focused card in the shared Explore and Saved carousel. */
 export function ActivityCardCarouselItem({
   activity,
+  detailHref,
   favoriteRemovalEffect,
   followsCollapsingHeader,
   headerTranslation,
@@ -90,6 +93,7 @@ export function ActivityCardCarouselItem({
       <Animated.View style={cardStyle}>
         <ActivityCard
           activity={activity}
+          detailHref={detailHref}
           favoriteRemovalEffect={favoriteRemovalEffect}
           imageBlurOpacity={imageBlurOpacity}
           imageBlurRadius={ACTIVITY_CARD_INACTIVE_BLUR_RADIUS}

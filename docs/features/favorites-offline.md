@@ -17,20 +17,24 @@
 - Saved uses the same focused card carousel and collapsing header as Explore.
 - Saved shows only its title above the list. It does not show a subtitle.
 - Saved does not show search, category filters, refresh, or pagination.
-- Detail push from Saved is not wired yet.
+- Cards in Explore and Saved open the shared Activity Detail route.
+- Activity Detail reads the saved snapshot before it refetches current data.
+- A failed refetch keeps the saved snapshot visible with a retry action.
 
 ## Code map
 
-| Concern       | Location                      |
-| ------------- | ----------------------------- |
-| Persist store | `src/state/favorites.ts`      |
-| React helpers | `src/hooks/use-favorites.ts`  |
-| Saved screen  | `src/screens/saved/`          |
-| Saved route   | `src/app/saved.tsx`           |
-| Unit tests    | `src/state/favorites.test.ts` |
+| Concern       | Location                            |
+| ------------- | ----------------------------------- |
+| Persist store | `src/state/favorites.ts`            |
+| React helpers | `src/hooks/use-favorites.ts`        |
+| Saved screen  | `src/screens/saved/`                |
+| Saved route   | `src/app/(explore,saved)/index.tsx` |
+| Detail screen | `src/screens/activity-detail/`      |
+| Unit tests    | `src/state/favorites.test.ts`       |
 
 ## Related
 
 - [Navigation](./navigation.md)
 - [Data layer](./data-layer.md)
+- [Activity detail](./activity-detail.md)
 - [ADR-011](../decisions/adr-011-query-legend-local-first.md)

@@ -21,6 +21,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 13  | 2026-09-23     | Image-derived card surface; progressive cover blur; metadata cleanup; a11y and i18n checks         | [ai-sessions/session-013-image-derived-card-surface.md](./ai-sessions/session-013-image-derived-card-surface.md)             | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 14  | 2026-09-23     | App icon research; SVG layers; Icon Composer; Android assets; iOS Simulator validation             | [ai-sessions/session-014-app-icon.md](./ai-sessions/session-014-app-icon.md)                                                 | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 15  | 2026-09-24     | Saved card particle dissolve; selected-card handoff; header contrast; empty-state redesign         | [ai-sessions/session-015-saved-particle-dissolve.md](./ai-sessions/session-015-saved-particle-dissolve.md)                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 16  | 2026-09-24     | Activity Detail route; native zoom transition; offline saved fallback; shared tab stacks           | [ai-sessions/session-016-activity-detail-zoom.md](./ai-sessions/session-016-activity-detail-zoom.md)                         | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 

@@ -18,7 +18,7 @@ Library setup alone is not enough. Every a11y rule in this project must serve th
 | Library + root provider      | Shipped (`react-native-a11y@0.9.0` + SDK 58 patch; provider is a 0.9 passthrough shim) |
 | Screen shell + focus helpers | Shipped                                                                                |
 | Discovery list / search      | Shipped (Explore list, search field, category chips)                                   |
-| Detail / favorites / refresh | Partial (Saved + refresh on Explore; detail TBD)                                       |
+| Detail / favorites / refresh | Partial (UI shipped; native main-journey evidence remains)                             |
 | Scenario 8 evidence          | Not written                                                                            |
 
 ## Stack
@@ -112,6 +112,8 @@ Map every change to the assessment bar.
 - Prefer `@expo/ui` only when a11y and i18n stay intact. Do not swap journey CTAs to `@expo/ui` Button while it lacks project a11y props.
 - Do not pass `focusStyle` or `containerFocusStyle`. Use `mergeFocusedStyle` or a `style` callback with `{ focused, pressed }`.
 - Native verification needs a development or release build. Expo Go alone is not enough.
+- Activity Detail uses `ScreenFrame` and accessible back, favorite, retry, and save controls.
+- Detail loading, loaded, not-found, and saved-fallback states use status announcements.
 
 ### Expo SDK 58 / React Native 0.88
 

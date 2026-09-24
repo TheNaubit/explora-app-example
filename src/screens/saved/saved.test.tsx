@@ -7,11 +7,22 @@ import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { addFavorite, clearFavorites } from "@/state/favorites";
 import { createProviders } from "@/test/ui-test-utils";
 
-jest.mock("expo-router", () => ({
-  router: {
-    navigate: jest.fn(),
-  },
-}));
+jest.mock("expo-router", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  const passthrough = ({ children }: { children: React.ReactNode }) =>
+    React.createElement(View, null, children);
+  const Link = Object.assign(passthrough, {
+    AppleZoom: passthrough,
+  });
+
+  return {
+    Link,
+    router: {
+      navigate: jest.fn(),
+    },
+  };
+});
 
 const mockUseReducedMotion = useReducedMotion as jest.MockedFunction<typeof useReducedMotion>;
 

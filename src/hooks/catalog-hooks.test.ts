@@ -91,14 +91,14 @@ describe("catalog and favorites hooks", () => {
     expect(result.current.data?.activity).toEqual(activity);
   });
 
-  it("does not fetch detail when the id is empty", async () => {
+  it("returns not-found when the detail id is empty", async () => {
     const queryClient = createQueryClient();
     const { result } = await renderHook(() => useActivity(""), {
       wrapper: createWrapper(queryClient),
     });
 
+    await waitFor(() => expect(result.current.data).toBeNull());
     expect(result.current.fetchStatus).toBe("idle");
-    expect(result.current.data).toBeUndefined();
   });
 
   it("refreshes without clearing favorite hook state", async () => {
