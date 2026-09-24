@@ -77,6 +77,7 @@ export function EmptyState({
         style={[
           styles.body,
           isCentered ? styles.centeredBody : undefined,
+          isCentered ? styles.centeredText : undefined,
           { color: theme.colors.textSecondary },
         ]}
       >
