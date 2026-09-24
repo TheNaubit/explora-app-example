@@ -32,7 +32,8 @@ The coordinator accepts one active operation. A second submission returns a dupl
 
 ### iOS
 
-- Activity Detail shows one calendar action.
+- Activity Detail shows one full-width calendar action.
+- The action uses a leading calendar icon and has no disclosure chevron.
 - The action opens a fitted native SwiftUI sheet.
 - The sheet has no drag handle and does not allow swipe dismissal.
 - The header uses native Liquid Glass buttons on iOS 26 and later.

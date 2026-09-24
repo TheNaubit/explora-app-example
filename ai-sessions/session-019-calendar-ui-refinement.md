@@ -17,6 +17,8 @@ This session simplifies the Add to Calendar interface on Activity Detail.
 ## Work completed
 
 - Replaced the planning section with one accessible action row.
+- Made the action fill the Activity Detail content width.
+- Removed the disclosure chevron from the action.
 - Added a fitted native SwiftUI sheet on iOS.
 - Added one graphical SwiftUI date and time picker.
 - Added native Liquid Glass header buttons on iOS 26 and later.
@@ -31,6 +33,7 @@ This session simplifies the Add to Calendar interface on Activity Detail.
 - The full Jest suite passed: 44 suites and 150 tests.
 - Lingui extraction, Oxlint, Oxfmt, TypeScript, and Expo Doctor passed.
 - The iOS 27.0 Simulator showed the compact Activity Detail action.
+- The runtime accessibility tree exposed the action as a labeled button.
 - The simulator showed a fitted native sheet with Liquid Glass header buttons.
 - A downward gesture did not close or resize the sheet.
 - **Cancel** closed the sheet without a permission request.

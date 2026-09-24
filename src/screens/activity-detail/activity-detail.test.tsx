@@ -1,4 +1,5 @@
 import { createElement } from "react";
+import { StyleSheet } from "react-native";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
@@ -100,7 +101,20 @@ describe("ActivityDetail", () => {
     expect(screen.queryByText("Plan this activity")).toBeNull();
     expect(screen.queryByText("Date and start time")).toBeNull();
 
-    fireEvent.press(screen.getByTestId("add-to-calendar-button"));
+    const calendarButton = screen.getByTestId("add-to-calendar-button");
+    expect(calendarButton.props.accessibilityLabel).toBe("Add to Calendar");
+    expect(calendarButton.props.accessibilityHint).toBe(
+      "Opens a sheet to choose the activity date and start time.",
+    );
+    expect(calendarButton.props.accessibilityRole).toBe("button");
+    expect(calendarButton.props.accessibilityState).toEqual({ busy: false, disabled: false });
+    const calendarButtonStyle = StyleSheet.flatten(calendarButton.props.style);
+    expect(calendarButtonStyle).toEqual(
+      expect.objectContaining({ alignSelf: "stretch", minHeight: 44 }),
+    );
+    expect(calendarButtonStyle.width).toBeGreaterThan(calendarButtonStyle.minHeight);
+
+    fireEvent.press(calendarButton);
 
     expect(await screen.findByTestId("calendar-schedule-sheet")).toBeTruthy();
     expect(screen.getByText("Date and time")).toBeTruthy();

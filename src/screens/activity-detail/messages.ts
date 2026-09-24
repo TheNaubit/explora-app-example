@@ -86,7 +86,7 @@ export const activityDetailMessages = {
   }),
   calendarAdd: msg({
     id: "activityDetail.calendar.add",
-    comment: "Button that opens the system calendar event form",
+    comment: "Button that opens the activity schedule sheet before the system calendar form",
     message: "Add to Calendar",
   }),
   calendarAddHint: msg({

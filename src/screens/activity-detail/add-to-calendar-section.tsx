@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Linking, StyleSheet, Text, View } from "react-native";
+import { Linking, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { SymbolView } from "expo-symbols";
 import { useLingui } from "@lingui/react/macro";
 
@@ -29,6 +29,8 @@ type StatusCopy = {
 export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
   const { t } = useLingui();
   const theme = useAppTheme();
+  const { width: viewportWidth } = useWindowDimensions();
+  const calendarActionWidth = Math.max(MIN_TOUCH_TARGET, viewportWidth - spacing.space48);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const lastStartDate = useRef<Date | null>(null);
   const { isActive, result, submit } = useAddToCalendar(activity);
@@ -88,6 +90,7 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
                 borderColor: theme.colors.border,
                 opacity: isActive ? 0.64 : 1,
                 transform: [{ scale: state.pressed ? PRESS_SCALE : 1 }],
+                width: calendarActionWidth,
               },
             ]}
             testID="add-to-calendar-button"
@@ -104,11 +107,6 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
                 ? t(activityDetailMessages.calendarBusy)
                 : t(activityDetailMessages.calendarAdd)}
             </Text>
-            <SymbolView
-              name={{ ios: "chevron.forward", android: "chevron_right", web: "chevron_right" }}
-              size={18}
-              tintColor={theme.colors.textSecondary}
-            />
           </A11yPressable>
         }
       />
@@ -211,6 +209,7 @@ function getStatusCopy(result: AddToCalendarResult | null, t: Translate): Status
 const styles = StyleSheet.create({
   addButton: {
     alignItems: "center",
+    alignSelf: "stretch",
     borderCurve: "continuous",
     borderRadius: radii.medium,
     borderWidth: StyleSheet.hairlineWidth,

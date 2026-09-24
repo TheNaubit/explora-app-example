@@ -14,7 +14,8 @@
 - Loading uses a hero and content skeleton.
 - An invalid activity id shows a not-found state with a back action.
 - Other first-load errors use the shared Query error boundary.
-- One **Add to Calendar** action opens the schedule controls.
+- One full-width **Add to Calendar** action opens the schedule controls.
+- The action has no disclosure chevron because it starts a task.
 - The iOS sheet fits the native date and time picker without expanding to full height.
 - The fixed iOS sheet has no drag handle and does not allow swipe dismissal.
 - The iOS sheet puts Liquid Glass **Cancel** and **Done** buttons in its header on iOS 26 or later.

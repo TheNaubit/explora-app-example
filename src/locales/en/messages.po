@@ -69,7 +69,7 @@ msgstr "Activity unavailable"
 msgid "activityDetail.notFoundAnnounce"
 msgstr "Activity was not found."
 
-#. Button that opens the system calendar event form
+#. Button that opens the activity schedule sheet before the system calendar form
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.add"
