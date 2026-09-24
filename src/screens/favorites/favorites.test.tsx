@@ -2,7 +2,7 @@ import { createElement } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import { useReducedMotion } from "react-native-reanimated";
 
-import { Saved } from "@/screens/saved";
+import { Favorites } from "@/screens/favorites";
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { addFavorite, clearFavorites } from "@/state/favorites";
 import { createProviders } from "@/test/ui-test-utils";
@@ -26,7 +26,7 @@ jest.mock("expo-router", () => {
 
 const mockUseReducedMotion = useReducedMotion as jest.MockedFunction<typeof useReducedMotion>;
 
-describe("Saved screen", () => {
+describe("Favorites screen", () => {
   beforeEach(() => {
     clearFavorites();
     mockUseReducedMotion.mockReturnValue(false);
@@ -35,16 +35,16 @@ describe("Saved screen", () => {
   it("shows empty state and navigates to Explore", async () => {
     const { router } = require("expo-router");
 
-    await render(createElement(Saved), {
+    await render(createElement(Favorites), {
       wrapper: createProviders(),
     });
 
-    await waitFor(() => expect(screen.getByTestId("saved-empty")).toBeTruthy());
+    await waitFor(() => expect(screen.getByTestId("favorites-empty")).toBeTruthy());
     fireEvent.press(screen.getByTestId("empty-state-action"));
     expect(router.navigate).toHaveBeenCalledWith("/");
   });
 
-  it("lists saved activities", async () => {
+  it("lists favorite activities", async () => {
     const ReactNative = require("react-native");
     const windowDimensions = jest.spyOn(ReactNative, "useWindowDimensions").mockReturnValue({
       width: 402,
@@ -54,14 +54,14 @@ describe("Saved screen", () => {
     });
     addFavorite(SUPPLIED_ACTIVITIES[0]);
 
-    await render(createElement(Saved), {
+    await render(createElement(Favorites), {
       wrapper: createProviders(),
     });
 
-    await waitFor(() => expect(screen.getByTestId("saved-list")).toBeTruthy());
-    const list = screen.getByTestId("saved-list");
+    await waitFor(() => expect(screen.getByTestId("favorites-list")).toBeTruthy());
+    const list = screen.getByTestId("favorites-list");
     expect(screen.getByText(SUPPLIED_ACTIVITIES[0].title)).toBeTruthy();
-    expect(screen.queryByText("Saved details stay available offline.")).toBeNull();
+    expect(screen.queryByText("Favorite details stay available offline.")).toBeNull();
     expect(list.props.snapToInterval).toBeGreaterThan(0);
     expect(list.props.decelerationRate).toBe("fast");
     expect(list.props.disableIntervalMomentum).toBe(true);
@@ -72,17 +72,17 @@ describe("Saved screen", () => {
     windowDimensions.mockRestore();
   });
 
-  it("removes a saved card immediately when reduced motion is active", async () => {
+  it("removes a favorite card immediately when reduced motion is active", async () => {
     mockUseReducedMotion.mockReturnValue(true);
     const activity = SUPPLIED_ACTIVITIES[0];
     addFavorite(activity);
 
-    await render(createElement(Saved), {
+    await render(createElement(Favorites), {
       wrapper: createProviders(),
     });
 
     fireEvent.press(screen.getByTestId(`favorite-button-${activity.id}`));
 
-    await waitFor(() => expect(screen.getByTestId("saved-empty")).toBeTruthy());
+    await waitFor(() => expect(screen.getByTestId("favorites-empty")).toBeTruthy());
   });
 });

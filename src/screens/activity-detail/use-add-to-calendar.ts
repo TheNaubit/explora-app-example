@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 
 import { AddToCalendarCoordinator, type AddToCalendarResult } from "@/calendar/add-to-calendar";
 import { nativeCalendarAdapter } from "@/calendar/native-calendar";
-import { hapticActionError, hapticCalendarSuccess } from "@/haptics/feedback";
 import type { Activity } from "@/schemas/activity";
 
 type AddToCalendarState = {
@@ -27,16 +26,6 @@ export function useAddToCalendar(activity: Activity): AddToCalendarState {
 
       if (nextResult.status === "duplicate") {
         shouldClearActive = false;
-      }
-
-      if (nextResult.status === "saved") {
-        hapticCalendarSuccess();
-      } else if (
-        nextResult.status !== "canceled" &&
-        nextResult.status !== "duplicate" &&
-        nextResult.status !== "submitted"
-      ) {
-        hapticActionError();
       }
 
       return nextResult.status;

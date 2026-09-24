@@ -108,10 +108,10 @@ msgstr "Android does not report whether the event was saved or canceled."
 msgid "activityDetail.back"
 msgstr "Back"
 
-#. Button that opens the Explore tab from an empty Saved list
+#. Button that opens the Explore tab from an empty Favorites list
 #. js-lingui-explicit-id
-#: src/screens/saved/messages.ts
-msgid "saved.emptyAction"
+#: src/screens/favorites/messages.ts
+msgid "favorites.emptyAction"
 msgstr "Browse activities"
 
 #. Heading after a calendar permission denial that can be requested again
@@ -221,6 +221,12 @@ msgstr "Done"
 msgid "activityDetail.duration"
 msgstr "Duration"
 
+#. Development button that presents a native error toast
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.error"
+msgstr "Error"
+
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.invalidBody"
@@ -244,11 +250,41 @@ msgstr "Explore"
 msgid "explore.heading"
 msgstr "Explore"
 
+#. Screen reader announcement when favorite activities are shown
+#. js-lingui-explicit-id
+#: src/screens/favorites/messages.ts
+msgid "favorites.loadedAnnounce"
+msgstr "Favorite activities loaded."
+
+#. Native tab label for favorite activities
+#. js-lingui-explicit-id
+#: src/screens/tabs/messages.ts
+msgid "tabs.favorites"
+msgstr "Favorites"
+
+#. Spoken ScreenFrame title for the Favorites tab
+#. js-lingui-explicit-id
+#: src/screens/favorites/messages.ts
+msgid "favorites.screenTitle"
+msgstr "Favorites"
+
+#. Visible display title on the Favorites screen
+#. js-lingui-explicit-id
+#: src/screens/favorites/messages.ts
+msgid "favorites.heading"
+msgstr "Favorites"
+
 #. Button on the Activity Detail not-found state
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.unavailableAction"
 msgstr "Go back"
+
+#. Development button that presents a native information toast
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.info"
+msgstr "Info"
 
 #. Activity category chip label
 #. js-lingui-explicit-id
@@ -274,6 +310,44 @@ msgstr "Loading activity details."
 msgid "activityDetail.location"
 msgstr "Location"
 
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.errorMessage"
+msgstr "Native error feedback is working."
+
+#. Heading for development-only buttons that test native toast feedback
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.title"
+msgstr "Native feedback test"
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.infoMessage"
+msgstr "Native information feedback is working."
+
+#. Development status when the native toast module is not in the installed app
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.unavailable"
+msgstr "Native module missing. Rebuild the development app."
+
+#. Development status that confirms the native toast module is installed
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.available"
+msgstr "Native module ready"
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.successMessage"
+msgstr "Native success feedback is working."
+
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.warningMessage"
+msgstr "Native warning feedback is working."
+
 #. Android date dialog button that opens the time dialog
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -298,23 +372,23 @@ msgstr "No activities available"
 msgid "explore.emptyAnnounce"
 msgstr "No activities match your search."
 
+#. Title when the user has no favorite activities
+#. js-lingui-explicit-id
+#: src/screens/favorites/messages.ts
+msgid "favorites.emptyTitle"
+msgstr "No favorite activities"
+
+#. Screen reader announcement for an empty Favorites list
+#. js-lingui-explicit-id
+#: src/screens/favorites/messages.ts
+msgid "favorites.emptyAnnounce"
+msgstr "No favorite activities."
+
 #. Empty state heading when filters return no activities
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
 msgid "explore.emptyTitle"
 msgstr "No matching activities"
-
-#. Title when the user has no favorite activities
-#. js-lingui-explicit-id
-#: src/screens/saved/messages.ts
-msgid "saved.emptyTitle"
-msgstr "No saved activities"
-
-#. Screen reader announcement for an empty Saved list
-#. js-lingui-explicit-id
-#: src/screens/saved/messages.ts
-msgid "saved.emptyAnnounce"
-msgstr "No saved activities."
 
 #. Button that opens system Settings for calendar permission
 #. js-lingui-explicit-id
@@ -395,33 +469,9 @@ msgstr "Save {title} to favorites"
 
 #. Body when the favorites list is empty
 #. js-lingui-explicit-id
-#: src/screens/saved/messages.ts
-msgid "saved.emptyBody"
+#: src/screens/favorites/messages.ts
+msgid "favorites.emptyBody"
 msgstr "Save an activity from Explore to find it here later."
-
-#. Native tab label for saved favorite activities
-#. js-lingui-explicit-id
-#: src/screens/tabs/messages.ts
-msgid "tabs.saved"
-msgstr "Saved"
-
-#. Spoken ScreenFrame title for the Saved favorites tab
-#. js-lingui-explicit-id
-#: src/screens/saved/messages.ts
-msgid "saved.screenTitle"
-msgstr "Saved"
-
-#. Visible display title on the Saved screen
-#. js-lingui-explicit-id
-#: src/screens/saved/messages.ts
-msgid "saved.heading"
-msgstr "Saved"
-
-#. Screen reader announcement when Saved favorites are shown
-#. js-lingui-explicit-id
-#: src/screens/saved/messages.ts
-msgid "saved.loadedAnnounce"
-msgstr "Saved activities loaded."
 
 #. Spoken label for the discovery search text field
 #. js-lingui-explicit-id
@@ -457,6 +507,12 @@ msgstr "Showing saved details"
 #: src/i18n/error-keys.ts
 msgid "errors.unknown"
 msgstr "Something went wrong. Try again."
+
+#. Development button that presents a native success toast
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.success"
+msgstr "Success"
 
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -519,6 +575,12 @@ msgstr "Try again"
 #: src/components/query-error-boundary/index.tsx
 msgid "queryError.retry"
 msgstr "Try again"
+
+#. Development button that presents a native warning toast
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.nativeFeedbackTest.warning"
+msgstr "Warning"
 
 #. Activity category chip label
 #. js-lingui-explicit-id

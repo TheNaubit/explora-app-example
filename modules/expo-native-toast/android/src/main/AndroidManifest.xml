@@ -1,0 +1,9 @@
+<manifest>
+  <application>
+    <provider
+      android:name=".NativeToastInitProvider"
+      android:authorities="${applicationId}.expo-native-toast-init"
+      android:exported="false"
+      android:initOrder="100" />
+  </application>
+</manifest>

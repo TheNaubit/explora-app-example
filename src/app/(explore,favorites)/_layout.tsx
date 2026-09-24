@@ -3,7 +3,7 @@ import { Stack } from "expo-router";
 
 export const unstable_settings = {
   explore: { anchor: "index" },
-  saved: { anchor: "index" },
+  favorites: { anchor: "index" },
 };
 
 const IS_IOS = process.env.EXPO_OS === "ios";
@@ -12,7 +12,7 @@ type SharedTabStackProps = {
   segment: string;
 };
 
-/** Shared stack for Explore and Saved. Both tabs can push Activity Detail. */
+/** Shared stack for Explore and Favorites. Both tabs can push Activity Detail. */
 export default function SharedTabStack({ segment }: SharedTabStackProps) {
   const tab = segment.match(/\((.*)\)/)?.[1];
   const showsExploreHeader = tab === "explore" && !IS_IOS;

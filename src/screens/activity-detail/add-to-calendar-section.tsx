@@ -3,10 +3,10 @@ import { Linking, StyleSheet, Text, View, useWindowDimensions } from "react-nati
 import { SymbolView } from "expo-symbols";
 import { useLingui } from "@lingui/react/macro";
 
-import { announceStatus } from "@/a11y";
 import type { AddToCalendarResult } from "@/calendar/add-to-calendar";
 import { A11yPressable } from "@/components/a11y-pressable";
 import { MIN_TOUCH_TARGET, PRESS_SCALE } from "@/components/constants";
+import { showNativeToast, type NativeToastType } from "@/native-toast";
 import { CalendarSchedulePicker } from "@/screens/activity-detail/calendar-schedule-picker";
 import { CalendarStatusBanner } from "@/screens/activity-detail/calendar-status-banner";
 import { activityDetailMessages } from "@/screens/activity-detail/messages";
@@ -40,12 +40,19 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
     if (result === null) return;
 
     if (result === "duplicate") {
-      announceStatus(t(activityDetailMessages.calendarDuplicate));
+      showNativeToast({
+        title: t(activityDetailMessages.calendarDuplicate),
+        type: "warning",
+      });
       return;
     }
 
     if (statusCopy) {
-      announceStatus(`${statusCopy.title}. ${statusCopy.body}`);
+      showNativeToast({
+        message: statusCopy.body,
+        title: statusCopy.title,
+        type: getCalendarToastType(result),
+      });
     }
   }, [result, statusCopy, t]);
 
@@ -111,7 +118,7 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
         }
       />
 
-      {statusCopy && result !== "duplicate" ? (
+      {statusCopy && shouldShowCalendarRecovery(result) ? (
         <CalendarStatusBanner
           actionLabel={statusCopy.actionLabel}
           body={statusCopy.body}
@@ -129,6 +136,19 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
         />
       ) : null}
     </View>
+  );
+}
+
+export function getCalendarToastType(result: AddToCalendarResult): NativeToastType {
+  if (result === "saved") return "success";
+  if (result === "submitted") return "info";
+  if (result === "duplicate") return "warning";
+  return "error";
+}
+
+export function shouldShowCalendarRecovery(result: AddToCalendarResult | null): boolean {
+  return (
+    result === "permission-denied" || result === "permission-blocked" || result === "native-error"
   );
 }
 

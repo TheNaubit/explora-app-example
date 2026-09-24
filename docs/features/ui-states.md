@@ -10,7 +10,7 @@ Explora must show a clear UI for every async outcome. Users must never see a bla
 | Suspense + Error Boundary rules            | Shipped (ADR-012)                                                                          |
 | Shared skeleton / empty / error components | Shipped (`ActivityCardSkeleton`, `EmptyState`, `QueryErrorBoundary`, `InlineStatusBanner`) |
 | Discovery Explore                          | Shipped (skeleton, empty, first-load error, refresh / next-page banner)                    |
-| Detail / Saved                             | Shipped (detail skeleton and recovery states; Saved empty and content states)              |
+| Detail / Favorites                         | Shipped (detail skeleton and recovery states; Favorites empty and content states)          |
 
 ## Required states
 

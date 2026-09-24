@@ -39,14 +39,14 @@
 - Refresh-added activities keep their order and stable IDs after a cold app launch.
 - Refresh success and failure play Pulsar outcome haptics.
 - Infinite scroll loads the next page. Soft failures use an inline banner.
-- Native Explore uses its platform header and content insets. Web and Saved use `ScreenFrame`.
+- Native Explore uses its platform header and content insets. Web and Favorites use `ScreenFrame`.
 
 ## Code map
 
 | Concern               | Location                                                                           |
 | --------------------- | ---------------------------------------------------------------------------------- |
-| Route                 | `src/app/(explore,saved)/index.tsx`                                                |
-| Explore stack         | `src/app/(explore,saved)/_layout.tsx`                                              |
+| Route                 | `src/app/(explore,favorites)/index.tsx`                                            |
+| Explore stack         | `src/app/(explore,favorites)/_layout.tsx`                                          |
 | Screen                | `src/screens/explore/`                                                             |
 | Screen hooks          | `use-explore-list.ts`, `use-explore-refresh.ts`                                    |
 | Header search         | `explore-custom-header.tsx`, `explore-native-search.tsx`                           |

@@ -2,10 +2,9 @@ import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLingui } from "@lingui/react/macro";
 
-import { announceStatus } from "@/a11y";
 import { useRefreshCatalog } from "@/hooks/use-refresh-catalog";
-import { hapticActionError, hapticRefreshSuccess } from "@/haptics/feedback";
 import { resolveErrorMessage } from "@/i18n";
+import { showNativeToast } from "@/native-toast";
 import { isApiError } from "@/query/errors";
 import { activityKeys } from "@/query/keys";
 import { exploreMessages } from "@/screens/explore/messages";
@@ -31,13 +30,18 @@ export function useExploreRefresh() {
     setBanner(null);
     try {
       await refresh.mutateAsync();
-      hapticRefreshSuccess();
-      announceStatus(t(exploreMessages.refreshSuccessAnnounce));
+      showNativeToast({
+        title: t(exploreMessages.refreshSuccessAnnounce),
+        type: "success",
+      });
     } catch (error) {
       const errorKey = isApiError(error) ? error.errorKey : "errors.refreshFailed";
       setBanner({ kind: "refresh", errorKey });
-      hapticActionError();
-      announceStatus(t(resolveErrorMessage(errorKey)));
+      showNativeToast({
+        message: t(resolveErrorMessage(errorKey)),
+        title: t(exploreMessages.refreshFailedTitle),
+        type: "error",
+      });
     } finally {
       refreshInFlight.current = false;
     }

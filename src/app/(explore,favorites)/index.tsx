@@ -3,14 +3,14 @@ import { useSegments } from "expo-router";
 
 import { Explore } from "@/screens/explore";
 import { ExploreNativeSearch } from "@/screens/explore/explore-native-search";
-import { Saved } from "@/screens/saved";
+import { Favorites } from "@/screens/favorites";
 
-/** Thin shared index route for the Explore and Saved tab stacks. */
+/** Thin shared index route for the Explore and Favorites tab stacks. */
 export default function TabIndexRoute() {
   const [segment] = useSegments();
 
-  if (segment === "(saved)") {
-    return <Saved />;
+  if (segment === "(favorites)") {
+    return <Favorites />;
   }
 
   return (

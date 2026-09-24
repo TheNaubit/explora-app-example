@@ -14,7 +14,7 @@ function TestHeader() {
       bodyHeight={76}
       safeAreaTop={47}
       scrollOffset={scrollOffset}
-      title="Saved"
+      title="Favorites"
     />
   );
 }
@@ -23,7 +23,7 @@ describe("CollapsingScreenHeader", () => {
   it("uses a high-contrast compact title over scrolling content", async () => {
     await render(<TestHeader />);
 
-    const titles = screen.getAllByText("Saved", { includeHiddenElements: true });
+    const titles = screen.getAllByText("Favorites", { includeHiddenElements: true });
     const compactStyle = StyleSheet.flatten(titles[1].props.style);
 
     expect(compactStyle.color).toBe(primitiveColors.white);

@@ -100,7 +100,7 @@ Map every change to the assessment bar.
 ## Notes
 
 - List cards use seeded cover photos (`getActivityCoverImage`) with BlurHash placeholders because the catalog JSON has no image URLs. Clay icons stay for empty states and category cues.
-- `ScreenFrame` pads the top and horizontal safe areas on Saved and on web Explore. Native Explore uses the stack header for the top inset.
+- `ScreenFrame` pads the top and horizontal safe areas on Favorites and on web Explore. Native Explore uses the stack header for the top inset.
 - Search uses the native Stack search field and accessible category controls.
 - Search submit, filter selection, and list or chip drag remove search focus.
 - The header uses a soft iOS 26 scroll-edge effect. Older iOS uses a low-intensity static blur.

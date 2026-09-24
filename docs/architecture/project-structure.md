@@ -16,10 +16,10 @@ Based on [Expo folder-structure best practices](https://expo.dev/blog/expo-app-f
 │   │   ├── (explore)/
 │   │   │   ├── _layout.tsx          # Explore Stack
 │   │   │   └── index.tsx            # Explore tab route
-│   │   └── saved.tsx                # Saved tab
+│   │   └── (explore,favorites)/     # Shared Explore and Favorites stacks
 │   ├── screens/             # screen bodies + screen-local UI/hooks
 │   │   ├── explore/
-│   │   ├── saved/
+│   │   ├── favorites/
 │   │   └── tabs/messages.ts         # shared tab labels
 │   ├── components/          # shared UI (incl. app-tabs)
 │   ├── a11y/                # canonical react-native-a11y re-exports + helpers

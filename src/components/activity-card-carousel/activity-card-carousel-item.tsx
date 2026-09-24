@@ -30,7 +30,7 @@ type ActivityCardCarouselItemProps = {
   scrollOffset: SharedValue<number>;
 };
 
-/** One focused card in the shared Explore and Saved carousel. */
+/** One focused card in the shared Explore and Favorites carousel. */
 export function ActivityCardCarouselItem({
   activity,
   detailHref,

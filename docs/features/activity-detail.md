@@ -2,7 +2,7 @@
 
 ## Current behavior
 
-- Activity cards in Explore and Saved open `/activity/[id]`.
+- Activity cards in Explore and Favorites open `/activity/[id]`.
 - Both tabs push the route in their own Expo Router stack.
 - Back returns to the previous tab state.
 - Search, category filters, and Explore scroll position stay in memory.
@@ -48,11 +48,11 @@ Android uses the same route, content, actions, and state handling. Android runti
 
 | Concern            | Location                                                                      |
 | ------------------ | ----------------------------------------------------------------------------- |
-| Shared route       | `src/app/(explore,saved)/activity/[id].tsx`                                   |
+| Shared route       | `src/app/(explore,favorites)/activity/[id].tsx`                               |
 | Screen             | `src/screens/activity-detail/`                                                |
 | Detail query       | `src/hooks/use-activity.ts`                                                   |
 | Card zoom source   | `src/components/activity-card/index.tsx`                                      |
-| Shared tab stacks  | `src/app/(explore,saved)/_layout.tsx`                                         |
+| Shared tab stacks  | `src/app/(explore,favorites)/_layout.tsx`                                     |
 | Automated coverage | `src/screens/activity-detail/*.test.tsx`                                      |
 | Calendar feature   | `src/calendar/` and `src/screens/activity-detail/add-to-calendar-section.tsx` |
 

@@ -15,43 +15,47 @@ import { CollapsingScreenHeader } from "@/components/collapsing-screen-header";
 import { getCollapsingHeaderTranslation } from "@/components/collapsing-screen-header/constants";
 import { EmptyState } from "@/components/empty-state";
 import { ScreenFrame } from "@/components/screen-frame";
-import { emptySavedIllustration } from "@/illustrations";
-import { savedMessages } from "@/screens/saved/messages";
-import { useSavedActivities } from "@/screens/saved/use-saved-activities";
+import { emptyFavoritesIllustration } from "@/illustrations";
+import { favoritesMessages } from "@/screens/favorites/messages";
+import { useFavoriteActivities } from "@/screens/favorites/use-favorite-activities";
 import { spacing, typography, useAppTheme } from "@/theme";
 
-/** Expanded Saved header height below the iOS safe area. */
-const IOS_SAVED_HEADER_BODY_HEIGHT = 76;
+/** Expanded Favorites header height below the iOS safe area. */
+const IOS_FAVORITES_HEADER_BODY_HEIGHT = 76;
 
-/** Extra Saved header height for each Dynamic Type scale step. */
-const IOS_SAVED_HEADER_FONT_SCALE_ALLOWANCE = 40;
+/** Extra Favorites header height for each Dynamic Type scale step. */
+const IOS_FAVORITES_HEADER_FONT_SCALE_ALLOWANCE = 40;
 
-/** Saved favorites tab with the same focused card presentation as Explore. */
-export function Saved() {
-  if (process.env.EXPO_OS === "web" || Platform.OS !== "ios") return <SavedStandard />;
+/** Favorites tab with the same focused card presentation as Explore. */
+export function Favorites() {
+  if (process.env.EXPO_OS === "web" || Platform.OS !== "ios") return <FavoritesStandard />;
 
   return (
     <ScrollEdgeEffectProvider>
-      <SavedNative />
+      <FavoritesNative />
     </ScrollEdgeEffectProvider>
   );
 }
 
-function useSavedScreenState() {
+function useFavoritesScreenState() {
   const { t } = useLingui();
-  const activities = useSavedActivities();
+  const activities = useFavoriteActivities();
 
   useEffect(() => {
     announceStatus(
-      t(activities.length === 0 ? savedMessages.emptyAnnounce : savedMessages.loadedAnnounce),
+      t(
+        activities.length === 0
+          ? favoritesMessages.emptyAnnounce
+          : favoritesMessages.loadedAnnounce,
+      ),
     );
   }, [activities.length, t]);
 
   return { activities, t };
 }
 
-function SavedNative() {
-  const { activities, t } = useSavedScreenState();
+function FavoritesNative() {
+  const { activities, t } = useFavoritesScreenState();
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
   const scrollEdgeRef = useScrollEdgeEffectRef();
@@ -59,11 +63,11 @@ function SavedNative() {
   const { fontScale: measuredFontScale } = useWindowDimensions();
   const fontScale = measuredFontScale ?? 1;
   const headerBodyHeight =
-    IOS_SAVED_HEADER_BODY_HEIGHT +
-    Math.max(0, fontScale - 1) * IOS_SAVED_HEADER_FONT_SCALE_ALLOWANCE;
+    IOS_FAVORITES_HEADER_BODY_HEIGHT +
+    Math.max(0, fontScale - 1) * IOS_FAVORITES_HEADER_FONT_SCALE_ALLOWANCE;
   const headerHeight = insets.top + headerBodyHeight;
   const headerTranslation = getCollapsingHeaderTranslation(headerBodyHeight);
-  const title = t(savedMessages.screenTitle);
+  const title = t(favoritesMessages.screenTitle);
   const onScroll = useAnimatedScrollHandler((event) => {
     const normalizedOffset = event.contentOffset.y + (event.contentInset?.top ?? 0);
     scrollOffset.set(Math.max(0, normalizedOffset));
@@ -73,7 +77,7 @@ function SavedNative() {
     <View
       collapsable={false}
       style={[styles.root, { backgroundColor: theme.colors.background }]}
-      testID="saved-screen"
+      testID="favorites-screen"
     >
       {activities.length === 0 ? (
         <Animated.ScrollView
@@ -88,13 +92,13 @@ function SavedNative() {
           contentInsetAdjustmentBehavior="never"
           onScroll={onScroll}
           scrollEventThrottle={16}
-          testID="saved-empty"
+          testID="favorites-empty"
         >
           <EmptyState
-            title={t(savedMessages.emptyTitle)}
-            body={t(savedMessages.emptyBody)}
-            actionLabel={t(savedMessages.emptyAction)}
-            illustration={emptySavedIllustration}
+            title={t(favoritesMessages.emptyTitle)}
+            body={t(favoritesMessages.emptyBody)}
+            actionLabel={t(favoritesMessages.emptyAction)}
+            illustration={emptyFavoritesIllustration}
             presentation="centered"
             onAction={() => router.navigate("/")}
           />
@@ -108,7 +112,7 @@ function SavedNative() {
           headerTranslation={headerTranslation}
           scrollOffset={scrollOffset}
           scrollRef={scrollEdgeRef}
-          testID="saved-list"
+          testID="favorites-list"
         />
       )}
       <CollapsingScreenHeader
@@ -123,26 +127,26 @@ function SavedNative() {
   );
 }
 
-function SavedStandard() {
-  const { activities, t } = useSavedScreenState();
+function FavoritesStandard() {
+  const { activities, t } = useFavoritesScreenState();
   const theme = useAppTheme();
 
   return (
     <ScreenFrame
-      title={t(savedMessages.screenTitle)}
+      title={t(favoritesMessages.screenTitle)}
       contentStyle={{ backgroundColor: theme.colors.background }}
-      testID="saved-screen"
+      testID="favorites-screen"
     >
       <Text style={[styles.heading, { color: theme.colors.text }]} accessibilityRole="header">
-        {t(savedMessages.heading)}
+        {t(favoritesMessages.heading)}
       </Text>
       {activities.length === 0 ? (
-        <View style={styles.empty} testID="saved-empty">
+        <View style={styles.empty} testID="favorites-empty">
           <EmptyState
-            title={t(savedMessages.emptyTitle)}
-            body={t(savedMessages.emptyBody)}
-            actionLabel={t(savedMessages.emptyAction)}
-            illustration={emptySavedIllustration}
+            title={t(favoritesMessages.emptyTitle)}
+            body={t(favoritesMessages.emptyBody)}
+            actionLabel={t(favoritesMessages.emptyAction)}
+            illustration={emptyFavoritesIllustration}
             presentation="centered"
             onAction={() => router.navigate("/")}
           />
@@ -151,7 +155,7 @@ function SavedStandard() {
         <ActivityCardCarousel
           activities={activities}
           favoriteRemovalEffect="particle-dissolve"
-          testID="saved-list"
+          testID="favorites-list"
         />
       )}
     </ScreenFrame>

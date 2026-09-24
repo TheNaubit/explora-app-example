@@ -4,7 +4,7 @@
 
 - Root layout wraps Query, a11y, i18n, SafeAreaProvider, and Expo Router `ThemeProvider`.
 - Primary navigation uses Expo Router **NativeTabs** (`expo-router/native-tabs` on SDK 58).
-- Tabs: **Explore** (`/(explore)`) and **Saved** (`/(saved)`).
+- Tabs: **Explore** (`/(explore)`) and **Favorites** (`/(favorites)`).
 - Both tabs use one array-route stack layout.
 - Both stacks push the shared `/activity/[id]` route.
 - Activity Detail uses `Link.AppleZoom` and `Link.AppleZoomTarget`.
@@ -19,14 +19,14 @@
 
 ## Code map
 
-| Concern        | Location                                    |
-| -------------- | ------------------------------------------- |
-| Providers      | `src/app/_layout.tsx`                       |
-| Native tab bar | `src/components/app-tabs/index.tsx`         |
-| Tab labels     | `src/screens/tabs/messages.ts`              |
-| Shared stacks  | `src/app/(explore,saved)/_layout.tsx`       |
-| Tab index      | `src/app/(explore,saved)/index.tsx`         |
-| Detail route   | `src/app/(explore,saved)/activity/[id].tsx` |
+| Concern        | Location                                        |
+| -------------- | ----------------------------------------------- |
+| Providers      | `src/app/_layout.tsx`                           |
+| Native tab bar | `src/components/app-tabs/index.tsx`             |
+| Tab labels     | `src/screens/tabs/messages.ts`                  |
+| Shared stacks  | `src/app/(explore,favorites)/_layout.tsx`       |
+| Tab index      | `src/app/(explore,favorites)/index.tsx`         |
+| Detail route   | `src/app/(explore,favorites)/activity/[id].tsx` |
 
 ## Related
 

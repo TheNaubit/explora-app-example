@@ -1,7 +1,7 @@
 /** Visible dust duration keeps the dense breakup clear without delaying the next selection. */
 export const PARTICLE_DISSOLVE_DURATION_MS = 1_100;
 
-/** Duration of the Saved list handoff. This matches Telegram's 0.8-second delete transition. */
+/** Duration of the Favorites list handoff. This matches Telegram's 0.8-second delete transition. */
 export const PARTICLE_DISSOLVE_REFLOW_DURATION_MS = 800;
 
 /** Strong ease-in-out keeps the visible list movement smooth at both ends. */

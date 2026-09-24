@@ -6,9 +6,9 @@ import type { ActivityCategory } from "@/schemas/activity";
 export const emptySearchIllustration =
   require("../../assets/illustrations/empty-search.png") as ImageSource;
 
-/** Transparent claymorphic Saved collection illustration. */
-export const emptySavedIllustration =
-  require("../../assets/illustrations/empty-saved.png") as ImageSource;
+/** Transparent claymorphic Favorites collection illustration. */
+export const emptyFavoritesIllustration =
+  require("../../assets/illustrations/empty-favorites.png") as ImageSource;
 
 const categoryIllustrations = {
   Outdoors: require("../../assets/illustrations/category-outdoors.png"),

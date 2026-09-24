@@ -7,6 +7,7 @@ import { i18n } from "@lingui/core";
 import { ApiError } from "@/query/errors";
 import { createQueryClient } from "@/query/client";
 import { activityKeys } from "@/query/keys";
+import { showNativeToast } from "@/native-toast";
 import { useExploreRefresh } from "@/screens/explore/use-explore-refresh";
 
 i18n.load("en", {});
@@ -14,6 +15,7 @@ i18n.activate("en");
 
 const mockMutateAsync = jest.fn();
 const mockResetQueries = jest.fn();
+const mockShowNativeToast = showNativeToast as jest.MockedFunction<typeof showNativeToast>;
 
 jest.mock("@/hooks/use-refresh-catalog", () => ({
   useRefreshCatalog: () => ({
@@ -22,8 +24,8 @@ jest.mock("@/hooks/use-refresh-catalog", () => ({
   }),
 }));
 
-jest.mock("@/a11y", () => ({
-  announceStatus: jest.fn(),
+jest.mock("@/native-toast", () => ({
+  showNativeToast: jest.fn(),
 }));
 
 jest.mock("@tanstack/react-query", () => {
@@ -51,6 +53,7 @@ describe("useExploreRefresh", () => {
   beforeEach(() => {
     mockMutateAsync.mockReset();
     mockResetQueries.mockReset();
+    mockShowNativeToast.mockReset();
     mockMutateAsync.mockResolvedValue({ activity: { id: "new" } });
   });
 
@@ -64,6 +67,7 @@ describe("useExploreRefresh", () => {
     });
 
     expect(result.current.banner).toBeNull();
+    expect(mockShowNativeToast).toHaveBeenCalledWith(expect.objectContaining({ type: "success" }));
   });
 
   it("ignores a second refresh request while the first request is pending", async () => {
@@ -107,6 +111,7 @@ describe("useExploreRefresh", () => {
       kind: "refresh",
       errorKey: "errors.refreshFailed",
     });
+    expect(mockShowNativeToast).toHaveBeenCalledWith(expect.objectContaining({ type: "error" }));
   });
 
   it("maps unknown refresh failures to errors.refreshFailed", async () => {

@@ -76,6 +76,7 @@ export function ExploreSkeleton({
       estimatedListSize={{ width, height }}
       initialScrollOffset={0}
       keyExtractor={(index) => `skeleton-${index}`}
+      recycleItems
       renderItem={({ item: index }) => (
         <View
           style={usesCardCarousel ? [styles.carouselItem, { height: itemExtent }] : undefined}

@@ -14,6 +14,7 @@ import { getActivityCoverImage } from "@/data/activity-image";
 import { useActivity } from "@/hooks/use-activity";
 import { emptySearchIllustration } from "@/illustrations";
 import { categoryMessages } from "@/i18n/category-labels";
+import { showNativeToast } from "@/native-toast";
 import { ActivityCategoryBadge } from "@/screens/activity-detail/activity-category-badge";
 import { ActivityDetailControls } from "@/screens/activity-detail/activity-detail-controls";
 import { ActivityDetailSkeleton } from "@/screens/activity-detail/activity-detail-skeleton";
@@ -24,6 +25,7 @@ import {
   ACTIVITY_DETAIL_HERO_MAX_HEIGHT,
 } from "@/screens/activity-detail/constants";
 import { activityDetailMessages } from "@/screens/activity-detail/messages";
+import { NativeFeedbackTestPanel } from "@/screens/activity-detail/native-feedback-test-panel";
 import type { Activity } from "@/schemas/activity";
 import { spacing, typography, useAppTheme } from "@/theme";
 import { formatDuration } from "@/utils/format-duration";
@@ -149,8 +151,14 @@ function ActivityDetailLoaded({
   }, [activity.title, i18n]);
 
   useEffect(() => {
-    if (hasSavedFallback) announceStatus(savedFallbackBody);
-  }, [hasSavedFallback, savedFallbackBody]);
+    if (hasSavedFallback) {
+      showNativeToast({
+        message: savedFallbackBody,
+        title: savedFallbackTitle,
+        type: "error",
+      });
+    }
+  }, [hasSavedFallback, savedFallbackBody, savedFallbackTitle]);
 
   return (
     <View style={styles.loadedRoot}>
@@ -201,6 +209,7 @@ function ActivityDetailLoaded({
             <DetailValue label={t(activityDetailMessages.duration)} value={duration} />
           </View>
           <AddToCalendarSection activity={activity} />
+          {__DEV__ ? <NativeFeedbackTestPanel /> : null}
         </View>
       </ScrollView>
       <ActivityDetailControls

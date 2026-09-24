@@ -29,24 +29,3 @@ export function hapticFavoriteRemoved(): void {
     Presets.System.impactSoft();
   });
 }
-
-/** Catalog refresh succeeded (+1 activity). */
-export function hapticRefreshSuccess(): void {
-  playSafe(() => {
-    Presets.System.notificationSuccess();
-  });
-}
-
-/** Refresh or other recoverable action failed. */
-export function hapticActionError(): void {
-  playSafe(() => {
-    Presets.System.notificationError();
-  });
-}
-
-/** Calendar event saved by the native form. */
-export function hapticCalendarSuccess(): void {
-  playSafe(() => {
-    Presets.System.notificationSuccess();
-  });
-}

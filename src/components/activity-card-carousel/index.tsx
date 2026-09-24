@@ -60,7 +60,7 @@ type ActivityCardCarouselProps = {
   testID: string;
 };
 
-/** Shared focused activity list for Explore and Saved. */
+/** Shared focused activity list for Explore and Favorites. */
 export function ActivityCardCarousel({
   activities,
   favoriteRemovalEffect,

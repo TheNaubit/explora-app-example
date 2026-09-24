@@ -4,6 +4,22 @@ Explora builds **only with EAS CLI on this machine** (`eas build --local`). Do n
 
 Artifacts land in `dist/eas-builds/` (gitignored via `dist/`).
 
+## Fast native development loop
+
+Do not use a clean EAS build for each native code edit.
+
+1. Keep the generated, gitignored `ios/` and `android/` folders on this machine.
+2. Run `npm run ios` or `npm run android` after a native code change.
+3. Let Xcode DerivedData, CocoaPods, Gradle, and C++ outputs remain in place.
+4. Run `npm run start:dev-client` for JavaScript-only changes.
+5. Use the local EAS scripts for final artifacts and clean release verification.
+
+React Native still builds from source on iOS. `react-native-a11y` imports private headers that the prebuilt React framework omits.
+
+Expo supports `ccacheEnabled` for source builds. This machine does not have `ccache` installed, so the project does not enable it yet.
+
+Local EAS builds always create a fresh artifact. `EAS_LOCAL_BUILD_SKIP_CLEANUP` keeps a build directory for inspection. It does not make EAS incremental.
+
 ## Ignore files
 
 1. [`.gitignore`](../../.gitignore) — keep `dist/`, `ios/`, `android/`, and binary artifacts (`.apk`, `.aab`, `.ipa`, `.app`) out of git.

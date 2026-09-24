@@ -65,7 +65,7 @@ The coordinator accepts one active operation. A second submission returns a dupl
 | Permission denied      | Explain the denial and offer a retry.                       |
 | Permission blocked     | Explain the system setting and offer **Open Settings**.     |
 | Native form active     | Disable the main action and show **Opening Calendar…**.     |
-| Saved on iOS           | Confirm that the system calendar saved the event.           |
+| Saved on iOS           | Show one native success toast and matching haptic.          |
 | Canceled on iOS        | Return to Activity Detail without a status message.         |
 | Form closed on Android | State that Android does not report the final form decision. |
 | Native error           | Keep the schedule and offer a retry.                        |
@@ -76,7 +76,9 @@ The coordinator accepts one active operation. A second submission returns a dupl
 - The native iOS sheet contains focus until **Cancel** or **Done** closes it.
 - Date and time controls use native `@expo/ui` pickers.
 - Text supports Dynamic Type and wraps at larger sizes.
-- Status changes use alert semantics and spoken announcements.
+- Native toast feedback reports calendar outcomes with a matching semantic haptic.
+- Success, information, warning, and validation results do not add persistent banners.
+- Actionable permission and native errors keep an inline recovery action.
 - All user-facing copy uses Lingui.
 - The iOS permission text lives in `src/locales/native/en.json`.
 

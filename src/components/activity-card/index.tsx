@@ -34,7 +34,7 @@ type ActivityCardProps = {
   activity: Activity;
   /** Detail route used by the card press and the iOS zoom transition. */
   detailHref?: Href;
-  /** Saved-only removal treatment. Other favorite buttons update immediately. */
+  /** Favorites-only removal treatment. Other favorite buttons update immediately. */
   favoriteRemovalEffect?: "particle-dissolve";
   /** Optional scroll-linked opacity for the static image blur layer. */
   imageBlurOpacity?: SharedValue<number>;
@@ -77,7 +77,7 @@ function ActivityCardPressable({ style, ...rest }: PressableProps) {
 }
 
 /**
- * Explore / Saved activity row.
+ * Explore / Favorites activity row.
  * The cover continues behind the body through one alpha-masked blur layer.
  */
 export function ActivityCard({
