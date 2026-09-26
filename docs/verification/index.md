@@ -9,6 +9,7 @@ This area explains how we prove Explora behavior. Prefer links to scenarios, tes
 | Automated tests                                | Jest plus two tagged Maestro assessment flows                                     |
 | State journey automation                       | [Maestro state checks](../operations/maestro.md)                                  |
 | Performance evidence                           | [Scenario 7](./scenarios.md#scenario-7-performance-with-at-least-1000-activities) |
+| Before and after improvement evidence          | [Platform-native outcome feedback](./improvement-native-feedback.md)              |
 | Release artifact manifest                      | [artifacts.md](./artifacts.md)                                                    |
 
 Submission packages (video, APK notes, `AI_SESSION.md`) may **point at** these pages. Do not turn this folder into the full submission dump.

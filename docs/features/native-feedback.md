@@ -89,6 +89,9 @@ Dev Tools also reports if the installed app contains the native module.
 
 ## Evidence
 
+- [Before and after improvement record](../verification/improvement-native-feedback.md)
+- [iOS success after the native change](../verification/evidence/native-feedback/ios-success-after.jpg)
+- [iOS transient error after the native change](../verification/evidence/native-feedback/ios-error-after.jpg)
 - [Android success in light mode](../verification/evidence/native-feedback/android-success-light.jpg)
 - [Android error in light mode](../verification/evidence/native-feedback/android-error-light.jpg)
 - [Android success in dark mode](../verification/evidence/native-feedback/android-success-dark.jpg)
