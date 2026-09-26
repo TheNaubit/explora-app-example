@@ -11,6 +11,7 @@ import { ActivityDetail } from "@/screens/activity-detail";
 import {
   getCalendarStatusCopy,
   getCalendarFeedbackPresentation,
+  showCalendarFeedback,
   shouldShowCalendarRecovery,
 } from "@/screens/activity-detail/add-to-calendar-section";
 import { addFavorite, clearFavorites, isFavorite } from "@/state/favorites";
@@ -230,15 +231,22 @@ describe("ActivityDetail", () => {
 
   it("shows native feedback only for confirmed calendar saves", () => {
     expect(getCalendarFeedbackPresentation("saved")).toBe("toast");
-    expect(getCalendarFeedbackPresentation("submitted")).toBe("none");
     expect(getCalendarFeedbackPresentation("canceled")).toBe("none");
     expect(getCalendarFeedbackPresentation("duplicate")).toBe("none");
     expect(getCalendarFeedbackPresentation("permission-denied")).toBe("inline");
   });
 
+  it("shows feedback for each confirmed calendar save", () => {
+    const translate = jest.fn((descriptor: { message: string }) => descriptor.message);
+
+    showCalendarFeedback("saved", translate as never);
+    showCalendarFeedback("saved", translate as never);
+
+    expect(showNativeToast).toHaveBeenCalledTimes(2);
+  });
+
   it("does not keep a persistent banner after calendar success", () => {
     expect(shouldShowCalendarRecovery("saved")).toBe(false);
-    expect(shouldShowCalendarRecovery("submitted")).toBe(false);
     expect(shouldShowCalendarRecovery("past-date")).toBe(true);
     expect(shouldShowCalendarRecovery("permission-denied")).toBe(true);
     expect(shouldShowCalendarRecovery("native-error")).toBe(true);

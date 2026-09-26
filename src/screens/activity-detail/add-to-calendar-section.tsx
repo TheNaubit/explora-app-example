@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Linking, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { SymbolView } from "expo-symbols";
 import { useLingui } from "@lingui/react/macro";
@@ -40,27 +40,20 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
   const { isActive, result, submit } = useAddToCalendar(activity);
   const statusCopy = useMemo(() => getCalendarStatusCopy(result, t), [result, t]);
 
-  useEffect(() => {
-    if (result === null) return;
-
-    if (statusCopy && getCalendarFeedbackPresentation(result) === "toast") {
-      showNativeToast({
-        message: statusCopy.body,
-        title: statusCopy.title,
-        type: "success",
-      });
-    }
-  }, [result, statusCopy]);
+  async function submitSchedule(startDate: Date) {
+    const nextResult = await submit(startDate);
+    showCalendarFeedback(nextResult, t);
+  }
 
   async function handleScheduleConfirm(startDate: Date) {
     lastStartDate.current = startDate;
-    await submit(startDate);
+    await submitSchedule(startDate);
   }
 
   function retryLastSchedule() {
     const startDate = lastStartDate.current;
     if (startDate) {
-      void submit(startDate);
+      void submitSchedule(startDate);
     } else {
       setIsPickerOpen(true);
     }
@@ -150,7 +143,7 @@ export function getCalendarFeedbackPresentation(result: AddToCalendarResult) {
     return resolveFeedbackPresentation({ kind: "canceled" });
   }
 
-  if (result === "submitted" || result === "duplicate") {
+  if (result === "duplicate") {
     return resolveFeedbackPresentation({ kind: "no-change" });
   }
 
@@ -163,6 +156,17 @@ export function shouldShowCalendarRecovery(result: AddToCalendarResult | null): 
 
 type Translate = ReturnType<typeof useLingui>["t"];
 
+export function showCalendarFeedback(result: AddToCalendarResult, t: Translate): void {
+  const copy = getCalendarStatusCopy(result, t);
+  if (copy && getCalendarFeedbackPresentation(result) === "toast") {
+    showNativeToast({
+      message: copy.body,
+      title: copy.title,
+      type: "success",
+    });
+  }
+}
+
 export function getCalendarStatusCopy(
   result: AddToCalendarResult | null,
   t: Translate,
@@ -172,11 +176,6 @@ export function getCalendarStatusCopy(
       return {
         body: t(activityDetailMessages.calendarSavedBody),
         title: t(activityDetailMessages.calendarSavedTitle),
-      };
-    case "submitted":
-      return {
-        body: t(activityDetailMessages.calendarSubmittedBody),
-        title: t(activityDetailMessages.calendarSubmittedTitle),
       };
     case "canceled":
       return null;

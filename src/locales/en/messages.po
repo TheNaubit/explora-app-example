@@ -127,11 +127,17 @@ msgstr "Add to Calendar is available only in the native iOS and Android app."
 msgid "devTools.calendarSuccessTitle"
 msgstr "Added to Calendar"
 
-#. Heading after the user saves the event on iOS
+#. Heading after the calendar confirms that it saved the event
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.savedTitle"
 msgstr "Added to Calendar"
+
+#. Button label while calendar permission or the event form is active
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.busy"
+msgstr "Adding to Calendar…"
 
 #. Category chip that clears the category filter
 #. js-lingui-explicit-id
@@ -143,11 +149,6 @@ msgstr "All"
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.permissionDeniedBody"
 msgstr "Allow calendar access when asked, then try again."
-
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.submittedBody"
-msgstr "Android does not report whether the event was saved or canceled."
 
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
@@ -183,12 +184,6 @@ msgstr "Calendar access is off"
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.errorTitle"
 msgstr "Calendar could not open"
-
-#. Heading after the Android calendar form closes
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.submittedTitle"
-msgstr "Calendar form closed"
 
 #. Heading when the native calendar feature is unavailable
 #. js-lingui-explicit-id
@@ -561,12 +556,6 @@ msgstr "Open Settings"
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.permissionBlockedBody"
 msgstr "Open Settings and allow Explora to add calendar events."
-
-#. Button label while calendar permission or the event form is active
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.busy"
-msgstr "Opening Calendar…"
 
 #. Screen reader hint for the Add to Calendar button
 #. js-lingui-explicit-id

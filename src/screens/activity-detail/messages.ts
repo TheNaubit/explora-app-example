@@ -113,25 +113,16 @@ export const activityDetailMessages = {
   calendarBusy: msg({
     id: "activityDetail.calendar.busy",
     comment: "Button label while calendar permission or the event form is active",
-    message: "Opening Calendar…",
+    message: "Adding to Calendar…",
   }),
   calendarSavedTitle: msg({
     id: "activityDetail.calendar.savedTitle",
-    comment: "Heading after the user saves the event on iOS",
+    comment: "Heading after the calendar confirms that it saved the event",
     message: "Added to Calendar",
   }),
   calendarSavedBody: msg({
     id: "activityDetail.calendar.savedBody",
     message: "The system calendar saved this activity.",
-  }),
-  calendarSubmittedTitle: msg({
-    id: "activityDetail.calendar.submittedTitle",
-    comment: "Heading after the Android calendar form closes",
-    message: "Calendar form closed",
-  }),
-  calendarSubmittedBody: msg({
-    id: "activityDetail.calendar.submittedBody",
-    message: "Android does not report whether the event was saved or canceled.",
   }),
   calendarPermissionDeniedTitle: msg({
     id: "activityDetail.calendar.permissionDeniedTitle",

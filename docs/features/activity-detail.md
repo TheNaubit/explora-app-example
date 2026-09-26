@@ -28,7 +28,9 @@
 - The iOS sheet puts Liquid Glass **Cancel** and **Done** buttons in its header on iOS 26 or later.
 - Android uses the platform date and time dialogs because it has no combined picker.
 - Add to Calendar calculates the end time from the activity duration.
-- The system event form receives the title, location, and description.
+- The iOS event form receives the title, location, and description.
+- Android writes the event to a writable calendar after permission succeeds.
+- Each confirmed save shows native success feedback.
 - The calendar flow handles validation, permission, cancel, success, and native error states.
 
 ## Zoom transition
@@ -39,7 +41,9 @@ Expo Router uses the native zoom transition on iOS 18 and later. Other platforms
 
 The detail screen hides the native header. This avoids the known iOS header limitation during zoom transitions.
 
-Android uses the same route, content, actions, and state handling. Android runtime verification is pending.
+Android uses the same route, content, actions, and state handling.
+
+The Android calendar flow passed runtime verification on an Android 16 emulator.
 
 ## Accessibility and i18n
 

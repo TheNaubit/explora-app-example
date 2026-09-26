@@ -15,30 +15,40 @@ export declare class ExpoNativeToastModule extends NativeModule<{
 declare global {
   var expoV2:
     | {
-        ExpoNativeToast?: ExpoNativeToastModule;
+        modules?: {
+          ExpoNativeToast?: ExpoNativeToastModule;
+        };
       }
     | undefined;
 }
 
-const nativeModule =
+const legacyNativeModule =
   Platform.OS === "android"
-    ? globalThis.expoV2?.ExpoNativeToast
+    ? null
     : requireOptionalNativeModule<ExpoNativeToastModule>("ExpoNativeToast");
 
+function getNativeModule(): ExpoNativeToastModule | null {
+  if (Platform.OS === "android") {
+    return globalThis.expoV2?.modules?.ExpoNativeToast ?? null;
+  }
+
+  return legacyNativeModule;
+}
+
 export function show(options: NativeToastOptions): void {
-  nativeModule?.show(options);
+  getNativeModule()?.show(options);
 }
 
 export function isAvailable(): boolean {
-  return nativeModule != null;
+  return getNativeModule() != null;
 }
 
 export function dismiss(): void {
-  nativeModule?.dismiss();
+  getNativeModule()?.dismiss();
 }
 
 export function addActionListener(listener: (event: NativeToastActionEvent) => void): Subscription {
-  return nativeModule?.addListener("action", listener) ?? { remove() {} };
+  return getNativeModule()?.addListener("action", listener) ?? { remove() {} };
 }
 
-export default nativeModule;
+export default legacyNativeModule;

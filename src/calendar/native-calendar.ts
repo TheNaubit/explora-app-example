@@ -2,6 +2,7 @@ import * as Calendar from "expo-calendar";
 import * as LegacyCalendar from "expo-calendar/legacy";
 
 import type { CalendarNativeAdapter } from "@/calendar/add-to-calendar";
+import { selectWritableCalendar } from "@/calendar/select-writable-calendar";
 
 function getCalendarPlatform(): CalendarNativeAdapter["platform"] {
   if (process.env.EXPO_OS === "ios" || process.env.EXPO_OS === "android") {
@@ -11,10 +12,10 @@ function getCalendarPlatform(): CalendarNativeAdapter["platform"] {
   return "web";
 }
 
-/** Expo Calendar adapter with write-only iOS access and Android system UI. */
+/** Expo Calendar adapter with an iOS form and confirmed Android event creation. */
 export const nativeCalendarAdapter: CalendarNativeAdapter = {
   platform: getCalendarPlatform(),
-  async requestWriteOnlyPermission() {
+  async requestPermission() {
     const response = await Calendar.requestCalendarPermissions(true);
 
     return {
@@ -22,7 +23,7 @@ export const nativeCalendarAdapter: CalendarNativeAdapter = {
       status: response.status,
     };
   },
-  async presentEventForm(event) {
+  async addEvent(event) {
     const isAvailable = await LegacyCalendar.isAvailableAsync();
     if (!isAvailable) {
       throw new Error("Calendar is unavailable");
@@ -34,9 +35,14 @@ export const nativeCalendarAdapter: CalendarNativeAdapter = {
     }
 
     if (process.env.EXPO_OS === "android") {
-      return LegacyCalendar.createEventInCalendarAsync(event, {
-        startNewActivityTask: false,
-      });
+      const calendars = await Calendar.getCalendars(Calendar.EntityTypes.EVENT);
+      const writableCalendar = selectWritableCalendar(calendars);
+      if (!writableCalendar) {
+        throw new Error("No writable calendar is available");
+      }
+
+      const savedEvent = await writableCalendar.createEvent(event);
+      return { action: "saved", id: savedEvent.id };
     }
 
     throw new Error("Calendar is unavailable");

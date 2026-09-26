@@ -12,10 +12,11 @@ The feature stays local. Explora does not send calendar data to a backend.
 2. Select **Add to Calendar**.
 3. Choose a future date and start time.
 4. Select **Done** in the sheet header.
-5. Review the pre-filled event in the system calendar form.
-6. Save or cancel the event.
+5. On iOS, review the event in the system calendar form.
+6. On Android, allow calendar access when the system asks.
+7. Save or cancel the iOS event form.
 
-Explora pre-fills the activity title, location, and description.
+Explora adds the activity title, location, and description.
 
 Explora calculates the end time from `durationMinutes`.
 
@@ -49,26 +50,26 @@ The coordinator accepts one active operation. A second submission returns a dupl
 
 - Android opens native date and time dialogs in sequence.
 - Expo UI has no combined Android date and time picker.
-- Explora opens the system calendar event form.
-- Explora does not request calendar read or write permission.
-- The form stays active in the same task, so duplicate protection remains active.
-- Android returns `done` for saved and canceled forms.
-- Explora stays silent after the form closes because Android cannot confirm the outcome.
+- Explora requests calendar access after the user selects **Done**.
+- Explora selects a writable event calendar.
+- Explora adds the event directly with Expo Calendar.
+- A successful write shows one native success toast and matching haptic.
+- Permission denial and native errors show one inline recovery surface.
+- Local picker cancellation stays silent.
 
 ## UI states
 
-| State                  | Result                                                   |
-| ---------------------- | -------------------------------------------------------- |
-| Schedule sheet open    | Show one fitted native picker and header actions on iOS. |
-| Schedule canceled      | Close the controls and do not request permission.        |
-| Past schedule          | Ask for a future time.                                   |
-| Permission denied      | Explain the denial and offer a retry.                    |
-| Permission blocked     | Explain the system setting and offer **Open Settings**.  |
-| Native form active     | Disable the main action and show **Opening Calendar…**.  |
-| Saved on iOS           | Show one native success toast and matching haptic.       |
-| Canceled on iOS        | Return to Activity Detail without a status message.      |
-| Form closed on Android | Return without a status message.                         |
-| Native error           | Keep the schedule and offer a retry.                     |
+| State               | Result                                                    |
+| ------------------- | --------------------------------------------------------- |
+| Schedule sheet open | Show one fitted native picker and header actions on iOS.  |
+| Schedule canceled   | Close the controls and do not request permission.         |
+| Past schedule       | Ask for a future time.                                    |
+| Permission denied   | Explain the denial and offer a retry.                     |
+| Permission blocked  | Explain the system setting and offer **Open Settings**.   |
+| Native work active  | Disable the main action and show **Adding to Calendar…**. |
+| Saved               | Show one native success toast and matching haptic.        |
+| Canceled on iOS     | Return to Activity Detail without a status message.       |
+| Native error        | Keep the schedule and offer a retry.                      |
 
 ## Accessibility and localization
 
@@ -77,7 +78,7 @@ The coordinator accepts one active operation. A second submission returns a dupl
 - Date and time controls use native `@expo/ui` pickers.
 - Text supports Dynamic Type and wraps at larger sizes.
 - A confirmed save uses one native success toast and a matching semantic haptic.
-- Cancellation and unknown Android outcomes stay silent.
+- Local cancellation and iOS form cancellation stay silent.
 - Permission, validation, and native errors use one inline recovery surface.
 - All user-facing copy uses Lingui.
 - The iOS permission text lives in `src/locales/native/en.json`.
@@ -95,14 +96,20 @@ The coordinator accepts one active operation. A second submission returns a dupl
 
 ## Verification status
 
-- Automated behavior verification: passed on 2026-09-24.
+- Automated behavior verification: passed on 2026-09-26.
 - Local iOS development build: passed on 2026-09-24.
 - iOS 27.0 Simulator runtime verification: passed on 2026-09-24.
-- Android native runtime verification: not run because this machine has no Android runtime.
+- Android 16 emulator runtime verification: passed on 2026-09-26.
 
 The iOS runtime check covered invalid input, write-only permission, blocked permission, native form cancellation, save success, and duplicate protection.
 
 The native event form showed the title, location, description, start time, and calculated end time.
+
+The Android check covered permission, direct event creation, and visible success feedback.
+
+The saved event used calendar ID `2` and event ID `134`.
+
+The Android native feedback module reported **Ready** after the module bridge fix.
 
 See [scenario 6](../verification/scenarios.md#scenario-6-native-calendar) for the observed values and screenshots.
 

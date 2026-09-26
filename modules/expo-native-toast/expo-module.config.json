@@ -2,5 +2,6 @@
   "platforms": ["apple", "android"],
   "apple": {
     "modules": ["ExpoNativeToastModule"]
-  }
+  },
+  "android": {}
 }

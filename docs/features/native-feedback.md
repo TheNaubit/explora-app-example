@@ -36,6 +36,12 @@ Android action labels do nothing on iOS. This keeps one JavaScript API without i
 ### Android
 
 - The module uses a Material native `Snackbar`.
+- The snackbar keeps one neutral surface for all outcomes.
+- A leading Material symbol identifies success, warning, error, or information.
+- The symbol uses a semantic green, amber, red, or blue tint.
+- The title uses bold text. The optional message uses regular text on the next line.
+- Text and symbols communicate the outcome without color alone.
+- The semantic symbol colors keep clear contrast in light and dark app themes.
 - The snackbar supports one optional action.
 - The module uses system haptic feedback constants.
 - The Android system controls haptic availability and user settings.
@@ -71,5 +77,15 @@ Dev Tools also reports if the installed app contains the native module.
 - The iOS module compiles for the iOS 27 Simulator.
 - The complete iOS development app builds and reports that the native module is ready.
 - Repeated builds reuse DerivedData when the build command and settings stay unchanged.
-- Android compilation is pending because this machine has no Android SDK.
+- The Android development app builds and installs on an Android 16 emulator.
+- The emulator shows the semantic success snackbar in light and dark themes.
+- The emulator shows the semantic error snackbar in the light theme.
+- The calendar flow shows the semantic success snackbar after a confirmed save.
 - Physical-device haptic feel remains a device-only check.
+
+## Evidence
+
+- [Android success in light mode](../verification/evidence/native-feedback/android-success-light.jpg)
+- [Android error in light mode](../verification/evidence/native-feedback/android-error-light.jpg)
+- [Android success in dark mode](../verification/evidence/native-feedback/android-success-dark.jpg)
+- [Android calendar save](../verification/evidence/native-calendar/android-saved-toast.jpg)

@@ -15,9 +15,9 @@ function createAdapter(
   overrides: Partial<CalendarNativeAdapter> = {},
 ): jest.Mocked<CalendarNativeAdapter> {
   return {
+    addEvent: jest.fn(async () => ({ action: "saved", id: "event-1" })),
     platform: "ios",
-    presentEventForm: jest.fn(async () => ({ action: "saved", id: "event-1" })),
-    requestWriteOnlyPermission: jest.fn(async () => ({ status: "granted", canAskAgain: true })),
+    requestPermission: jest.fn(async () => ({ status: "granted", canAskAgain: true })),
     ...overrides,
   } as jest.Mocked<CalendarNativeAdapter>;
 }
@@ -80,7 +80,7 @@ describe("calendar date and time selection", () => {
 describe("AddToCalendarCoordinator", () => {
   it("returns permission denial without opening the native form", async () => {
     const adapter = createAdapter({
-      requestWriteOnlyPermission: jest.fn(async () => ({
+      requestPermission: jest.fn(async () => ({
         status: "denied" as const,
         canAskAgain: true,
       })),
@@ -90,13 +90,13 @@ describe("AddToCalendarCoordinator", () => {
     await expect(coordinator.submit(activity, FUTURE_START, NOW)).resolves.toEqual({
       status: "permission-denied",
     });
-    expect(adapter.requestWriteOnlyPermission).toHaveBeenCalledTimes(1);
-    expect(adapter.presentEventForm).not.toHaveBeenCalled();
+    expect(adapter.requestPermission).toHaveBeenCalledTimes(1);
+    expect(adapter.addEvent).not.toHaveBeenCalled();
   });
 
   it("distinguishes permanent permission denial", async () => {
     const adapter = createAdapter({
-      requestWriteOnlyPermission: jest.fn(async () => ({
+      requestPermission: jest.fn(async () => ({
         status: "denied" as const,
         canAskAgain: false,
       })),
@@ -106,12 +106,12 @@ describe("AddToCalendarCoordinator", () => {
     await expect(coordinator.submit(activity, FUTURE_START, NOW)).resolves.toEqual({
       status: "permission-blocked",
     });
-    expect(adapter.presentEventForm).not.toHaveBeenCalled();
+    expect(adapter.addEvent).not.toHaveBeenCalled();
   });
 
   it("reports cancellation from the native event form", async () => {
     const adapter = createAdapter({
-      presentEventForm: jest.fn(async () => ({ action: "canceled" as const, id: null })),
+      addEvent: jest.fn(async () => ({ action: "canceled" as const, id: null })),
     });
     const coordinator = new AddToCalendarCoordinator(adapter);
 
@@ -126,7 +126,7 @@ describe("AddToCalendarCoordinator", () => {
       resolveForm = resolve;
     });
     const adapter = createAdapter({
-      presentEventForm: jest.fn(() => pendingForm),
+      addEvent: jest.fn(() => pendingForm),
     });
     const coordinator = new AddToCalendarCoordinator(adapter);
 
@@ -136,7 +136,7 @@ describe("AddToCalendarCoordinator", () => {
     await expect(coordinator.submit(activity, FUTURE_START, NOW)).resolves.toEqual({
       status: "duplicate",
     });
-    expect(adapter.presentEventForm).toHaveBeenCalledTimes(1);
+    expect(adapter.addEvent).toHaveBeenCalledTimes(1);
 
     resolveForm?.({ action: "saved", id: "event-1" });
     await expect(firstSubmission).resolves.toEqual({ status: "saved" });
@@ -144,7 +144,7 @@ describe("AddToCalendarCoordinator", () => {
 
   it("returns a stable error result for unexpected native failures", async () => {
     const adapter = createAdapter({
-      presentEventForm: jest.fn(async () => {
+      addEvent: jest.fn(async () => {
         throw new Error("Native calendar failed");
       }),
     });
@@ -155,14 +155,14 @@ describe("AddToCalendarCoordinator", () => {
     });
   });
 
-  it("uses the Android system form without requesting calendar permission", async () => {
+  it("requests Android calendar permission and confirms a saved event", async () => {
     const adapter = createAdapter({ platform: "android" });
     const coordinator = new AddToCalendarCoordinator(adapter);
 
     await expect(coordinator.submit(activity, FUTURE_START, NOW)).resolves.toEqual({
-      status: "submitted",
+      status: "saved",
     });
-    expect(adapter.requestWriteOnlyPermission).not.toHaveBeenCalled();
-    expect(adapter.presentEventForm).toHaveBeenCalledTimes(1);
+    expect(adapter.requestPermission).toHaveBeenCalledTimes(1);
+    expect(adapter.addEvent).toHaveBeenCalledTimes(1);
   });
 });

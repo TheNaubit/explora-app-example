@@ -21,7 +21,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     package: "com.adlerventures.explora",
-    blockedPermissions: ["android.permission.READ_CALENDAR", "android.permission.WRITE_CALENDAR"],
     icon: "./assets/images/icon.png",
     adaptiveIcon: {
       backgroundColor: "#F7F4EC",

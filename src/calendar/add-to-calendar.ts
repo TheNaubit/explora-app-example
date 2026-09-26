@@ -29,9 +29,9 @@ export type CalendarFormResult = {
 };
 
 export type CalendarNativeAdapter = {
+  addEvent: (event: CalendarEventDraft) => Promise<CalendarFormResult>;
   platform: "android" | "ios" | "web";
-  presentEventForm: (event: CalendarEventDraft) => Promise<CalendarFormResult>;
-  requestWriteOnlyPermission: () => Promise<CalendarPermissionResult>;
+  requestPermission: () => Promise<CalendarPermissionResult>;
 };
 
 export type AddToCalendarResult =
@@ -42,7 +42,6 @@ export type AddToCalendarResult =
   | "permission-blocked"
   | "permission-denied"
   | "saved"
-  | "submitted"
   | "unavailable";
 
 /** Apply a selected day and keep the existing local start time. */
@@ -141,22 +140,16 @@ export class AddToCalendarCoordinator {
     this.isActive = true;
 
     try {
-      if (this.adapter.platform === "ios") {
-        const permission = await this.adapter.requestWriteOnlyPermission();
-        if (permission.status !== "granted") {
-          return {
-            status: permission.canAskAgain
-              ? ("permission-denied" as const)
-              : ("permission-blocked" as const),
-          };
-        }
+      const permission = await this.adapter.requestPermission();
+      if (permission.status !== "granted") {
+        return {
+          status: permission.canAskAgain
+            ? ("permission-denied" as const)
+            : ("permission-blocked" as const),
+        };
       }
 
-      const formResult = await this.adapter.presentEventForm(draftResult.value);
-
-      if (this.adapter.platform === "android") {
-        return { status: "submitted" as const };
-      }
+      const formResult = await this.adapter.addEvent(draftResult.value);
 
       if (formResult.action === "canceled") {
         return { status: "canceled" as const };

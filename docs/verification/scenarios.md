@@ -9,7 +9,7 @@ The assessment expects **6–8** scenarios with steps, expected behavior, observ
 | 3   | Persistence / offline favorites | Relaunch + offline detail                  | Relaunch and saved fallback passed; device-offline run remains required    |
 | 4   | Failure recovery                | Failed refresh adds nothing                | Jest and Maestro state checks passed on iOS Simulator                      |
 | 5   | Lifecycle interruptions         | Background / delayed results               | Maestro slow-load background and resume passed on iOS Simulator            |
-| 6   | Native calendar                 | Permissions / cancel / invalid             | Passed on iOS; Android runtime unavailable                                 |
+| 6   | Native calendar                 | Permissions / cancel / invalid             | Passed on iOS and Android                                                  |
 | 7   | Performance (≥1k)               | Scroll / search + measurement              | Not measured in this development run; release evidence remains required    |
 | 8   | Accessibility                   | Main journey accessibility                 | Catalog state flow passed with larger text; full screen-reader run remains |
 
@@ -167,7 +167,9 @@ The app resumed into the catalog after the delayed request completed.
 - App build: local development build `build-1790261620671.tar.gz`.
 - Activity: local activity `ref-0005`, with a 35-minute duration.
 - Runtime date: 2026-09-24.
-- Android runtime: unavailable on this machine.
+- Android platform: `sdk_gphone64_arm64` emulator on Android 16, API 36.
+- Android activity: `Botanical Garden Walk`, with a 60-minute duration.
+- Android runtime date: 2026-09-26.
 
 ### Steps and expected results
 
@@ -207,6 +209,19 @@ Passed on the iOS 27.0 Simulator.
 
 The focused Jest tests cover past dates, malformed data, invalid durations, both denial states, native errors, and duplicate protection.
 
+The Android flow also passed in a local development build.
+
+1. Explora requested calendar access after the date and time selection.
+2. The user allowed calendar access.
+3. Explora selected writable calendar ID `2`.
+4. Explora created event ID `134`.
+5. The event title was `Botanical Garden Walk`.
+6. Activity Detail showed the native **Added to Calendar** toast.
+7. The toast said that the system calendar saved the activity.
+8. Dev Tools reported the native feedback module as **Ready**.
+9. The Android toast used a green success symbol and a neutral Snackbar surface.
+10. The title used bold text above the supporting message.
+
 ### Evidence
 
 - Automated: `src/calendar/add-to-calendar.test.ts`.
@@ -218,15 +233,19 @@ The focused Jest tests cover past dates, malformed data, invalid durations, both
 - Blocked permission: [`ios-permission-blocked.jpg`](./evidence/native-calendar/ios-permission-blocked.jpg).
 - Pre-filled system form: [`ios-native-event-form.jpg`](./evidence/native-calendar/ios-native-event-form.jpg).
 - Saved state: [`ios-saved.jpg`](./evidence/native-calendar/ios-saved.jpg).
+- Android saved toast: [`android-saved-toast.jpg`](./evidence/native-calendar/android-saved-toast.jpg).
+- Android success preview: [`android-success-light.jpg`](./evidence/native-feedback/android-success-light.jpg).
+- Android error preview: [`android-error-light.jpg`](./evidence/native-feedback/android-error-light.jpg).
+- Android dark success preview: [`android-success-dark.jpg`](./evidence/native-feedback/android-success-dark.jpg).
 - Native build: `dist/eas-builds/build-1790261620671.tar.gz`.
 - Build metadata contains `NSCalendarsWriteOnlyAccessUsageDescription`.
 - Build metadata does not contain `NSCalendarsFullAccessUsageDescription`.
 
 ### Limits
 
-Android does not report whether its system form saved or canceled an event.
+The Android check used a development build on an emulator.
 
-Android runtime behavior remains unverified because this machine has no Android runtime.
+It does not prove behavior on a physical Android device.
 
 ## Scenario 7: Performance with at least 1,000 activities
 

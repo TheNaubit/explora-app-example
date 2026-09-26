@@ -336,6 +336,8 @@ Changing a mode does not silently reset favorites or generated activities.
 - Empty and recovery states enter over 260 milliseconds: fade, 8-point rise, and scale from 0.98. Reduced motion keeps only the fade.
 - Use critically damped springs for direct manipulation.
 - Add haptics only for save, remove, refresh outcomes, errors, and a new settled Explore card.
+- Keep the Android Snackbar surface neutral. Use a leading semantic symbol and tint for each outcome.
+- Keep the outcome in the snackbar text. Do not use symbol tint as the only meaning.
 - Dissolve a card into sampled particles when the user removes it from Favorites.
 - Keep visible dust near 1.1 seconds. Reflow the list over 800 milliseconds.
 - Animate the list to the replacement card. Do not use an instant offset correction.

@@ -16,6 +16,7 @@ expo-env.d.ts
 .kotlin/
 /ios
 /android
+modules/*/android/build/
 *.orig.*
 *.jks
 *.p8
