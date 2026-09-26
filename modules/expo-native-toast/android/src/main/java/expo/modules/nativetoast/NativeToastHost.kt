@@ -11,16 +11,18 @@ import android.text.Spanned
 import android.text.style.StyleSpan
 import android.view.HapticFeedbackConstants
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.snackbar.Snackbar
 import java.lang.ref.WeakReference
 
 internal object NativeToastHost : Application.ActivityLifecycleCallbacks {
-  const val DEFAULT_DURATION_MILLISECONDS = 3_000
+  const val DEFAULT_DURATION_MILLISECONDS = 6_000
   private const val ICON_SIZE_DP = 20
   private const val ICON_SPACING_DP = 12
 
@@ -40,6 +42,7 @@ internal object NativeToastHost : Application.ActivityLifecycleCallbacks {
       playHaptic(anchor, kind)
 
       val snackbar = Snackbar.make(anchor, buildBody(options), options.duration.coerceAtLeast(1_000))
+      findBottomNavigationAnchor(activity.window.decorView)?.let(snackbar::setAnchorView)
       styleMessage(snackbar, kind)
       options.actionLabel?.takeIf(String::isNotBlank)?.let { label ->
         snackbar.setAction(label) { onAction() }
@@ -77,6 +80,27 @@ internal object NativeToastHost : Application.ActivityLifecycleCallbacks {
     icon.setBounds(0, 0, iconSize, iconSize)
     messageView.compoundDrawablePadding = (ICON_SPACING_DP * density).toInt()
     messageView.setCompoundDrawablesRelative(icon, null, null, null)
+  }
+
+  private fun findBottomNavigationAnchor(root: View): View? {
+    val itemContent = root.findViewById<View>(
+      com.google.android.material.R.id.navigation_bar_item_content_container,
+    )
+    val item = itemContent?.parent as? View
+    val navigationBar = item?.parent as? View
+    if (navigationBar?.isShown == true) return navigationBar
+
+    return findVisibleNavigationBar(root)
+  }
+
+  private fun findVisibleNavigationBar(view: View): NavigationBarView? {
+    if (view is NavigationBarView && view.isShown) return view
+    if (view !is ViewGroup) return null
+
+    for (index in 0 until view.childCount) {
+      findVisibleNavigationBar(view.getChildAt(index))?.let { return it }
+    }
+    return null
   }
 
   private fun playHaptic(view: View, kind: NativeToastKind) {

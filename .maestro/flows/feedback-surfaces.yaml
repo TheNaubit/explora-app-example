@@ -24,11 +24,11 @@ tags:
 - tapOn:
     id: "dev-tools-transient-error"
 - extendedWaitUntil:
-    visible: "Could not refresh"
+    visible: "(?s)Could not refresh.*Your current activities are still available\\."
     timeout: 5000
 
 - tapOn:
     id: "dev-tools-calendar-success"
 - extendedWaitUntil:
-    visible: "Added to Calendar"
+    visible: "(?s)Added to Calendar.*The event was saved to your calendar\\."
     timeout: 5000

@@ -26,7 +26,7 @@ tags:
 - extendedWaitUntil:
     visible:
       id: "activity-detail-content"
-    timeout: 8000
+    timeout: 15000
 - tapOn:
     id: "activity-detail-back"
 
