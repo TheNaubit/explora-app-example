@@ -87,6 +87,12 @@ The complete iOS suite passed 8 of 8 flows on 2026-09-25. The run took 12 minute
 
 The iOS suite used a Simulator development build. It did not use a production-release build.
 
+The final iOS release app passed both assessment-required flows without Metro on 2026-09-26.
+
+The saved-detail fallback flow also passed against that release app.
+
+The EventKit form runs in a separate system window. Device Hub completed the final cancel and save actions.
+
 The complete Android suite passed 8 of 8 flows on 2026-09-26. The run took 11 minutes and 35 seconds.
 
 The Android core flow also passed with dark mode, 2.0 font scale, and device networking disabled.

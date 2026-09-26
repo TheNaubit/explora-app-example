@@ -68,6 +68,7 @@ npm run start:dev-client
 | `npm start`                         | Start Expo / Metro                     |
 | `npm run start:dev-client`          | Metro for a development build          |
 | `npm run build:ios:dev:simulator`   | Local EAS iOS Simulator (dev client)   |
+| `npm run build:ios:prod:simulator`  | Local EAS iOS Simulator release app    |
 | `npm run build:android:prod:device` | Local EAS release APK (assessment)     |
 | `npm run lint`                      | Oxlint (deny warnings)                 |
 | `npm run fix`                       | Oxlint `--fix` (deny warnings) + Oxfmt |
@@ -128,7 +129,10 @@ Write wiki pages and agent-facing docs in Simplified Technical English (see `AGE
 ## Current status
 
 The core journey, refresh, favorites, native calendar, and Dev Tools are implemented.
-Assessment scenario evidence and final release artifacts remain incomplete. See [`docs/verification/scenarios.md`](./docs/verification/scenarios.md).
+
+The Android APK and iOS Simulator release app are built and verified. See [`docs/verification/artifacts.md`](./docs/verification/artifacts.md).
+
+The improvement evidence, release note, final presentation, and iOS VoiceOver journey remain incomplete.
 
 ---
 

@@ -4,9 +4,9 @@ The assessment expects **6–8** scenarios with steps, expected behavior, observ
 
 | #   | Scenario                        | Covers                                     | Status                                                                 |
 | --- | ------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------- |
-| 1   | Core journey                    | Search/filter → detail → favorite → reopen | Maestro passed on iOS and Android                                      |
-| 2   | Generated-item refresh          | Successful refresh +1                      | Maestro count checks passed on iOS and Android                         |
-| 3   | Persistence / offline favorites | Relaunch + offline detail                  | Android device-offline reopen passed                                   |
+| 1   | Core journey                    | Search/filter → detail → favorite → reopen | Maestro passed on iOS and Android release builds                       |
+| 2   | Generated-item refresh          | Successful refresh +1                      | Maestro count checks passed on iOS and Android release builds          |
+| 3   | Persistence / offline favorites | Relaunch + offline detail                  | Release checks passed on iOS; Android device-offline reopen passed     |
 | 4   | Failure recovery                | Failed refresh adds nothing                | Jest and Maestro passed on iOS and Android                             |
 | 5   | Lifecycle interruptions         | Background / delayed results               | Maestro background and resume passed on iOS and Android                |
 | 6   | Native calendar                 | Permissions / cancel / invalid             | Passed on iOS and Android                                              |
@@ -39,6 +39,8 @@ Passed on an Android 16 emulator on 2026-09-26.
 
 The Android flow kept the search, filter, favorite, and persisted detail state.
 
+The final iOS release app passed this flow without Metro on 2026-09-26.
+
 ### Evidence
 
 - Maestro: `.maestro/flows/core-journey.yaml`.
@@ -65,6 +67,8 @@ The refresh added exactly one activity. Routine success produced no toast.
 
 The same count and feedback checks passed on an Android 16 emulator on 2026-09-26.
 
+The final iOS release app passed the failure and exact one-item success checks without Metro.
+
 ### Evidence
 
 - Maestro: `.maestro/flows/refresh-integrity.yaml`.
@@ -86,6 +90,8 @@ The same count and feedback checks passed on an Android 16 emulator on 2026-09-2
 ### Observed result
 
 Steps 1–4 passed on the iOS 27.0 Simulator on 2026-09-25.
+
+Steps 1–4 also passed against the final iOS release app on 2026-09-26.
 
 All five steps passed on an Android 16 emulator on 2026-09-26.
 
@@ -123,8 +129,6 @@ Automated verification passed on 2026-09-24.
 - Saved-detail refetch failure keeps the saved copy and uses one error toast.
 
 The iOS Dev Tools screen also displayed the native module status and the new inline recovery design.
-
-The complete failure journey still needs one recorded device run for final submission evidence.
 
 Maestro passed all eight flows on the iOS 27.0 Simulator on 2026-09-25.
 
@@ -179,6 +183,7 @@ Passed on an Android 16 emulator on 2026-09-26.
 
 - Platform: Explora iPhone 18 Pro Simulator on iOS 27.0.
 - App build: local development build `build-1790261620671.tar.gz`.
+- Final release build: `build-1790457549256.tar.gz`.
 - Activity: local activity `ref-0005`, with a 35-minute duration.
 - Runtime date: 2026-09-24.
 - Android platform: `sdk_gphone64_arm64` emulator on Android 16, API 36.
@@ -221,6 +226,10 @@ Passed on the iOS 27.0 Simulator.
 13. Closing the form returned to Activity Detail without a status message.
 14. Saving the form showed **Added to Calendar**.
 
+The final iOS release app repeated the schedule cancellation, system-form cancellation, and save path on 2026-09-26.
+
+It launched from its embedded bundle without Metro. The saved event used `Botanical Garden Walk` with a one-hour duration.
+
 The focused Jest tests cover past dates, malformed data, invalid durations, both denial states, native errors, and duplicate protection.
 
 The Android flow passed in local development and release builds.
@@ -252,8 +261,10 @@ The Android flow passed in local development and release builds.
 - Android success preview: [`android-success-light.jpg`](./evidence/native-feedback/android-success-light.jpg).
 - Android error preview: [`android-error-light.jpg`](./evidence/native-feedback/android-error-light.jpg).
 - Android dark success preview: [`android-success-dark.jpg`](./evidence/native-feedback/android-success-dark.jpg).
-- iOS development build: `dist/eas-builds/build-1790261620671.tar.gz`.
+- Historical iOS development build: `build-1790261620671.tar.gz`.
+- iOS release build: `dist/eas-builds/build-1790457549256.tar.gz`.
 - Android release APK: `dist/eas-builds/build-1790454953687.apk`.
+- Artifact metadata and checksums: [`artifacts.md`](./artifacts.md).
 - Build metadata contains `NSCalendarsWriteOnlyAccessUsageDescription`.
 - Build metadata does not contain `NSCalendarsFullAccessUsageDescription`.
 
@@ -262,6 +273,8 @@ The Android flow passed in local development and release builds.
 The Android check used development and release builds on an emulator.
 
 It does not prove behavior on a physical Android device.
+
+The iOS release check used a Simulator. EventKit required Device Hub for final system-form actions.
 
 ## Scenario 7: Performance with at least 1,000 activities
 
@@ -340,4 +353,6 @@ The keyboard run used the category filter to verify the required search or filte
 
 The accessibility run used an Android emulator. It does not prove physical-device haptics.
 
-The iOS Maestro suite used a Simulator development build. It did not use a production-release build.
+The final iOS release app passed the automated core and saved-detail checks.
+
+The full iOS VoiceOver main journey did not run again against the release app.

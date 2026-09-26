@@ -9,6 +9,7 @@ This area explains how we prove Explora behavior. Prefer links to scenarios, tes
 | Automated tests                                | Jest plus two tagged Maestro assessment flows                                     |
 | State journey automation                       | [Maestro state checks](../operations/maestro.md)                                  |
 | Performance evidence                           | [Scenario 7](./scenarios.md#scenario-7-performance-with-at-least-1000-activities) |
+| Release artifact manifest                      | [artifacts.md](./artifacts.md)                                                    |
 
 Submission packages (video, APK notes, `AI_SESSION.md`) may **point at** these pages. Do not turn this folder into the full submission dump.
 
@@ -19,3 +20,4 @@ Submission packages (video, APK notes, `AI_SESSION.md`) may **point at** these p
 - The Lingui check passed with 153 English source messages and no catalog difference.
 - Android Maestro passed all eight flows.
 - The final Android release APK passed native calendar and assessment checks without Metro.
+- The final iOS Simulator release app passed launch, core, refresh, saved-detail, and native calendar checks without Metro.
