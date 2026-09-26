@@ -11,6 +11,8 @@ The user asked for complete Android test and feature parity verification.
 
 The user also asked to commit all changes.
 
+The user asked to keep only necessary build artifacts on the laptop.
+
 ## Work completed
 
 - Added Android Maestro runner support and Android-safe flow behavior.
@@ -50,6 +52,16 @@ The user also asked to commit all changes.
 - Recorded a stress scroll through the 1,012-activity catalog.
 - The host-GPU stress scroll reported 4.44 percent janky frames after an emulator reboot.
 - The emulator result does not predict physical-device frame times.
+
+## Final delivery
+
+- Retained the final release APK at `dist/eas-builds/build-1790454953687.apk`.
+- Recorded the implementation in commit `2020ed1`.
+- The final APK passed the native calendar flow in 35 seconds.
+- The final APK passed both assessment flows in 2 minutes and 39 seconds.
+- Cleanup reduced ignored build and Maestro output from about 4.5 GB to about 535 MB.
+- Moved superseded APKs and build intermediates to the system Trash.
+- Confirmed a clean worktree after the implementation commit.
 
 ## Limits
 
