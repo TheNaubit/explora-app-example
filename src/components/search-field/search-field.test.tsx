@@ -30,7 +30,8 @@ describe("SearchField", () => {
     expect(input.props.submitBehavior).toBe("blurAndSubmit");
     expect(inputContainerStyle.flex).toBe(1);
     expect(inputContainerStyle.minWidth).toBe(0);
-    expect(inputStyle.height).toBe(MIN_TOUCH_TARGET);
+    expect(inputStyle.height).toBeUndefined();
+    expect(inputStyle.minHeight).toBe(MIN_TOUCH_TARGET);
     expect(inputStyle.paddingVertical).toBe(0);
     expect(inputStyle.textAlignVertical).toBe("center");
     expect(inputStyle.width).toBe("100%");

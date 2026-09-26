@@ -131,6 +131,9 @@ describe("ExploreList", () => {
     );
 
     expect(screen.getByTestId("explore-list")).toBeTruthy();
+    const progress = screen.getByTestId("explore-next-page-progress");
+    expect(progress.props.accessibilityRole).toBe("progressbar");
+    expect(progress.props.accessibilityLabel).toBe("Loading more activities");
     expect(screen.getByTestId("explore-list").props.keyboardDismissMode).toBe("on-drag");
     expect(screen.getByTestId("explore-list").props.keyboardShouldPersistTaps).toBe("handled");
     await fireEvent(screen.getByTestId("explore-list"), "scrollBeginDrag");
