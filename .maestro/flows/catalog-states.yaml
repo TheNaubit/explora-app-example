@@ -3,7 +3,6 @@ name: Catalog loading, empty, error, and recovery
 tags:
   - assessment
   - states
-  - ios
 ---
 - runFlow: ../subflows/reset-test-state.yaml
 
@@ -16,16 +15,14 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - extendedWaitUntil:
     visible:
       id: "explore-empty"
     timeout: 8000
 - assertVisible: "No activities available"
 
-- tapOn:
-    point: "71%, 94%"
+- tapOn: "Dev Tools"
 - scrollUntilVisible:
     element:
       id: "dev-tools-initial-load-slow"
@@ -35,8 +32,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - assertVisible:
     id: "explore-skeleton"
 - extendedWaitUntil:
@@ -44,8 +40,7 @@ tags:
       id: "explore-list"
     timeout: 8000
 
-- tapOn:
-    point: "71%, 94%"
+- tapOn: "Dev Tools"
 - scrollUntilVisible:
     element:
       id: "dev-tools-initial-load-invalid-data"
@@ -55,8 +50,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - extendedWaitUntil:
     visible:
       id: "explore-load-error"
@@ -65,8 +59,7 @@ tags:
 - assertVisible: "The data from the server was invalid."
 - assertNotVisible: "Render Error"
 
-- tapOn:
-    point: "71%, 94%"
+- tapOn: "Dev Tools"
 - scrollUntilVisible:
     element:
       id: "dev-tools-initial-load-normal"
@@ -76,8 +69,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - extendedWaitUntil:
     visible:
       id: "explore-list"

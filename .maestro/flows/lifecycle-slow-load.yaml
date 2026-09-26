@@ -3,7 +3,6 @@ name: Slow load survives background and resume
 tags:
   - assessment
   - lifecycle
-  - ios
 ---
 - runFlow: ../subflows/reset-test-state.yaml
 - scrollUntilVisible:
@@ -15,8 +14,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - assertVisible:
     id: "explore-skeleton"
 - pressKey: Home

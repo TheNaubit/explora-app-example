@@ -3,7 +3,6 @@ name: Favorite opens from its saved snapshot during a detail failure
 tags:
   - assessment
   - core
-  - ios
 ---
 - runFlow: ../subflows/reset-test-state.yaml
 - scrollUntilVisible:
@@ -13,8 +12,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - extendedWaitUntil:
     visible:
       id: "explore-list"
@@ -25,8 +23,7 @@ tags:
     visible: "Remove Botanical Garden Walk from favorites"
     timeout: 8000
 
-- tapOn:
-    point: "71%, 94%"
+- tapOn: "Dev Tools"
 - scrollUntilVisible:
     element:
       id: "dev-tools-favorite-count"
@@ -45,8 +42,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "50%, 94%"
+- tapOn: "Favorites"
 - extendedWaitUntil:
     visible:
       id: "favorites-list"

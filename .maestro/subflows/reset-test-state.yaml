@@ -16,8 +16,7 @@ appId: com.adlerventures.explora
     visible:
       id: "explore-screen"
     timeout: 20000
-- tapOn:
-    point: "71%, 94%"
+- tapOn: "Dev Tools"
 - extendedWaitUntil:
     visible:
       id: "dev-tools-screen"

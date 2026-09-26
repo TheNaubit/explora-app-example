@@ -3,7 +3,6 @@ name: Detail loading, invalid data, and not found
 tags:
   - assessment
   - states
-  - ios
 ---
 - runFlow: ../subflows/reset-test-state.yaml
 - scrollUntilVisible:
@@ -15,8 +14,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - extendedWaitUntil:
     visible:
       id: "explore-list"
@@ -32,8 +30,7 @@ tags:
 - tapOn:
     id: "activity-detail-back"
 
-- tapOn:
-    point: "71%, 94%"
+- tapOn: "Dev Tools"
 - scrollUntilVisible:
     element:
       id: "dev-tools-detail-load-invalid-data"
@@ -43,8 +40,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - tapOn:
     id: "activity-card-act-001"
 - extendedWaitUntil:
@@ -57,8 +53,7 @@ tags:
 - tapOn:
     id: "activity-detail-back"
 
-- tapOn:
-    point: "71%, 94%"
+- tapOn: "Dev Tools"
 - scrollUntilVisible:
     element:
       id: "dev-tools-detail-load-not-found"
@@ -68,8 +63,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - tapOn:
     id: "activity-card-act-001"
 - extendedWaitUntil:

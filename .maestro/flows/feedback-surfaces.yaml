@@ -3,7 +3,6 @@ name: Feedback policy surfaces
 tags:
   - assessment
   - states
-  - ios
 ---
 - runFlow: ../subflows/reset-test-state.yaml
 

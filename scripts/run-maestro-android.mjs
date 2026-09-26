@@ -2,7 +2,6 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import process from "node:process";
 
-const preferredSimulatorName = "Explora iPhone 18 Pro";
 const reportDirectory = "artifacts/maestro";
 
 function findDeviceId() {
@@ -10,25 +9,24 @@ function findDeviceId() {
     return process.env.MAESTRO_DEVICE_ID;
   }
 
-  const output = execFileSync("xcrun", ["simctl", "list", "devices", "booted", "--json"], {
-    encoding: "utf8",
-  });
-  const parsed = JSON.parse(output);
-  const devices = Object.values(parsed.devices).flat();
-  const available = devices.filter((device) => device.isAvailable && device.state === "Booted");
-  const preferred = available.find((device) => device.name === preferredSimulatorName);
+  const output = execFileSync("adb", ["devices"], { encoding: "utf8" });
+  const devices = output
+    .split("\n")
+    .slice(1)
+    .map((line) => line.trim().split(/\s+/))
+    .filter((parts) => parts.length >= 2 && parts[1] === "device")
+    .map(([deviceId]) => deviceId);
+  const emulators = devices.filter((deviceId) => deviceId.startsWith("emulator-"));
 
-  if (preferred) {
-    return preferred.udid;
+  if (emulators.length === 1) {
+    return emulators[0];
   }
 
-  if (available.length === 1) {
-    return available[0].udid;
+  if (devices.length === 1) {
+    return devices[0];
   }
 
-  throw new Error(
-    `Boot ${preferredSimulatorName}, or set MAESTRO_DEVICE_ID to one booted iOS Simulator.`,
-  );
+  throw new Error("Start one Android emulator, or set MAESTRO_DEVICE_ID to one Android device.");
 }
 
 const deviceId = findDeviceId();
@@ -45,11 +43,11 @@ const result = spawnSync(
     "--format",
     "JUNIT",
     "--output",
-    `${reportDirectory}/results.xml`,
+    `${reportDirectory}/android-results.xml`,
     "--test-output-dir",
-    `${reportDirectory}/run`,
+    `${reportDirectory}/android-run`,
     "--exclude-tags",
-    "android",
+    "ios",
     ...process.argv.slice(2),
     ".maestro",
   ],

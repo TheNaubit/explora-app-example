@@ -3,7 +3,6 @@ name: Later-page failure and recovery
 tags:
   - assessment
   - states
-  - ios
 ---
 - runFlow: ../subflows/reset-test-state.yaml
 - scrollUntilVisible:
@@ -19,8 +18,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - runFlow:
     when:
       visible:
@@ -49,10 +47,8 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "13%, 92%"
-- tapOn:
-    point: "71%, 94%"
+- tapOn: "Explore"
+- tapOn: "Dev Tools"
 - extendedWaitUntil:
     visible:
       id: "dev-tools-screen"
@@ -70,8 +66,7 @@ tags:
 - swipe:
     direction: DOWN
     duration: 500
-- tapOn:
-    point: "29%, 94%"
+- tapOn: "Explore"
 - runFlow:
     when:
       visible:
