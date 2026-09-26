@@ -31,6 +31,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 23  | 2026-09-24     | Unified feedback policy; expanded review states; Activity Detail hero merge                        | [ai-sessions/session-023-feedback-policy-and-review-states.md](./ai-sessions/session-023-feedback-policy-and-review-states.md) | OpenAI Codex desktop agent; exact deployment slug unavailable                 |
 | 24  | 2026-09-25     | Explicit async state matrix; kept-alive review modes; Maestro setup and iOS state flows            | [ai-sessions/session-024-state-matrix-and-maestro.md](./ai-sessions/session-024-state-matrix-and-maestro.md)                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 25  | 2026-09-26     | Full assessment audit, remaining evidence map, validation, and session close                       | [ai-sessions/session-025-assessment-audit-and-close.md](./ai-sessions/session-025-assessment-audit-and-close.md)               | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 26  | 2026-09-26     | Design polish for detail, favorites, and states; Favorites appear and next-page footer fixes       | [ai-sessions/session-026-design-polish-and-state-fixes.md](./ai-sessions/session-026-design-polish-and-state-fixes.md)         | Claude Code CLI agent; Claude Opus 5.5 (`claude-opus-5-5`)                    |
 
 ## How to add a later session
 

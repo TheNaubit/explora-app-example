@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import { useLingui } from "@lingui/react/macro";
+import Animated from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { announceStatus } from "@/a11y";
@@ -20,14 +21,18 @@ import { ActivityCategoryBadge } from "@/screens/activity-detail/activity-catego
 import { ActivityDetailControls } from "@/screens/activity-detail/activity-detail-controls";
 import { ActivityDetailErrorState } from "@/screens/activity-detail/activity-detail-error-state";
 import { ActivityDetailSkeleton } from "@/screens/activity-detail/activity-detail-skeleton";
+import { type ActivityFact, ActivityFactList } from "@/screens/activity-detail/activity-fact-list";
 import { AddToCalendarSection } from "@/screens/activity-detail/add-to-calendar-section";
+import { DetailCompactBar } from "@/screens/activity-detail/detail-compact-bar";
 import { HeroImageBlend } from "@/screens/activity-detail/hero-image-blend";
 import {
   ACTIVITY_DETAIL_BOTTOM_CHROME_CLEARANCE,
   ACTIVITY_DETAIL_HERO_ASPECT_RATIO,
   ACTIVITY_DETAIL_HERO_MAX_HEIGHT,
+  ACTIVITY_DETAIL_SCROLL_EVENT_THROTTLE_MS,
 } from "@/screens/activity-detail/constants";
 import { activityDetailMessages } from "@/screens/activity-detail/messages";
+import { useDetailScrollMotion } from "@/screens/activity-detail/use-detail-scroll-motion";
 import type { Activity } from "@/schemas/activity";
 import { spacing, typography, useAppTheme } from "@/theme";
 import { formatDuration } from "@/utils/format-duration";
@@ -79,6 +84,7 @@ function ActivityDetailContent({ bottomInset, id, topInset }: ActivityDetailCont
     return (
       <ActivityDetailErrorState
         body={t(resolveErrorMessage(errorKey))}
+        errorKey={errorKey}
         onRetry={() => {
           void refetch();
         }}
@@ -152,6 +158,15 @@ function ActivityDetailLoaded({
   );
   const cover = getActivityCoverImage(activity);
   const duration = formatDuration(activity.durationMinutes);
+  const motion = useDetailScrollMotion({ heroHeight, safeAreaTop: topInset });
+  const facts = buildActivityFacts({
+    duration,
+    durationLabel: t(activityDetailMessages.duration),
+    location: activity.location,
+    locationLabel: t(activityDetailMessages.location),
+    speak: (label, value) =>
+      i18n._({ ...activityDetailMessages.factAccessibilityLabel, values: { label, value } }),
+  });
 
   useEffect(() => {
     announceStatus(
@@ -175,27 +190,31 @@ function ActivityDetailLoaded({
 
   return (
     <View style={styles.loadedRoot}>
-      <ScrollView
+      <Animated.ScrollView
         contentContainerStyle={[
           styles.scrollContent,
           { paddingBottom: bottomInset + ACTIVITY_DETAIL_BOTTOM_CHROME_CLEARANCE },
         ]}
         contentInsetAdjustmentBehavior="never"
+        onScroll={motion.onScroll}
+        scrollEventThrottle={ACTIVITY_DETAIL_SCROLL_EVENT_THROTTLE_MS}
         testID="activity-detail-content"
       >
         <Link.AppleZoomTarget>
           <View collapsable={false} style={[styles.hero, { height: heroHeight }]}>
-            <Image
-              accessibilityElementsHidden
-              importantForAccessibility="no-hide-descendants"
-              contentFit="cover"
-              placeholder={{ blurhash: cover.blurhash }}
-              placeholderContentFit="cover"
-              source={{ uri: cover.uri }}
-              style={styles.heroImage}
-              testID="activity-detail-hero"
-            />
-            <HeroImageBlend uri={cover.uri} />
+            <Animated.View style={[styles.heroMotion, motion.heroStyle]}>
+              <Image
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+                contentFit="cover"
+                placeholder={{ blurhash: cover.blurhash }}
+                placeholderContentFit="cover"
+                source={{ uri: cover.uri }}
+                style={styles.heroImage}
+                testID="activity-detail-hero"
+              />
+              <HeroImageBlend uri={cover.uri} />
+            </Animated.View>
           </View>
         </Link.AppleZoomTarget>
         <View style={styles.copy}>
@@ -203,19 +222,28 @@ function ActivityDetailLoaded({
             category={activity.category}
             label={t(categoryMessages[activity.category])}
           />
-          <Text accessibilityRole="header" style={[styles.title, { color: theme.colors.text }]}>
+          <Text
+            accessibilityRole="header"
+            selectable
+            style={[styles.title, { color: theme.colors.text }]}
+          >
             {activity.title}
           </Text>
           <Text style={[styles.description, { color: theme.colors.textSecondary }]}>
             {activity.description}
           </Text>
-          <View style={[styles.metadata, { borderColor: theme.colors.border }]}>
-            <DetailValue label={t(activityDetailMessages.location)} value={activity.location} />
-            <DetailValue label={t(activityDetailMessages.duration)} value={duration} />
-          </View>
+          <ActivityFactList facts={facts} />
           <AddToCalendarSection activity={activity} />
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
+      <DetailCompactBar
+        fadeEnd={motion.compactBarFadeEnd}
+        fadeStart={motion.compactBarFadeStart}
+        height={motion.compactBarHeight}
+        safeAreaTop={topInset}
+        scrollY={motion.scrollY}
+        title={activity.title}
+      />
       <ActivityDetailControls
         activity={activity}
         backLabel={t(activityDetailMessages.back)}
@@ -226,20 +254,37 @@ function ActivityDetailLoaded({
   );
 }
 
-type DetailValueProps = {
-  label: string;
-  value: string;
+type BuildActivityFactsOptions = {
+  duration: string;
+  durationLabel: string;
+  location: string;
+  locationLabel: string;
+  speak: (label: string, value: string) => string;
 };
 
-function DetailValue({ label, value }: DetailValueProps) {
-  const theme = useAppTheme();
-
-  return (
-    <View style={styles.detailValue}>
-      <Text style={[styles.detailLabel, { color: theme.colors.textSecondary }]}>{label}</Text>
-      <Text style={[styles.detailText, { color: theme.colors.text }]}>{value}</Text>
-    </View>
-  );
+function buildActivityFacts({
+  duration,
+  durationLabel,
+  location,
+  locationLabel,
+  speak,
+}: BuildActivityFactsOptions): ActivityFact[] {
+  return [
+    {
+      accessibilityLabel: speak(locationLabel, location),
+      id: "location",
+      label: locationLabel,
+      symbol: { android: "location_on", ios: "mappin.and.ellipse", web: "location_on" },
+      value: location,
+    },
+    {
+      accessibilityLabel: speak(durationLabel, duration),
+      id: "duration",
+      label: durationLabel,
+      symbol: { android: "schedule", ios: "clock", web: "schedule" },
+      value: duration,
+    },
+  ];
 }
 
 const styles = StyleSheet.create({
@@ -249,40 +294,21 @@ const styles = StyleSheet.create({
   },
   description: {
     ...typography.body,
-    marginBottom: spacing.space32,
+    marginBottom: spacing.space24,
     textAlign: "left",
-  },
-  detailLabel: {
-    ...typography.caption,
-    marginBottom: spacing.space4,
-    textAlign: "left",
-  },
-  detailText: {
-    ...typography.bodyStrong,
-    textAlign: "left",
-  },
-  detailValue: {
-    flex: 1,
-    minWidth: 120,
   },
   hero: {
-    overflow: "hidden",
     width: "100%",
   },
   heroImage: {
     height: "100%",
     width: "100%",
   },
+  heroMotion: {
+    ...StyleSheet.absoluteFill,
+  },
   loadedRoot: {
     flex: 1,
-  },
-  metadata: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.space24,
-    paddingVertical: spacing.space20,
   },
   notFound: {
     flex: 1,

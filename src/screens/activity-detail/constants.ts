@@ -1,8 +1,23 @@
-/** Hero ratio keeps the card-to-detail zoom visually related. */
-export const ACTIVITY_DETAIL_HERO_ASPECT_RATIO = 1.24;
+/** Hero ratio keeps the card-to-detail zoom visually related. A square gives the photo room. */
+export const ACTIVITY_DETAIL_HERO_ASPECT_RATIO = 1;
 
 /** Maximum hero height on tall or wide devices. */
-export const ACTIVITY_DETAIL_HERO_MAX_HEIGHT = 390;
+export const ACTIVITY_DETAIL_HERO_MAX_HEIGHT = 440;
+
+/** Scroll event interval for scroll-linked detail motion (one frame at 60 fps). */
+export const ACTIVITY_DETAIL_SCROLL_EVENT_THROTTLE_MS = 16;
+
+/** Compact bar height below the safe area. It holds the 44-point hero controls. */
+export const ACTIVITY_DETAIL_COMPACT_BAR_HEIGHT = 56;
+
+/** Scroll distance over which the compact bar fades in. */
+export const ACTIVITY_DETAIL_COMPACT_BAR_FADE_DISTANCE = 56;
+
+/** Visual size of a fact symbol. */
+export const ACTIVITY_DETAIL_FACT_ICON_SIZE = 20;
+
+/** Tonal frame around a fact symbol. */
+export const ACTIVITY_DETAIL_FACT_ICON_FRAME = 40;
 
 /** Static blur for the lower hero copy. */
 export const ACTIVITY_DETAIL_HERO_BLUR_RADIUS = 32;

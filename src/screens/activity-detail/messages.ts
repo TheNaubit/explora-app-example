@@ -21,6 +21,12 @@ export const activityDetailMessages = {
     comment: "Label for the activity location value",
     message: "Location",
   }),
+  factAccessibilityLabel: msg({
+    id: "activityDetail.factAccessibilityLabel",
+    comment:
+      "Spoken text for one activity fact row. {label} is Location or Duration. {value} is the fact, for example North Garden or 1 hr",
+    message: "{label}, {value}",
+  }),
   unavailableTitle: msg({
     id: "activityDetail.unavailableTitle",
     comment: "Heading when an activity id does not exist",
@@ -93,6 +99,11 @@ export const activityDetailMessages = {
     id: "activityDetail.calendar.add",
     comment: "Button that opens the activity schedule sheet before the system calendar form",
     message: "Add to Calendar",
+  }),
+  calendarAddSubtitle: msg({
+    id: "activityDetail.calendar.addSubtitle",
+    comment: "Supporting line below the Add to Calendar button title",
+    message: "Choose a date and time",
   }),
   calendarAddHint: msg({
     id: "activityDetail.calendar.addHint",

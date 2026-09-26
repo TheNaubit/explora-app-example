@@ -149,6 +149,7 @@ export function ExploreList({
     return (
       <ExploreLoadError
         body={t(resolveErrorMessage(errorKey))}
+        errorKey={errorKey}
         filtersInOverlay={filtersInOverlay}
         headerHeight={headerHeight}
         onRetry={() => {

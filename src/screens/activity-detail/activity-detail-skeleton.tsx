@@ -16,10 +16,21 @@ import {
   SKELETON_PULSE_MS,
 } from "@/components/constants";
 import {
+  ACTIVITY_DETAIL_FACT_ICON_FRAME,
   ACTIVITY_DETAIL_HERO_ASPECT_RATIO,
   ACTIVITY_DETAIL_HERO_MAX_HEIGHT,
 } from "@/screens/activity-detail/constants";
+
 import { radii, spacing, useAppTheme } from "@/theme";
+
+/** Skeleton height of one fact row: icon frame plus vertical row padding. */
+const FACT_ROW_SKELETON_HEIGHT = ACTIVITY_DETAIL_FACT_ICON_FRAME + spacing.space24;
+
+/** Number of fact rows in the loaded layout. */
+const FACT_ROW_COUNT = 2;
+
+/** Skeleton height of the calendar action. It uses the same tile and padding as a fact row. */
+const CALENDAR_ACTION_SKELETON_HEIGHT = FACT_ROW_SKELETON_HEIGHT;
 
 type ActivityDetailSkeletonProps = {
   loadingAnnouncement: string;
@@ -89,9 +100,10 @@ export function ActivityDetailSkeleton({ loadingAnnouncement }: ActivityDetailSk
 
 const styles = StyleSheet.create({
   action: {
-    borderRadius: radii.medium,
-    height: spacing.space48,
-    marginTop: spacing.space32,
+    borderCurve: "continuous",
+    borderRadius: radii.large,
+    height: CALENDAR_ACTION_SKELETON_HEIGHT,
+    marginTop: spacing.space24,
     width: "100%",
   },
   body: {
@@ -107,29 +119,31 @@ const styles = StyleSheet.create({
     width: "72%",
   },
   category: {
-    borderRadius: radii.small,
-    height: spacing.space12,
-    width: "28%",
+    borderRadius: radii.full,
+    height: spacing.space40,
+    width: "32%",
   },
   content: {
     paddingBottom: spacing.space48,
   },
   copy: {
-    padding: spacing.space24,
+    paddingHorizontal: spacing.space24,
+    paddingTop: spacing.space16,
   },
   hero: {
     width: "100%",
   },
   meta: {
-    borderRadius: radii.small,
-    height: spacing.space40,
-    marginTop: spacing.space32,
+    borderCurve: "continuous",
+    borderRadius: radii.large,
+    height: FACT_ROW_SKELETON_HEIGHT * FACT_ROW_COUNT,
+    marginTop: spacing.space24,
     width: "100%",
   },
   title: {
     borderRadius: radii.small,
     height: spacing.space32,
-    marginTop: spacing.space12,
+    marginTop: spacing.space16,
     width: "84%",
   },
 });

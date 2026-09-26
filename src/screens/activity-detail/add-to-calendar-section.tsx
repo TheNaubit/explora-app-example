@@ -10,6 +10,10 @@ import { resolveFeedbackPresentation } from "@/feedback/feedback-policy";
 import { showNativeToast } from "@/native-toast";
 import { CalendarSchedulePicker } from "@/screens/activity-detail/calendar-schedule-picker";
 import { CalendarStatusBanner } from "@/screens/activity-detail/calendar-status-banner";
+import {
+  ACTIVITY_DETAIL_FACT_ICON_FRAME,
+  ACTIVITY_DETAIL_FACT_ICON_SIZE,
+} from "@/screens/activity-detail/constants";
 import { activityDetailMessages } from "@/screens/activity-detail/messages";
 import { useAddToCalendar } from "@/screens/activity-detail/use-add-to-calendar";
 import type { Activity } from "@/schemas/activity";
@@ -85,7 +89,9 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
             style={(state) => [
               styles.addButton,
               {
-                backgroundColor: theme.colors.surfaceElevated,
+                backgroundColor: state.pressed
+                  ? theme.colors.surfaceSecondary
+                  : theme.colors.surface,
                 borderColor: theme.colors.border,
                 opacity: isActive ? 0.64 : 1,
                 transform: [{ scale: state.pressed ? PRESS_SCALE : 1 }],
@@ -97,15 +103,20 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
             <View style={[styles.icon, { backgroundColor: theme.colors.surfaceSecondary }]}>
               <SymbolView
                 name={{ ios: "calendar.badge.plus", android: "event", web: "event" }}
-                size={24}
+                size={ACTIVITY_DETAIL_FACT_ICON_SIZE}
                 tintColor={theme.colors.accent}
               />
             </View>
-            <Text style={[styles.addLabel, { color: theme.colors.text }]}>
-              {isActive
-                ? t(activityDetailMessages.calendarBusy)
-                : t(activityDetailMessages.calendarAdd)}
-            </Text>
+            <View style={styles.addCopy}>
+              <Text style={[styles.addLabel, { color: theme.colors.text }]}>
+                {isActive
+                  ? t(activityDetailMessages.calendarBusy)
+                  : t(activityDetailMessages.calendarAdd)}
+              </Text>
+              <Text style={[styles.addSubtitle, { color: theme.colors.textSecondary }]}>
+                {t(activityDetailMessages.calendarAddSubtitle)}
+              </Text>
+            </View>
           </A11yPressable>
         }
       />
@@ -219,7 +230,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "stretch",
     borderCurve: "continuous",
-    borderRadius: radii.medium,
+    borderRadius: radii.large,
     borderWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
     gap: spacing.space12,
@@ -228,17 +239,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.space16,
     paddingVertical: spacing.space12,
   },
+  addCopy: {
+    flex: 1,
+  },
   addLabel: {
     ...typography.bodyStrong,
-    flex: 1,
+    textAlign: "left",
+  },
+  addSubtitle: {
+    ...typography.caption,
     textAlign: "left",
   },
   icon: {
     alignItems: "center",
-    borderRadius: radii.full,
-    height: MIN_TOUCH_TARGET,
+    borderCurve: "continuous",
+    borderRadius: radii.small,
+    height: ACTIVITY_DETAIL_FACT_ICON_FRAME,
     justifyContent: "center",
-    width: MIN_TOUCH_TARGET,
+    width: ACTIVITY_DETAIL_FACT_ICON_FRAME,
   },
   root: {
     gap: spacing.space12,

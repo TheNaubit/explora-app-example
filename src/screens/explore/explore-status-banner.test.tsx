@@ -23,4 +23,21 @@ describe("ExploreStatusBanner", () => {
     expect(onDismiss).toHaveBeenCalledTimes(1);
     expect(onRetryNextPage).toHaveBeenCalledTimes(1);
   });
+
+  it("names an offline cause and uses the shared retry wording", async () => {
+    await render(
+      createElement(ExploreStatusBanner, {
+        banner: { kind: "nextPage", errorKey: "errors.networkOffline" },
+        onDismiss: jest.fn(),
+        onRetryNextPage: jest.fn(),
+      }),
+      { wrapper: createProviders() },
+    );
+
+    expect(screen.getByText("Try again")).toBeTruthy();
+    expect(screen.queryByText("Retry")).toBeNull();
+    expect(screen.getByTestId("explore-next-page-error").props.style).not.toContainEqual(
+      expect.objectContaining({ marginHorizontal: expect.any(Number) }),
+    );
+  });
 });

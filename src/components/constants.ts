@@ -41,3 +41,15 @@ export const SKELETON_PULSE_MS = 1000;
 /** Opacity range for skeleton pulse (idle → peak). */
 export const SKELETON_OPACITY_MIN = 0.55;
 export const SKELETON_OPACITY_MAX = 1;
+
+/** Strong ease-out curve for timed entrances (Emil / DESIGN motion). */
+export const EASE_OUT_CURVE = [0.23, 1, 0.32, 1] as const;
+
+/** Entrance duration for occasional state surfaces (empty, error). */
+export const STATE_ENTRANCE_MS = 260;
+
+/** Vertical travel for a state surface entrance, in points. */
+export const STATE_ENTRANCE_OFFSET = 8;
+
+/** Start scale for a state surface entrance. Never start from zero. */
+export const STATE_ENTRANCE_SCALE = 0.98;

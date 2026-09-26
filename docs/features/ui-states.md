@@ -34,15 +34,15 @@ Use explicit TanStack Query state for expected data outcomes. Pair failures with
 
 Explore and Activity Detail use the same approach. Handled failures stay out of the Expo development error overlay.
 
-| Outcome                                   | Mechanism                                                      |
-| ----------------------------------------- | -------------------------------------------------------------- |
-| First load waiting                        | `isPending` with no data renders the matching skeleton         |
-| Catalog or detail first load failed       | `error` with no data renders `RecoveryState` with one retry    |
-| Empty list                                | A successful zero-item result renders the designed empty state |
-| Detail not-found                          | A soft null result renders the designed not-found state        |
-| Refetch failed while content stays usable | One transient error toast keeps current content visible        |
-| Next page failed                          | One inline footer recovery keeps current content visible       |
-| Refresh mutation failed                   | One transient error toast keeps content and adds nothing       |
+| Outcome                                   | Mechanism                                                                                                                                                            |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| First load waiting                        | `isPending` with no data renders the matching skeleton                                                                                                               |
+| Catalog or detail first load failed       | `error` with no data renders `RecoveryState` with one retry. The symbol follows the `errorKey`                                                                       |
+| Empty list                                | A successful zero-item result renders the designed empty state                                                                                                       |
+| Detail not-found                          | A soft null result renders the designed not-found state                                                                                                              |
+| Refetch failed while content stays usable | One transient error toast keeps current content visible                                                                                                              |
+| Next page failed                          | One inline footer recovery keeps current content visible. It is a quiet compact footer below the last card, with a neutral cause symbol and a tonal "Try again" pill |
+| Refresh mutation failed                   | One transient error toast keeps content and adds nothing                                                                                                             |
 
 Do not catch mutation or event-handler failures only with an Error Boundary. Those paths need explicit UI state.
 

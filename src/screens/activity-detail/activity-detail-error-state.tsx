@@ -1,10 +1,12 @@
 import { ScrollView, StyleSheet } from "react-native";
 
 import { RecoveryState } from "@/components/recovery-state";
+import type { ErrorKey } from "@/i18n/error-keys";
 import { spacing } from "@/theme";
 
 type ActivityDetailErrorStateProps = {
   body: string;
+  errorKey?: ErrorKey;
   onRetry: () => void;
   retryLabel: string;
   title: string;
@@ -14,6 +16,7 @@ type ActivityDetailErrorStateProps = {
 /** Show a full-screen recovery state when Activity Detail cannot load. */
 export function ActivityDetailErrorState({
   body,
+  errorKey,
   onRetry,
   retryLabel,
   title,
@@ -32,6 +35,7 @@ export function ActivityDetailErrorState({
         actionLabel={retryLabel}
         actionTestID="activity-detail-error-retry"
         body={body}
+        errorKey={errorKey}
         onAction={onRetry}
         testID="activity-detail-error"
         title={title}

@@ -7,17 +7,21 @@
 - Back returns to the previous tab state.
 - Search, category filters, and Explore scroll position stay in memory.
 - The screen shows an illustrated category badge, title, description, location, and duration.
+- The hero is square and capped at 440 points.
 - A masked blurred hero layer merges the image into the screen background.
+- A pull-down stretches the hero. The top edge stays on the screen top. There is no parallax.
+- Location and duration show as grouped fact rows with a symbol tile, a value, and a label.
+- A solid compact bar with the activity title fades in after the hero scrolls away. The screen reader skips it.
 - The right hero control saves or removes the activity.
 - The heart is filled when the activity is saved.
 - A saved activity snapshot appears immediately and remains available offline.
 - A failed snapshot refetch keeps the saved copy visible.
 - A failed snapshot refetch shows one temporary error toast.
-- Loading uses a hero and content skeleton.
+- Loading uses a hero and content skeleton with the same fact and calendar row shapes.
 - An invalid activity id shows a not-found state with a back action.
-- Other first-load errors use a dedicated full-screen recovery state.
+- Other first-load errors use a dedicated full-screen recovery state. Its symbol names the cause, for example no connection.
 - Detail failures stay in query state. They do not throw a render error into the Expo development overlay.
-- One full-width **Add to Calendar** action opens the schedule controls.
+- One full-width **Add to Calendar** action opens the schedule controls. A supporting line reads "Choose a date and time".
 - The action has no disclosure chevron because it starts a task.
 - The iOS sheet fits the native date and time picker without expanding to full height.
 - The fixed iOS sheet has no drag handle and does not allow swipe dismissal.

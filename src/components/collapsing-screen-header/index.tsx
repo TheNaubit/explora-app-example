@@ -13,6 +13,7 @@ import {
   COLLAPSING_HEADER_BLUR_INTENSITY,
   COLLAPSING_HEADER_COMPACT_HEIGHT,
   COLLAPSING_HEADER_DISTANCE,
+  COLLAPSING_HEADER_TITLE_MAX_FONT_SCALE,
   COLLAPSING_HEADER_TRANSLATION,
 } from "@/components/collapsing-screen-header/constants";
 import { primitiveColors, spacing, typography, useAppTheme } from "@/theme";
@@ -91,6 +92,7 @@ export function CollapsingScreenHeader({
             <Animated.View style={expandedStyle}>
               <Text
                 accessibilityRole="header"
+                maxFontSizeMultiplier={COLLAPSING_HEADER_TITLE_MAX_FONT_SCALE}
                 style={[styles.heading, { color: theme.colors.text }]}
               >
                 {title}

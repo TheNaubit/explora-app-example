@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactElement, type Ref } from "react";
+import { useEffect, useMemo, useRef, type ReactElement, type Ref } from "react";
 import {
   Keyboard,
   type NativeScrollEvent,
@@ -10,10 +10,12 @@ import {
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
 import type { LegendListRef } from "@legendapp/list/react-native";
 import { HapticSupport, Settings, useRealtimeComposer } from "react-native-pulsar";
-import {
+import Animated, {
   Easing,
-  LinearTransition,
+  Extrapolation,
+  interpolate,
   type SharedValue,
+  useAnimatedStyle,
   useAnimatedScrollHandler,
   useReducedMotion,
   useSharedValue,
@@ -36,8 +38,12 @@ import {
   ACTIVITY_CARD_HAPTIC_FREQUENCY,
 } from "@/components/activity-card-carousel/constants";
 import { getActivityCardCarouselLayout } from "@/components/activity-card-carousel/layout";
+import { createGatedReflowTransition } from "@/components/activity-card-carousel/reflow-transition";
 import type { Activity } from "@/schemas/activity";
-import { COLLAPSING_HEADER_TRANSLATION } from "@/components/collapsing-screen-header/constants";
+import {
+  COLLAPSING_HEADER_DISTANCE,
+  COLLAPSING_HEADER_TRANSLATION,
+} from "@/components/collapsing-screen-header/constants";
 import { spacing, useAppTheme } from "@/theme";
 
 type ActivityCardCarouselProps = {
@@ -87,6 +93,10 @@ export function ActivityCardCarousel({
   const isReconcilingFocus = useSharedValue(0);
   const reduceMotion = useReducedMotion();
   const listRef = useRef<LegendListRef | null>(null);
+  const reflowArmed = useSharedValue(0);
+  const reflowTransition = useMemo(() => createGatedReflowTransition(reflowArmed), [reflowArmed]);
+  const armedOrderKey = useRef<string | null>(null);
+  const disarmTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previousActivityIds = useRef(activities.map(({ id }) => id));
   const { playDiscrete } = useRealtimeComposer();
   const usesCardCarousel =
@@ -99,7 +109,29 @@ export function ActivityCardCarousel({
     width,
   });
   const activityOrderKey = activities.map(({ id }) => id).join("|");
+  const usesReflowAnimation = favoriteRemovalEffect !== undefined && !reduceMotion;
+  const armReflow = usesReflowAnimation
+    ? () => {
+        armedOrderKey.current = activityOrderKey;
+        reflowArmed.set(1);
+      }
+    : undefined;
   const settledIndex = useRef(Math.round((initialScrollOffset ?? 0) / itemExtent));
+  // The footer moves with the cards while the header collapses, so it stays next to the last card.
+  const footerStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateY: followsCollapsingHeader
+          ? interpolate(
+              cardScrollOffset.get(),
+              [0, COLLAPSING_HEADER_DISTANCE],
+              [0, -headerTranslation],
+              Extrapolation.CLAMP,
+            )
+          : 0,
+      },
+    ],
+  }));
   const onScroll = useAnimatedScrollHandler((event) => {
     const normalizedOffset = event.contentOffset.y + (event.contentInset?.top ?? 0);
     if (isReconcilingFocus.get() === 0) {
@@ -156,6 +188,25 @@ export function ActivityCardCarousel({
     usesCardCarousel,
   ]);
 
+  useEffect(() => {
+    // Disarm after the removal has reflowed. The dissolve ends before the list changes.
+    if (armedOrderKey.current === null || armedOrderKey.current === activityOrderKey) return;
+
+    armedOrderKey.current = null;
+    if (disarmTimer.current) clearTimeout(disarmTimer.current);
+    disarmTimer.current = setTimeout(() => {
+      reflowArmed.set(0);
+      disarmTimer.current = null;
+    }, PARTICLE_DISSOLVE_REFLOW_DURATION_MS);
+  }, [activityOrderKey, reflowArmed]);
+
+  useEffect(
+    () => () => {
+      if (disarmTimer.current) clearTimeout(disarmTimer.current);
+    },
+    [],
+  );
+
   function handleMomentumScrollEnd(event: NativeSyntheticEvent<NativeScrollEvent>) {
     onScrollPositionChange?.(event);
 
@@ -209,6 +260,7 @@ export function ActivityCardCarousel({
             itemExtent={itemExtent}
             key={`${item.id}-${index}`}
             mediaHeight={mediaHeight}
+            onFavoriteRemovalStart={armReflow}
             scrollOffset={cardScrollOffset}
           />
         ) : (
@@ -216,22 +268,21 @@ export function ActivityCardCarousel({
             activity={item}
             detailHref={{ pathname: "/activity/[id]", params: { id: item.id } }}
             favoriteRemovalEffect={favoriteRemovalEffect}
+            onFavoriteRemovalStart={armReflow}
           />
         )
       }
-      itemLayoutAnimation={
-        favoriteRemovalEffect && !reduceMotion
-          ? LinearTransition.duration(PARTICLE_DISSOLVE_REFLOW_DURATION_MS).easing(
-              Easing.bezier(...PARTICLE_DISSOLVE_REFLOW_EASING),
-            )
-          : undefined
-      }
+      itemLayoutAnimation={usesReflowAnimation ? reflowTransition : undefined}
       maintainVisibleContentPosition={false}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.4}
       refreshControl={refreshControl}
       ListHeaderComponent={listHeaderComponent}
-      ListFooterComponent={listFooterComponent}
+      ListFooterComponent={
+        listFooterComponent ? (
+          <Animated.View style={footerStyle}>{listFooterComponent}</Animated.View>
+        ) : null
+      }
       contentContainerStyle={[styles.listPad, { paddingBottom: endPadding, paddingTop: padTop }]}
       contentInsetAdjustmentBehavior={followsCollapsingHeader ? "never" : "automatic"}
       decelerationRate={usesCardCarousel ? "fast" : "normal"}

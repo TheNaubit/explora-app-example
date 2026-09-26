@@ -8,6 +8,7 @@
 - Favorites survive app relaunch.
 - Refresh success or failure does not clear favorites.
 - The **Favorites** tab lists favorite snapshots and shows an empty state when none exist.
+- When favorites exist, one line below the title states the count and "Available offline".
 - The Favorites empty state uses a centered composition and a transparent clay illustration.
 - Removing a card from Favorites dissolves its captured surface through a batched Skia particle atlas.
 - The dust remains visible for approximately 1.1 seconds and uses a dense iOS particle grid.

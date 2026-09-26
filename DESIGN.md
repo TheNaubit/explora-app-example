@@ -220,22 +220,26 @@ The initial generated concept is stored at [`docs/design/references/explora-app-
 
 ## Component kit
 
-| Component                  | Purpose                                        | Anatomy                                              | States                                               | Limits and rejected use                                               |
-| -------------------------- | ---------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `ScreenFrame`              | Define the safe screen region                  | Screen announcement and content region               | Light, dark, focused return                          | Use on every screen                                                   |
-| `SearchField`              | Explore title search                           | Symbol, centered single-line input, clear action     | Idle, focused, typed, disabled                       | Use in the iOS and web Explore header. Android uses `Stack.SearchBar` |
-| `CategoryChip`             | One category filter control                    | Clay icon, label, and glass material                 | Default, pressed, lightly tinted selected, focused   | `A11yPressable` required for labels and selected state                |
-| `CategoryChipRow`          | Category filter row                            | All plus catalog categories and edge fades           | All, multiple selected, start, middle, end           | All is exclusive; category selections combine with OR                 |
-| `ActivityCategoryBadge`    | Identify a detail category                     | Clay icon, label, and filter-chip material           | Light, dark, glass, solid fallback                   | Static text; do not expose button semantics                           |
-| `ActivityCard`             | Open an activity                               | Photo, image-derived body, title, metadata, favorite | Default, pressed, focused, unfocused, saved, offline | Do not nest another card or put Liquid Glass on its surface           |
-| `FavoriteButton`           | Save or remove an activity                     | Heart symbol and 44-point target                     | Unsaved, saved, pressed, focused                     | Give it one clear spoken action                                       |
-| `PrimaryButton`            | Commit the main action                         | Label and optional leading symbol                    | Default, pressed, focused, busy, disabled            | Use one primary action per screen                                     |
-| `IconButton`               | Run a compact action                           | System symbol and 44-point target                    | Default, pressed, focused, disabled                  | Use glass only above imagery or scrolling                             |
-| `NativeTabs` (Expo Router) | Move between Explore, Favorites, and Dev Tools | System tab bar                                       | Light, dark, minimize on scroll                      | Use `expo-router/native-tabs`                                         |
-| `InlineStatusBanner`       | Explain an actionable failure                  | Tonal panel, compact symbol, title, body, and retry  | Error, pressed, focused                              | Keep it flat. Never pair it with a toast for the same outcome         |
-| `ActivityCardSkeleton`     | Reserve the activity card shape                | Full cover, favorite target, and lower copy blocks   | Loading pulse, reduced motion                        | Match the full-image card. Do not use a full-screen spinner           |
-| `EmptyState`               | Explain a resolved empty result                | Illustration, title, body, and action                | Search empty, favorites empty, not-found             | Give one next action                                                  |
-| `DevTools`                 | Reproduce assessment states                    | Grouped settings, feedback previews, and reset       | Normal, slow, offline, timeout, invalid, not-found   | Keep device offline testing separate                                  |
+| Component                  | Purpose                                        | Anatomy                                              | States                                               | Limits and rejected use                                                                                                                   |
+| -------------------------- | ---------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `ScreenFrame`              | Define the safe screen region                  | Screen announcement and content region               | Light, dark, focused return                          | Use on every screen                                                                                                                       |
+| `SearchField`              | Explore title search                           | Symbol, centered single-line input, clear action     | Idle, focused, typed, disabled                       | Use in the iOS and web Explore header. Android uses `Stack.SearchBar`                                                                     |
+| `CategoryChip`             | One category filter control                    | Clay icon, label, and glass material                 | Default, pressed, lightly tinted selected, focused   | `A11yPressable` required for labels and selected state                                                                                    |
+| `CategoryChipRow`          | Category filter row                            | All plus catalog categories and edge fades           | All, multiple selected, start, middle, end           | All is exclusive; category selections combine with OR                                                                                     |
+| `ActivityCategoryBadge`    | Identify a detail category                     | Clay icon, label, and filter-chip material           | Light, dark, glass, solid fallback                   | Static text; do not expose button semantics                                                                                               |
+| `ActivityCard`             | Open an activity                               | Photo, image-derived body, title, metadata, favorite | Default, pressed, focused, unfocused, saved, offline | Do not nest another card or put Liquid Glass on its surface                                                                               |
+| `FavoriteButton`           | Save or remove an activity                     | Heart symbol and 44-point target                     | Unsaved, saved, pressed, focused                     | Give it one clear spoken action                                                                                                           |
+| `PrimaryButton`            | Commit the main action                         | Label and optional leading symbol                    | Default, pressed, focused, busy, disabled            | Use one primary action per screen                                                                                                         |
+| `IconButton`               | Run a compact action                           | System symbol and 44-point target                    | Default, pressed, focused, disabled                  | Use glass only above imagery or scrolling                                                                                                 |
+| `NativeTabs` (Expo Router) | Move between Explore, Favorites, and Dev Tools | System tab bar                                       | Light, dark, minimize on scroll                      | Use `expo-router/native-tabs`                                                                                                             |
+| `InlineStatusBanner`       | Explain an actionable failure                  | Tonal panel, compact symbol, title, body, and retry  | Error, pressed, focused                              | Keep it flat, with no border. Use it when the failure blocks the current action, for example a calendar error. Never pair it with a toast |
+| `ActivityCardSkeleton`     | Reserve the activity card shape                | Full cover, favorite target, and lower copy blocks   | Loading pulse, reduced motion                        | Match the full-image card. Do not use a full-screen spinner                                                                               |
+| `EmptyState`               | Explain a resolved empty result                | Illustration, title, body, and action                | Search empty, favorites empty, not-found             | Give one next action. Enters with a short fade and rise                                                                                   |
+| `RecoveryState`            | Explain an important failure                   | Cause symbol, title, body, and one retry action      | Offline, timeout, invalid data, unknown              | The symbol names the cause. Enters with a short fade and rise                                                                             |
+| `ActivityFactList`         | Show activity facts on Activity Detail         | Grouped surface, symbol tile, value, and label       | Light, dark, large text                              | One spoken label per row. Not focusable with a hardware keyboard                                                                          |
+| `DetailCompactBar`         | Keep the title visible after the hero scrolls  | Solid background, hairline, and one-line title       | Hidden at rest, visible after the hero leaves        | Decorative copy of the title. Hidden from the screen reader                                                                               |
+| `FavoritesSummary`         | State the favorite count and offline access    | Offline symbol and one caption line                  | Shown only when favorites exist                      | Use a Lingui plural for the count                                                                                                         |
+| `DevTools`                 | Reproduce assessment states                    | Grouped settings, feedback previews, and reset       | Normal, slow, offline, timeout, invalid, not-found   | Keep device offline testing separate                                                                                                      |
 
 Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF Symbols on iOS and Material Symbols on Android.
 
@@ -260,11 +264,16 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 ### Activity detail
 
 - Push the detail screen from Explore or Favorites.
-- Use one edge-to-edge hero image when an image exists.
+- Use one edge-to-edge square hero image when an image exists. Cap it at 440 points.
+- Stretch the hero when the user pulls down. Keep its top edge on the screen top and its bottom edge still.
+- Do not add parallax. The copy must not slide over the blended hero edge.
+- Fade in the solid compact bar with the activity title after the hero leaves the screen.
 - Crossfade the lower hero from the sharp image into a blurred copy.
 - Fade the blurred copy into the screen background. Do not leave a hard seam.
 - Put glass controls above the hero image on supported iOS devices.
 - Show an illustrated category badge, title, description, location, and duration in that order.
+- Show location and duration as grouped fact rows. Each row has a symbol tile, a value, and a label.
+- Show Add to Calendar as one row with a symbol tile, a title, and a supporting line. Align its tile with the fact tiles. Do not add a chevron, because the action starts a task.
 - Keep one primary save action.
 - Preserve the previous search, filter, and scroll position on back.
 
@@ -276,6 +285,7 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 - Do not show search or category filters.
 - Do not show discovery refresh or pagination controls.
 - Show a composed empty state when no favorites exist.
+- Show the favorite count and offline access below the title when favorites exist.
 - Center the empty-state composition and use artwork with a transparent background.
 - Do not add folders, sorting, or collection management.
 
@@ -287,7 +297,10 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 - Refresh failure keeps stale content visible.
 - Temporary failures use one native error toast when content stays usable.
 - Important failures use one inline recovery surface with one clear action.
-- Keep inline recovery compact. Use a danger tint and a direct accent retry action.
+- The recovery symbol names the cause: no connection, timeout, invalid data, or a neutral alert.
+- Every retry action reads "Try again".
+- Keep inline recovery compact. Use a danger tint and a direct accent retry action when the failure blocks the current action.
+- A next-page failure does not block anything, so it uses no alarm color. End the list with a compact footer directly below the last card. Put a neutral cause symbol, the title, and a tonal "Try again" pill in one row. Put the cause text below. Keep it short enough to fit fully between the last card and the tab bar, and move it with the cards when the header collapses.
 - Do not style inline recovery as an elevated alert card.
 - Routine success and cancellation stay silent.
 - A confirmed calendar save is the only success toast.
@@ -320,12 +333,14 @@ Changing a mode does not silently reset favorites or generated activities.
 - Use `0.97` scale for buttons and image cards. Use a highlight for list rows.
 - Keep frequent feedback between 100 and 150 milliseconds.
 - Use a strong ease-out for timed entrances. Keep them below 300 milliseconds.
+- Empty and recovery states enter over 260 milliseconds: fade, 8-point rise, and scale from 0.98. Reduced motion keeps only the fade.
 - Use critically damped springs for direct manipulation.
 - Add haptics only for save, remove, refresh outcomes, errors, and a new settled Explore card.
 - Dissolve a card into sampled particles when the user removes it from Favorites.
 - Keep visible dust near 1.1 seconds. Reflow the list over 800 milliseconds.
 - Animate the list to the replacement card. Do not use an instant offset correction.
 - Keep the replacement card selected throughout the list handoff.
+- Run the reflow transition only after a removal starts. Place cards at once on first display, on a return to the tab, and after a text size change.
 - Use one batched Skia canvas. Do not create one React Native view for each particle.
 - Use `react-native-pulsar` only. Route system outcomes through `@/haptics/feedback`.
 - Use the realtime composer only for documented custom feedback. Do not use `expo-haptics`.
@@ -340,6 +355,7 @@ Do not animate recycled list rows on entry. Do not move content only for decorat
 - Do not put important text inside photography.
 - Use semantic colors. Do not rely on color alone.
 - Let labels grow. Do not clip primary actions at large text sizes.
+- Cap the expanded display title at 1.5 times the base size, like native large titles. Keep one-word titles on one line. The title still scales.
 - Route every user-facing string through Lingui.
 - Mirror directional layout for RTL. Keep non-directional symbols unchanged.
 

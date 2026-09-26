@@ -11,6 +11,18 @@ export const favoritesMessages = {
     comment: "Visible display title on the Favorites screen",
     message: "Favorites",
   }),
+  summary: msg({
+    id: "favorites.summary",
+    comment:
+      "Line below the Favorites title. {count} is the number of favorite activities. Favorites stay on the device and open without a network connection",
+    message: "{count, plural, one {# activity} other {# activities}} · Available offline",
+  }),
+  summaryAccessibilityLabel: msg({
+    id: "favorites.summaryAccessibilityLabel",
+    comment:
+      "Spoken version of the Favorites summary line. {count} is the number of favorite activities",
+    message: "{count, plural, one {# activity} other {# activities}}, available offline",
+  }),
   emptyTitle: msg({
     id: "favorites.emptyTitle",
     comment: "Title when the user has no favorite activities",

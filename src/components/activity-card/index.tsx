@@ -42,6 +42,8 @@ type ActivityCardProps = {
   imageBlurRadius?: number;
   /** Optional Explore-only media height for the focused vertical card layout. */
   mediaHeight?: number;
+  /** Runs before a Favorites removal starts, so the list can prepare its reflow. */
+  onFavoriteRemovalStart?: () => void;
   onPress?: () => void;
   testID?: string;
   /** Removes list spacing when a parent owns the carousel step. */
@@ -87,6 +89,7 @@ export function ActivityCard({
   imageBlurOpacity,
   imageBlurRadius,
   mediaHeight,
+  onFavoriteRemovalStart,
   onPress,
   testID,
   variant = "list",
@@ -107,7 +110,10 @@ export function ActivityCard({
             imageBlurOpacity={imageBlurOpacity}
             imageBlurRadius={imageBlurRadius}
             mediaHeight={mediaHeight}
-            onFavoriteRemove={startDissolve}
+            onFavoriteRemove={() => {
+              onFavoriteRemovalStart?.();
+              return startDissolve();
+            }}
             onPress={onPress}
             testID={testID}
             variant={variant}

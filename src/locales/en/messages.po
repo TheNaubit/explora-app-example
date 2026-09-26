@@ -13,10 +13,28 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. Line below the Favorites title. {count} is the number of favorite activities. Favorites stay on the device and open without a network connection
+#. js-lingui-explicit-id
+#: src/screens/favorites/messages.ts
+msgid "favorites.summary"
+msgstr "{count, plural, one {# activity} other {# activities}} · Available offline"
+
+#. Spoken version of the Favorites summary line. {count} is the number of favorite activities
+#. js-lingui-explicit-id
+#: src/screens/favorites/messages.ts
+msgid "favorites.summaryAccessibilityLabel"
+msgstr "{count, plural, one {# activity} other {# activities}}, available offline"
+
 #. Accessible label for a Dev Tools data row and its current value
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
 msgid "devTools.valueAccessibilityLabel"
+msgstr "{label}, {value}"
+
+#. Spoken text for one activity fact row. {label} is Location or Duration. {value} is the fact, for example North Garden or 1 hr
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.factAccessibilityLabel"
 msgstr "{label}, {value}"
 
 #. Screen reader status after a request mode changes
@@ -201,6 +219,12 @@ msgstr "Catalog activities"
 #: src/screens/explore/messages.ts
 msgid "explore.refreshSuccessAnnounce"
 msgstr "Catalog refreshed. One activity added."
+
+#. Supporting line below the Add to Calendar button title
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.calendar.addSubtitle"
+msgstr "Choose a date and time"
 
 #. Validation heading when no activity date is selected
 #. js-lingui-explicit-id
@@ -672,12 +696,6 @@ msgstr "Reset request modes"
 msgid "devTools.resetModesHint"
 msgstr "Restores normal catalog and detail loads, and successful refresh."
 
-#. Retry label on Explore inline error banners
-#. js-lingui-explicit-id
-#: src/screens/explore/messages.ts
-msgid "explore.bannerRetry"
-msgstr "Retry"
-
 #. Spoken label for the favorite toggle when the activity is not a favorite
 #. js-lingui-explicit-id
 #: src/a11y/activity-label.ts
@@ -826,6 +844,12 @@ msgstr "Try a different search or clear your filters."
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
 msgid "explore.loadErrorRetry"
+msgstr "Try again"
+
+#. Retry label on Explore inline error banners. Same wording as other retry actions
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.bannerRetry"
 msgstr "Try again"
 
 #. Retry action in the inline recovery preview

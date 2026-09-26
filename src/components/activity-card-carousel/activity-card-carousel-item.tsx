@@ -27,6 +27,7 @@ type ActivityCardCarouselItemProps = {
   index: number;
   itemExtent: number;
   mediaHeight: number;
+  onFavoriteRemovalStart?: () => void;
   scrollOffset: SharedValue<number>;
 };
 
@@ -40,6 +41,7 @@ export function ActivityCardCarouselItem({
   index,
   itemExtent,
   mediaHeight,
+  onFavoriteRemovalStart,
   scrollOffset,
 }: ActivityCardCarouselItemProps) {
   const cardStyle = useAnimatedStyle(() => {
@@ -98,6 +100,7 @@ export function ActivityCardCarouselItem({
           imageBlurOpacity={imageBlurOpacity}
           imageBlurRadius={ACTIVITY_CARD_INACTIVE_BLUR_RADIUS}
           mediaHeight={mediaHeight}
+          onFavoriteRemovalStart={onFavoriteRemovalStart}
           variant="carousel"
         />
       </Animated.View>

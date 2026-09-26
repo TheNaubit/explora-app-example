@@ -40,6 +40,7 @@ describe("Favorites screen", () => {
     });
 
     await waitFor(() => expect(screen.getByTestId("favorites-empty")).toBeTruthy());
+    expect(screen.queryByTestId("favorites-summary")).toBeNull();
     await fireEvent.press(screen.getByTestId("empty-state-action"));
     expect(router.navigate).toHaveBeenCalledWith("/");
   });
@@ -62,6 +63,9 @@ describe("Favorites screen", () => {
     const list = screen.getByTestId("favorites-list");
     expect(screen.getByText(SUPPLIED_ACTIVITIES[0].title)).toBeTruthy();
     expect(screen.queryByText("Favorite details stay available offline.")).toBeNull();
+    expect(screen.getByTestId("favorites-summary").props.accessibilityLabel).toBe(
+      "1 activity, available offline",
+    );
     expect(list.props.snapToInterval).toBeGreaterThan(0);
     expect(list.props.decelerationRate).toBe("fast");
     expect(list.props.disableIntervalMomentum).toBe(true);

@@ -16,6 +16,7 @@ import { getCollapsingHeaderTranslation } from "@/components/collapsing-screen-h
 import { EmptyState } from "@/components/empty-state";
 import { ScreenFrame } from "@/components/screen-frame";
 import { emptyFavoritesIllustration } from "@/illustrations";
+import { FavoritesSummary } from "@/screens/favorites/favorites-summary";
 import { favoritesMessages } from "@/screens/favorites/messages";
 import { useFavoriteActivities } from "@/screens/favorites/use-favorite-activities";
 import { spacing, typography, useAppTheme } from "@/theme";
@@ -25,6 +26,12 @@ const IOS_FAVORITES_HEADER_BODY_HEIGHT = 76;
 
 /** Extra Favorites header height for each Dynamic Type scale step. */
 const IOS_FAVORITES_HEADER_FONT_SCALE_ALLOWANCE = 40;
+
+/** Space below the summary line inside the header. */
+const IOS_FAVORITES_HEADER_SUMMARY_GAP = 2;
+
+/** Font scale where the summary can wrap to a second line on narrow phones. */
+const IOS_FAVORITES_SUMMARY_WRAP_FONT_SCALE = 1.3;
 
 /** Favorites tab with the same focused card presentation as Explore. */
 export function Favorites() {
@@ -62,9 +69,16 @@ function FavoritesNative() {
   const scrollOffset = useSharedValue(0);
   const { fontScale: measuredFontScale } = useWindowDimensions();
   const fontScale = measuredFontScale ?? 1;
+  const hasFavorites = activities.length > 0;
+  const fontScaleStep = Math.max(0, fontScale - 1);
+  const summaryLines = fontScale >= IOS_FAVORITES_SUMMARY_WRAP_FONT_SCALE ? 2 : 1;
+  const summaryHeight = hasFavorites
+    ? typography.caption.lineHeight * fontScale * summaryLines + IOS_FAVORITES_HEADER_SUMMARY_GAP
+    : 0;
   const headerBodyHeight =
     IOS_FAVORITES_HEADER_BODY_HEIGHT +
-    Math.max(0, fontScale - 1) * IOS_FAVORITES_HEADER_FONT_SCALE_ALLOWANCE;
+    fontScaleStep * IOS_FAVORITES_HEADER_FONT_SCALE_ALLOWANCE +
+    summaryHeight;
   const headerHeight = insets.top + headerBodyHeight;
   const headerTranslation = getCollapsingHeaderTranslation(headerBodyHeight);
   const title = t(favoritesMessages.screenTitle);
@@ -121,7 +135,9 @@ function FavoritesNative() {
         scrollOffset={scrollOffset}
         title={title}
         translation={headerTranslation}
-      />
+      >
+        {hasFavorites ? <FavoritesSummary count={activities.length} /> : null}
+      </CollapsingScreenHeader>
       <A11y.ScreenChange title={title} />
     </View>
   );
@@ -140,6 +156,7 @@ function FavoritesStandard() {
       <Text style={[styles.heading, { color: theme.colors.text }]} accessibilityRole="header">
         {t(favoritesMessages.heading)}
       </Text>
+      {activities.length > 0 ? <FavoritesSummary count={activities.length} /> : null}
       {activities.length === 0 ? (
         <View style={styles.empty} testID="favorites-empty">
           <EmptyState

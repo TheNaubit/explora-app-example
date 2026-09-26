@@ -78,6 +78,17 @@ describe("ActivityDetail", () => {
     await waitFor(() => expect(screen.getByText(activity.title)).toBeTruthy());
     expect(screen.getByText(activity.description)).toBeTruthy();
     expect(screen.getByText(activity.location)).toBeTruthy();
+    expect(screen.getByTestId("activity-detail-fact-location").props.accessibilityLabel).toBe(
+      `Location, ${activity.location}`,
+    );
+    expect(screen.getByTestId("activity-detail-fact-duration").props.accessibilityLabel).toMatch(
+      /^Duration, /,
+    );
+    expect(screen.getByTestId("activity-detail-fact-location").props.focusable).toBe(false);
+    expect(
+      screen.getByTestId("activity-detail-compact-bar", { includeHiddenElements: true }).props
+        .accessibilityElementsHidden,
+    ).toBe(true);
     expect(
       screen.getByTestId("activity-detail-hero-blend", { includeHiddenElements: true }),
     ).toBeTruthy();

@@ -97,8 +97,8 @@ export const exploreMessages = {
   }),
   bannerRetry: msg({
     id: "explore.bannerRetry",
-    comment: "Retry label on Explore inline error banners",
-    message: "Retry",
+    comment: "Retry label on Explore inline error banners. Same wording as other retry actions",
+    message: "Try again",
   }),
   refreshSuccessAnnounce: msg({
     id: "explore.refreshSuccessAnnounce",

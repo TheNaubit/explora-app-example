@@ -3,11 +3,13 @@ import { StyleSheet, View } from "react-native";
 import Animated, { type SharedValue, useAnimatedScrollHandler } from "react-native-reanimated";
 
 import { RecoveryState } from "@/components/recovery-state";
+import type { ErrorKey } from "@/i18n/error-keys";
 import { ExploreHeader } from "@/screens/explore/explore-header";
 import { spacing, useAppTheme } from "@/theme";
 
 type ExploreLoadErrorProps = {
   body: string;
+  errorKey?: ErrorKey;
   filtersInOverlay: boolean;
   headerHeight: number;
   onRetry: () => void;
@@ -20,6 +22,7 @@ type ExploreLoadErrorProps = {
 /** Show a recoverable first-load failure without a render exception. */
 export function ExploreLoadError({
   body,
+  errorKey,
   filtersInOverlay,
   headerHeight,
   onRetry,
@@ -51,6 +54,7 @@ export function ExploreLoadError({
           actionLabel={retryLabel}
           actionTestID="explore-load-error-retry"
           body={body}
+          errorKey={errorKey}
           onAction={onRetry}
           testID="explore-load-error"
           title={title}

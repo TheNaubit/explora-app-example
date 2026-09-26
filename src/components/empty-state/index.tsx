@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Image, type ImageSource } from "expo-image";
+import Animated from "react-native-reanimated";
 
 import { A11yPressable } from "@/components/a11y-pressable";
 import { MIN_TOUCH_TARGET } from "@/components/constants";
+import { useStateEntrance } from "@/hooks/use-state-entrance";
 import { radii, spacing, typography, useAppTheme } from "@/theme";
 
 type EmptyStateProps = {
@@ -31,10 +33,11 @@ export function EmptyState({
 }: EmptyStateProps) {
   const theme = useAppTheme();
   const isCentered = presentation === "centered";
+  const entranceStyle = useStateEntrance();
 
   return (
-    <View
-      style={[styles.root, isCentered ? styles.centeredRoot : undefined]}
+    <Animated.View
+      style={[styles.root, isCentered ? styles.centeredRoot : undefined, entranceStyle]}
       testID={testID ?? "empty-state"}
     >
       {illustration && isCentered ? (
@@ -105,7 +108,7 @@ export function EmptyState({
           {actionLabel}
         </Text>
       </A11yPressable>
-    </View>
+    </Animated.View>
   );
 }
 
