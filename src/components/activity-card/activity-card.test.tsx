@@ -30,7 +30,7 @@ describe("ActivityCard", () => {
       }),
     ).toBeTruthy();
     expect(view.getByTestId(`activity-card-image-${activity.id}`)).toBeTruthy();
-    fireEvent.press(view.getByTestId(`activity-card-${activity.id}`));
+    await fireEvent.press(view.getByTestId(`activity-card-${activity.id}`));
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 

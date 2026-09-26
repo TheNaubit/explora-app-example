@@ -39,7 +39,7 @@ The user then requested a session journal and one commit containing the complete
 - `npm run lint` passed.
 - `npx tsc --noEmit` passed.
 - All 46 Jest suites and 178 tests passed their assertions.
-- Jest reported React `act()` warnings and an open handle after completion.
+- The initial Jest run reported React `act()` warnings and an open handle after completion.
 - `npm run test:e2e:syntax` passed all Maestro YAML checks.
 - The existing JUnit report records eight passing Maestro flows and zero failures.
 - `npm run lingui:extract` updated the English message catalog before the commit.
@@ -49,3 +49,17 @@ The user then requested a session journal and one commit containing the complete
 This session commits the feedback policy, explicit async states, Dev Tools controls, Maestro flows, documentation, and assessment evidence together.
 
 The remaining items are release, device, accessibility, performance, improvement, and submission evidence. They are not complete in this session.
+
+## Follow-up: clean Jest and Lingui checks
+
+The user requested fixes for the Jest warnings, the open handle, and the Lingui catalog check.
+
+- Awaited all React Native Testing Library interaction promises.
+- Added a test Query client with no query or mutation cache timers.
+- Scheduled TanStack Query test notifications through the microtask queue.
+- Kept the loading-state request pending until the test verified its skeleton.
+- Confirmed that all 46 Jest suites and 178 tests pass without warnings.
+- Confirmed that Jest exits normally without forced termination.
+- Confirmed that the Lingui check passes with 151 English source messages.
+- Confirmed that the message catalog has no generated difference.
+- Ran Oxlint, Oxfmt, TypeScript, and `git diff --check` successfully.

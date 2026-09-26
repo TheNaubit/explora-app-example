@@ -18,11 +18,11 @@ describe("FavoriteButton", () => {
       wrapper: createProviders(),
     });
 
-    fireEvent.press(view.getByTestId(`favorite-button-${activity.id}`));
+    await fireEvent.press(view.getByTestId(`favorite-button-${activity.id}`));
     expect(isFavorite(activity.id)).toBe(true);
 
     await view.rerender(createElement(FavoriteButton, { activity }));
-    fireEvent.press(view.getByTestId(`favorite-button-${activity.id}`));
+    await fireEvent.press(view.getByTestId(`favorite-button-${activity.id}`));
     expect(isFavorite(activity.id)).toBe(false);
   });
 });

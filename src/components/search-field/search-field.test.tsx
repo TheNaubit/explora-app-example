@@ -14,12 +14,12 @@ describe("SearchField", () => {
       wrapper: createProviders(),
     });
 
-    fireEvent.changeText(screen.getByTestId("search-field-input"), "Garden");
+    await fireEvent.changeText(screen.getByTestId("search-field-input"), "Garden");
     expect(onDebouncedChange).not.toHaveBeenCalledWith("Garden");
 
     await waitFor(() => expect(onDebouncedChange).toHaveBeenCalledWith("Garden"));
 
-    fireEvent.press(screen.getByTestId("search-field-clear"));
+    await fireEvent.press(screen.getByTestId("search-field-clear"));
     await waitFor(() => expect(onDebouncedChange).toHaveBeenCalledWith(""));
 
     const input = screen.getByTestId("search-field-input");

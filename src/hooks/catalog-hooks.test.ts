@@ -15,9 +15,9 @@ import { useRefreshCatalog } from "@/hooks/use-refresh-catalog";
 import { LIST_PAGE_SIZE } from "@/mocks/constants";
 import { resetCatalog } from "@/mocks/catalog-store";
 import { resetReviewModeState, setInitialLoadMode, setRefreshMode } from "@/mocks/review-mode";
-import { createQueryClient } from "@/query/client";
 import { clearFavorites } from "@/state/favorites";
 import { resetDiscoveryFilters } from "@/state/discovery";
+import { createTestQueryClient as createQueryClient } from "@/test/create-test-query-client";
 
 jest.mock("@/mocks/delay", () => ({
   MOCK_DELAY_MS: { normal: 1, slow: 2 },

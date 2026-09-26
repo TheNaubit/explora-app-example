@@ -5,9 +5,9 @@ import { I18nProvider } from "@lingui/react";
 import { i18n } from "@lingui/core";
 
 import { ApiError } from "@/query/errors";
-import { createQueryClient } from "@/query/client";
 import { showNativeToast } from "@/native-toast";
 import { useExploreRefresh } from "@/screens/explore/use-explore-refresh";
+import { createTestQueryClient as createQueryClient } from "@/test/create-test-query-client";
 
 i18n.load("en", {});
 i18n.activate("en");

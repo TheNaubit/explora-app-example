@@ -19,7 +19,7 @@ describe("EmptyState", () => {
     );
 
     expect(screen.getByText("No matches")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("empty-state-action"));
+    await fireEvent.press(screen.getByTestId("empty-state-action"));
     expect(onAction).toHaveBeenCalledTimes(1);
   });
 

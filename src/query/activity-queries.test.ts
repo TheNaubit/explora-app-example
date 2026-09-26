@@ -1,5 +1,3 @@
-import { QueryClient } from "@tanstack/react-query";
-
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { LIST_PAGE_SIZE } from "@/mocks/constants";
 import { resetCatalog } from "@/mocks/catalog-store";
@@ -13,13 +11,13 @@ import {
 } from "@/query/activity-queries";
 import { activityKeys } from "@/query/keys";
 import { ApiError } from "@/query/errors";
-import { createQueryClient } from "@/query/client";
 import {
   addFavorite,
   clearFavorites,
   getOfflineSnapshot,
   listFavoriteIds,
 } from "@/state/favorites";
+import { createTestQueryClient as createQueryClient } from "@/test/create-test-query-client";
 
 jest.mock("@/mocks/delay", () => ({
   MOCK_DELAY_MS: { normal: 1, slow: 2 },
@@ -74,7 +72,7 @@ describe("activity query helpers", () => {
     addFavorite(favorite);
     setRefreshMode("fail");
 
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
     await expect(runRefreshCatalog(queryClient)).rejects.toBeInstanceOf(ApiError);
     expect(listFavoriteIds()).toEqual([favorite.id]);
   });

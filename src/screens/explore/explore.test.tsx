@@ -88,7 +88,7 @@ describe("Explore screen", () => {
     });
 
     await waitFor(() => expect(screen.getByTestId("explore-empty")).toBeTruthy());
-    fireEvent.press(screen.getByTestId("empty-state-action"));
+    await fireEvent.press(screen.getByTestId("empty-state-action"));
     expect(getDiscoveryFilters().searchQuery).toBe("");
   });
 
@@ -107,7 +107,7 @@ describe("Explore screen", () => {
     expect(consoleError).not.toHaveBeenCalled();
 
     setInitialLoadMode("normal");
-    fireEvent.press(screen.getByTestId("explore-load-error-retry"));
+    await fireEvent.press(screen.getByTestId("explore-load-error-retry"));
     await waitFor(() => expect(screen.getByTestId("explore-list")).toBeTruthy());
 
     consoleError.mockRestore();

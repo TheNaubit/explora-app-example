@@ -1,8 +1,9 @@
 import { createElement } from "react";
 import { StyleSheet } from "react-native";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
+import { delay } from "@/mocks/delay";
 import { resetCatalog } from "@/mocks/catalog-store";
 import { resetReviewModeState, setDetailLoadMode } from "@/mocks/review-mode";
 import { showNativeToast } from "@/native-toast";
@@ -24,6 +25,8 @@ jest.mock("@/native-toast", () => ({
   isNativeToastAvailable: jest.fn(() => true),
   showNativeToast: jest.fn(),
 }));
+
+const mockDelay = delay as jest.MockedFunction<typeof delay>;
 
 jest.mock("expo-glass-effect", () => {
   const React = require("react");
@@ -58,6 +61,7 @@ jest.mock("expo-router", () => {
 describe("ActivityDetail", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockDelay.mockResolvedValue(undefined);
     clearFavorites();
     resetCatalog();
     resetReviewModeState();
@@ -97,7 +101,7 @@ describe("ActivityDetail", () => {
     expect(screen.queryByText("Save for later")).toBeNull();
     expect(screen.queryByText("Remove from Favorites")).toBeNull();
 
-    fireEvent.press(favoriteButton);
+    await fireEvent.press(favoriteButton);
     expect(isFavorite(activity.id)).toBe(true);
     await waitFor(() =>
       expect(screen.getByTestId("activity-detail-favorite").props.accessibilityState).toEqual({
@@ -105,7 +109,7 @@ describe("ActivityDetail", () => {
       }),
     );
 
-    fireEvent.press(screen.getByTestId("activity-detail-favorite"));
+    await fireEvent.press(screen.getByTestId("activity-detail-favorite"));
     await waitFor(() => expect(isFavorite(activity.id)).toBe(false));
   });
 
@@ -120,6 +124,13 @@ describe("ActivityDetail", () => {
   });
 
   it("exposes one accessible loading status while detail is pending", async () => {
+    let resolveDelay: (() => void) | undefined;
+    mockDelay.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveDelay = resolve;
+        }),
+    );
     setDetailLoadMode("slow");
 
     await render(createElement(ActivityDetail, { id: SUPPLIED_ACTIVITIES[0].id }), {
@@ -129,6 +140,11 @@ describe("ActivityDetail", () => {
     const skeleton = screen.getByTestId("activity-detail-skeleton");
     expect(skeleton.props.accessibilityRole).toBe("progressbar");
     expect(skeleton.props.accessibilityLabel).toBe("Loading activity details.");
+
+    await act(async () => {
+      resolveDelay?.();
+    });
+    await waitFor(() => expect(screen.getByTestId("activity-detail-content")).toBeTruthy());
   });
 
   it("handles invalid detail data without a render error", async () => {
@@ -152,7 +168,7 @@ describe("ActivityDetail", () => {
     expect(consoleError).not.toHaveBeenCalled();
 
     setDetailLoadMode("normal");
-    fireEvent.press(screen.getByTestId("activity-detail-error-retry"));
+    await fireEvent.press(screen.getByTestId("activity-detail-error-retry"));
     await waitFor(() => expect(screen.getByText(activity.title)).toBeTruthy());
 
     consoleError.mockRestore();
@@ -182,7 +198,7 @@ describe("ActivityDetail", () => {
     );
     expect(calendarButtonStyle.width).toBeGreaterThan(calendarButtonStyle.minHeight);
 
-    fireEvent.press(calendarButton);
+    await fireEvent.press(calendarButton);
 
     expect(await screen.findByTestId("calendar-schedule-sheet")).toBeTruthy();
     expect(screen.getByText("Date and time")).toBeTruthy();
@@ -193,7 +209,7 @@ describe("ActivityDetail", () => {
       "hourAndMinute",
     ]);
 
-    fireEvent.press(screen.getByTestId("calendar-schedule-cancel"));
+    await fireEvent.press(screen.getByTestId("calendar-schedule-cancel"));
     await waitFor(() => expect(screen.queryByTestId("calendar-schedule-sheet")).toBeNull());
   });
 
@@ -221,8 +237,8 @@ describe("ActivityDetail", () => {
     const activity = SUPPLIED_ACTIVITIES[0];
     const queryClient = createQueryClient();
     queryClient.setDefaultOptions({
-      mutations: { networkMode: "always", retry: 0 },
-      queries: { networkMode: "always", retry: false },
+      mutations: { gcTime: Infinity, networkMode: "always", retry: 0 },
+      queries: { gcTime: Infinity, networkMode: "always", retry: false },
     });
     addFavorite(activity);
     setDetailLoadMode("fail");

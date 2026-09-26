@@ -40,7 +40,7 @@ describe("Favorites screen", () => {
     });
 
     await waitFor(() => expect(screen.getByTestId("favorites-empty")).toBeTruthy());
-    fireEvent.press(screen.getByTestId("empty-state-action"));
+    await fireEvent.press(screen.getByTestId("empty-state-action"));
     expect(router.navigate).toHaveBeenCalledWith("/");
   });
 
@@ -81,7 +81,7 @@ describe("Favorites screen", () => {
       wrapper: createProviders(),
     });
 
-    fireEvent.press(screen.getByTestId(`favorite-button-${activity.id}`));
+    await fireEvent.press(screen.getByTestId(`favorite-button-${activity.id}`));
 
     await waitFor(() => expect(screen.getByTestId("favorites-empty")).toBeTruthy());
   });

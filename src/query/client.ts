@@ -3,6 +3,10 @@ import { QueryClient } from "@tanstack/react-query";
 import { getQueryRetryDelay, QUERY_RETRY_COUNT, QUERY_STALE_TIME_MS } from "@/query/constants";
 import { isApiError } from "@/query/errors";
 
+type CreateQueryClientOptions = {
+  gcTime?: number;
+};
+
 /** Do not retry client or validation failures from the mock envelope. */
 export function shouldRetryQuery(failureCount: number, error: Error): boolean {
   if (isApiError(error)) {
@@ -15,10 +19,11 @@ export function shouldRetryQuery(failureCount: number, error: Error): boolean {
 }
 
 /** Shared QueryClient for the app. Prefer this instance from providers and tests. */
-export function createQueryClient(): QueryClient {
+export function createQueryClient({ gcTime }: CreateQueryClientOptions = {}): QueryClient {
   return new QueryClient({
     defaultOptions: {
       queries: {
+        gcTime,
         staleTime: QUERY_STALE_TIME_MS,
         retry: shouldRetryQuery,
         retryDelay: getQueryRetryDelay,
@@ -26,6 +31,7 @@ export function createQueryClient(): QueryClient {
         networkMode: "always",
       },
       mutations: {
+        gcTime,
         retry: 0,
         networkMode: "always",
       },

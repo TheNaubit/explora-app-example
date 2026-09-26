@@ -20,7 +20,7 @@ describe("InlineStatusBanner", () => {
     );
 
     expect(screen.getByText("Refresh failed")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("inline-status-retry"));
+    await fireEvent.press(screen.getByTestId("inline-status-retry"));
     expect(onAction).toHaveBeenCalledTimes(1);
   });
 

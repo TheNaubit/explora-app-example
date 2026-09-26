@@ -18,7 +18,7 @@ describe("CategoryChipRow", () => {
       { wrapper: createProviders() },
     );
 
-    fireEvent.press(screen.getByTestId("category-chip-outdoors"));
+    await fireEvent.press(screen.getByTestId("category-chip-outdoors"));
     expect(onToggle).toHaveBeenCalledWith("Outdoors");
     expect(screen.getByTestId("category-chip-outdoors")).toHaveProp("accessibilityState", {
       selected: true,
@@ -30,11 +30,11 @@ describe("CategoryChipRow", () => {
       selected: false,
     });
 
-    fireEvent.press(screen.getByTestId("category-chip-all"));
+    await fireEvent.press(screen.getByTestId("category-chip-all"));
     expect(onToggle).toHaveBeenCalledWith(null);
     expect(dismissKeyboard).toHaveBeenCalledTimes(2);
     expect(screen.getByTestId("category-chip-scroll").props.keyboardDismissMode).toBe("on-drag");
-    fireEvent(screen.getByTestId("category-chip-scroll"), "scrollBeginDrag");
+    await fireEvent(screen.getByTestId("category-chip-scroll"), "scrollBeginDrag");
     expect(dismissKeyboard).toHaveBeenCalledTimes(3);
 
     expect(screen.getByTestId("category-chip-row-leading-edge")).toBeOnTheScreen();

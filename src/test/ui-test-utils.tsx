@@ -8,7 +8,7 @@ import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { createQueryClient } from "@/query/client";
+import { createTestQueryClient } from "@/test/create-test-query-client";
 
 i18n.load("en", {});
 i18n.activate("en");
@@ -19,7 +19,7 @@ const TEST_SAFE_AREA_METRICS = {
   insets: { top: 47, left: 0, right: 0, bottom: 34 },
 };
 
-export function createProviders(queryClient: QueryClient = createQueryClient()) {
+export function createProviders(queryClient: QueryClient = createTestQueryClient()) {
   return function Providers({ children }: { children: ReactNode }) {
     return createElement(
       SafeAreaProvider,
@@ -33,4 +33,4 @@ export function createProviders(queryClient: QueryClient = createQueryClient()) 
   };
 }
 
-export { createQueryClient };
+export { createTestQueryClient as createQueryClient };

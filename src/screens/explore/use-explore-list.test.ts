@@ -5,8 +5,8 @@ import { I18nProvider } from "@lingui/react";
 import { i18n } from "@lingui/core";
 
 import { ApiError } from "@/query/errors";
-import { createQueryClient } from "@/query/client";
 import { useExploreList } from "@/screens/explore/use-explore-list";
+import { createTestQueryClient as createQueryClient } from "@/test/create-test-query-client";
 
 i18n.load("en", {});
 i18n.activate("en");

@@ -6,7 +6,6 @@ import { I18nProvider } from "@lingui/react";
 import { i18n } from "@lingui/core";
 
 import { ExploreList } from "@/screens/explore/explore-list";
-import { createQueryClient } from "@/query/client";
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import {
   EXPLORE_CARD_HAPTIC_AMPLITUDE,
@@ -17,6 +16,7 @@ import {
   resetDiscoveryScrollOffsets,
   setDiscoveryScrollOffset,
 } from "@/state/discovery";
+import { createTestQueryClient as createQueryClient } from "@/test/create-test-query-client";
 
 i18n.load("en", {});
 i18n.activate("en");
@@ -85,7 +85,7 @@ describe("ExploreList", () => {
     const list = screen.getByTestId("explore-list");
     expect(list.props.initialScrollOffset).toBe(248);
 
-    fireEvent(list, "scrollEndDrag", {
+    await fireEvent(list, "scrollEndDrag", {
       nativeEvent: { contentOffset: { y: 412 } },
     });
     expect(getDiscoveryScrollOffset(defaultProps.filters)).toBe(412);
@@ -108,7 +108,7 @@ describe("ExploreList", () => {
     const list = screen.getByTestId("search-list");
     expect(list.props.initialScrollOffset).toBe(176);
 
-    fireEvent(list, "scrollEndDrag", {
+    await fireEvent(list, "scrollEndDrag", {
       nativeEvent: { contentOffset: { y: 412 } },
     });
     expect(getDiscoveryScrollOffset(searchFilters)).toBe(412);
@@ -133,7 +133,7 @@ describe("ExploreList", () => {
     expect(screen.getByTestId("explore-list")).toBeTruthy();
     expect(screen.getByTestId("explore-list").props.keyboardDismissMode).toBe("on-drag");
     expect(screen.getByTestId("explore-list").props.keyboardShouldPersistTaps).toBe("handled");
-    fireEvent(screen.getByTestId("explore-list"), "scrollBeginDrag");
+    await fireEvent(screen.getByTestId("explore-list"), "scrollBeginDrag");
     expect(dismissKeyboard).toHaveBeenCalledTimes(1);
     dismissKeyboard.mockRestore();
   });
@@ -152,7 +152,7 @@ describe("ExploreList", () => {
       { wrapper: createWrapper() },
     );
 
-    fireEvent.press(screen.getByTestId("explore-next-page-retry"));
+    await fireEvent.press(screen.getByTestId("explore-next-page-retry"));
     expect(onBannerChange).toHaveBeenCalledWith(null);
     expect(mockHandleEndReached).toHaveBeenCalled();
     expect(onRefresh).not.toHaveBeenCalled();
@@ -166,7 +166,7 @@ describe("ExploreList", () => {
       { wrapper: createWrapper() },
     );
 
-    fireEvent.press(screen.getByTestId("list-end-reached"));
+    await fireEvent.press(screen.getByTestId("list-end-reached"));
     expect(mockHandleEndReached).toHaveBeenCalled();
   });
 

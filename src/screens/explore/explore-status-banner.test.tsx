@@ -19,7 +19,7 @@ describe("ExploreStatusBanner", () => {
     );
 
     expect(screen.getByTestId("explore-next-page-error")).toBeTruthy();
-    fireEvent.press(screen.getByTestId("explore-next-page-retry"));
+    await fireEvent.press(screen.getByTestId("explore-next-page-retry"));
     expect(onDismiss).toHaveBeenCalledTimes(1);
     expect(onRetryNextPage).toHaveBeenCalledTimes(1);
   });

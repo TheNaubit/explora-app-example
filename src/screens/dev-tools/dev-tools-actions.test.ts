@@ -1,5 +1,3 @@
-import { QueryClient } from "@tanstack/react-query";
-
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import {
   clearRequestCache,
@@ -10,10 +8,11 @@ import { getCatalogSize, prependRefreshActivity } from "@/mocks/catalog-store";
 import { getReviewModeState, resetReviewModeState } from "@/mocks/review-mode";
 import { addFavorite, listFavoriteIds } from "@/state/favorites";
 import { getDiscoveryFilters, setDiscoverySearch } from "@/state/discovery";
+import { createTestQueryClient } from "@/test/create-test-query-client";
 
 describe("Dev Tools actions", () => {
   beforeEach(() => {
-    resetLocalData(new QueryClient());
+    resetLocalData(createTestQueryClient());
     resetReviewModeState();
   });
 
@@ -30,7 +29,7 @@ describe("Dev Tools actions", () => {
   });
 
   it("clears request data without changing local user data", () => {
-    const queryClient = new QueryClient();
+    const queryClient = createTestQueryClient();
     const resetQueries = jest.spyOn(queryClient, "resetQueries");
     queryClient.setQueryData(["activities", "detail", "sample"], {
       activity: SUPPLIED_ACTIVITIES[0],
@@ -47,7 +46,7 @@ describe("Dev Tools actions", () => {
   });
 
   it("resets the catalog, favorites, filters, and query cache", () => {
-    const queryClient = new QueryClient();
+    const queryClient = createTestQueryClient();
     const clear = jest.spyOn(queryClient, "clear");
     addFavorite(SUPPLIED_ACTIVITIES[0]);
     prependRefreshActivity();
