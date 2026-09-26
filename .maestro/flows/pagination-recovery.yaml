@@ -1,0 +1,91 @@
+appId: com.adlerventures.explora
+name: Later-page failure and recovery
+tags:
+  - assessment
+  - states
+  - ios
+---
+- runFlow: ../subflows/reset-test-state.yaml
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-page-load-timeout"
+    direction: UP
+- tapOn:
+    id: "dev-tools-page-load-timeout"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-normal"
+    direction: UP
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- runFlow:
+    when:
+      visible:
+        id: "activity-detail-back"
+    commands:
+      - tapOn:
+          id: "activity-detail-back"
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 8000
+- repeat:
+    times: 22
+    commands:
+      - swipe:
+          direction: UP
+          duration: 280
+- extendedWaitUntil:
+    visible:
+      id: "explore-next-page-error"
+    timeout: 10000
+- assertVisible: "Could not load more"
+- assertVisible:
+    id: "explore-next-page-retry"
+
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "13%, 92%"
+- tapOn:
+    point: "71%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "dev-tools-screen"
+    timeout: 8000
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-page-load-normal"
+    direction: DOWN
+- tapOn:
+    id: "dev-tools-page-load-normal"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-normal"
+    direction: UP
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- runFlow:
+    when:
+      visible:
+        id: "activity-detail-back"
+    commands:
+      - tapOn:
+          id: "activity-detail-back"
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 8000
+- extendedWaitUntil:
+    notVisible:
+      id: "explore-next-page-error"
+    timeout: 8000
+- assertVisible:
+    id: "explore-list"

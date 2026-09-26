@@ -48,32 +48,41 @@ Use the **Dev Tools** tab in the assessment app. You can also set modes from the
 ```ts
 import {
   setInitialLoadMode,
+  setDetailLoadMode,
   setPageLoadMode,
   setRefreshMode,
   resetReviewModeState,
 } from "@/mocks/review-mode";
 import { resetCatalog } from "@/mocks/catalog-store";
 
-setInitialLoadMode("slow"); // normal | slow | fail (first list page + get)
-setPageLoadMode("fail"); // normal | slow | fail (later list pages)
-setRefreshMode("fail"); // success | slow | fail
+setInitialLoadMode("slow"); // first catalog page
+setDetailLoadMode("not-found"); // activity detail
+setPageLoadMode("invalid-data"); // later catalog pages
+setRefreshMode("timeout"); // refresh adds nothing
 resetCatalog();
 resetReviewModeState();
 ```
 
-| Mode             | Initial load (first page / get) | Page load (later pages)   | Refresh                              |
-| ---------------- | ------------------------------- | ------------------------- | ------------------------------------ |
-| Normal / success | Short delay, returns data       | Short delay, returns page | Short delay, appends one activity    |
-| Slow             | ~2.5s delay, then success       | ~2.5s delay, then success | ~2.5s delay, then success (+1)       |
-| Fail             | `errors.networkOffline`         | `errors.networkOffline`   | `errors.refreshFailed`; adds nothing |
+| Mode             | Catalog and detail loads       | Refresh                               |
+| ---------------- | ------------------------------ | ------------------------------------- |
+| Normal / success | Short delay, returns data      | Short delay, appends one activity     |
+| Slow             | 10s delay, then success        | 10s delay, then success (+1)          |
+| Empty            | Valid empty first catalog page | Not available                         |
+| Offline          | `errors.networkOffline`        | `errors.refreshFailed`; adds nothing  |
+| Timeout          | `errors.networkTimeout`        | `errors.networkTimeout`; adds nothing |
+| Invalid data     | `errors.validationFailed`      | Not available                         |
+| Not found        | Detail only: `errors.notFound` | Not available                         |
 
-Select **Clear request cache** after you change an initial or later-page mode. The next matching request uses the selected mode.
+Changing a mode clears the request cache. The next matching request uses that mode.
+
+Changing a mode also changes the review revision in Query keys. Kept-alive tabs reload the selected mode.
 
 Select **Reset local data** to clear generated activities, favorites, filters, and request cache. Request modes do not change.
 
 ## Related
 
 - [EAS local builds](./eas-local-builds.md) — profiles and `npm run build:*` scripts
+- [Maestro checks](./maestro.md) — local iOS state flows
 - [Architecture overview](../architecture/overview.md)
 - [Mock API](../features/mock-api.md)
 - Assessment reproducibility rules: root `AGENTS.md`

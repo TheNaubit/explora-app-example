@@ -29,7 +29,7 @@ describe("activity card carousel layout", () => {
     );
   });
 
-  it("removes a native safe-area origin from Suspense list padding", () => {
+  it("removes a native safe-area origin from first-load list padding", () => {
     const layout = getActivityCardCarouselLayout({
       contentOriginInset: 59,
       fontScale: 1,

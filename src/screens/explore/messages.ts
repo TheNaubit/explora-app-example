@@ -30,6 +30,16 @@ export const exploreMessages = {
     comment: "Screen reader status when the catalog list finished loading with results",
     message: "Activities loaded.",
   }),
+  loadErrorTitle: msg({
+    id: "explore.loadErrorTitle",
+    comment: "Heading when the first activity catalog request fails",
+    message: "Could not load activities",
+  }),
+  loadErrorRetry: msg({
+    id: "explore.loadErrorRetry",
+    comment: "Button that retries the first activity catalog request",
+    message: "Try again",
+  }),
   emptyAnnounce: msg({
     id: "explore.emptyAnnounce",
     comment: "Screen reader status when search or filters return no activities",
@@ -77,7 +87,7 @@ export const exploreMessages = {
   }),
   refreshFailedTitle: msg({
     id: "explore.refreshFailedTitle",
-    comment: "Inline banner title when catalog refresh fails",
+    comment: "Native toast title when catalog refresh fails",
     message: "Refresh failed",
   }),
   nextPageFailedTitle: msg({

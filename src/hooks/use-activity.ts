@@ -1,9 +1,11 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSyncExternalStore } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { fetchActivityDetail } from "@/query/activity-queries";
 import { isApiError } from "@/query/errors";
 import { activityKeys } from "@/query/keys";
 import { getOfflineSnapshot } from "@/state/favorites";
+import { getReviewModeRevision, subscribeReviewMode } from "@/mocks/review-mode";
 
 /**
  * Load one activity by id from the mock catalog.
@@ -12,9 +14,14 @@ import { getOfflineSnapshot } from "@/state/favorites";
  */
 export function useActivity(id: string) {
   const snapshot = id.length > 0 ? getOfflineSnapshot(id) : undefined;
+  const reviewRevision = useSyncExternalStore(
+    subscribeReviewMode,
+    getReviewModeRevision,
+    getReviewModeRevision,
+  );
 
-  return useSuspenseQuery({
-    queryKey: activityKeys.detail(id),
+  return useQuery({
+    queryKey: activityKeys.detailForReview(id, reviewRevision),
     queryFn: async () => {
       if (id.length === 0) return null;
 

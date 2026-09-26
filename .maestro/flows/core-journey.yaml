@@ -1,0 +1,98 @@
+appId: com.adlerventures.explora
+name: Core discovery, detail, and favorite journey
+tags:
+  - assessment
+  - assessment-required
+  - core
+  - ios
+---
+- runFlow: ../subflows/reset-test-state.yaml
+
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-normal"
+    direction: UP
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 8000
+
+- tapOn:
+    id: "search-field-input"
+- inputText: "Botanical Garden Walk"
+- pressKey: Enter
+- extendedWaitUntil:
+    visible:
+      id: "activity-card-act-001"
+    timeout: 8000
+- assertNotVisible:
+    id: "activity-card-act-002"
+
+- tapOn:
+    id: "category-chip-outdoors"
+- extendedWaitUntil:
+    visible:
+      id: "activity-card-act-001"
+    timeout: 8000
+- tapOn:
+    id: "activity-card-act-001"
+- extendedWaitUntil:
+    visible:
+      id: "activity-detail-content"
+    timeout: 8000
+- assertVisible: "Botanical Garden Walk"
+- tapOn:
+    id: "activity-detail-back"
+- extendedWaitUntil:
+    visible:
+      id: "activity-card-act-001"
+    timeout: 8000
+- assertVisible:
+    id: "search-field-input"
+    text: "Botanical Garden Walk"
+- tapOn:
+    id: "favorite-button-act-001"
+- extendedWaitUntil:
+    visible: "Remove Botanical Garden Walk from favorites"
+    timeout: 8000
+
+- tapOn:
+    point: "50%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "favorites-list"
+    timeout: 8000
+- assertVisible: "Remove Botanical Garden Walk from favorites"
+- tapOn:
+    id: "activity-card-act-001"
+- extendedWaitUntil:
+    visible:
+      id: "activity-detail-content"
+    timeout: 8000
+- assertVisible: "Botanical Garden Walk"
+- tapOn:
+    id: "activity-detail-back"
+
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: "explore-screen"
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 30000
+- assertVisible: "Remove Botanical Garden Walk from favorites"
+- tapOn:
+    point: "50%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "favorites-list"
+    timeout: 12000
+- assertVisible: "Remove Botanical Garden Walk from favorites"

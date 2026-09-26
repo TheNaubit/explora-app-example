@@ -11,7 +11,7 @@ import {
 import type { Activity } from "@/schemas/activity";
 import type { MockResult } from "@/schemas/mock-result";
 import { parseWithSchema } from "@/utils/parse-with-schema";
-import { ZodError } from "zod";
+import { ZodError, type ZodType } from "zod";
 
 import * as catalogStore from "@/mocks/catalog-store";
 import { LIST_PAGE_SIZE } from "@/mocks/constants";
@@ -28,6 +28,26 @@ export type {
 
 function validationFailure() {
   return mockFailure("errors.validationFailed");
+}
+
+function invalidPayloadFailure(schema: ZodType) {
+  try {
+    parseWithSchema(schema, {});
+  } catch (error) {
+    if (!(error instanceof ZodError)) {
+      throw error;
+    }
+  }
+
+  return validationFailure();
+}
+
+function loadModeFailure(mode: "fail" | "timeout") {
+  if (mode === "timeout") {
+    return mockFailure("errors.networkTimeout");
+  }
+
+  return mockFailure("errors.networkOffline");
 }
 
 function filterCatalog(
@@ -78,12 +98,26 @@ export async function listActivities(
     const { initialLoad, pageLoad } = getReviewModeState();
     const mode = isFirstPage ? initialLoad : pageLoad;
 
-    if (mode === "fail") {
+    if (mode === "invalid-data") {
       await delay(MOCK_DELAY_MS.normal);
-      return mockFailure("errors.networkOffline");
+      return invalidPayloadFailure(listActivitiesResponseSchema);
+    }
+
+    if (mode === "fail" || mode === "timeout") {
+      await delay(MOCK_DELAY_MS.normal);
+      return loadModeFailure(mode);
     }
 
     await delay(mode === "slow" ? MOCK_DELAY_MS.slow : MOCK_DELAY_MS.normal);
+
+    if (mode === "empty") {
+      const payload = parseWithSchema(listActivitiesResponseSchema, {
+        activities: [],
+        total: 0,
+        nextCursor: null,
+      });
+      return mockSuccess(payload);
+    }
 
     const filtered = filterCatalog(catalogStore.getCatalog(), search, categories);
     const offset = parseCursorOffset(cursor);
@@ -108,17 +142,26 @@ export async function listActivities(
 
 /**
  * Load one activity by id.
- * Honors initial-load review modes for delay and hard fail.
+ * Honors the independent activity-detail review mode.
  */
 export async function getActivity(id: string): Promise<MockResult<GetActivityResponse>> {
-  const { initialLoad } = getReviewModeState();
+  const { detailLoad } = getReviewModeState();
 
-  if (initialLoad === "fail") {
+  if (detailLoad === "invalid-data") {
     await delay(MOCK_DELAY_MS.normal);
-    return mockFailure("errors.networkOffline");
+    return invalidPayloadFailure(getActivityResponseSchema);
   }
 
-  await delay(initialLoad === "slow" ? MOCK_DELAY_MS.slow : MOCK_DELAY_MS.normal);
+  if (detailLoad === "fail" || detailLoad === "timeout") {
+    await delay(MOCK_DELAY_MS.normal);
+    return loadModeFailure(detailLoad);
+  }
+
+  await delay(detailLoad === "slow" ? MOCK_DELAY_MS.slow : MOCK_DELAY_MS.normal);
+
+  if (detailLoad === "not-found") {
+    return mockFailure("errors.notFound");
+  }
 
   const activity = catalogStore.findActivityById(id);
 
@@ -148,6 +191,11 @@ export async function refreshCatalog(): Promise<MockResult<RefreshCatalogRespons
   if (refresh === "fail") {
     await delay(MOCK_DELAY_MS.normal);
     return mockFailure("errors.refreshFailed");
+  }
+
+  if (refresh === "timeout") {
+    await delay(MOCK_DELAY_MS.normal);
+    return mockFailure("errors.networkTimeout");
   }
 
   await delay(refresh === "slow" ? MOCK_DELAY_MS.slow : MOCK_DELAY_MS.normal);

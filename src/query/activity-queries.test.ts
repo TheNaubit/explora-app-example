@@ -3,7 +3,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { LIST_PAGE_SIZE } from "@/mocks/constants";
 import { resetCatalog } from "@/mocks/catalog-store";
-import { resetReviewModeState, setInitialLoadMode, setRefreshMode } from "@/mocks/review-mode";
+import { resetReviewModeState, setDetailLoadMode, setRefreshMode } from "@/mocks/review-mode";
 import {
   fetchActivitiesPage,
   fetchActivityDetail,
@@ -53,7 +53,7 @@ describe("activity query helpers", () => {
     const detail = await fetchActivityDetail(target.id);
     expect(detail.activity).toEqual(target);
 
-    setInitialLoadMode("fail");
+    setDetailLoadMode("fail");
     await expect(fetchActivityDetail(target.id)).rejects.toBeInstanceOf(ApiError);
   });
 

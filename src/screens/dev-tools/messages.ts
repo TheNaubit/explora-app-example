@@ -18,12 +18,21 @@ export const devToolsMessages = {
   }),
   initialLoad: msg({
     id: "devTools.initialLoad",
-    comment: "Setting for the first catalog or activity request",
-    message: "Initial load",
+    comment: "Setting for the first catalog request",
+    message: "First catalog load",
   }),
   initialLoadHelp: msg({
     id: "devTools.initialLoadHelp",
-    message: "Controls the first catalog page and activity detail requests.",
+    message: "Controls the first catalog page.",
+  }),
+  detailLoad: msg({
+    id: "devTools.detailLoad",
+    comment: "Setting for activity detail request behavior",
+    message: "Activity detail",
+  }),
+  detailLoadHelp: msg({
+    id: "devTools.detailLoadHelp",
+    message: "Controls activity detail loading and not-found states.",
   }),
   laterPageLoad: msg({
     id: "devTools.laterPageLoad",
@@ -53,10 +62,30 @@ export const devToolsMessages = {
     comment: "Request mode with a deliberate delay",
     message: "Slow",
   }),
+  empty: msg({
+    id: "devTools.mode.empty",
+    comment: "Successful first catalog request with no activities",
+    message: "Empty",
+  }),
   fail: msg({
     id: "devTools.mode.fail",
     comment: "Request mode that returns an error",
-    message: "Fail",
+    message: "Offline",
+  }),
+  timeout: msg({
+    id: "devTools.mode.timeout",
+    comment: "Request mode that returns a timeout error",
+    message: "Timeout",
+  }),
+  invalidData: msg({
+    id: "devTools.mode.invalidData",
+    comment: "Request mode that returns an invalid validated payload",
+    message: "Invalid data",
+  }),
+  notFound: msg({
+    id: "devTools.mode.notFound",
+    comment: "Activity detail mode that returns a missing activity",
+    message: "Not found",
   }),
   success: msg({
     id: "devTools.mode.success",
@@ -75,7 +104,7 @@ export const devToolsMessages = {
   modeChanged: msg({
     id: "devTools.modeChanged",
     comment: "Screen reader status after a request mode changes",
-    message: "{setting} set to {option}.",
+    message: "{setting} set to {option}. Cached requests cleared.",
   }),
   lifecycleHelp: msg({
     id: "devTools.lifecycleHelp",
@@ -130,7 +159,7 @@ export const devToolsMessages = {
   }),
   resetModesHint: msg({
     id: "devTools.resetModesHint",
-    message: "Restores normal loads and successful refresh.",
+    message: "Restores normal catalog and detail loads, and successful refresh.",
   }),
   requestModesReset: msg({
     id: "devTools.requestModesReset",
@@ -167,5 +196,90 @@ export const devToolsMessages = {
   localDataReset: msg({
     id: "devTools.localDataReset",
     message: "Local data reset.",
+  }),
+  feedbackPolicy: msg({
+    id: "devTools.feedbackPolicy",
+    comment: "Dev Tools section for previewing permitted feedback surfaces",
+    message: "Feedback policy",
+  }),
+  feedbackPolicyHelp: msg({
+    id: "devTools.feedbackPolicyHelp",
+    message: "Success and cancel stay silent. Only confirmed calendar saves show success feedback.",
+  }),
+  nativeFeedbackModule: msg({
+    id: "devTools.nativeFeedbackModule",
+    comment: "Row label for the native toast module status",
+    message: "Native feedback module",
+  }),
+  nativeFeedbackAvailable: msg({
+    id: "devTools.nativeFeedbackAvailable",
+    comment: "Native toast module status when installed",
+    message: "Ready",
+  }),
+  nativeFeedbackUnavailable: msg({
+    id: "devTools.nativeFeedbackUnavailable",
+    comment: "Native toast module status when missing",
+    message: "Unavailable",
+  }),
+  nativeFeedbackStatusLabel: msg({
+    id: "devTools.nativeFeedbackStatusLabel",
+    comment: "Accessible label for the native feedback module and its status",
+    message: "Native feedback module, {status}",
+  }),
+  transientErrorAction: msg({
+    id: "devTools.transientErrorAction",
+    comment: "Action that previews a transient error toast",
+    message: "Preview transient error",
+  }),
+  transientErrorHint: msg({
+    id: "devTools.transientErrorHint",
+    message: "Shows the toast used when content stays usable after a temporary failure.",
+  }),
+  transientErrorTitle: msg({
+    id: "devTools.transientErrorTitle",
+    message: "Could not refresh",
+  }),
+  transientErrorBody: msg({
+    id: "devTools.transientErrorBody",
+    message: "Your current activities are still available.",
+  }),
+  actionableErrorAction: msg({
+    id: "devTools.actionableErrorAction",
+    comment: "Action that previews an inline retry surface",
+    message: "Preview actionable error",
+  }),
+  actionableErrorHint: msg({
+    id: "devTools.actionableErrorHint",
+    message: "Shows the inline recovery design used when a clear action can help.",
+  }),
+  inlinePreviewTitle: msg({
+    id: "devTools.inlinePreviewTitle",
+    message: "Could not load more activities",
+  }),
+  inlinePreviewBody: msg({
+    id: "devTools.inlinePreviewBody",
+    message: "Your current activities stay available. Try the request again.",
+  }),
+  inlinePreviewAction: msg({
+    id: "devTools.inlinePreviewAction",
+    comment: "Retry action in the inline recovery preview",
+    message: "Try again",
+  }),
+  calendarSuccessAction: msg({
+    id: "devTools.calendarSuccessAction",
+    comment: "Action that previews confirmed calendar save feedback",
+    message: "Preview calendar success",
+  }),
+  calendarSuccessHint: msg({
+    id: "devTools.calendarSuccessHint",
+    message: "Shows the only success toast allowed by the feedback policy.",
+  }),
+  calendarSuccessTitle: msg({
+    id: "devTools.calendarSuccessTitle",
+    message: "Added to Calendar",
+  }),
+  calendarSuccessBody: msg({
+    id: "devTools.calendarSuccessBody",
+    message: "The event was saved to your calendar.",
   }),
 } as const;

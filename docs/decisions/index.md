@@ -2,21 +2,23 @@
 
 Architecture Decision Records (ADRs) for lasting choices. Each page is short: context, decision, consequences. Do not store debate transcripts here.
 
-| ID      | Title                                                                                             | Status   |
-| ------- | ------------------------------------------------------------------------------------------------- | -------- |
-| ADR-001 | [Technical wiki in `docs/`](./adr-001-docs-wiki.md)                                               | Accepted |
-| ADR-002 | [Zod for payload validation](./adr-002-zod-validation.md)                                         | Accepted |
-| ADR-003 | [Simplified Technical English](./adr-003-simplified-technical-english.md)                         | Accepted |
-| ADR-004 | [Pre-commit lint, format, and TypeScript check](./adr-004-pre-commit-lint-staged.md)              | Accepted |
-| ADR-005 | [react-native-a11y for accessibility](./adr-005-react-native-a11y.md)                             | Accepted |
-| ADR-006 | [Lingui + expo-localization for i18n](./adr-006-lingui-i18n.md)                                   | Accepted |
-| ADR-007 | [Async UI states and skeletons over spinners](./adr-007-async-ui-states-skeletons.md)             | Accepted |
-| ADR-008 | [Mandatory Emil design skills and Expo skills](./adr-008-emil-and-expo-skills.md)                 | Accepted |
-| ADR-009 | [Root design contract](./adr-009-root-design-contract.md)                                         | Accepted |
-| ADR-010 | [Client mock API with review modes](./adr-010-client-mock-api.md)                                 | Accepted |
-| ADR-011 | [TanStack Query for catalog, Legend State for local-first](./adr-011-query-legend-local-first.md) | Accepted |
-| ADR-012 | [Suspense and Error Boundaries for Query UI](./adr-012-suspense-error-boundaries.md)              | Accepted |
-| ADR-013 | [Conventional Commits](./adr-013-conventional-commits.md)                                         | Accepted |
+| ID      | Title                                                                                             | Status     |
+| ------- | ------------------------------------------------------------------------------------------------- | ---------- |
+| ADR-001 | [Technical wiki in `docs/`](./adr-001-docs-wiki.md)                                               | Accepted   |
+| ADR-002 | [Zod for payload validation](./adr-002-zod-validation.md)                                         | Accepted   |
+| ADR-003 | [Simplified Technical English](./adr-003-simplified-technical-english.md)                         | Accepted   |
+| ADR-004 | [Pre-commit lint, format, and TypeScript check](./adr-004-pre-commit-lint-staged.md)              | Accepted   |
+| ADR-005 | [react-native-a11y for accessibility](./adr-005-react-native-a11y.md)                             | Accepted   |
+| ADR-006 | [Lingui + expo-localization for i18n](./adr-006-lingui-i18n.md)                                   | Accepted   |
+| ADR-007 | [Async UI states and skeletons over spinners](./adr-007-async-ui-states-skeletons.md)             | Accepted   |
+| ADR-008 | [Mandatory Emil design skills and Expo skills](./adr-008-emil-and-expo-skills.md)                 | Accepted   |
+| ADR-009 | [Root design contract](./adr-009-root-design-contract.md)                                         | Accepted   |
+| ADR-010 | [Client mock API with review modes](./adr-010-client-mock-api.md)                                 | Accepted   |
+| ADR-011 | [TanStack Query for catalog, Legend State for local-first](./adr-011-query-legend-local-first.md) | Accepted   |
+| ADR-012 | [Suspense and Error Boundaries for Query UI](./adr-012-suspense-error-boundaries.md)              | Superseded |
+| ADR-013 | [Conventional Commits](./adr-013-conventional-commits.md)                                         | Accepted   |
+| ADR-014 | [One feedback surface for each outcome](./adr-014-feedback-surface-policy.md)                     | Accepted   |
+| ADR-015 | [Explicit Query states for expected data outcomes](./adr-015-explicit-query-states.md)            | Accepted   |
 
 ## Template
 

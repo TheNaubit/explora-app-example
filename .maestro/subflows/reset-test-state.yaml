@@ -1,0 +1,39 @@
+appId: com.adlerventures.explora
+---
+- launchApp
+- runFlow:
+    when:
+      visible: "Runtime version:.*"
+    commands:
+      - tapOn:
+          point: "90%, 47%"
+- runFlow:
+    when:
+      visible: "Development Servers"
+    commands:
+      - tapOn: "http://.*:8081"
+- extendedWaitUntil:
+    visible:
+      id: "explore-screen"
+    timeout: 20000
+- tapOn:
+    point: "71%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "dev-tools-screen"
+    timeout: 8000
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-reset-local-data"
+    direction: DOWN
+    visibilityPercentage: 50
+- tapOn:
+    id: "dev-tools-reset-local-data"
+- tapOn: "Reset"
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-reset-modes"
+    direction: UP
+- tapOn:
+    id: "dev-tools-reset-modes"

@@ -53,22 +53,22 @@ The coordinator accepts one active operation. A second submission returns a dupl
 - Explora does not request calendar read or write permission.
 - The form stays active in the same task, so duplicate protection remains active.
 - Android returns `done` for saved and canceled forms.
-- Explora states this platform limit after the form closes.
+- Explora stays silent after the form closes because Android cannot confirm the outcome.
 
 ## UI states
 
-| State                  | Result                                                      |
-| ---------------------- | ----------------------------------------------------------- |
-| Schedule sheet open    | Show one fitted native picker and header actions on iOS.    |
-| Schedule canceled      | Close the controls and do not request permission.           |
-| Past schedule          | Ask for a future time.                                      |
-| Permission denied      | Explain the denial and offer a retry.                       |
-| Permission blocked     | Explain the system setting and offer **Open Settings**.     |
-| Native form active     | Disable the main action and show **Opening Calendar…**.     |
-| Saved on iOS           | Show one native success toast and matching haptic.          |
-| Canceled on iOS        | Return to Activity Detail without a status message.         |
-| Form closed on Android | State that Android does not report the final form decision. |
-| Native error           | Keep the schedule and offer a retry.                        |
+| State                  | Result                                                   |
+| ---------------------- | -------------------------------------------------------- |
+| Schedule sheet open    | Show one fitted native picker and header actions on iOS. |
+| Schedule canceled      | Close the controls and do not request permission.        |
+| Past schedule          | Ask for a future time.                                   |
+| Permission denied      | Explain the denial and offer a retry.                    |
+| Permission blocked     | Explain the system setting and offer **Open Settings**.  |
+| Native form active     | Disable the main action and show **Opening Calendar…**.  |
+| Saved on iOS           | Show one native success toast and matching haptic.       |
+| Canceled on iOS        | Return to Activity Detail without a status message.      |
+| Form closed on Android | Return without a status message.                         |
+| Native error           | Keep the schedule and offer a retry.                     |
 
 ## Accessibility and localization
 
@@ -76,9 +76,9 @@ The coordinator accepts one active operation. A second submission returns a dupl
 - The native iOS sheet contains focus until **Cancel** or **Done** closes it.
 - Date and time controls use native `@expo/ui` pickers.
 - Text supports Dynamic Type and wraps at larger sizes.
-- Native toast feedback reports calendar outcomes with a matching semantic haptic.
-- Success, information, warning, and validation results do not add persistent banners.
-- Actionable permission and native errors keep an inline recovery action.
+- A confirmed save uses one native success toast and a matching semantic haptic.
+- Cancellation and unknown Android outcomes stay silent.
+- Permission, validation, and native errors use one inline recovery surface.
 - All user-facing copy uses Lingui.
 - The iOS permission text lives in `src/locales/native/en.json`.
 

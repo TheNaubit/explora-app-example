@@ -17,6 +17,8 @@ import { EmptyState } from "@/components/empty-state";
 import { PullToRefreshIndicator, usePullToRefreshMotion } from "@/components/pull-to-refresh";
 import { HIDDEN_REFRESH_CONTROL_COLOR } from "@/components/pull-to-refresh/constants";
 import { emptySearchIllustration } from "@/illustrations";
+import { resolveErrorMessage } from "@/i18n";
+import { isApiError } from "@/query/errors";
 import type { ActivityListFilters } from "@/query/keys";
 import {
   getDiscoveryScrollOffset,
@@ -24,6 +26,8 @@ import {
   setDiscoveryScrollOffset,
 } from "@/state/discovery";
 import { ExploreHeader } from "@/screens/explore/explore-header";
+import { ExploreLoadError } from "@/screens/explore/explore-load-error";
+import { ExploreSkeleton } from "@/screens/explore/explore-skeleton";
 import { ExploreStatusBanner } from "@/screens/explore/explore-status-banner";
 import { exploreMessages } from "@/screens/explore/messages";
 import type { DiscoveryMode, ExploreBannerState } from "@/screens/explore/types";
@@ -44,7 +48,7 @@ type ExploreListProps = {
 };
 
 /**
- * Explore catalog body after Suspense resolves.
+ * Explore catalog body with explicit loading, error, empty, and content states.
  * Uses an explicit window size so LegendList is not height 0 under Native Tabs.
  * Native platforms use automatic insets below their Stack headers.
  */
@@ -63,15 +67,13 @@ export function ExploreList({
   const { t } = useLingui();
   const theme = useAppTheme();
   const { width, height } = useWindowDimensions();
-  const { activities, isFetchingNextPage, handleEndReached } = useExploreList({
-    filters,
-    onBannerChange,
-  });
-  const sharesCatalogPosition = filters.search.length === 0;
+  const { activities, error, isPending, isFetchingNextPage, handleEndReached, refetch } =
+    useExploreList({
+      filters,
+      onBannerChange,
+    });
   const hasActiveFilters = filters.search.length > 0 || filters.categories.length > 0;
-  const initialScrollOffset = useRef(
-    sharesCatalogPosition ? getDiscoveryScrollOffset() : undefined,
-  ).current;
+  const initialScrollOffset = useRef(getDiscoveryScrollOffset(filters)).current;
   const pullToRefresh = usePullToRefreshMotion(refreshing, onRefresh);
 
   const bannerNode =
@@ -79,21 +81,13 @@ export function ExploreList({
       <ExploreStatusBanner
         banner={banner}
         onDismiss={() => onBannerChange(null)}
-        onRetryRefresh={onRefresh}
         onRetryNextPage={() => {
           void handleEndReached();
         }}
       />
     ) : null;
 
-  const listHeader = filtersInOverlay ? (
-    bannerNode
-  ) : (
-    <>
-      <ExploreHeader />
-      {bannerNode}
-    </>
-  );
+  const listHeader = filtersInOverlay ? null : <ExploreHeader />;
 
   const padTop = headerHeight + spacing.space8;
   const listStyle = [styles.list, { width, height, backgroundColor: theme.colors.background }];
@@ -124,11 +118,7 @@ export function ExploreList({
   );
 
   function handleScrollPositionChange(event: NativeSyntheticEvent<NativeScrollEvent>) {
-    if (!sharesCatalogPosition) {
-      return;
-    }
-
-    setDiscoveryScrollOffset(event.nativeEvent.contentOffset.y);
+    setDiscoveryScrollOffset(filters, event.nativeEvent.contentOffset.y);
   }
 
   function handleScrollBeginDrag() {
@@ -141,6 +131,37 @@ export function ExploreList({
     pullToRefresh.finishPull();
   }
 
+  if (isPending) {
+    return (
+      <ExploreSkeleton
+        filtersInOverlay={filtersInOverlay}
+        headerHeight={headerHeight}
+        scrollOffset={scrollOffset}
+        scrollRef={scrollRef}
+        showFilters={!filtersInOverlay}
+      />
+    );
+  }
+
+  if (error !== null && activities.length === 0) {
+    const errorKey = isApiError(error) ? error.errorKey : "errors.unknown";
+
+    return (
+      <ExploreLoadError
+        body={t(resolveErrorMessage(errorKey))}
+        filtersInOverlay={filtersInOverlay}
+        headerHeight={headerHeight}
+        onRetry={() => {
+          void refetch();
+        }}
+        retryLabel={t(exploreMessages.loadErrorRetry)}
+        scrollOffset={scrollOffset}
+        scrollRef={scrollRef}
+        title={t(exploreMessages.loadErrorTitle)}
+      />
+    );
+  }
+
   if (activities.length === 0) {
     return (
       <View style={styles.root}>
@@ -148,9 +169,7 @@ export function ExploreList({
           ref={scrollRef as never}
           contentContainerStyle={[styles.emptyScroll, { paddingTop: padTop }]}
           contentInsetAdjustmentBehavior={insetBehavior}
-          contentOffset={
-            initialScrollOffset === undefined ? undefined : { x: 0, y: initialScrollOffset }
-          }
+          contentOffset={{ x: 0, y: initialScrollOffset }}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
           onScroll={onScroll}
@@ -199,11 +218,12 @@ export function ExploreList({
         refreshControl={refreshControl}
         listHeaderComponent={listHeader}
         listFooterComponent={
-          isFetchingNextPage ? (
+          bannerNode ??
+          (isFetchingNextPage ? (
             <View style={styles.footer}>
               <ActivityIndicator color={theme.colors.accent} />
             </View>
-          ) : null
+          ) : null)
         }
         onScrollPositionChange={handleScrollPositionChange}
         scrollOffset={scrollOffset}

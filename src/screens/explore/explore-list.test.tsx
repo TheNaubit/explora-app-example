@@ -12,7 +12,11 @@ import {
   EXPLORE_CARD_HAPTIC_AMPLITUDE,
   EXPLORE_CARD_HAPTIC_FREQUENCY,
 } from "@/screens/explore/constants";
-import { getDiscoveryScrollOffset, setDiscoveryScrollOffset } from "@/state/discovery";
+import {
+  getDiscoveryScrollOffset,
+  resetDiscoveryScrollOffsets,
+  setDiscoveryScrollOffset,
+} from "@/state/discovery";
 
 i18n.load("en", {});
 i18n.activate("en");
@@ -58,7 +62,7 @@ describe("ExploreList", () => {
   });
 
   beforeEach(() => {
-    setDiscoveryScrollOffset(0);
+    resetDiscoveryScrollOffsets();
     mockHandleEndReached.mockReset();
     mockUseExploreList.mockReset();
     mockUseExploreList.mockReturnValue({
@@ -69,7 +73,7 @@ describe("ExploreList", () => {
   });
 
   it("restores and updates the shared catalog position before search starts", async () => {
-    setDiscoveryScrollOffset(248);
+    setDiscoveryScrollOffset(defaultProps.filters, 248);
 
     await render(
       createElement(ExploreList, {
@@ -84,28 +88,31 @@ describe("ExploreList", () => {
     fireEvent(list, "scrollEndDrag", {
       nativeEvent: { contentOffset: { y: 412 } },
     });
-    expect(getDiscoveryScrollOffset()).toBe(412);
+    expect(getDiscoveryScrollOffset(defaultProps.filters)).toBe(412);
   });
 
-  it("keeps the shared catalog position after search starts", async () => {
-    setDiscoveryScrollOffset(248);
+  it("restores search position without replacing the browse position", async () => {
+    const searchFilters = { search: "museum", categories: [] } as const;
+    setDiscoveryScrollOffset(defaultProps.filters, 248);
+    setDiscoveryScrollOffset(searchFilters, 176);
 
     await render(
       createElement(ExploreList, {
         ...defaultProps,
-        filters: { search: "museum", categories: [] },
+        filters: searchFilters,
         mode: "search",
       }),
       { wrapper: createWrapper() },
     );
 
     const list = screen.getByTestId("search-list");
-    expect(list.props.initialScrollOffset).toBeUndefined();
+    expect(list.props.initialScrollOffset).toBe(176);
 
     fireEvent(list, "scrollEndDrag", {
       nativeEvent: { contentOffset: { y: 412 } },
     });
-    expect(getDiscoveryScrollOffset()).toBe(248);
+    expect(getDiscoveryScrollOffset(searchFilters)).toBe(412);
+    expect(getDiscoveryScrollOffset(defaultProps.filters)).toBe(248);
   });
 
   it("shows a next-page footer spinner while fetching", async () => {
@@ -145,7 +152,7 @@ describe("ExploreList", () => {
       { wrapper: createWrapper() },
     );
 
-    fireEvent.press(screen.getByTestId("inline-status-retry"));
+    fireEvent.press(screen.getByTestId("explore-next-page-retry"));
     expect(onBannerChange).toHaveBeenCalledWith(null);
     expect(mockHandleEndReached).toHaveBeenCalled();
     expect(onRefresh).not.toHaveBeenCalled();

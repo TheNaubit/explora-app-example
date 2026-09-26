@@ -11,5 +11,20 @@ describe("activityKeys", () => {
       ["Culture", "Outdoors"],
     ]);
     expect(activityKeys.detail("act-001")).toEqual(["activities", "detail", "act-001"]);
+    expect(activityKeys.listForReview({ search: "walk", categories: ["Outdoors"] }, 3)).toEqual([
+      "activities",
+      "list",
+      "walk",
+      ["Outdoors"],
+      "review",
+      3,
+    ]);
+    expect(activityKeys.detailForReview("act-001", 3)).toEqual([
+      "activities",
+      "detail",
+      "act-001",
+      "review",
+      3,
+    ]);
   });
 });

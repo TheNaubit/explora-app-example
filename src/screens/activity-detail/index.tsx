@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import { Link, router } from "expo-router";
@@ -7,25 +7,27 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { announceStatus } from "@/a11y";
 import { EmptyState } from "@/components/empty-state";
-import { InlineStatusBanner } from "@/components/inline-status-banner";
-import { QueryErrorBoundary } from "@/components/query-error-boundary";
 import { ScreenFrame } from "@/components/screen-frame";
 import { getActivityCoverImage } from "@/data/activity-image";
+import { resolveFeedbackPresentation } from "@/feedback/feedback-policy";
 import { useActivity } from "@/hooks/use-activity";
 import { emptySearchIllustration } from "@/illustrations";
 import { categoryMessages } from "@/i18n/category-labels";
+import { resolveErrorMessage } from "@/i18n";
 import { showNativeToast } from "@/native-toast";
+import { isApiError } from "@/query/errors";
 import { ActivityCategoryBadge } from "@/screens/activity-detail/activity-category-badge";
 import { ActivityDetailControls } from "@/screens/activity-detail/activity-detail-controls";
+import { ActivityDetailErrorState } from "@/screens/activity-detail/activity-detail-error-state";
 import { ActivityDetailSkeleton } from "@/screens/activity-detail/activity-detail-skeleton";
 import { AddToCalendarSection } from "@/screens/activity-detail/add-to-calendar-section";
+import { HeroImageBlend } from "@/screens/activity-detail/hero-image-blend";
 import {
   ACTIVITY_DETAIL_BOTTOM_CHROME_CLEARANCE,
   ACTIVITY_DETAIL_HERO_ASPECT_RATIO,
   ACTIVITY_DETAIL_HERO_MAX_HEIGHT,
 } from "@/screens/activity-detail/constants";
 import { activityDetailMessages } from "@/screens/activity-detail/messages";
-import { NativeFeedbackTestPanel } from "@/screens/activity-detail/native-feedback-test-panel";
 import type { Activity } from "@/schemas/activity";
 import { spacing, typography, useAppTheme } from "@/theme";
 import { formatDuration } from "@/utils/format-duration";
@@ -49,17 +51,7 @@ export function ActivityDetail({ id }: ActivityDetailProps) {
       testID="activity-detail-screen"
       title={screenTitle}
     >
-      <QueryErrorBoundary>
-        <Suspense
-          fallback={
-            <ActivityDetailSkeleton
-              loadingAnnouncement={t(activityDetailMessages.loadingAnnounce)}
-            />
-          }
-        >
-          <ActivityDetailContent id={id} bottomInset={insets.bottom} topInset={insets.top} />
-        </Suspense>
-      </QueryErrorBoundary>
+      <ActivityDetailContent id={id} bottomInset={insets.bottom} topInset={insets.top} />
       <ActivityDetailControls backLabel={t(activityDetailMessages.back)} safeAreaTop={insets.top} />
     </ScreenFrame>
   );
@@ -73,7 +65,29 @@ type ActivityDetailContentProps = {
 
 function ActivityDetailContent({ bottomInset, id, topInset }: ActivityDetailContentProps) {
   const { t } = useLingui();
-  const { data, error, refetch } = useActivity(id);
+  const { data, error, isPending, refetch } = useActivity(id);
+
+  if (isPending) {
+    return (
+      <ActivityDetailSkeleton loadingAnnouncement={t(activityDetailMessages.loadingAnnounce)} />
+    );
+  }
+
+  if (error !== null && data === undefined) {
+    const errorKey = isApiError(error) ? error.errorKey : "errors.unknown";
+
+    return (
+      <ActivityDetailErrorState
+        body={t(resolveErrorMessage(errorKey))}
+        onRetry={() => {
+          void refetch();
+        }}
+        retryLabel={t(activityDetailMessages.loadErrorRetry)}
+        title={t(activityDetailMessages.loadErrorTitle)}
+        topInset={topInset}
+      />
+    );
+  }
 
   if (data === null) {
     return <ActivityNotFound />;
@@ -84,9 +98,6 @@ function ActivityDetailContent({ bottomInset, id, topInset }: ActivityDetailCont
       activity={data.activity}
       bottomInset={bottomInset}
       hasSavedFallback={error !== null}
-      onRetry={() => {
-        void refetch();
-      }}
       savedFallbackBody={t(activityDetailMessages.savedFallbackBody)}
       savedFallbackTitle={t(activityDetailMessages.savedFallbackTitle)}
       topInset={topInset}
@@ -119,7 +130,6 @@ type ActivityDetailLoadedProps = {
   activity: Activity;
   bottomInset: number;
   hasSavedFallback: boolean;
-  onRetry: () => void;
   savedFallbackBody: string;
   savedFallbackTitle: string;
   topInset: number;
@@ -129,7 +139,6 @@ function ActivityDetailLoaded({
   activity,
   bottomInset,
   hasSavedFallback,
-  onRetry,
   savedFallbackBody,
   savedFallbackTitle,
   topInset,
@@ -151,7 +160,11 @@ function ActivityDetailLoaded({
   }, [activity.title, i18n]);
 
   useEffect(() => {
-    if (hasSavedFallback) {
+    const presentation = resolveFeedbackPresentation({
+      kind: "error",
+      recovery: "transient",
+    });
+    if (hasSavedFallback && presentation === "toast") {
       showNativeToast({
         message: savedFallbackBody,
         title: savedFallbackTitle,
@@ -182,18 +195,10 @@ function ActivityDetailLoaded({
               style={styles.heroImage}
               testID="activity-detail-hero"
             />
+            <HeroImageBlend uri={cover.uri} />
           </View>
         </Link.AppleZoomTarget>
         <View style={styles.copy}>
-          {hasSavedFallback ? (
-            <InlineStatusBanner
-              actionLabel={t(activityDetailMessages.retry)}
-              body={savedFallbackBody}
-              onAction={onRetry}
-              testID="activity-detail-saved-fallback"
-              title={savedFallbackTitle}
-            />
-          ) : null}
           <ActivityCategoryBadge
             category={activity.category}
             label={t(categoryMessages[activity.category])}
@@ -209,7 +214,6 @@ function ActivityDetailLoaded({
             <DetailValue label={t(activityDetailMessages.duration)} value={duration} />
           </View>
           <AddToCalendarSection activity={activity} />
-          {__DEV__ ? <NativeFeedbackTestPanel /> : null}
         </View>
       </ScrollView>
       <ActivityDetailControls
@@ -241,7 +245,7 @@ function DetailValue({ label, value }: DetailValueProps) {
 const styles = StyleSheet.create({
   copy: {
     paddingHorizontal: spacing.space24,
-    paddingTop: spacing.space24,
+    paddingTop: spacing.space16,
   },
   description: {
     ...typography.body,

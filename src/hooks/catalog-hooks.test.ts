@@ -1,6 +1,6 @@
 import { createElement, Suspense, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { act, renderHook, waitFor } from "@testing-library/react-native";
+import { act, cleanup, renderHook, waitFor } from "@testing-library/react-native";
 
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
 import { useActivities } from "@/hooks/use-activities";
@@ -14,7 +14,7 @@ import {
 import { useRefreshCatalog } from "@/hooks/use-refresh-catalog";
 import { LIST_PAGE_SIZE } from "@/mocks/constants";
 import { resetCatalog } from "@/mocks/catalog-store";
-import { resetReviewModeState, setRefreshMode } from "@/mocks/review-mode";
+import { resetReviewModeState, setInitialLoadMode, setRefreshMode } from "@/mocks/review-mode";
 import { createQueryClient } from "@/query/client";
 import { clearFavorites } from "@/state/favorites";
 import { resetDiscoveryFilters } from "@/state/discovery";
@@ -35,6 +35,10 @@ function createWrapper(queryClient: QueryClient) {
 }
 
 describe("catalog and favorites hooks", () => {
+  afterEach(async () => {
+    await cleanup();
+  });
+
   beforeEach(() => {
     resetCatalog();
     resetReviewModeState();
@@ -42,15 +46,32 @@ describe("catalog and favorites hooks", () => {
     clearFavorites();
   });
 
-  it("loads paginated activities with Suspense", async () => {
+  it("loads paginated activities", async () => {
     const queryClient = createQueryClient();
     const { result } = await renderHook(() => useActivities({ search: "", categories: [] }), {
       wrapper: createWrapper(queryClient),
     });
 
     await waitFor(() =>
-      expect(result.current.data.pages[0]?.activities).toHaveLength(LIST_PAGE_SIZE),
+      expect(result.current.data?.pages[0]?.activities).toHaveLength(LIST_PAGE_SIZE),
     );
+  });
+
+  it("reloads a kept-alive catalog after a review mode changes", async () => {
+    const queryClient = createQueryClient();
+    const { result } = await renderHook(() => useActivities({ search: "", categories: [] }), {
+      wrapper: createWrapper(queryClient),
+    });
+
+    await waitFor(() =>
+      expect(result.current.data?.pages[0]?.activities).toHaveLength(LIST_PAGE_SIZE),
+    );
+
+    await act(async () => {
+      setInitialLoadMode("empty");
+    });
+
+    await waitFor(() => expect(result.current.data?.pages[0]?.activities).toHaveLength(0));
   });
 
   it("applies discovery search and categories to the list query", async () => {
@@ -66,9 +87,9 @@ describe("catalog and favorites hooks", () => {
       },
     );
 
-    await waitFor(() => expect(result.current.data.pages.length).toBeGreaterThan(0));
+    await waitFor(() => expect(result.current.data?.pages.length).toBeGreaterThan(0));
     expect(
-      result.current.data.pages[0]?.activities.every(
+      result.current.data?.pages[0]?.activities.every(
         (activity) =>
           ["Outdoors", "Culture"].includes(activity.category) &&
           activity.title.toLowerCase().includes(SUPPLIED_ACTIVITIES[0].title.toLowerCase()),

@@ -1,0 +1,62 @@
+appId: com.adlerventures.explora
+name: Favorite opens from its saved snapshot during a detail failure
+tags:
+  - assessment
+  - core
+  - ios
+---
+- runFlow: ../subflows/reset-test-state.yaml
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-normal"
+    direction: UP
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 8000
+- tapOn:
+    id: "favorite-button-act-001"
+- extendedWaitUntil:
+    visible: "Remove Botanical Garden Walk from favorites"
+    timeout: 8000
+
+- tapOn:
+    point: "71%, 94%"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-favorite-count"
+    direction: DOWN
+- assertVisible: "Favorites, 1"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-detail-load-fail"
+    direction: UP
+- tapOn:
+    id: "dev-tools-detail-load-fail"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-normal"
+    direction: UP
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "50%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "favorites-list"
+    timeout: 8000
+- tapOn:
+    id: "activity-card-act-001"
+- extendedWaitUntil:
+    visible:
+      id: "activity-detail-content"
+    timeout: 8000
+- assertVisible: "Botanical Garden Walk"
+- assertNotVisible:
+    id: "activity-detail-error"

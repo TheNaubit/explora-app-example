@@ -14,11 +14,18 @@ List requests accept `cursor`, optional `limit`, `search` (title substring), and
 
 Review modes:
 
-| Field         | Applies to                           | Values                      |
-| ------------- | ------------------------------------ | --------------------------- |
-| `initialLoad` | First list page and get-by-id        | `normal` / `slow` / `fail`  |
-| `pageLoad`    | Later list pages (`cursor !== null`) | `normal` / `slow` / `fail`  |
-| `refresh`     | Refresh mutation                     | `success` / `slow` / `fail` |
+| Field         | Applies to                           | Values                                                            |
+| ------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `initialLoad` | First list page                      | `normal` / `slow` / `empty` / `fail` / `timeout` / `invalid-data` |
+| `detailLoad`  | Activity lookup                      | List values plus `not-found`                                      |
+| `pageLoad`    | Later list pages (`cursor !== null`) | `normal` / `slow` / `fail` / `timeout` / `invalid-data`           |
+| `refresh`     | Refresh mutation                     | `success` / `slow` / `fail` / `timeout`                           |
+
+`fail` returns an offline error. `timeout` returns a timeout error.
+
+`invalid-data` returns a validation error. Failed refresh requests add no activity.
+
+`empty` returns a valid first page with zero activities. Slow modes wait 10 seconds.
 
 ## Code map
 

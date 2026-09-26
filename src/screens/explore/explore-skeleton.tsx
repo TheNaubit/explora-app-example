@@ -33,7 +33,7 @@ type ExploreSkeletonProps = {
 const SKELETON_ROWS = Array.from({ length: SKELETON_LIST_ROW_COUNT }, (_, index) => index);
 
 /**
- * Suspense fallback for the Explore catalog list.
+ * First-load skeleton for the Explore catalog list.
  * Matches the sized list host and keeps custom iOS header spacing while loading.
  */
 export function ExploreSkeleton({
@@ -51,7 +51,7 @@ export function ExploreSkeleton({
   const usesCardCarousel =
     Platform.OS !== "web" && !reduceMotion && fontScale <= EXPLORE_CARD_CAROUSEL_MAX_FONT_SCALE;
   const { itemExtent, mediaHeight, padTop } = getActivityCardCarouselLayout({
-    // A Suspense list starts below the safe area before it replaces the loaded list.
+    // The first-load list starts below the safe area before content replaces it.
     contentOriginInset: filtersInOverlay ? insets.top : 0,
     fontScale,
     headerHeight,

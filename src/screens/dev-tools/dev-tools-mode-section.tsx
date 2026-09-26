@@ -7,7 +7,15 @@ import { DevToolsSection } from "@/screens/dev-tools/dev-tools-section";
 import { devToolsMessages } from "@/screens/dev-tools/messages";
 import { spacing, typography, useAppTheme } from "@/theme";
 
-export type ReviewModeOption = "normal" | "slow" | "fail" | "success";
+export type ReviewModeOption =
+  | "normal"
+  | "slow"
+  | "empty"
+  | "fail"
+  | "timeout"
+  | "invalid-data"
+  | "not-found"
+  | "success";
 
 type DevToolsModeSectionProps = {
   title: string;
@@ -21,8 +29,12 @@ type DevToolsModeSectionProps = {
 const optionMessages = {
   normal: devToolsMessages.normal,
   slow: devToolsMessages.slow,
+  empty: devToolsMessages.empty,
   fail: devToolsMessages.fail,
+  "invalid-data": devToolsMessages.invalidData,
+  "not-found": devToolsMessages.notFound,
   success: devToolsMessages.success,
+  timeout: devToolsMessages.timeout,
 } as const;
 
 /** One grouped radio selection for a request mode. */

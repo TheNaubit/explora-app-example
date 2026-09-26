@@ -6,7 +6,7 @@
 /** Delay before search text updates the discovery store / query key. */
 export const SEARCH_DEBOUNCE_MS = 300;
 
-/** Skeleton rows shown while the catalog Suspense fallback is visible. */
+/** Skeleton rows shown while the first catalog request is pending. */
 export const SKELETON_LIST_ROW_COUNT = 6;
 
 /** Minimum touch target size from DESIGN.md (44 × 44 points). */

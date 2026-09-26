@@ -1,0 +1,89 @@
+appId: com.adlerventures.explora
+name: Refresh failure keeps content and success adds one
+tags:
+  - assessment
+  - assessment-required
+  - recovery
+  - states
+  - ios
+---
+- runFlow: ../subflows/reset-test-state.yaml
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-refresh-fail"
+    direction: UP
+- tapOn:
+    id: "dev-tools-refresh-fail"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-normal"
+    direction: UP
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 8000
+- scrollUntilVisible:
+    element:
+      id: "activity-card-act-001"
+    direction: UP
+- swipe:
+    start: 50%, 35%
+    end: 50%, 92%
+    duration: 1500
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 8000
+- assertNotVisible:
+    id: "explore-load-error"
+
+- tapOn:
+    point: "71%, 94%"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-catalog-count"
+    direction: DOWN
+- assertVisible:
+    id: "dev-tools-catalog-count"
+- assertVisible: "Catalog activities, 1,012"
+
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-refresh-success"
+    direction: UP
+- tapOn:
+    id: "dev-tools-refresh-success"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-normal"
+    direction: UP
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- scrollUntilVisible:
+    element:
+      id: "activity-card-act-001"
+    direction: UP
+- swipe:
+    start: 50%, 35%
+    end: 50%, 92%
+    duration: 1500
+- extendedWaitUntil:
+    notVisible:
+      id: "pull-to-refresh-indicator"
+    timeout: 8000
+
+- tapOn:
+    point: "71%, 94%"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-catalog-count"
+    direction: DOWN
+- assertVisible: "Catalog activities, 1,013"

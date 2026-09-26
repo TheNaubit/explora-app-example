@@ -1,0 +1,35 @@
+appId: com.adlerventures.explora
+name: Feedback policy surfaces
+tags:
+  - assessment
+  - states
+  - ios
+---
+- runFlow: ../subflows/reset-test-state.yaml
+
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-actionable-error"
+    direction: DOWN
+- tapOn:
+    id: "dev-tools-actionable-error"
+- assertVisible:
+    id: "dev-tools-inline-recovery-preview"
+- assertVisible: "Could not load more activities"
+- assertVisible: "Try again"
+- tapOn:
+    id: "inline-status-retry"
+- assertNotVisible:
+    id: "dev-tools-inline-recovery-preview"
+
+- tapOn:
+    id: "dev-tools-transient-error"
+- extendedWaitUntil:
+    visible: "Could not refresh"
+    timeout: 5000
+
+- tapOn:
+    id: "dev-tools-calendar-success"
+- extendedWaitUntil:
+    visible: "Added to Calendar"
+    timeout: 5000

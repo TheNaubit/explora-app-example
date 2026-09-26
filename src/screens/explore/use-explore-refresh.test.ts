@@ -1,12 +1,11 @@
 import { createElement, Suspense, type ReactNode } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { act, renderHook, waitFor } from "@testing-library/react-native";
+import { act, renderHook } from "@testing-library/react-native";
 import { I18nProvider } from "@lingui/react";
 import { i18n } from "@lingui/core";
 
 import { ApiError } from "@/query/errors";
 import { createQueryClient } from "@/query/client";
-import { activityKeys } from "@/query/keys";
 import { showNativeToast } from "@/native-toast";
 import { useExploreRefresh } from "@/screens/explore/use-explore-refresh";
 
@@ -14,7 +13,6 @@ i18n.load("en", {});
 i18n.activate("en");
 
 const mockMutateAsync = jest.fn();
-const mockResetQueries = jest.fn();
 const mockShowNativeToast = showNativeToast as jest.MockedFunction<typeof showNativeToast>;
 
 jest.mock("@/hooks/use-refresh-catalog", () => ({
@@ -27,16 +25,6 @@ jest.mock("@/hooks/use-refresh-catalog", () => ({
 jest.mock("@/native-toast", () => ({
   showNativeToast: jest.fn(),
 }));
-
-jest.mock("@tanstack/react-query", () => {
-  const actual = jest.requireActual("@tanstack/react-query");
-  return {
-    ...actual,
-    useQueryClient: () => ({
-      resetQueries: mockResetQueries,
-    }),
-  };
-});
 
 function createWrapper() {
   const queryClient = createQueryClient();
@@ -52,12 +40,11 @@ function createWrapper() {
 describe("useExploreRefresh", () => {
   beforeEach(() => {
     mockMutateAsync.mockReset();
-    mockResetQueries.mockReset();
     mockShowNativeToast.mockReset();
     mockMutateAsync.mockResolvedValue({ activity: { id: "new" } });
   });
 
-  it("clears the banner and announces on refresh success", async () => {
+  it("keeps refresh success silent", async () => {
     const { result } = await renderHook(() => useExploreRefresh(), {
       wrapper: createWrapper(),
     });
@@ -67,7 +54,7 @@ describe("useExploreRefresh", () => {
     });
 
     expect(result.current.banner).toBeNull();
-    expect(mockShowNativeToast).toHaveBeenCalledWith(expect.objectContaining({ type: "success" }));
+    expect(mockShowNativeToast).not.toHaveBeenCalled();
   });
 
   it("ignores a second refresh request while the first request is pending", async () => {
@@ -96,7 +83,7 @@ describe("useExploreRefresh", () => {
     });
   });
 
-  it("maps ApiError refresh failures to a banner", async () => {
+  it("maps ApiError refresh failures to one transient toast", async () => {
     mockMutateAsync.mockRejectedValue(new ApiError("errors.refreshFailed"));
 
     const { result } = await renderHook(() => useExploreRefresh(), {
@@ -107,10 +94,8 @@ describe("useExploreRefresh", () => {
       await result.current.handleRefresh();
     });
 
-    expect(result.current.banner).toEqual({
-      kind: "refresh",
-      errorKey: "errors.refreshFailed",
-    });
+    expect(result.current.banner).toBeNull();
+    expect(mockShowNativeToast).toHaveBeenCalledTimes(1);
     expect(mockShowNativeToast).toHaveBeenCalledWith(expect.objectContaining({ type: "error" }));
   });
 
@@ -125,23 +110,7 @@ describe("useExploreRefresh", () => {
       await result.current.handleRefresh();
     });
 
-    expect(result.current.banner).toEqual({
-      kind: "refresh",
-      errorKey: "errors.refreshFailed",
-    });
-  });
-
-  it("resets list queries on first-load error recovery", async () => {
-    const { result } = await renderHook(() => useExploreRefresh(), {
-      wrapper: createWrapper(),
-    });
-
-    await act(async () => {
-      result.current.handleQueryErrorReset();
-    });
-
-    await waitFor(() =>
-      expect(mockResetQueries).toHaveBeenCalledWith({ queryKey: activityKeys.lists() }),
-    );
+    expect(result.current.banner).toBeNull();
+    expect(mockShowNativeToast).toHaveBeenCalledWith(expect.objectContaining({ type: "error" }));
   });
 });

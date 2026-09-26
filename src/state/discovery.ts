@@ -7,6 +7,11 @@ export type DiscoveryState = {
   categories: ActivityCategory[];
 };
 
+type DiscoveryScrollFilters = {
+  search: string;
+  categories: readonly ActivityCategory[];
+};
+
 const initialDiscoveryState: DiscoveryState = {
   searchQuery: "",
   categories: [],
@@ -18,21 +23,33 @@ const initialDiscoveryState: DiscoveryState = {
  */
 export const discovery$ = observable<DiscoveryState>({ ...initialDiscoveryState });
 
-const discoveryScrollOffset$ = observable(0);
+const discoveryScrollOffsets = new Map<string, number>();
+
+function getDiscoveryScrollKey({ search, categories }: DiscoveryScrollFilters): string {
+  return JSON.stringify([search, [...categories].sort()]);
+}
 
 /** Set the title search query used by the catalog list query key. */
 export function setDiscoverySearch(searchQuery: string): void {
   discovery$.searchQuery.set(searchQuery);
 }
 
-/** Store the shared catalog position used before a search query starts. */
-export function setDiscoveryScrollOffset(scrollOffset: number): void {
-  discoveryScrollOffset$.set(Math.max(0, scrollOffset));
+/** Store the Explore position for one search and category state. */
+export function setDiscoveryScrollOffset(
+  filters: DiscoveryScrollFilters,
+  scrollOffset: number,
+): void {
+  discoveryScrollOffsets.set(getDiscoveryScrollKey(filters), Math.max(0, scrollOffset));
 }
 
-/** Get the shared catalog position without subscribing a route to scroll changes. */
-export function getDiscoveryScrollOffset(): number {
-  return discoveryScrollOffset$.peek();
+/** Get the Explore position for one search and category state. */
+export function getDiscoveryScrollOffset(filters: DiscoveryScrollFilters): number {
+  return discoveryScrollOffsets.get(getDiscoveryScrollKey(filters)) ?? 0;
+}
+
+/** Remove all session scroll positions. */
+export function resetDiscoveryScrollOffsets(): void {
+  discoveryScrollOffsets.clear();
 }
 
 /** Toggle one category. An empty array represents the exclusive All selection. */

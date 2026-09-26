@@ -2,6 +2,7 @@ import {
   getDiscoveryScrollOffset,
   getDiscoveryFilters,
   resetDiscoveryFilters,
+  resetDiscoveryScrollOffsets,
   setDiscoveryScrollOffset,
   setDiscoverySearch,
   toggleDiscoveryCategory,
@@ -10,6 +11,7 @@ import {
 describe("discovery store", () => {
   beforeEach(() => {
     resetDiscoveryFilters();
+    resetDiscoveryScrollOffsets();
   });
 
   it("stores search and multiple categories for the list query key", () => {
@@ -44,12 +46,18 @@ describe("discovery store", () => {
     expect(getDiscoveryFilters().categories).toEqual([]);
   });
 
-  it("shares a non-negative catalog scroll offset between discovery routes", () => {
-    setDiscoveryScrollOffset(248);
+  it("stores a non-negative scroll offset for each filter state", () => {
+    const browseFilters = { search: "", categories: [] } as const;
+    const searchFilters = { search: "museum", categories: ["Culture"] } as const;
 
-    expect(getDiscoveryScrollOffset()).toBe(248);
+    setDiscoveryScrollOffset(browseFilters, 248);
+    setDiscoveryScrollOffset(searchFilters, 412);
 
-    setDiscoveryScrollOffset(-24);
-    expect(getDiscoveryScrollOffset()).toBe(0);
+    expect(getDiscoveryScrollOffset(browseFilters)).toBe(248);
+    expect(getDiscoveryScrollOffset(searchFilters)).toBe(412);
+
+    setDiscoveryScrollOffset(searchFilters, -24);
+    expect(getDiscoveryScrollOffset(searchFilters)).toBe(0);
+    expect(getDiscoveryScrollOffset(browseFilters)).toBe(248);
   });
 });

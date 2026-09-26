@@ -57,6 +57,9 @@ yarn-error.*
 coverage/
 *.lcov
 
+# Maestro runtime reports
+artifacts/maestro/
+
 # Lingui: Metro compiles .po on import. Do not ignore the .po sources.
 # If you add `lingui compile` artifacts later, ignore only messages.js / messages.ts.
 

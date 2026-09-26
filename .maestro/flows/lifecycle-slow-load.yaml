@@ -1,0 +1,29 @@
+appId: com.adlerventures.explora
+name: Slow load survives background and resume
+tags:
+  - assessment
+  - lifecycle
+  - ios
+---
+- runFlow: ../subflows/reset-test-state.yaml
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-slow"
+    direction: UP
+- tapOn:
+    id: "dev-tools-initial-load-slow"
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- assertVisible:
+    id: "explore-skeleton"
+- pressKey: Home
+- launchApp:
+    stopApp: false
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 10000
+- assertNotVisible: "Render Error"

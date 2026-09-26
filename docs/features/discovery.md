@@ -13,6 +13,8 @@
 - Select multiple category chips. A result can match any selected category.
 - All clears the category selection and becomes the only selected chip.
 - Combine search and filter. Filters stay in the discovery store for the session.
+- Explore keeps a separate session scroll position for each search and category state.
+- Explore saves the live scroll position when its route loses focus, including during active momentum.
 - Activity cards show a seeded cover photo with a BlurHash fade-in (`getActivityCoverImage`).
 - Card text sits inside the lower cover region.
 - One continuous alpha mask changes that region from the sharp cover to a blurred copy.
@@ -56,7 +58,7 @@
 | Seed catalog          | `src/mocks/seed-catalog.ts` (1,012 items)                                          |
 | Refresh persistence   | `src/mocks/catalog-store.ts`, MMKV                                                 |
 | Mock list API         | `src/mocks/api.ts` → `listActivities` (paginated)                                  |
-| List query            | `src/hooks/use-activities.ts` (`useSuspenseInfiniteQuery`)                         |
+| List query            | `src/hooks/use-activities.ts` (`useInfiniteQuery`)                                 |
 | Search / filter store | `src/state/discovery.ts`                                                           |
 | Shared kit            | `CategoryChip` (`A11yPressable`), `CategoryChipRow`, `ActivityCard`, `SearchField` |
 | Cover photos          | `src/data/activity-image.ts` (`getActivityCoverImage`)                             |

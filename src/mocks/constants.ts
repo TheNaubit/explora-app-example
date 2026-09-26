@@ -50,7 +50,7 @@ export const GENERATED_ACTIVITY_TITLE_SUFFIX = " Experience";
 export const MOCK_DELAY_NORMAL_MS = 40;
 
 /** Mock network delay for a slow response, in milliseconds. */
-export const MOCK_DELAY_SLOW_MS = 2_500;
+export const MOCK_DELAY_SLOW_MS = 10_000;
 
 /**
  * Default page size for paginated `listActivities`.

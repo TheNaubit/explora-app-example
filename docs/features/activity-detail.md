@@ -7,13 +7,16 @@
 - Back returns to the previous tab state.
 - Search, category filters, and Explore scroll position stay in memory.
 - The screen shows an illustrated category badge, title, description, location, and duration.
+- A masked blurred hero layer merges the image into the screen background.
 - The right hero control saves or removes the activity.
 - The heart is filled when the activity is saved.
 - A saved activity snapshot appears immediately and remains available offline.
 - A failed snapshot refetch keeps the saved copy visible.
+- A failed snapshot refetch shows one temporary error toast.
 - Loading uses a hero and content skeleton.
 - An invalid activity id shows a not-found state with a back action.
-- Other first-load errors use the shared Query error boundary.
+- Other first-load errors use a dedicated full-screen recovery state.
+- Detail failures stay in query state. They do not throw a render error into the Expo development overlay.
 - One full-width **Add to Calendar** action opens the schedule controls.
 - The action has no disclosure chevron because it starts a task.
 - The iOS sheet fits the native date and time picker without expanding to full height.
@@ -38,7 +41,7 @@ Android uses the same route, content, actions, and state handling. Android runti
 
 - `ScreenFrame` announces the screen.
 - Loading, loaded, not-found, and saved-fallback states use status announcements.
-- Back, favorite, and retry actions use accessible project controls.
+- Back, favorite, calendar, and retry actions use accessible project controls.
 - Text scales with Dynamic Type and can wrap.
 - All user-facing copy uses Lingui messages.
 - The calendar action and sheet header actions support keyboard activation and clear focus styles.

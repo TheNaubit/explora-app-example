@@ -38,22 +38,23 @@ The implementation source is [`src/theme.ts`](./src/theme.ts). Keep this file an
 
 Use one forest-green accent. Use warm neutrals in both themes.
 
-| Role              | Light     | Dark      | Use                                     |
-| ----------------- | --------- | --------- | --------------------------------------- |
-| Background        | `#F7F4EC` | `#101411` | Main screen background                  |
-| Surface           | `#FFFDF8` | `#171C18` | Cards, inputs, and grouped content      |
-| Secondary surface | `#EEEAE1` | `#202620` | Selected regions and quiet controls     |
-| Elevated surface  | `#FFFFFF` | `#262D27` | Floating non-glass surfaces             |
-| Primary text      | `#1C211D` | `#F5F2EA` | Titles and body text                    |
-| Secondary text    | `#616860` | `#B8BDB6` | Supporting and metadata text            |
-| Border            | `#D9D7CE` | `#343C35` | Input and card boundaries               |
-| Accent            | `#2F6D50` | `#70B58D` | Primary action, active state, and focus |
-| Accent pressed    | `#245940` | `#5B9D77` | Press feedback                          |
-| On accent         | `#FFFFFF` | `#07140C` | Content on the accent                   |
-| Warning           | `#9A650A` | `#E7B760` | Non-blocking warning                    |
-| Danger            | `#B23B32` | `#F18A80` | Error and destructive action            |
-| Danger surface    | `#FCECEA` | `#3A211F` | Inline error background                 |
-| Skeleton          | `#DEDAD0` | `#2A312B` | Loading placeholders                    |
+| Role              | Light                    | Dark                  | Use                                     |
+| ----------------- | ------------------------ | --------------------- | --------------------------------------- |
+| Background        | `#F7F4EC`                | `#101411`             | Main screen background                  |
+| Background clear  | `rgba(247, 244, 236, 0)` | `rgba(16, 20, 17, 0)` | Image-to-screen fades                   |
+| Surface           | `#FFFDF8`                | `#171C18`             | Cards, inputs, and grouped content      |
+| Secondary surface | `#EEEAE1`                | `#202620`             | Selected regions and quiet controls     |
+| Elevated surface  | `#FFFFFF`                | `#262D27`             | Floating non-glass surfaces             |
+| Primary text      | `#1C211D`                | `#F5F2EA`             | Titles and body text                    |
+| Secondary text    | `#616860`                | `#B8BDB6`             | Supporting and metadata text            |
+| Border            | `#D9D7CE`                | `#343C35`             | Input and card boundaries               |
+| Accent            | `#2F6D50`                | `#70B58D`             | Primary action, active state, and focus |
+| Accent pressed    | `#245940`                | `#5B9D77`             | Press feedback                          |
+| On accent         | `#FFFFFF`                | `#07140C`             | Content on the accent                   |
+| Warning           | `#9A650A`                | `#E7B760`             | Non-blocking warning                    |
+| Danger            | `#B23B32`                | `#F18A80`             | Error and destructive action            |
+| Danger surface    | `#FCECEA`                | `#3A211F`             | Inline error background                 |
+| Skeleton          | `#DEDAD0`                | `#2A312B`             | Loading placeholders                    |
 
 Do not add another accent hue. Photography can contain natural color, but interface chrome stays within these tokens.
 
@@ -231,10 +232,10 @@ The initial generated concept is stored at [`docs/design/references/explora-app-
 | `PrimaryButton`            | Commit the main action                         | Label and optional leading symbol                    | Default, pressed, focused, busy, disabled            | Use one primary action per screen                                     |
 | `IconButton`               | Run a compact action                           | System symbol and 44-point target                    | Default, pressed, focused, disabled                  | Use glass only above imagery or scrolling                             |
 | `NativeTabs` (Expo Router) | Move between Explore, Favorites, and Dev Tools | System tab bar                                       | Light, dark, minimize on scroll                      | Use `expo-router/native-tabs`                                         |
-| `InlineStatusBanner`       | Explain refresh status                         | Status symbol, title, body, and retry action         | Success, warning, error                              | Keep stale content visible below it                                   |
+| `InlineStatusBanner`       | Explain an actionable failure                  | Tonal panel, compact symbol, title, body, and retry  | Error, pressed, focused                              | Keep it flat. Never pair it with a toast for the same outcome         |
 | `ActivityCardSkeleton`     | Reserve the activity card shape                | Full cover, favorite target, and lower copy blocks   | Loading pulse, reduced motion                        | Match the full-image card. Do not use a full-screen spinner           |
 | `EmptyState`               | Explain a resolved empty result                | Illustration, title, body, and action                | Search empty, favorites empty, not-found             | Give one next action                                                  |
-| `DevTools`                 | Reproduce assessment states                    | Grouped settings, status summary, and reset          | Normal, slow, fail, success                          | Keep device offline testing separate                                  |
+| `DevTools`                 | Reproduce assessment states                    | Grouped settings, feedback previews, and reset       | Normal, slow, offline, timeout, invalid, not-found   | Keep device offline testing separate                                  |
 
 Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF Symbols on iOS and Material Symbols on Android.
 
@@ -260,6 +261,8 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 
 - Push the detail screen from Explore or Favorites.
 - Use one edge-to-edge hero image when an image exists.
+- Crossfade the lower hero from the sharp image into a blurred copy.
+- Fade the blurred copy into the screen background. Do not leave a hard seam.
 - Put glass controls above the hero image on supported iOS devices.
 - Show an illustrated category badge, title, description, location, and duration in that order.
 - Keep one primary save action.
@@ -282,7 +285,12 @@ Use `A11yPressable`, `A11yInput`, and `A11yCard` inside these components. Use SF
 - Empty search keeps the current query and filters visible.
 - Not-found explains that the activity link is invalid or unavailable.
 - Refresh failure keeps stale content visible.
-- Every recovery state has one clear next action.
+- Temporary failures use one native error toast when content stays usable.
+- Important failures use one inline recovery surface with one clear action.
+- Keep inline recovery compact. Use a danger tint and a direct accent retry action.
+- Do not style inline recovery as an elevated alert card.
+- Routine success and cancellation stay silent.
+- A confirmed calendar save is the only success toast.
 
 ## Dev Tools
 
@@ -290,11 +298,14 @@ The assessment requires reproducible success, slow, and failure states. Provide 
 
 - Add a **Dev Tools** native tab with a tools icon.
 - Use an iOS-style grouped settings screen.
-- Include **Initial load:** Normal, Slow, Fail.
-- Include **Later page load:** Normal, Slow, Fail.
-- Include **Refresh:** Success, Slow, Fail.
+- Include first catalog modes for Normal, Slow, Empty, Offline, Timeout, and Invalid data.
+- Include the same activity detail modes and Not found.
+- Include the same later-page modes.
+- Include refresh modes for Success, Slow, Offline, and Timeout.
+- Include previews for transient error, actionable error, and calendar success feedback.
 - Show the current catalog and favorite counts.
-- Include a request-cache action so the next request uses the selected mode.
+- Clear request cache automatically when a mode changes.
+- Keep a manual request-cache action for repeated checks.
 - Include a request-mode reset action.
 - Include `Reset local data` as a destructive action with confirmation.
 - Keep actual device offline testing separate from simulated request modes.

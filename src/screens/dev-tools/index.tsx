@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { useLingui } from "@lingui/react/macro";
 import { useFocusEffect } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { useFavoriteIds } from "@/hooks/use-favorites";
 import { getCatalogSize } from "@/mocks/catalog-store";
 import { getReviewModeState, resetReviewModeState } from "@/mocks/review-mode";
 import { DevToolsActionRow } from "@/screens/dev-tools/dev-tools-action-row";
+import { DevToolsFeedbackSection } from "@/screens/dev-tools/dev-tools-feedback-section";
 import {
   clearRequestCache,
   resetLocalData,
@@ -27,8 +28,17 @@ import type { ReviewModeState } from "@/schemas/review-mode";
 import { formatNumber } from "@/i18n/format";
 import { spacing, typography, useAppTheme } from "@/theme";
 
-const LOAD_OPTIONS = ["normal", "slow", "fail"] as const;
-const REFRESH_OPTIONS = ["success", "slow", "fail"] as const;
+const LOAD_OPTIONS = ["normal", "slow", "fail", "timeout", "invalid-data"] as const;
+const INITIAL_LOAD_OPTIONS = [
+  "normal",
+  "slow",
+  "empty",
+  "fail",
+  "timeout",
+  "invalid-data",
+] as const;
+const DETAIL_OPTIONS = [...LOAD_OPTIONS, "not-found"] as const;
+const REFRESH_OPTIONS = ["success", "slow", "fail", "timeout"] as const;
 
 /** Assessment controls in an iOS-style grouped settings screen. */
 export function DevTools() {
@@ -52,6 +62,7 @@ export function DevTools() {
     setting: string,
   ) {
     const next = updateReviewMode(key, value);
+    clearRequestCache(queryClient);
     const option = t(
       value === "success"
         ? devToolsMessages.success
@@ -59,7 +70,15 @@ export function DevTools() {
           ? devToolsMessages.normal
           : value === "slow"
             ? devToolsMessages.slow
-            : devToolsMessages.fail,
+            : value === "empty"
+              ? devToolsMessages.empty
+              : value === "timeout"
+                ? devToolsMessages.timeout
+                : value === "invalid-data"
+                  ? devToolsMessages.invalidData
+                  : value === "not-found"
+                    ? devToolsMessages.notFound
+                    : devToolsMessages.fail,
     );
     setModes(next);
     announceStatus(i18n._({ ...devToolsMessages.modeChanged, values: { option, setting } }));
@@ -93,6 +112,7 @@ export function DevTools() {
   }
 
   const initialLoadTitle = t(devToolsMessages.initialLoad);
+  const detailLoadTitle = t(devToolsMessages.detailLoad);
   const laterPageLoadTitle = t(devToolsMessages.laterPageLoad);
   const refreshTitle = t(devToolsMessages.refresh);
   const catalogActivitiesLabel = t(devToolsMessages.catalogActivities);
@@ -104,105 +124,114 @@ export function DevTools() {
     <ScreenFrame
       padHorizontal={false}
       padTop={false}
+      scrollable
+      scrollContentStyle={styles.content}
+      scrollViewProps={{ keyboardShouldPersistTaps: "handled" }}
       style={{ backgroundColor: theme.colors.background }}
       testID="dev-tools-screen"
       title={t(devToolsMessages.title)}
     >
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
-      >
-        <Text style={[styles.introduction, { color: theme.colors.textSecondary }]}>
-          {t(devToolsMessages.introduction)}
-        </Text>
+      <Text style={[styles.introduction, { color: theme.colors.textSecondary }]}>
+        {t(devToolsMessages.introduction)}
+      </Text>
 
-        <View style={styles.sections}>
-          <DevToolsModeSection
-            help={t(devToolsMessages.initialLoadHelp)}
-            onChange={(value) =>
-              handleModeChange(
-                "initialLoad",
-                value as ReviewModeState["initialLoad"],
-                initialLoadTitle,
-              )
-            }
-            options={LOAD_OPTIONS}
-            selected={modes.initialLoad}
-            testIDPrefix="initial-load"
-            title={initialLoadTitle}
+      <View style={styles.sections}>
+        <DevToolsModeSection
+          help={t(devToolsMessages.initialLoadHelp)}
+          onChange={(value) =>
+            handleModeChange(
+              "initialLoad",
+              value as ReviewModeState["initialLoad"],
+              initialLoadTitle,
+            )
+          }
+          options={INITIAL_LOAD_OPTIONS}
+          selected={modes.initialLoad}
+          testIDPrefix="initial-load"
+          title={initialLoadTitle}
+        />
+        <DevToolsModeSection
+          help={t(devToolsMessages.detailLoadHelp)}
+          onChange={(value) =>
+            handleModeChange("detailLoad", value as ReviewModeState["detailLoad"], detailLoadTitle)
+          }
+          options={DETAIL_OPTIONS}
+          selected={modes.detailLoad}
+          testIDPrefix="detail-load"
+          title={detailLoadTitle}
+        />
+        <DevToolsModeSection
+          help={t(devToolsMessages.laterPageLoadHelp)}
+          onChange={(value) =>
+            handleModeChange("pageLoad", value as ReviewModeState["pageLoad"], laterPageLoadTitle)
+          }
+          options={LOAD_OPTIONS}
+          selected={modes.pageLoad}
+          testIDPrefix="page-load"
+          title={laterPageLoadTitle}
+        />
+        <DevToolsModeSection
+          help={t(devToolsMessages.refreshHelp)}
+          onChange={(value: ReviewModeOption) =>
+            handleModeChange("refresh", value as ReviewModeState["refresh"], refreshTitle)
+          }
+          options={REFRESH_OPTIONS}
+          selected={modes.refresh}
+          testIDPrefix="refresh"
+          title={refreshTitle}
+        />
+
+        <DevToolsSection
+          title={t(devToolsMessages.requestModes)}
+          footer={`${t(devToolsMessages.lifecycleHelp)} ${t(devToolsMessages.offlineHelp)}`}
+        >
+          <DevToolsActionRow
+            hint={t(devToolsMessages.clearRequestCacheHint)}
+            label={t(devToolsMessages.clearRequestCache)}
+            onPress={handleClearRequestCache}
+            testID="dev-tools-clear-cache"
           />
-          <DevToolsModeSection
-            help={t(devToolsMessages.laterPageLoadHelp)}
-            onChange={(value) =>
-              handleModeChange("pageLoad", value as ReviewModeState["pageLoad"], laterPageLoadTitle)
-            }
-            options={LOAD_OPTIONS}
-            selected={modes.pageLoad}
-            testIDPrefix="page-load"
-            title={laterPageLoadTitle}
+          <DevToolsActionRow
+            hint={t(devToolsMessages.resetModesHint)}
+            label={t(devToolsMessages.resetModes)}
+            onPress={handleResetModes}
+            testID="dev-tools-reset-modes"
           />
-          <DevToolsModeSection
-            help={t(devToolsMessages.refreshHelp)}
-            onChange={(value: ReviewModeOption) =>
-              handleModeChange("refresh", value as ReviewModeState["refresh"], refreshTitle)
-            }
-            options={REFRESH_OPTIONS}
-            selected={modes.refresh}
-            testIDPrefix="refresh"
-            title={refreshTitle}
+        </DevToolsSection>
+
+        <DevToolsSection title={t(devToolsMessages.localData)}>
+          <DevToolsValueRow
+            accessibilityLabel={i18n._({
+              ...devToolsMessages.valueAccessibilityLabel,
+              values: { label: catalogActivitiesLabel, value: formattedCatalogCount },
+            })}
+            label={catalogActivitiesLabel}
+            testID="dev-tools-catalog-count"
+            value={formattedCatalogCount}
           />
+          <DevToolsValueRow
+            accessibilityLabel={i18n._({
+              ...devToolsMessages.valueAccessibilityLabel,
+              values: { label: favoritesLabel, value: formattedFavoriteCount },
+            })}
+            label={favoritesLabel}
+            testID="dev-tools-favorite-count"
+            value={formattedFavoriteCount}
+          />
+        </DevToolsSection>
 
-          <DevToolsSection
-            title={t(devToolsMessages.requestModes)}
-            footer={`${t(devToolsMessages.lifecycleHelp)} ${t(devToolsMessages.offlineHelp)}`}
-          >
-            <DevToolsActionRow
-              hint={t(devToolsMessages.clearRequestCacheHint)}
-              label={t(devToolsMessages.clearRequestCache)}
-              onPress={handleClearRequestCache}
-              testID="dev-tools-clear-cache"
-            />
-            <DevToolsActionRow
-              hint={t(devToolsMessages.resetModesHint)}
-              label={t(devToolsMessages.resetModes)}
-              onPress={handleResetModes}
-              testID="dev-tools-reset-modes"
-            />
-          </DevToolsSection>
+        <DevToolsFeedbackSection />
 
-          <DevToolsSection title={t(devToolsMessages.localData)}>
-            <DevToolsValueRow
-              accessibilityLabel={i18n._({
-                ...devToolsMessages.valueAccessibilityLabel,
-                values: { label: catalogActivitiesLabel, value: formattedCatalogCount },
-              })}
-              label={catalogActivitiesLabel}
-              testID="dev-tools-catalog-count"
-              value={formattedCatalogCount}
-            />
-            <DevToolsValueRow
-              accessibilityLabel={i18n._({
-                ...devToolsMessages.valueAccessibilityLabel,
-                values: { label: favoritesLabel, value: formattedFavoriteCount },
-              })}
-              label={favoritesLabel}
-              testID="dev-tools-favorite-count"
-              value={formattedFavoriteCount}
-            />
-          </DevToolsSection>
-
-          <DevToolsSection title={t(devToolsMessages.actions)}>
-            <DevToolsActionRow
-              destructive
-              hint={t(devToolsMessages.resetLocalDataHint)}
-              label={t(devToolsMessages.resetLocalData)}
-              onPress={handleResetLocalData}
-              testID="dev-tools-reset-local-data"
-            />
-          </DevToolsSection>
-        </View>
-      </ScrollView>
+        <DevToolsSection title={t(devToolsMessages.actions)}>
+          <DevToolsActionRow
+            destructive
+            hint={t(devToolsMessages.resetLocalDataHint)}
+            label={t(devToolsMessages.resetLocalData)}
+            onPress={handleResetLocalData}
+            testID="dev-tools-reset-local-data"
+          />
+        </DevToolsSection>
+      </View>
     </ScreenFrame>
   );
 }

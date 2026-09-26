@@ -94,3 +94,19 @@ The user asked Saved to match Explore without search or category filters.
 All 34 Jest suites passed. All 106 tests passed.
 Oxlint, Oxfmt, TypeScript, and the diff check passed.
 The iOS 27 Simulator showed the Saved header and saved card correctly.
+
+## Follow-up: Explore tab scroll position
+
+The user reported that a Favorites tab round trip changed the Explore scroll position.
+
+- Added a session scroll position for each search and category state.
+- Saved the live UI-thread position when Explore loses focus.
+- Kept drag-end and momentum-end checkpoints.
+- Reset all stored positions with the existing local-data reset action.
+- Added store, list, and tab-focus regression tests.
+
+The focused regression suite passed all 19 tests.
+All 47 Jest suites passed. All 175 tests passed.
+Oxlint, Oxfmt, TypeScript, and the diff check passed.
+The iOS Simulator kept the filtered Explore card after a Favorites round trip.
+Android runtime verification remains pending.

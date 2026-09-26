@@ -18,6 +18,7 @@ import { delay, MOCK_DELAY_MS } from "@/mocks/delay";
 import {
   getReviewModeState,
   resetReviewModeState,
+  setDetailLoadMode,
   setInitialLoadMode,
   setPageLoadMode,
   setRefreshMode,
@@ -142,6 +143,18 @@ describe("mock API", () => {
       expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.slow);
     });
 
+    it("returns a valid empty first page when initial load is empty", async () => {
+      setInitialLoadMode("empty");
+
+      const result = await listActivities({ cursor: null });
+
+      expect(result).toEqual({
+        ok: true,
+        data: { activities: [], nextCursor: null, total: 0 },
+      });
+      expect(getCatalogSize()).toBe(SEEDED_CATALOG_SIZE);
+    });
+
     it("returns networkOffline on first-page fail without mutating the catalog", async () => {
       setInitialLoadMode("fail");
       const sizeBefore = getCatalogSize();
@@ -156,6 +169,17 @@ describe("mock API", () => {
       expect(result.errorKey).toBe("errors.networkOffline");
       expect(getCatalogSize()).toBe(sizeBefore);
       expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.normal);
+    });
+
+    it.each([
+      ["timeout", "errors.networkTimeout"],
+      ["invalid-data", "errors.validationFailed"],
+    ] as const)("returns %s for a first-page scenario", async (mode, errorKey) => {
+      setInitialLoadMode(mode);
+
+      const result = await listActivities({ cursor: null });
+
+      expect(result).toEqual({ ok: false, errorKey });
     });
 
     it("returns networkOffline on next-page fail when pageLoad is fail", async () => {
@@ -210,8 +234,8 @@ describe("mock API", () => {
       expect(result.errorKey).toBe("errors.notFound");
     });
 
-    it("returns networkOffline when initial load is fail", async () => {
-      setInitialLoadMode("fail");
+    it("returns networkOffline when detail load is fail", async () => {
+      setDetailLoadMode("fail");
 
       const result = await getActivity(SUPPLIED_ACTIVITIES[0].id);
 
@@ -223,13 +247,25 @@ describe("mock API", () => {
       expect(result.errorKey).toBe("errors.networkOffline");
     });
 
-    it("uses the slow delay when initial load is slow", async () => {
-      setInitialLoadMode("slow");
+    it("uses the slow delay when detail load is slow", async () => {
+      setDetailLoadMode("slow");
 
       const result = await getActivity(SUPPLIED_ACTIVITIES[0].id);
 
       expect(result.ok).toBe(true);
       expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.slow);
+    });
+
+    it.each([
+      ["timeout", "errors.networkTimeout"],
+      ["invalid-data", "errors.validationFailed"],
+      ["not-found", "errors.notFound"],
+    ] as const)("returns %s for a detail scenario", async (mode, errorKey) => {
+      setDetailLoadMode(mode);
+
+      const result = await getActivity(SUPPLIED_ACTIVITIES[0].id);
+
+      expect(result).toEqual({ ok: false, errorKey });
     });
 
     it("returns validationFailed when a stored activity is invalid", async () => {
@@ -302,6 +338,16 @@ describe("mock API", () => {
       expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.slow);
     });
 
+    it("returns a timeout without adding an activity", async () => {
+      const sizeBefore = getCatalogSize();
+      setRefreshMode("timeout");
+
+      const result = await refreshCatalog();
+
+      expect(result).toEqual({ ok: false, errorKey: "errors.networkTimeout" });
+      expect(getCatalogSize()).toBe(sizeBefore);
+    });
+
     it("returns validationFailed when the appended activity is invalid", async () => {
       const spy = jest
         .spyOn(catalogStore, "prependRefreshActivity")
@@ -351,17 +397,25 @@ describe("mock API", () => {
 
   describe("review mode helpers", () => {
     it("updates and resets review mode state", () => {
-      setReviewModeState({ initialLoad: "fail", pageLoad: "fail", refresh: "fail" });
+      setReviewModeState({
+        detailLoad: "not-found",
+        initialLoad: "fail",
+        pageLoad: "fail",
+        refresh: "fail",
+      });
       expect(getReviewModeState()).toEqual({
+        detailLoad: "not-found",
         initialLoad: "fail",
         pageLoad: "fail",
         refresh: "fail",
       });
 
       setInitialLoadMode("slow");
+      setDetailLoadMode("slow");
       setPageLoadMode("slow");
       setRefreshMode("slow");
       expect(getReviewModeState()).toEqual({
+        detailLoad: "slow",
         initialLoad: "slow",
         pageLoad: "slow",
         refresh: "slow",
@@ -369,6 +423,7 @@ describe("mock API", () => {
 
       resetReviewModeState();
       expect(getReviewModeState()).toEqual({
+        detailLoad: "normal",
         initialLoad: "normal",
         pageLoad: "normal",
         refresh: "success",

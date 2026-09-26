@@ -45,12 +45,6 @@ msgstr "{value, plural, one {# hr} other {# hr}}"
 msgid "{value, plural, one {# min} other {# min}}"
 msgstr "{value, plural, one {# min} other {# min}}"
 
-#. Screen reader status when a second calendar submission is blocked
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.calendar.duplicate"
-msgstr "A calendar operation is already active."
-
 #. Section title for Dev Tools maintenance actions
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
@@ -68,6 +62,12 @@ msgstr "Activities loaded."
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.invalidTitle"
 msgstr "Activity data is invalid"
+
+#. Setting for activity detail request behavior
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.detailLoad"
+msgstr "Activity detail"
 
 #. Spoken title for the Activity Detail screen
 #. js-lingui-explicit-id
@@ -103,6 +103,11 @@ msgstr "Add to Calendar"
 #: src/screens/activity-detail/messages.ts
 msgid "activityDetail.calendar.unavailableBody"
 msgstr "Add to Calendar is available only in the native iOS and Android app."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.calendarSuccessTitle"
+msgstr "Added to Calendar"
 
 #. Heading after the user saves the event on iOS
 #. js-lingui-explicit-id
@@ -234,30 +239,51 @@ msgstr "Clears generated activities, favorites, filters, and request cache."
 
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
+msgid "devTools.detailLoadHelp"
+msgstr "Controls activity detail loading and not-found states."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
 msgid "devTools.laterPageLoadHelp"
 msgstr "Controls later catalog pages during infinite scrolling."
 
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
 msgid "devTools.initialLoadHelp"
-msgstr "Controls the first catalog page and activity detail requests."
+msgstr "Controls the first catalog page."
 
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
 msgid "devTools.refreshHelp"
 msgstr "Controls the next pull-to-refresh request."
 
-#. Heading shown when a Suspense query first load fails
+#. Heading when the first activity catalog request fails
 #. js-lingui-explicit-id
-#: src/components/query-error-boundary/index.tsx
-msgid "queryError.title"
-msgstr "Could not load"
+#: src/screens/explore/messages.ts
+msgid "explore.loadErrorTitle"
+msgstr "Could not load activities"
+
+#. Heading when Activity Detail cannot load its activity
+#. js-lingui-explicit-id
+#: src/screens/activity-detail/messages.ts
+msgid "activityDetail.loadErrorTitle"
+msgstr "Could not load activity"
 
 #. Inline banner title when loading the next catalog page fails
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
 msgid "explore.nextPageFailedTitle"
 msgstr "Could not load more"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.inlinePreviewTitle"
+msgstr "Could not load more activities"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.transientErrorTitle"
+msgstr "Could not refresh"
 
 #. Activity category chip label
 #. js-lingui-explicit-id
@@ -300,11 +326,11 @@ msgstr "Done"
 msgid "activityDetail.duration"
 msgstr "Duration"
 
-#. Development button that presents a native error toast
+#. Successful first catalog request with no activities
 #. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.error"
-msgstr "Error"
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.mode.empty"
+msgstr "Empty"
 
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -328,12 +354,6 @@ msgstr "Explore"
 #: src/screens/explore/messages.ts
 msgid "explore.heading"
 msgstr "Explore"
-
-#. Request mode that returns an error
-#. js-lingui-explicit-id
-#: src/screens/dev-tools/messages.ts
-msgid "devTools.mode.fail"
-msgstr "Fail"
 
 #. Screen reader announcement when favorite activities are shown
 #. js-lingui-explicit-id
@@ -365,6 +385,18 @@ msgstr "Favorites"
 msgid "devTools.favorites"
 msgstr "Favorites"
 
+#. Dev Tools section for previewing permitted feedback surfaces
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.feedbackPolicy"
+msgstr "Feedback policy"
+
+#. Setting for the first catalog request
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.initialLoad"
+msgstr "First catalog load"
+
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
 msgid "devTools.lifecycleHelp"
@@ -376,17 +408,11 @@ msgstr "For lifecycle checks, select Slow and background the app during the requ
 msgid "activityDetail.unavailableAction"
 msgstr "Go back"
 
-#. Development button that presents a native information toast
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.info"
-msgstr "Info"
-
-#. Setting for the first catalog or activity request
+#. Request mode that returns an invalid validated payload
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
-msgid "devTools.initialLoad"
-msgstr "Initial load"
+msgid "devTools.mode.invalidData"
+msgstr "Invalid data"
 
 #. Setting for later pages during infinite catalog scrolling
 #. js-lingui-explicit-id
@@ -429,43 +455,17 @@ msgstr "Local data reset."
 msgid "activityDetail.location"
 msgstr "Location"
 
+#. Row label for the native toast module status
 #. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.errorMessage"
-msgstr "Native error feedback is working."
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.nativeFeedbackModule"
+msgstr "Native feedback module"
 
-#. Heading for development-only buttons that test native toast feedback
+#. Accessible label for the native feedback module and its status
 #. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.title"
-msgstr "Native feedback test"
-
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.infoMessage"
-msgstr "Native information feedback is working."
-
-#. Development status when the native toast module is not in the installed app
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.unavailable"
-msgstr "Native module missing. Rebuild the development app."
-
-#. Development status that confirms the native toast module is installed
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.available"
-msgstr "Native module ready"
-
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.successMessage"
-msgstr "Native success feedback is working."
-
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.warningMessage"
-msgstr "Native warning feedback is working."
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.nativeFeedbackStatusLabel"
+msgstr "Native feedback module, {status}"
 
 #. Android date dialog button that opens the time dialog
 #. js-lingui-explicit-id
@@ -515,6 +515,18 @@ msgstr "No matching activities"
 msgid "devTools.mode.normal"
 msgstr "Normal"
 
+#. Activity detail mode that returns a missing activity
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.mode.notFound"
+msgstr "Not found"
+
+#. Request mode that returns an error
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.mode.fail"
+msgstr "Offline"
+
 #. Button that opens system Settings for calendar permission
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -544,6 +556,30 @@ msgstr "Opens the system event form with this activity pre-filled."
 msgid "category.outdoors"
 msgstr "Outdoors"
 
+#. Action that previews an inline retry surface
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.actionableErrorAction"
+msgstr "Preview actionable error"
+
+#. Action that previews confirmed calendar save feedback
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.calendarSuccessAction"
+msgstr "Preview calendar success"
+
+#. Action that previews a transient error toast
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.transientErrorAction"
+msgstr "Preview transient error"
+
+#. Native toast module status when installed
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.nativeFeedbackAvailable"
+msgstr "Ready"
+
 #. Button that refreshes an empty activity catalog
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
@@ -562,7 +598,7 @@ msgstr "Refresh"
 msgid "explore.refreshAction"
 msgstr "Refresh activities"
 
-#. Inline banner title when catalog refresh fails
+#. Native toast title when catalog refresh fails
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
 msgid "explore.refreshFailedTitle"
@@ -634,7 +670,7 @@ msgstr "Reset request modes"
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
 msgid "devTools.resetModesHint"
-msgstr "Restores normal loads and successful refresh."
+msgstr "Restores normal catalog and detail loads, and successful refresh."
 
 #. Retry label on Explore inline error banners
 #. js-lingui-explicit-id
@@ -688,6 +724,21 @@ msgstr "Selects this request mode."
 msgid "activityDetail.savedFallbackTitle"
 msgstr "Showing saved details"
 
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.actionableErrorHint"
+msgstr "Shows the inline recovery design used when a clear action can help."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.calendarSuccessHint"
+msgstr "Shows the only success toast allowed by the feedback policy."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.transientErrorHint"
+msgstr "Shows the toast used when content stays usable after a temporary failure."
+
 #. Request mode with a deliberate delay
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
@@ -706,11 +757,10 @@ msgstr "Something went wrong. Try again."
 msgid "devTools.mode.success"
 msgstr "Success"
 
-#. Development button that presents a native success toast
 #. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.success"
-msgstr "Success"
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.feedbackPolicyHelp"
+msgstr "Success and cancel stay silent. Only confirmed calendar saves show success feedback."
 
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -722,6 +772,11 @@ msgstr "The activity start time must be later than the current time."
 #: src/i18n/error-keys.ts
 msgid "errors.validationFailed"
 msgstr "The data from the server was invalid."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.calendarSuccessBody"
+msgstr "The event was saved to your calendar."
 
 #. Shown when a mocked or network request times out
 #. js-lingui-explicit-id
@@ -755,16 +810,34 @@ msgstr "This activity was not found."
 msgid "devTools.confirmResetBody"
 msgstr "This removes generated activities, favorites, filters, and cached requests."
 
+#. Request mode that returns a timeout error
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.mode.timeout"
+msgstr "Timeout"
+
 #. Empty state body when filters return no activities
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
 msgid "explore.emptyBody"
 msgstr "Try a different search or clear your filters."
 
-#. Button that retries loading current activity details
+#. Button that retries the first activity catalog request
+#. js-lingui-explicit-id
+#: src/screens/explore/messages.ts
+msgid "explore.loadErrorRetry"
+msgstr "Try again"
+
+#. Retry action in the inline recovery preview
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.inlinePreviewAction"
+msgstr "Try again"
+
+#. Button that retries a failed Activity Detail load
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
-msgid "activityDetail.retry"
+msgid "activityDetail.loadErrorRetry"
 msgstr "Try again"
 
 #. Button that retries the Add to Calendar operation
@@ -773,22 +846,16 @@ msgstr "Try again"
 msgid "activityDetail.calendar.tryAgain"
 msgstr "Try again"
 
-#. Button label to retry a failed first catalog or detail load
+#. Native toast module status when missing
 #. js-lingui-explicit-id
-#: src/components/query-error-boundary/index.tsx
-msgid "queryError.retry"
-msgstr "Try again"
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.nativeFeedbackUnavailable"
+msgstr "Unavailable"
 
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
 msgid "devTools.introduction"
 msgstr "Use these controls to reproduce assessment states."
-
-#. Development button that presents a native warning toast
-#. js-lingui-explicit-id
-#: src/screens/activity-detail/messages.ts
-msgid "activityDetail.nativeFeedbackTest.warning"
-msgstr "Warning"
 
 #. Activity category chip label
 #. js-lingui-explicit-id
@@ -801,3 +868,13 @@ msgstr "Workshops"
 #: src/i18n/error-keys.ts
 msgid "errors.networkOffline"
 msgstr "You are offline. Check your connection and try again."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.transientErrorBody"
+msgstr "Your current activities are still available."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.inlinePreviewBody"
+msgstr "Your current activities stay available. Try the request again."

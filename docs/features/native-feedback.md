@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Explora uses native transient feedback for completed actions and recoverable failures.
+Explora uses native transient feedback for temporary failures and confirmed calendar saves.
 
 The local `expo-native-toast` module owns the visual surface, semantic haptic, timing, and accessibility announcement.
 
@@ -43,25 +43,23 @@ Android action labels do nothing on iOS. This keeps one JavaScript API without i
 
 ## Current use
 
-- Explore refresh success and failure.
-- Activity detail refetch failure when saved content remains visible.
-- Calendar save success.
-- Calendar form completion information on Android.
-- Calendar validation and native errors.
-- Duplicate calendar submission warning.
+- Explore refresh failure when current activities remain usable.
+- Activity detail refetch failure when a saved copy remains usable.
+- Confirmed calendar save success.
 
-Successful calendar results use only the native toast. They do not add persistent banners.
+Other successful actions stay silent. Canceled actions also stay silent.
 
-Actionable permission and native failures keep their inline recovery action. The toast provides immediate feedback and does not replace that action.
+Actionable failures use one inline recovery surface. They do not also show a toast.
 
-Development builds show a test panel on Activity Detail. The panel triggers success, warning, error, and information feedback.
+Dev Tools previews transient error feedback and confirmed calendar success.
 
-The panel also shows if the installed app contains the native module. Release builds do not show the panel.
+Dev Tools also reports if the installed app contains the native module.
 
 ## Code map
 
 | Concern               | Location                                                    |
 | --------------------- | ----------------------------------------------------------- |
+| Feedback policy       | `src/feedback/feedback-policy.ts`                           |
 | Universal API         | `src/native-toast/index.ts`                                 |
 | Module TypeScript     | `modules/expo-native-toast/src/`                            |
 | Swift implementation  | `modules/expo-native-toast/ios/ExpoNativeToastModule.swift` |
@@ -69,7 +67,7 @@ The panel also shows if the installed app contains the native module. Release bu
 
 ## Verification status
 
-- TypeScript and all 154 JavaScript tests pass in the main project.
+- TypeScript and the current JavaScript test suite pass in the main project.
 - The iOS module compiles for the iOS 27 Simulator.
 - The complete iOS development app builds and reports that the native module is ready.
 - Repeated builds reuse DerivedData when the build command and settings stay unchanged.

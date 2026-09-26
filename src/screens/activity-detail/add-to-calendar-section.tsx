@@ -6,7 +6,8 @@ import { useLingui } from "@lingui/react/macro";
 import type { AddToCalendarResult } from "@/calendar/add-to-calendar";
 import { A11yPressable } from "@/components/a11y-pressable";
 import { MIN_TOUCH_TARGET, PRESS_SCALE } from "@/components/constants";
-import { showNativeToast, type NativeToastType } from "@/native-toast";
+import { resolveFeedbackPresentation } from "@/feedback/feedback-policy";
+import { showNativeToast } from "@/native-toast";
 import { CalendarSchedulePicker } from "@/screens/activity-detail/calendar-schedule-picker";
 import { CalendarStatusBanner } from "@/screens/activity-detail/calendar-status-banner";
 import { activityDetailMessages } from "@/screens/activity-detail/messages";
@@ -21,7 +22,6 @@ type AddToCalendarSectionProps = {
 type StatusCopy = {
   actionLabel?: string;
   body: string;
-  isError: boolean;
   title: string;
 };
 
@@ -39,22 +39,14 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
   useEffect(() => {
     if (result === null) return;
 
-    if (result === "duplicate") {
-      showNativeToast({
-        title: t(activityDetailMessages.calendarDuplicate),
-        type: "warning",
-      });
-      return;
-    }
-
-    if (statusCopy) {
+    if (statusCopy && getCalendarFeedbackPresentation(result) === "toast") {
       showNativeToast({
         message: statusCopy.body,
         title: statusCopy.title,
-        type: getCalendarToastType(result),
+        type: "success",
       });
     }
-  }, [result, statusCopy, t]);
+  }, [result, statusCopy]);
 
   async function handleScheduleConfirm(startDate: Date) {
     lastStartDate.current = startDate;
@@ -122,7 +114,6 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
         <CalendarStatusBanner
           actionLabel={statusCopy.actionLabel}
           body={statusCopy.body}
-          isError={statusCopy.isError}
           onAction={
             result === "permission-blocked"
               ? () => {
@@ -139,17 +130,24 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
   );
 }
 
-export function getCalendarToastType(result: AddToCalendarResult): NativeToastType {
-  if (result === "saved") return "success";
-  if (result === "submitted") return "info";
-  if (result === "duplicate") return "warning";
-  return "error";
+export function getCalendarFeedbackPresentation(result: AddToCalendarResult) {
+  if (result === "saved") {
+    return resolveFeedbackPresentation({ kind: "success", source: "calendar" });
+  }
+
+  if (result === "canceled") {
+    return resolveFeedbackPresentation({ kind: "canceled" });
+  }
+
+  if (result === "submitted" || result === "duplicate") {
+    return resolveFeedbackPresentation({ kind: "no-change" });
+  }
+
+  return resolveFeedbackPresentation({ kind: "error", recovery: "actionable" });
 }
 
 export function shouldShowCalendarRecovery(result: AddToCalendarResult | null): boolean {
-  return (
-    result === "permission-denied" || result === "permission-blocked" || result === "native-error"
-  );
+  return result !== null && getCalendarFeedbackPresentation(result) === "inline";
 }
 
 type Translate = ReturnType<typeof useLingui>["t"];
@@ -162,13 +160,11 @@ export function getCalendarStatusCopy(
     case "saved":
       return {
         body: t(activityDetailMessages.calendarSavedBody),
-        isError: false,
         title: t(activityDetailMessages.calendarSavedTitle),
       };
     case "submitted":
       return {
         body: t(activityDetailMessages.calendarSubmittedBody),
-        isError: false,
         title: t(activityDetailMessages.calendarSubmittedTitle),
       };
     case "canceled":
@@ -177,46 +173,39 @@ export function getCalendarStatusCopy(
       return {
         actionLabel: t(activityDetailMessages.calendarTryAgain),
         body: t(activityDetailMessages.calendarPermissionDeniedBody),
-        isError: true,
         title: t(activityDetailMessages.calendarPermissionDeniedTitle),
       };
     case "permission-blocked":
       return {
         actionLabel: t(activityDetailMessages.calendarOpenSettings),
         body: t(activityDetailMessages.calendarPermissionBlockedBody),
-        isError: true,
         title: t(activityDetailMessages.calendarPermissionBlockedTitle),
       };
     case "missing-date":
       return {
         body: t(activityDetailMessages.calendarMissingBody),
-        isError: true,
         title: t(activityDetailMessages.calendarMissingTitle),
       };
     case "past-date":
       return {
         body: t(activityDetailMessages.calendarPastBody),
-        isError: true,
         title: t(activityDetailMessages.calendarPastTitle),
       };
     case "invalid-activity":
     case "invalid-duration":
       return {
         body: t(activityDetailMessages.calendarInvalidBody),
-        isError: true,
         title: t(activityDetailMessages.calendarInvalidTitle),
       };
     case "native-error":
       return {
         actionLabel: t(activityDetailMessages.calendarTryAgain),
         body: t(activityDetailMessages.calendarErrorBody),
-        isError: true,
         title: t(activityDetailMessages.calendarErrorTitle),
       };
     case "unavailable":
       return {
         body: t(activityDetailMessages.calendarUnavailableBody),
-        isError: true,
         title: t(activityDetailMessages.calendarUnavailableTitle),
       };
     case "duplicate":

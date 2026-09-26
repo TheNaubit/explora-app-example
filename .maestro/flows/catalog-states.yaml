@@ -1,0 +1,84 @@
+appId: com.adlerventures.explora
+name: Catalog loading, empty, error, and recovery
+tags:
+  - assessment
+  - states
+  - ios
+---
+- runFlow: ../subflows/reset-test-state.yaml
+
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-empty"
+    direction: UP
+- tapOn:
+    id: "dev-tools-initial-load-empty"
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "explore-empty"
+    timeout: 8000
+- assertVisible: "No activities available"
+
+- tapOn:
+    point: "71%, 94%"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-slow"
+    direction: UP
+- tapOn:
+    id: "dev-tools-initial-load-slow"
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- assertVisible:
+    id: "explore-skeleton"
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 8000
+
+- tapOn:
+    point: "71%, 94%"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-invalid-data"
+    direction: UP
+- tapOn:
+    id: "dev-tools-initial-load-invalid-data"
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "explore-load-error"
+    timeout: 8000
+- assertVisible: "Could not load activities"
+- assertVisible: "The data from the server was invalid."
+- assertNotVisible: "Render Error"
+
+- tapOn:
+    point: "71%, 94%"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-normal"
+    direction: UP
+- tapOn:
+    id: "dev-tools-initial-load-normal"
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 8000

@@ -16,7 +16,7 @@ type ActivityCardCarouselLayoutInput = {
   width: number;
 };
 
-/** Shared list geometry for loaded cards and their Suspense skeletons. */
+/** Shared list geometry for loaded cards and their first-load skeletons. */
 export function getActivityCardCarouselLayout({
   contentOriginInset = 0,
   fontScale,

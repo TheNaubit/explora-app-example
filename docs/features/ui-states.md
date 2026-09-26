@@ -7,10 +7,10 @@ Explora must show a clear UI for every async outcome. Users must never see a bla
 | Area                                       | Status                                                                                     |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------ |
 | Rules in `AGENTS.md`                       | Shipped                                                                                    |
-| Suspense + Error Boundary rules            | Shipped (ADR-012)                                                                          |
-| Shared skeleton / empty / error components | Shipped (`ActivityCardSkeleton`, `EmptyState`, `QueryErrorBoundary`, `InlineStatusBanner`) |
-| Discovery Explore                          | Shipped (skeleton, empty, first-load error, refresh / next-page banner)                    |
-| Detail / Favorites                         | Shipped (detail skeleton and recovery states; Favorites empty and content states)          |
+| Explicit Query state rules                 | Shipped (ADR-015)                                                                          |
+| Shared skeleton / empty / error components | Shipped (`ActivityCardSkeleton`, `EmptyState`, `RecoveryState`, `InlineStatusBanner`)      |
+| Discovery Explore                          | Shipped (skeleton, empty, first-load error, refresh toast, next-page recovery)             |
+| Detail / Favorites                         | Shipped (detail skeleton and explicit recovery states; Favorites empty and content states) |
 
 ## Required states
 
@@ -28,21 +28,44 @@ Loading is not empty. Do not show an empty list while the first fetch still runs
 
 Explore uses one shared carousel geometry helper for loaded cards and card skeletons.
 
-## Suspense and Error Boundaries (Query)
+## Explicit Query states
 
-Use React Suspense and an Error Boundary for **first-load** catalog and detail queries. Pair them with `ApiError` from `@/query/errors`.
+Use explicit TanStack Query state for expected data outcomes. Pair failures with `ApiError` from `@/query/errors`.
 
-| Outcome                                       | Mechanism                                                                                                               |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| First load waiting                            | `<Suspense fallback={skeleton}>` around `useSuspenseQuery` / `useSuspenseInfiniteQuery`                                 |
-| First load failed                             | Error Boundary catches thrown `ApiError`; resolve `errorKey` with Lingui; show retry                                    |
-| Empty list                                    | Query succeeded with zero items → designed empty UI (not a boundary)                                                    |
-| Detail not-found                              | Prefer designed not-found UI, or throw `ApiError` (`errors.notFound`) into the boundary when that path should fail hard |
-| Refetch / next page / refresh mutation failed | Inline non-blocking error; keep current content (ADR-007)                                                               |
+Explore and Activity Detail use the same approach. Handled failures stay out of the Expo development error overlay.
+
+| Outcome                                   | Mechanism                                                      |
+| ----------------------------------------- | -------------------------------------------------------------- |
+| First load waiting                        | `isPending` with no data renders the matching skeleton         |
+| Catalog or detail first load failed       | `error` with no data renders `RecoveryState` with one retry    |
+| Empty list                                | A successful zero-item result renders the designed empty state |
+| Detail not-found                          | A soft null result renders the designed not-found state        |
+| Refetch failed while content stays usable | One transient error toast keeps current content visible        |
+| Next page failed                          | One inline footer recovery keeps current content visible       |
+| Refresh mutation failed                   | One transient error toast keeps content and adds nothing       |
 
 Do not catch mutation or event-handler failures only with an Error Boundary. Those paths need explicit UI state.
 
 Shared components live under `src/components/`. Explore and Activity Detail use them in their screen folders.
+
+## Feedback policy
+
+Each outcome uses one feedback surface.
+
+| Outcome                                  | Feedback                                    |
+| ---------------------------------------- | ------------------------------------------- |
+| Successful action                        | No toast or inline message                  |
+| Confirmed calendar save                  | One native success toast                    |
+| Canceled action                          | No toast or inline message                  |
+| Temporary failure with usable content    | One native error toast                      |
+| Important failure with a recovery action | One inline recovery surface                 |
+| First-load failure                       | One full-screen recovery surface with retry |
+
+Do not show a toast and an inline error for the same outcome.
+
+The inline recovery surface uses a flat danger tint and a compact hierarchy. It keeps one direct retry action near the explanation.
+
+The shared feedback policy lives in `src/feedback/feedback-policy.ts`.
 
 ## Skeleton preference
 
@@ -74,4 +97,6 @@ When you build or change a data screen, load:
 - Accessibility announcements: [`accessibility.md`](./accessibility.md)
 - Data layer: [`data-layer.md`](./data-layer.md)
 - Decision: [`../decisions/adr-007-async-ui-states-skeletons.md`](../decisions/adr-007-async-ui-states-skeletons.md)
-- Decision: [`../decisions/adr-012-suspense-error-boundaries.md`](../decisions/adr-012-suspense-error-boundaries.md)
+- Superseded decision: [`../decisions/adr-012-suspense-error-boundaries.md`](../decisions/adr-012-suspense-error-boundaries.md)
+- Current decision: [`../decisions/adr-015-explicit-query-states.md`](../decisions/adr-015-explicit-query-states.md)
+- Decision: [`../decisions/adr-014-feedback-surface-policy.md`](../decisions/adr-014-feedback-surface-policy.md)

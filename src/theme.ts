@@ -32,6 +32,7 @@ export const lightTheme = {
   colorScheme: "light",
   colors: {
     background: primitiveColors.cream100,
+    backgroundTransparent: "rgba(247, 244, 236, 0)",
     surface: primitiveColors.cream50,
     surfaceSecondary: primitiveColors.cream200,
     surfaceElevated: primitiveColors.white,
@@ -60,6 +61,7 @@ export const darkTheme = {
   colorScheme: "dark",
   colors: {
     background: primitiveColors.night950,
+    backgroundTransparent: "rgba(16, 20, 17, 0)",
     surface: "#171C18",
     surfaceSecondary: "#202620",
     surfaceElevated: "#262D27",

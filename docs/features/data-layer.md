@@ -4,14 +4,14 @@
 
 The client data layer has two owners:
 
-| Concern                       | Owner                                     | Entry                              |
-| ----------------------------- | ----------------------------------------- | ---------------------------------- |
-| Paginated catalog list        | TanStack Query `useSuspenseInfiniteQuery` | `src/hooks/use-activities.ts`      |
-| Activity detail               | TanStack Query `useSuspenseQuery`         | `src/hooks/use-activity.ts`        |
-| Refresh (+1 on success)       | TanStack Query `useMutation`              | `src/hooks/use-refresh-catalog.ts` |
-| Refresh catalog delta         | MMKV                                      | `src/mocks/catalog-store.ts`       |
-| Favorites + offline snapshots | Legend State + MMKV                       | `src/state/favorites.ts`           |
-| Search / category filters     | Legend State arrays (memory)              | `src/state/discovery.ts`           |
+| Concern                       | Owner                             | Entry                              |
+| ----------------------------- | --------------------------------- | ---------------------------------- |
+| Paginated catalog list        | TanStack Query `useInfiniteQuery` | `src/hooks/use-activities.ts`      |
+| Activity detail               | TanStack Query `useQuery`         | `src/hooks/use-activity.ts`        |
+| Refresh (+1 on success)       | TanStack Query `useMutation`      | `src/hooks/use-refresh-catalog.ts` |
+| Refresh catalog delta         | MMKV                              | `src/mocks/catalog-store.ts`       |
+| Favorites + offline snapshots | Legend State + MMKV               | `src/state/favorites.ts`           |
+| Search / category filters     | Legend State arrays (memory)      | `src/state/discovery.ts`           |
 
 Mock handlers remain the only network layer. Review modes control first-page, next-page, and refresh latency or failure.
 
@@ -19,17 +19,15 @@ MMKV stores only refresh-added activities and the refresh sequence. The app gene
 
 Query errors use `ApiError` with `errorKey`. UI resolves keys with `resolveErrorMessage`.
 
-## Suspense and Error Boundaries
+## Explicit Query state
 
-Explore ships the Suspense path:
+Explore and Activity Detail use explicit state:
 
-1. `useSuspenseInfiniteQuery` for the catalog list.
-2. `QueryErrorBoundary` + `ExploreSkeleton` for first load.
-3. Empty, refresh failure, and next-page failure stay as designed inline UI (see [ui-states](./ui-states.md) and [ADR-012](../decisions/adr-012-suspense-error-boundaries.md)).
-
-Activity Detail uses `useSuspenseQuery` for the first load.
-
-The query converts a missing activity into a soft not-found result. Other first-load errors go to the shared boundary.
+1. `useInfiniteQuery` returns catalog loading, error, and data states.
+2. `useQuery` returns detail loading, error, not-found, saved fallback, and data states.
+3. First-load failures render `RecoveryState` without a render throw.
+4. Empty, refresh failure, and next-page failure stay in designed UI states.
+5. Review-mode revisions create new Query keys for kept-alive tabs.
 
 ## Offline detail contract
 

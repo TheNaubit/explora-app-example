@@ -60,13 +60,17 @@ export function ActivityDetailSkeleton({ loadingAnnouncement }: ActivityDetailSk
 
   return (
     <ScrollView
-      accessibilityElementsHidden
+      accessibilityLabel={loadingAnnouncement}
+      accessibilityRole="progressbar"
       contentContainerStyle={styles.content}
       contentInsetAdjustmentBehavior="never"
-      importantForAccessibility="no-hide-descendants"
       testID="activity-detail-skeleton"
     >
-      <Animated.View style={animatedStyle}>
+      <Animated.View
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+        style={animatedStyle}
+      >
         <View
           style={[styles.hero, { height: heroHeight, backgroundColor: theme.colors.skeleton }]}
         />

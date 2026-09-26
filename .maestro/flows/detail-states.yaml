@@ -1,0 +1,79 @@
+appId: com.adlerventures.explora
+name: Detail loading, invalid data, and not found
+tags:
+  - assessment
+  - states
+  - ios
+---
+- runFlow: ../subflows/reset-test-state.yaml
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-detail-load-slow"
+    direction: UP
+- tapOn:
+    id: "dev-tools-detail-load-slow"
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 8000
+- tapOn:
+    id: "activity-card-act-001"
+- assertVisible:
+    id: "activity-detail-skeleton"
+- extendedWaitUntil:
+    visible:
+      id: "activity-detail-content"
+    timeout: 8000
+- tapOn:
+    id: "activity-detail-back"
+
+- tapOn:
+    point: "71%, 94%"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-detail-load-invalid-data"
+    direction: DOWN
+- tapOn:
+    id: "dev-tools-detail-load-invalid-data"
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- tapOn:
+    id: "activity-card-act-001"
+- extendedWaitUntil:
+    visible:
+      id: "activity-detail-error"
+    timeout: 8000
+- assertVisible: "Could not load activity"
+- assertVisible: "The data from the server was invalid."
+- assertNotVisible: "Render Error"
+- tapOn:
+    id: "activity-detail-back"
+
+- tapOn:
+    point: "71%, 94%"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-detail-load-not-found"
+    direction: DOWN
+- tapOn:
+    id: "dev-tools-detail-load-not-found"
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn:
+    point: "29%, 94%"
+- tapOn:
+    id: "activity-card-act-001"
+- extendedWaitUntil:
+    visible:
+      id: "activity-detail-not-found"
+    timeout: 8000
+- assertVisible: "Activity unavailable"

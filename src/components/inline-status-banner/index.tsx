@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
+import { SymbolView } from "expo-symbols";
 
+import { A11y } from "@/a11y";
 import { A11yPressable } from "@/components/a11y-pressable";
 import { MIN_TOUCH_TARGET } from "@/components/constants";
 import { radii, spacing, typography, useAppTheme } from "@/theme";
@@ -7,44 +9,81 @@ import { radii, spacing, typography, useAppTheme } from "@/theme";
 type InlineStatusBannerProps = {
   title: string;
   body: string;
-  actionLabel: string;
-  onAction: () => void;
+  actionLabel?: string;
+  actionTestID?: string;
+  inset?: boolean;
+  onAction?: () => void;
   testID?: string;
 };
 
 /**
- * Non-blocking status banner for refresh or next-page failures.
- * Keep stale content visible below the banner.
+ * Show an actionable failure without replacing available content.
  */
 export function InlineStatusBanner({
   title,
   body,
   actionLabel,
+  actionTestID,
+  inset = true,
   onAction,
   testID,
 }: InlineStatusBannerProps) {
   const theme = useAppTheme();
 
   return (
-    <View
+    <A11y.View
       accessibilityRole="alert"
-      style={[styles.root, { backgroundColor: theme.colors.dangerSurface }]}
+      accessibilityLiveRegion="polite"
+      focusable={false}
+      style={[
+        styles.root,
+        inset ? styles.inset : null,
+        {
+          backgroundColor: theme.colors.dangerSurface,
+          borderColor: theme.colors.border,
+          boxShadow: theme.elevation.none,
+        },
+      ]}
       testID={testID ?? "inline-status-banner"}
     >
-      <View style={styles.copy}>
-        <Text style={[styles.title, { color: theme.colors.danger }]}>{title}</Text>
-        <Text style={[styles.body, { color: theme.colors.text }]}>{body}</Text>
+      <View style={styles.header}>
+        <View
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          style={[styles.icon, { backgroundColor: theme.colors.surface }]}
+        >
+          <SymbolView
+            name={{ ios: "exclamationmark.triangle.fill", android: "error", web: "error" }}
+            size={20}
+            tintColor={theme.colors.danger}
+          />
+        </View>
+        <View style={styles.copy}>
+          <Text accessibilityRole="header" style={[styles.title, { color: theme.colors.text }]}>
+            {title}
+          </Text>
+          <Text style={[styles.body, { color: theme.colors.textSecondary }]}>{body}</Text>
+          {actionLabel && onAction ? (
+            <A11yPressable
+              accessibilityRole="button"
+              accessibilityLabel={actionLabel}
+              onPress={onAction}
+              style={({ pressed }) => [styles.retry, { opacity: pressed ? 0.62 : 1 }]}
+              testID={actionTestID ?? "inline-status-retry"}
+            >
+              <SymbolView
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+                name={{ ios: "arrow.clockwise", android: "refresh", web: "refresh" }}
+                size={spacing.space16}
+                tintColor={theme.colors.accent}
+              />
+              <Text style={[styles.retryLabel, { color: theme.colors.accent }]}>{actionLabel}</Text>
+            </A11yPressable>
+          ) : null}
+        </View>
       </View>
-      <A11yPressable
-        accessibilityRole="button"
-        accessibilityLabel={actionLabel}
-        onPress={onAction}
-        style={[styles.retry, { borderColor: theme.colors.danger }]}
-        testID="inline-status-retry"
-      >
-        <Text style={[styles.retryLabel, { color: theme.colors.danger }]}>{actionLabel}</Text>
-      </A11yPressable>
-    </View>
+    </A11y.View>
   );
 }
 
@@ -55,31 +94,47 @@ const styles = StyleSheet.create({
   },
   copy: {
     flex: 1,
-    marginEnd: spacing.space12,
+    gap: spacing.space4,
+    minWidth: 0,
+  },
+  header: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    gap: spacing.space12,
+  },
+  icon: {
+    alignItems: "center",
+    borderRadius: radii.full,
+    height: spacing.space32,
+    justifyContent: "center",
+    width: spacing.space32,
   },
   retry: {
+    alignSelf: "flex-start",
     alignItems: "center",
-    borderRadius: radii.small,
-    borderWidth: StyleSheet.hairlineWidth,
-    justifyContent: "center",
+    flexDirection: "row",
+    gap: spacing.space8,
+    justifyContent: "flex-start",
     minHeight: MIN_TOUCH_TARGET,
-    paddingHorizontal: spacing.space12,
+    paddingEnd: spacing.space12,
   },
   retryLabel: {
     ...typography.label,
     textAlign: "left",
   },
   root: {
-    alignItems: "center",
-    borderRadius: radii.small,
-    flexDirection: "row",
+    alignItems: "stretch",
+    borderCurve: "continuous",
+    borderRadius: radii.medium,
+    borderWidth: StyleSheet.hairlineWidth,
     marginBottom: spacing.space12,
+    padding: spacing.space16,
+  },
+  inset: {
     marginHorizontal: spacing.space24,
-    padding: spacing.space12,
   },
   title: {
-    ...typography.label,
-    marginBottom: spacing.space4,
+    ...typography.bodyStrong,
     textAlign: "left",
   },
 });

@@ -15,23 +15,30 @@ type UseExploreListArgs = {
 };
 
 /**
- * Suspense catalog list for Explore.
+ * Catalog list state for Explore.
  * Flattens pages, announces empty or loaded, and loads the next page on scroll.
  */
 export function useExploreList({ filters, onBannerChange }: UseExploreListArgs) {
   const { t } = useLingui();
   const {
     data,
+    error,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     isFetchNextPageError,
     failureReason,
     fetchStatus,
+    isPending,
+    refetch,
   } = useActivities(filters);
-  const activities = flattenActivityPages(data);
+  const activities = data === undefined ? [] : flattenActivityPages(data);
 
   useEffect(() => {
+    if (isPending || error !== null) {
+      return;
+    }
+
     if (activities.length === 0) {
       announceStatus(
         t(
@@ -43,7 +50,7 @@ export function useExploreList({ filters, onBannerChange }: UseExploreListArgs) 
       return;
     }
     announceStatus(t(exploreMessages.loadedAnnounce));
-  }, [activities.length, filters.categories.length, filters.search.length, t]);
+  }, [activities.length, error, filters.categories.length, filters.search.length, isPending, t]);
 
   useEffect(() => {
     if (!isFetchNextPageError) {
@@ -69,7 +76,10 @@ export function useExploreList({ filters, onBannerChange }: UseExploreListArgs) 
 
   return {
     activities,
+    error,
+    isPending,
     isFetchingNextPage,
     handleEndReached,
+    refetch,
   };
 }

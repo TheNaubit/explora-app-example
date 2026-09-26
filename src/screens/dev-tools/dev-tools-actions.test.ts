@@ -22,6 +22,7 @@ describe("Dev Tools actions", () => {
     updateReviewMode("pageLoad", "fail");
 
     expect(getReviewModeState()).toEqual({
+      detailLoad: "normal",
       initialLoad: "slow",
       pageLoad: "fail",
       refresh: "success",
@@ -30,6 +31,7 @@ describe("Dev Tools actions", () => {
 
   it("clears request data without changing local user data", () => {
     const queryClient = new QueryClient();
+    const resetQueries = jest.spyOn(queryClient, "resetQueries");
     queryClient.setQueryData(["activities", "detail", "sample"], {
       activity: SUPPLIED_ACTIVITIES[0],
     });
@@ -38,6 +40,7 @@ describe("Dev Tools actions", () => {
 
     clearRequestCache(queryClient);
 
+    expect(resetQueries).toHaveBeenCalledTimes(1);
     expect(queryClient.getQueryData(["activities", "detail", "sample"])).toBeUndefined();
     expect(listFavoriteIds()).toEqual([SUPPLIED_ACTIVITIES[0].id]);
     expect(getCatalogSize()).toBeGreaterThan(1_012);

@@ -35,6 +35,16 @@ export const activityDetailMessages = {
     comment: "Button on the Activity Detail not-found state",
     message: "Go back",
   }),
+  loadErrorTitle: msg({
+    id: "activityDetail.loadErrorTitle",
+    comment: "Heading when Activity Detail cannot load its activity",
+    message: "Could not load activity",
+  }),
+  loadErrorRetry: msg({
+    id: "activityDetail.loadErrorRetry",
+    comment: "Button that retries a failed Activity Detail load",
+    message: "Try again",
+  }),
   savedFallbackTitle: msg({
     id: "activityDetail.savedFallbackTitle",
     comment: "Heading when saved activity data appears after a detail refetch fails",
@@ -43,11 +53,6 @@ export const activityDetailMessages = {
   savedFallbackBody: msg({
     id: "activityDetail.savedFallbackBody",
     message: "Current details could not load. This saved copy remains available offline.",
-  }),
-  retry: msg({
-    id: "activityDetail.retry",
-    comment: "Button that retries loading current activity details",
-    message: "Try again",
   }),
   loadedAnnounce: msg({
     id: "activityDetail.loadedAnnounce",
@@ -63,57 +68,6 @@ export const activityDetailMessages = {
     id: "activityDetail.loadingAnnounce",
     comment: "Screen reader status while Activity Detail loads",
     message: "Loading activity details.",
-  }),
-  nativeFeedbackTestTitle: msg({
-    id: "activityDetail.nativeFeedbackTest.title",
-    comment: "Heading for development-only buttons that test native toast feedback",
-    message: "Native feedback test",
-  }),
-  nativeFeedbackAvailable: msg({
-    id: "activityDetail.nativeFeedbackTest.available",
-    comment: "Development status that confirms the native toast module is installed",
-    message: "Native module ready",
-  }),
-  nativeFeedbackUnavailable: msg({
-    id: "activityDetail.nativeFeedbackTest.unavailable",
-    comment: "Development status when the native toast module is not in the installed app",
-    message: "Native module missing. Rebuild the development app.",
-  }),
-  nativeFeedbackSuccess: msg({
-    id: "activityDetail.nativeFeedbackTest.success",
-    comment: "Development button that presents a native success toast",
-    message: "Success",
-  }),
-  nativeFeedbackSuccessMessage: msg({
-    id: "activityDetail.nativeFeedbackTest.successMessage",
-    message: "Native success feedback is working.",
-  }),
-  nativeFeedbackWarning: msg({
-    id: "activityDetail.nativeFeedbackTest.warning",
-    comment: "Development button that presents a native warning toast",
-    message: "Warning",
-  }),
-  nativeFeedbackWarningMessage: msg({
-    id: "activityDetail.nativeFeedbackTest.warningMessage",
-    message: "Native warning feedback is working.",
-  }),
-  nativeFeedbackError: msg({
-    id: "activityDetail.nativeFeedbackTest.error",
-    comment: "Development button that presents a native error toast",
-    message: "Error",
-  }),
-  nativeFeedbackErrorMessage: msg({
-    id: "activityDetail.nativeFeedbackTest.errorMessage",
-    message: "Native error feedback is working.",
-  }),
-  nativeFeedbackInfo: msg({
-    id: "activityDetail.nativeFeedbackTest.info",
-    comment: "Development button that presents a native information toast",
-    message: "Info",
-  }),
-  nativeFeedbackInfoMessage: msg({
-    id: "activityDetail.nativeFeedbackTest.infoMessage",
-    message: "Native information feedback is working.",
   }),
   calendarScheduleSheetTitle: msg({
     id: "activityDetail.calendar.scheduleSheetTitle",
@@ -240,10 +194,5 @@ export const activityDetailMessages = {
   calendarUnavailableBody: msg({
     id: "activityDetail.calendar.unavailableBody",
     message: "Add to Calendar is available only in the native iOS and Android app.",
-  }),
-  calendarDuplicate: msg({
-    id: "activityDetail.calendar.duplicate",
-    comment: "Screen reader status when a second calendar submission is blocked",
-    message: "A calendar operation is already active.",
   }),
 } as const;

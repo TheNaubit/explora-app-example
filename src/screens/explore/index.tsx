@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode, type Ref } from "react";
+import { useCallback, useMemo, type Ref } from "react";
 import { Platform, StyleSheet, useWindowDimensions, View } from "react-native";
 import {
   ScrollEdgeEffectProvider,
@@ -6,11 +6,11 @@ import {
 } from "@bsky.app/expo-scroll-edge-effect";
 import { useLingui } from "@lingui/react/macro";
 import { useValue } from "@legendapp/state/react";
+import { useFocusEffect } from "expo-router";
 import { type SharedValue, useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { A11y } from "@/a11y";
-import { QueryErrorBoundary } from "@/components/query-error-boundary";
 import { ScreenFrame } from "@/components/screen-frame";
 import { toActivityListFilters } from "@/query/activity-queries";
 import type { ActivityListFilters } from "@/query/keys";
@@ -20,11 +20,10 @@ import {
 } from "@/screens/explore/constants";
 import { ExploreCustomHeader } from "@/screens/explore/explore-custom-header";
 import { ExploreList } from "@/screens/explore/explore-list";
-import { ExploreSkeleton } from "@/screens/explore/explore-skeleton";
 import { exploreMessages } from "@/screens/explore/messages";
 import type { DiscoveryMode } from "@/screens/explore/types";
 import { useExploreRefresh } from "@/screens/explore/use-explore-refresh";
-import { discovery$, getDiscoveryScrollOffset } from "@/state/discovery";
+import { discovery$, getDiscoveryScrollOffset, setDiscoveryScrollOffset } from "@/state/discovery";
 import { useAppTheme } from "@/theme";
 
 /** Explore discovery catalog with header search and category filters. */
@@ -61,7 +60,7 @@ function ExploreNative({ mode }: { mode: DiscoveryMode }) {
   const refresh = useExploreRefresh();
   const filters = useDiscoveryFilters();
   const scrollEdgeRef = useScrollEdgeEffectRef();
-  const scrollOffset = useSharedValue(filters.search.length === 0 ? getDiscoveryScrollOffset() : 0);
+  const scrollOffset = useSharedValue(getDiscoveryScrollOffset(filters));
   const insets = useSafeAreaInsets();
   const { fontScale: measuredFontScale } = useWindowDimensions();
   const fontScale = measuredFontScale ?? 1;
@@ -71,6 +70,15 @@ function ExploreNative({ mode }: { mode: DiscoveryMode }) {
     Math.max(0, fontScale - 1) * IOS_EXPLORE_HEADER_FONT_SCALE_ALLOWANCE;
   const headerHeight = usesCustomHeader ? insets.top + headerBodyHeight : 0;
   const title = t(exploreMessages.screenTitle);
+
+  useFocusEffect(
+    useCallback(
+      () => () => {
+        setDiscoveryScrollOffset(filters, scrollOffset.get());
+      },
+      [filters, scrollOffset],
+    ),
+  );
 
   return (
     <View
@@ -86,15 +94,6 @@ function ExploreNative({ mode }: { mode: DiscoveryMode }) {
         headerHeight={headerHeight}
         scrollRef={usesCustomHeader ? scrollEdgeRef : undefined}
         scrollOffset={usesCustomHeader ? scrollOffset : undefined}
-        skeletonFallback={
-          <ExploreSkeleton
-            filtersInOverlay={usesCustomHeader}
-            headerHeight={headerHeight}
-            scrollRef={usesCustomHeader ? scrollEdgeRef : undefined}
-            scrollOffset={usesCustomHeader ? scrollOffset : undefined}
-            showFilters={!usesCustomHeader}
-          />
-        }
       />
       {usesCustomHeader ? (
         <ExploreCustomHeader
@@ -112,7 +111,7 @@ function ExploreNative({ mode }: { mode: DiscoveryMode }) {
 function useDiscoveryFilters(): ActivityListFilters {
   const searchQuery = useValue(discovery$.searchQuery);
   const categories = useValue(discovery$.categories);
-  return toActivityListFilters(searchQuery, categories);
+  return useMemo(() => toActivityListFilters(searchQuery, categories), [categories, searchQuery]);
 }
 
 type RefreshState = ReturnType<typeof useExploreRefresh>;
@@ -125,7 +124,6 @@ type ExploreBodyProps = {
   headerHeight?: number;
   scrollRef?: Ref<unknown>;
   scrollOffset?: SharedValue<number>;
-  skeletonFallback?: ReactNode;
 };
 
 function ExploreBody({
@@ -136,27 +134,22 @@ function ExploreBody({
   headerHeight = 0,
   scrollRef,
   scrollOffset,
-  skeletonFallback,
 }: ExploreBodyProps) {
-  const { banner, setBanner, refreshing, handleRefresh, handleQueryErrorReset } = refresh;
+  const { banner, setBanner, refreshing, handleRefresh } = refresh;
 
   return (
-    <QueryErrorBoundary onReset={handleQueryErrorReset}>
-      <Suspense fallback={skeletonFallback ?? <ExploreSkeleton showFilters />}>
-        <ExploreList
-          banner={banner}
-          filters={filters}
-          mode={mode}
-          onBannerChange={setBanner}
-          refreshing={refreshing}
-          onRefresh={() => void handleRefresh()}
-          filtersInOverlay={filtersInOverlay}
-          headerHeight={headerHeight}
-          scrollRef={scrollRef}
-          scrollOffset={scrollOffset}
-        />
-      </Suspense>
-    </QueryErrorBoundary>
+    <ExploreList
+      banner={banner}
+      filters={filters}
+      mode={mode}
+      onBannerChange={setBanner}
+      refreshing={refreshing}
+      onRefresh={() => void handleRefresh()}
+      filtersInOverlay={filtersInOverlay}
+      headerHeight={headerHeight}
+      scrollRef={scrollRef}
+      scrollOffset={scrollOffset}
+    />
   );
 }
 
