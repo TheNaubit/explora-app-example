@@ -65,6 +65,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         },
       },
     ],
+    "./plugins/with-android-gradle-memory",
     "@rnrepo/expo-config-plugin",
     [
       "expo-localization",

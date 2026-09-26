@@ -2,16 +2,16 @@
 
 The assessment expects **6–8** scenarios with steps, expected behavior, observed results, and evidence. Track them here as you define and run them.
 
-| #   | Scenario                        | Covers                                     | Status                                                                     |
-| --- | ------------------------------- | ------------------------------------------ | -------------------------------------------------------------------------- |
-| 1   | Core journey                    | Search/filter → detail → favorite → reopen | Maestro assessment flow passed on iOS Simulator                            |
-| 2   | Generated-item refresh          | Successful refresh +1                      | Maestro count check passed on iOS Simulator                                |
-| 3   | Persistence / offline favorites | Relaunch + offline detail                  | Relaunch and saved fallback passed; device-offline run remains required    |
-| 4   | Failure recovery                | Failed refresh adds nothing                | Jest and Maestro state checks passed on iOS Simulator                      |
-| 5   | Lifecycle interruptions         | Background / delayed results               | Maestro slow-load background and resume passed on iOS Simulator            |
-| 6   | Native calendar                 | Permissions / cancel / invalid             | Passed on iOS and Android                                                  |
-| 7   | Performance (≥1k)               | Scroll / search + measurement              | Not measured in this development run; release evidence remains required    |
-| 8   | Accessibility                   | Main journey accessibility                 | Catalog state flow passed with larger text; full screen-reader run remains |
+| #   | Scenario                        | Covers                                     | Status                                                                 |
+| --- | ------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------- |
+| 1   | Core journey                    | Search/filter → detail → favorite → reopen | Maestro passed on iOS and Android                                      |
+| 2   | Generated-item refresh          | Successful refresh +1                      | Maestro count checks passed on iOS and Android                         |
+| 3   | Persistence / offline favorites | Relaunch + offline detail                  | Android device-offline reopen passed                                   |
+| 4   | Failure recovery                | Failed refresh adds nothing                | Jest and Maestro passed on iOS and Android                             |
+| 5   | Lifecycle interruptions         | Background / delayed results               | Maestro background and resume passed on iOS and Android                |
+| 6   | Native calendar                 | Permissions / cancel / invalid             | Passed on iOS and Android                                              |
+| 7   | Performance (≥1k)               | Scroll / search + measurement              | Android release startup and stress-scroll measurements recorded        |
+| 8   | Accessibility                   | Main journey accessibility                 | Android screen reader, keyboard, large text, and offline checks passed |
 
 When you specify or run a scenario, expand it here or add `scenarios/<name>.md` and link it from this table.
 
@@ -34,6 +34,10 @@ When you specify or run a scenario, expand it here or add `scenarios/<name>.md` 
 Passed on the iOS 27.0 Simulator on 2026-09-25.
 
 The Maestro flow completed all seven steps. The process restart kept the favorite.
+
+Passed on an Android 16 emulator on 2026-09-26.
+
+The Android flow kept the search, filter, favorite, and persisted detail state.
 
 ### Evidence
 
@@ -59,6 +63,8 @@ Passed on the iOS 27.0 Simulator on 2026-09-25.
 
 The refresh added exactly one activity. Routine success produced no toast.
 
+The same count and feedback checks passed on an Android 16 emulator on 2026-09-26.
+
 ### Evidence
 
 - Maestro: `.maestro/flows/refresh-integrity.yaml`.
@@ -81,7 +87,9 @@ The refresh added exactly one activity. Routine success produced no toast.
 
 Steps 1–4 passed on the iOS 27.0 Simulator on 2026-09-25.
 
-Step 5 remains pending. The review mode simulates a request failure. It does not disable device networking.
+All five steps passed on an Android 16 emulator on 2026-09-26.
+
+The Android run disabled Wi-Fi and mobile data. The saved detail reopened from persisted data.
 
 ### Evidence
 
@@ -126,6 +134,10 @@ The pagination flow shows the inline footer recovery. Switching to Normal remove
 
 The catalog flow also passed in dark mode with extra-extra-extra-large text.
 
+Maestro passed all eight flows on an Android 16 emulator on 2026-09-26.
+
+The Android run took 11 minutes and 35 seconds. The JUnit report records 8 of 8 passing flows.
+
 ### Evidence
 
 - Feedback policy: `src/feedback/feedback-policy.test.ts`.
@@ -153,6 +165,8 @@ The catalog flow also passed in dark mode with extra-extra-extra-large text.
 Passed on the iOS 27.0 Simulator on 2026-09-25.
 
 The app resumed into the catalog after the delayed request completed.
+
+Passed on an Android 16 emulator on 2026-09-26.
 
 ### Evidence
 
@@ -253,7 +267,7 @@ It does not prove behavior on a physical Android device.
 
 | Step | Action                                           | Expected result                                                  |
 | ---- | ------------------------------------------------ | ---------------------------------------------------------------- |
-| 1    | Install an iOS release Simulator build.          | The app starts without Metro.                                    |
+| 1    | Install a release build.                         | The app starts without Metro.                                    |
 | 2    | Reset to the seeded 1,012-activity catalog.      | Explore reports the expected dataset size.                       |
 | 3    | Record a fixed scroll and search interaction.    | The recording contains the complete interaction.                 |
 | 4    | Measure the selected release performance metric. | The report states the device, build, dataset, steps, and result. |
@@ -261,13 +275,26 @@ It does not prove behavior on a physical Android device.
 
 ### Observed result
 
-Pending. Development Maestro runs do not prove release performance.
+Measured on an Android 16 emulator on 2026-09-26.
+
+The final local EAS release APK started without Metro. Five clean cold starts took 1,029–1,105 ms.
+
+The median cold start was 1,098 ms. The average cold start was 1,076.8 ms.
+
+A stress scroll used 12 fast swipes down and 12 fast swipes up through 1,012 activities.
+
+The host-GPU emulator recorded 485 frames. It classified 35 frames as janky, or 7.22 percent.
+
+The frame percentiles were 17 ms at P50, 23 ms at P90, 48 ms at P95, and 65 ms at P99.
+
+The measurement uses an emulator with the host GPU. It does not predict physical-device frame times.
 
 ### Evidence
 
 - Dataset tests: `src/mocks/seed-catalog.test.ts`.
 - Build instructions: `docs/operations/eas-local-builds.md`.
-- Release measurement: not recorded yet.
+- Release APK: `dist/eas-builds/build-1790447467788.apk`.
+- Measurement method: Android `am start -S -W` and `dumpsys gfxinfo` frame statistics.
 
 ## Scenario 8: Accessibility
 
@@ -284,10 +311,29 @@ Pending. Development Maestro runs do not prove release performance.
 
 Step 1 passed for the catalog state flow on the iOS 27.0 Simulator.
 
-Steps 2–4 remain pending as one recorded native accessibility run.
+Steps 1–4 passed on an Android 16 emulator on 2026-09-26.
+
+The combined Maestro run used dark mode, 2.0 font scale, and disabled device networking.
+
+TalkBack exposed the expected labels, roles, selected states, and activity descriptions.
+
+Hardware-keyboard Tab and Shift+Tab moved through the main controls. Enter and Space activated focused controls.
+
+The keyboard journey filtered the catalog, opened detail, saved the activity, opened Favorites, and reopened the offline detail.
+
+The native Android search icon was reachable with TalkBack. It was not in the normal hardware-keyboard Tab order.
+
+The keyboard run used the category filter to verify the required search or filter journey.
 
 ### Evidence
 
 - Large-text catalog run: `.maestro/flows/catalog-states.yaml`.
+- Android combined run: `artifacts/maestro/android-core-offline-dark-large-text.xml`.
 - Component accessibility tests: `src/a11y/` and changed component tests.
-- Full native evidence: not recorded yet.
+- Native evidence: Android `dumpsys accessibility` and UI Automator inspection.
+
+### Limits
+
+The accessibility run used an Android emulator. It does not prove physical-device haptics.
+
+The iOS Maestro suite used a Simulator development build. It did not use a production-release build.

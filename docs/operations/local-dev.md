@@ -82,7 +82,7 @@ Select **Reset local data** to clear generated activities, favorites, filters, a
 ## Related
 
 - [EAS local builds](./eas-local-builds.md) — profiles and `npm run build:*` scripts
-- [Maestro checks](./maestro.md) — local iOS state flows
+- [Maestro checks](./maestro.md) — local iOS and Android state flows
 - [Architecture overview](../architecture/overview.md)
 - [Mock API](../features/mock-api.md)
 - Assessment reproducibility rules: root `AGENTS.md`

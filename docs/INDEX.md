@@ -20,7 +20,7 @@ Write wiki pages in Simplified Technical English. See [meta/simplified-technical
 | Decisions         | ADR-style trade-offs                    | [decisions/index.md](./decisions/index.md)                                     |
 | Verification      | Scenarios, tests, evidence pointers     | [verification/index.md](./verification/index.md)                               |
 | Operations        | Local run, review modes                 | [operations/local-dev.md](./operations/local-dev.md)                           |
-| Maestro checks    | Automated iOS state flows               | [operations/maestro.md](./operations/maestro.md)                               |
+| Maestro checks    | Automated iOS and Android state flows   | [operations/maestro.md](./operations/maestro.md)                               |
 | EAS local builds  | Profiles, npm scripts, install helpers  | [operations/eas-local-builds.md](./operations/eas-local-builds.md)             |
 | Wiki meta         | How to maintain this tree               | [meta/wiki-maintenance.md](./meta/wiki-maintenance.md)                         |
 | STE               | Simplified Technical English rules      | [meta/simplified-technical-english.md](./meta/simplified-technical-english.md) |

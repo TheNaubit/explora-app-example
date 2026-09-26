@@ -20,6 +20,8 @@ Expo supports `ccacheEnabled` for source builds. This machine does not have `cca
 
 Local EAS builds always create a fresh artifact. `EAS_LOCAL_BUILD_SKIP_CLEANUP` keeps a build directory for inspection. It does not make EAS incremental.
 
+The Android config plugin sets Gradle Metaspace to 1,024 MB. R8 can exceed the generated 512 MB default during release optimization.
+
 ## Ignore files
 
 1. [`.gitignore`](../../.gitignore) — keep `dist/`, `ios/`, `android/`, and binary artifacts (`.apk`, `.aab`, `.ipa`, `.app`) out of git.

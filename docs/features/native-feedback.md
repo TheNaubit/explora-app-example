@@ -78,9 +78,11 @@ Dev Tools also reports if the installed app contains the native module.
 - The complete iOS development app builds and reports that the native module is ready.
 - Repeated builds reuse DerivedData when the build command and settings stay unchanged.
 - The Android development app builds and installs on an Android 16 emulator.
+- The Android local EAS release APK builds and starts without Metro.
 - The emulator shows the semantic success snackbar in light and dark themes.
 - The emulator shows the semantic error snackbar in the light theme.
 - The calendar flow shows the semantic success snackbar after a confirmed save.
+- The targeted feedback Maestro flow passes against the release APK.
 - Physical-device haptic feel remains a device-only check.
 
 ## Evidence

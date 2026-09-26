@@ -8,7 +8,7 @@ Maestro drives the assessment states through the in-app Dev Tools tab.
 2. Install Maestro with Homebrew.
 3. Build and install the Explora development client.
 4. Start Metro with `npm run start:dev-client`.
-5. Boot the `Explora iPhone 18 Pro` Simulator.
+5. Boot the `Explora iPhone 18 Pro` Simulator or the configured Android emulator.
 
 ```bash
 brew tap mobile-dev-inc/tap
@@ -35,6 +35,18 @@ Run the two automated tests required by the assessment:
 
 ```bash
 npm run test:e2e:assessment:ios
+```
+
+Run all Android flows:
+
+```bash
+npm run test:e2e:android
+```
+
+Run the two Android assessment flows:
+
+```bash
+npm run test:e2e:assessment:android
 ```
 
 This command runs one core behavior flow and one failure or recovery flow.
@@ -64,6 +76,14 @@ The `assessment-required` tag selects these two meaningful automated tests:
 2. `refresh-integrity.yaml` covers failure integrity and recovery.
 
 The complete iOS suite passed 8 of 8 flows on 2026-09-25. The run took 12 minutes and 2 seconds.
+
+The iOS suite used a Simulator development build. It did not use a production-release build.
+
+The complete Android suite passed 8 of 8 flows on 2026-09-26. The run took 11 minutes and 35 seconds.
+
+The Android core flow also passed with dark mode, 2.0 font scale, and device networking disabled.
+
+The Android release APK passed the targeted native-feedback flow. The final aligned APK also runs the two assessment flows.
 
 The bootstrap resets local data and request modes through Dev Tools.
 

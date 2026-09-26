@@ -26,6 +26,9 @@ tags:
 - extendedWaitUntil:
     visible: "(?s)Could not refresh.*Your current activities are still available\\."
     timeout: 5000
+- extendedWaitUntil:
+    notVisible: "(?s)Could not refresh.*Your current activities are still available\\."
+    timeout: 8000
 
 - tapOn:
     id: "dev-tools-calendar-success"
