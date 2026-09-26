@@ -18,8 +18,8 @@ Library setup alone is not enough. Every a11y rule in this project must serve th
 | Library + root provider      | Shipped (`react-native-a11y@0.9.0` + SDK 58 patch; provider is a 0.9 passthrough shim) |
 | Screen shell + focus helpers | Shipped                                                                                |
 | Discovery list / search      | Shipped (Explore list, search field, category chips)                                   |
-| Detail / favorites / refresh | Partial (UI shipped; native main-journey evidence remains)                             |
-| Scenario 8 evidence          | Not written                                                                            |
+| Detail / favorites / refresh | Shipped on Android; iOS native main-journey evidence remains                           |
+| Scenario 8 evidence          | Written; Android passed; iOS native main-journey evidence remains                      |
 
 ## Stack
 
@@ -132,6 +132,12 @@ Until a rebuild includes the CardView fix, `src/components/a11y-card` may compos
 - Cover the full main journey: browse, search or filter, detail, favorite, and offline reopen.
 - Prove all four assessment conditions: usable navigation, hardware keyboard, larger text, and VoiceOver or TalkBack.
 - Record device, OS, text size setting, and build type in the scenario evidence.
+
+Android 16 emulator verification passed on 2026-09-26.
+
+The run covered TalkBack, hardware-keyboard navigation, 2.0 font scale, dark mode, and an offline saved-detail reopen.
+
+The iOS native main-journey accessibility run remains pending.
 
 ## Related
 

@@ -1,9 +1,10 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Linking, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { SymbolView } from "expo-symbols";
 import { useLingui } from "@lingui/react/macro";
 
 import type { AddToCalendarResult } from "@/calendar/add-to-calendar";
+import { ANDROID_CALENDAR_FEEDBACK_DELAY_MS } from "@/calendar/constants";
 import { A11yPressable } from "@/components/a11y-pressable";
 import { MIN_TOUCH_TARGET, PRESS_SCALE } from "@/components/constants";
 import { resolveFeedbackPresentation } from "@/feedback/feedback-policy";
@@ -37,12 +38,28 @@ export function AddToCalendarSection({ activity }: AddToCalendarSectionProps) {
   const calendarActionWidth = Math.max(MIN_TOUCH_TARGET, viewportWidth - spacing.space48);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const lastStartDate = useRef<Date | null>(null);
+  const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { isActive, result, submit } = useAddToCalendar(activity);
   const statusCopy = useMemo(() => getCalendarStatusCopy(result, t), [result, t]);
 
+  useEffect(() => {
+    return () => {
+      if (feedbackTimer.current !== null) clearTimeout(feedbackTimer.current);
+    };
+  }, []);
+
   async function submitSchedule(startDate: Date) {
     const nextResult = await submit(startDate);
-    showCalendarFeedback(nextResult, t);
+    if (process.env.EXPO_OS !== "android") {
+      showCalendarFeedback(nextResult, t);
+      return;
+    }
+
+    if (feedbackTimer.current !== null) clearTimeout(feedbackTimer.current);
+    feedbackTimer.current = setTimeout(() => {
+      feedbackTimer.current = null;
+      showCalendarFeedback(nextResult, t);
+    }, ANDROID_CALENDAR_FEEDBACK_DELAY_MS);
   }
 
   async function handleScheduleConfirm(startDate: Date) {

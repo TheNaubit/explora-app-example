@@ -3,6 +3,7 @@ import { mkdirSync } from "node:fs";
 import process from "node:process";
 
 const reportDirectory = "artifacts/maestro";
+const releaseNativeFlag = "--release-native";
 
 function findDeviceId() {
   if (process.env.MAESTRO_DEVICE_ID) {
@@ -30,6 +31,14 @@ function findDeviceId() {
 }
 
 const deviceId = findDeviceId();
+const forwardedArguments = process.argv.slice(2);
+const isReleaseNativeRun = forwardedArguments.includes(releaseNativeFlag);
+const maestroArguments = forwardedArguments.filter((argument) => argument !== releaseNativeFlag);
+const reportName = isReleaseNativeRun
+  ? "android-release-native-results.xml"
+  : "android-results.xml";
+const outputDirectory = isReleaseNativeRun ? "android-release-native-run" : "android-run";
+const flowTarget = isReleaseNativeRun ? ".maestro/release-flows" : ".maestro";
 mkdirSync(reportDirectory, { recursive: true });
 
 const result = spawnSync(
@@ -38,18 +47,16 @@ const result = spawnSync(
     "--device",
     deviceId,
     "test",
-    "--config",
-    ".maestro/config.yaml",
+    ...(isReleaseNativeRun ? [] : ["--config", ".maestro/config.yaml"]),
     "--format",
     "JUNIT",
     "--output",
-    `${reportDirectory}/android-results.xml`,
+    `${reportDirectory}/${reportName}`,
     "--test-output-dir",
-    `${reportDirectory}/android-run`,
-    "--exclude-tags",
-    "ios",
-    ...process.argv.slice(2),
-    ".maestro",
+    `${reportDirectory}/${outputDirectory}`,
+    ...(isReleaseNativeRun ? [] : ["--exclude-tags", "ios"]),
+    ...maestroArguments,
+    flowTarget,
   ],
   {
     env: {

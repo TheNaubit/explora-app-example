@@ -2,7 +2,7 @@ import { readdirSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 
-const flowDirectories = [".maestro/flows", ".maestro/subflows"];
+const flowDirectories = [".maestro/flows", ".maestro/release-flows", ".maestro/subflows"];
 const flowFiles = flowDirectories.flatMap((flowDirectory) =>
   readdirSync(flowDirectory)
     .filter((file) => file.endsWith(".yaml"))

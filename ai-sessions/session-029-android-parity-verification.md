@@ -18,6 +18,9 @@ The user also asked to commit all changes.
 - Aligned Expo SDK 58 packages with `npx expo install --fix`.
 - Kept the required `react-native-a11y` patch.
 - Built local Android release APKs with EAS.
+- Fixed calendar success feedback after the Android date-time dialogs close.
+- Added a release-only Maestro flow for cancellation, permission, save, and feedback.
+- Removed superseded build and Maestro artifacts after verification.
 - Updated the verification wiki with Android results and exact limits.
 
 ## Runtime verification
@@ -29,10 +32,11 @@ The user also asked to commit all changes.
 - Reopened a saved detail while the emulator had no network connection.
 - Passed the native feedback flow against a release APK without Metro.
 - Ran the two assessment-required flows against the final aligned release APK.
+- Passed the release-only native calendar flow against the final APK without Metro.
 
 ## Automated verification
 
-- Passed 51 Jest suites and 192 tests.
+- Passed 52 Jest suites and 196 tests.
 - Passed Oxlint with warnings denied.
 - Passed Oxfmt.
 - Passed TypeScript checking.
@@ -42,9 +46,9 @@ The user also asked to commit all changes.
 ## Performance evidence
 
 - Measured five clean cold starts from a local EAS release APK.
-- Recorded a 1,098 ms median cold start on the Android emulator.
+- Recorded a 683 ms median cold start on the Android emulator.
 - Recorded a stress scroll through the 1,012-activity catalog.
-- The host-GPU stress scroll reported 7.22 percent janky frames.
+- The host-GPU stress scroll reported 4.44 percent janky frames after an emulator reboot.
 - The emulator result does not predict physical-device frame times.
 
 ## Limits

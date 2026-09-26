@@ -1,22 +1,17 @@
-import { i18n } from "@lingui/core";
 import { plural } from "@lingui/core/macro";
 
 function formatMinuteUnit(value: number): string {
-  return i18n._(
-    plural(value, {
-      one: "# min",
-      other: "# min",
-    }),
-  );
+  return plural(value, {
+    one: "# min",
+    other: "# min",
+  });
 }
 
 function formatHourUnit(value: number): string {
-  return i18n._(
-    plural(value, {
-      one: "# hr",
-      other: "# hr",
-    }),
-  );
+  return plural(value, {
+    one: "# hr",
+    other: "# hr",
+  });
 }
 
 /**

@@ -51,6 +51,14 @@ npm run test:e2e:assessment:android
 
 This command runs one core behavior flow and one failure or recovery flow.
 
+Run the Android release-only native calendar flow:
+
+```bash
+npm run test:e2e:release:android
+```
+
+This flow checks cancellation, the permission prompt, event creation, and the success Snackbar.
+
 Set `MAESTRO_DEVICE_ID` when more than one suitable Simulator is booted.
 
 The runner prefers a booted Simulator named `Explora iPhone 18 Pro`.
@@ -83,7 +91,7 @@ The complete Android suite passed 8 of 8 flows on 2026-09-26. The run took 11 mi
 
 The Android core flow also passed with dark mode, 2.0 font scale, and device networking disabled.
 
-The Android release APK passed the targeted native-feedback flow. The final aligned APK also runs the two assessment flows.
+The final Android release APK passed the native calendar flow and both assessment flows without Metro.
 
 The bootstrap resets local data and request modes through Dev Tools.
 

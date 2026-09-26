@@ -1,0 +1,67 @@
+appId: com.adlerventures.explora
+name: Android release calendar cancellation, permission, and save
+tags:
+  - android
+  - release-native
+---
+- launchApp:
+    permissions:
+      android.permission.READ_CALENDAR: unset
+      android.permission.WRITE_CALENDAR: unset
+- runFlow:
+    when:
+      visible: "Runtime version:.*"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Development Servers"
+    commands:
+      - tapOn: "http://.*:8081"
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 30000
+
+- tapOn: "Search"
+- inputText: "Botanical Garden Walk"
+- pressKey: Enter
+- extendedWaitUntil:
+    visible:
+      id: "activity-card-act-001"
+    timeout: 8000
+- tapOn:
+    id: "activity-card-act-001"
+- extendedWaitUntil:
+    visible:
+      id: "activity-detail-content"
+    timeout: 8000
+
+- tapOn:
+    id: "add-to-calendar-button"
+- extendedWaitUntil:
+    visible: "Cancel"
+    timeout: 5000
+- tapOn: "Cancel"
+- assertVisible:
+    id: "add-to-calendar-button"
+
+- tapOn:
+    id: "add-to-calendar-button"
+- extendedWaitUntil:
+    visible: "Next"
+    timeout: 5000
+- tapOn: "Next"
+- extendedWaitUntil:
+    visible: "Done"
+    timeout: 5000
+- tapOn: "Done"
+- extendedWaitUntil:
+    visible: "Allow"
+    timeout: 5000
+- tapOn:
+    text: "Allow"
+    waitToSettleTimeoutMs: 0
+- extendedWaitUntil:
+    visible: "(?s)Added to Calendar.*The system calendar saved this activity\\."
+    timeout: 10000

@@ -17,6 +17,7 @@ export function useAddToCalendar(activity: Activity): AddToCalendarState {
   const [result, setResult] = useState<AddToCalendarResult | null>(null);
 
   async function submit(startDate: Date): Promise<AddToCalendarResult> {
+    setResult(null);
     setIsActive(true);
     let shouldClearActive = true;
 

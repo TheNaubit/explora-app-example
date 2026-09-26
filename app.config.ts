@@ -57,6 +57,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-build-properties",
       {
+        android: {
+          // The app uses expo-image and has no GIF assets. Exclude React Native's unused Fresco decoder.
+          gifEnabled: false,
+        },
         // SDK 58 / RN 0.88 prebuilt Core omits private headers that
         // react-native-a11y still imports. Build RN from source until a11y
         // supports the public module map.

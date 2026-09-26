@@ -12,6 +12,7 @@ import android.text.style.StyleSpan
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -28,14 +29,34 @@ internal object NativeToastHost : Application.ActivityLifecycleCallbacks {
 
   private var currentActivity = WeakReference<Activity>(null)
   private var currentSnackbar: WeakReference<Snackbar>? = null
+  private var pendingToast: PendingToast? = null
 
   fun install(context: Context) {
     (context.applicationContext as? Application)?.registerActivityLifecycleCallbacks(this)
   }
 
+  @Synchronized
   fun show(options: NativeToastOptions, onAction: () -> Unit) {
-    val activity = currentActivity.get() ?: return
+    val activity = currentActivity.get()
+    if (activity == null || !activity.hasWindowFocus()) {
+      pendingToast = PendingToast(options, onAction)
+      activity?.let(::showPendingWhenWindowFocused)
+      return
+    }
+
+    present(activity, options, onAction)
+  }
+
+  private fun present(activity: Activity, options: NativeToastOptions, onAction: () -> Unit) {
     activity.runOnUiThread {
+      if (!activity.hasWindowFocus()) {
+        synchronized(this) {
+          pendingToast = PendingToast(options, onAction)
+        }
+        showPendingWhenWindowFocused(activity)
+        return@runOnUiThread
+      }
+
       val anchor = activity.findViewById<View>(android.R.id.content) ?: return@runOnUiThread
       currentSnackbar?.get()?.dismiss()
       val kind = NativeToastKind.from(options.type)
@@ -52,7 +73,35 @@ internal object NativeToastHost : Application.ActivityLifecycleCallbacks {
     }
   }
 
+  private fun showPendingWhenWindowFocused(activity: Activity) {
+    activity.runOnUiThread {
+      if (activity.hasWindowFocus()) {
+        showPending(activity)
+        return@runOnUiThread
+      }
+
+      val decorView = activity.window.decorView
+      val observer = decorView.viewTreeObserver
+      lateinit var listener: ViewTreeObserver.OnWindowFocusChangeListener
+      listener = ViewTreeObserver.OnWindowFocusChangeListener { hasFocus ->
+        if (!hasFocus) return@OnWindowFocusChangeListener
+        if (observer.isAlive) observer.removeOnWindowFocusChangeListener(listener)
+        showPending(activity)
+      }
+      observer.addOnWindowFocusChangeListener(listener)
+    }
+  }
+
+  private fun showPending(activity: Activity) {
+    val pending = synchronized(this) {
+      pendingToast.also { pendingToast = null }
+    }
+    pending?.let { present(activity, it.options, it.onAction) }
+  }
+
+  @Synchronized
   fun dismiss() {
+    pendingToast = null
     currentActivity.get()?.runOnUiThread {
       currentSnackbar?.get()?.dismiss()
       currentSnackbar = null
@@ -122,15 +171,23 @@ internal object NativeToastHost : Application.ActivityLifecycleCallbacks {
   }
 
   override fun onActivityResumed(activity: Activity) {
-    currentActivity = WeakReference(activity)
+    val hasPending = synchronized(this) {
+      currentActivity = WeakReference(activity)
+      pendingToast != null
+    }
+    if (hasPending) showPendingWhenWindowFocused(activity)
   }
 
   override fun onActivityPaused(activity: Activity) {
-    if (currentActivity.get() === activity) currentActivity.clear()
+    synchronized(this) {
+      if (currentActivity.get() === activity) currentActivity.clear()
+    }
   }
 
   override fun onActivityDestroyed(activity: Activity) {
-    if (currentActivity.get() === activity) currentActivity.clear()
+    synchronized(this) {
+      if (currentActivity.get() === activity) currentActivity.clear()
+    }
   }
 
   override fun onActivityCreated(activity: Activity, state: Bundle?) = Unit
@@ -138,6 +195,11 @@ internal object NativeToastHost : Application.ActivityLifecycleCallbacks {
   override fun onActivityStopped(activity: Activity) = Unit
   override fun onActivitySaveInstanceState(activity: Activity, state: Bundle) = Unit
 }
+
+private data class PendingToast(
+  val options: NativeToastOptions,
+  val onAction: () -> Unit,
+)
 
 private enum class NativeToastKind(
   @param:DrawableRes val iconResource: Int,

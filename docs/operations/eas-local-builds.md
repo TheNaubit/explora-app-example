@@ -22,6 +22,18 @@ Local EAS builds always create a fresh artifact. `EAS_LOCAL_BUILD_SKIP_CLEANUP` 
 
 The Android config plugin sets Gradle Metaspace to 1,024 MB. R8 can exceed the generated 512 MB default during release optimization.
 
+The Android build excludes React Native GIF support. Explora has no GIF assets and uses `expo-image` for catalog images.
+
+## Local artifact cleanup
+
+Keep the final required APK, the referenced iOS archive, and the final verification reports.
+
+After verification, remove superseded APKs and old Maestro run directories.
+
+Remove `android/app/build`, `android/app/.cxx`, and `ios/build` when disk space matters.
+
+These directories are reproducible. Do not remove shared Gradle, CocoaPods, or npm caches during project cleanup.
+
 ## Ignore files
 
 1. [`.gitignore`](../../.gitignore) — keep `dist/`, `ios/`, `android/`, and binary artifacts (`.apk`, `.aab`, `.ipa`, `.app`) out of git.

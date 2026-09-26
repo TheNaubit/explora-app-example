@@ -33,6 +33,12 @@
 | Detail screen    | `src/screens/activity-detail/`          |
 | Unit tests       | `src/state/favorites.test.ts`           |
 
+## Verification
+
+- Persistence and saved-detail fallback pass in Jest and Maestro.
+- The Android 16 emulator reopened a saved detail with Wi-Fi and mobile data disabled.
+- The complete Android core journey also passed after an app process restart.
+
 ## Related
 
 - [Navigation](./navigation.md)

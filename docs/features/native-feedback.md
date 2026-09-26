@@ -46,6 +46,8 @@ Android action labels do nothing on iOS. This keeps one JavaScript API without i
 - The module uses system haptic feedback constants.
 - The Android system controls haptic availability and user settings.
 - The snackbar provides the native accessibility surface.
+- The module queues feedback while the app window lacks focus.
+- Pending feedback appears after a native dialog returns focus to the app window.
 
 ## Current use
 
@@ -82,7 +84,7 @@ Dev Tools also reports if the installed app contains the native module.
 - The emulator shows the semantic success snackbar in light and dark themes.
 - The emulator shows the semantic error snackbar in the light theme.
 - The calendar flow shows the semantic success snackbar after a confirmed save.
-- The targeted feedback Maestro flow passes against the release APK.
+- The calendar cancellation, permission, save, and feedback flow passes against the final release APK.
 - Physical-device haptic feel remains a device-only check.
 
 ## Evidence

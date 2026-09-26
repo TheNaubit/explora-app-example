@@ -223,7 +223,7 @@ Passed on the iOS 27.0 Simulator.
 
 The focused Jest tests cover past dates, malformed data, invalid durations, both denial states, native errors, and duplicate protection.
 
-The Android flow also passed in a local development build.
+The Android flow passed in local development and release builds.
 
 1. Explora requested calendar access after the date and time selection.
 2. The user allowed calendar access.
@@ -235,6 +235,7 @@ The Android flow also passed in a local development build.
 8. Dev Tools reported the native feedback module as **Ready**.
 9. The Android toast used a green success symbol and a neutral Snackbar surface.
 10. The title used bold text above the supporting message.
+11. The release flow passed without Metro on the final APK.
 
 ### Evidence
 
@@ -251,13 +252,14 @@ The Android flow also passed in a local development build.
 - Android success preview: [`android-success-light.jpg`](./evidence/native-feedback/android-success-light.jpg).
 - Android error preview: [`android-error-light.jpg`](./evidence/native-feedback/android-error-light.jpg).
 - Android dark success preview: [`android-success-dark.jpg`](./evidence/native-feedback/android-success-dark.jpg).
-- Native build: `dist/eas-builds/build-1790261620671.tar.gz`.
+- iOS development build: `dist/eas-builds/build-1790261620671.tar.gz`.
+- Android release APK: `dist/eas-builds/build-1790454953687.apk`.
 - Build metadata contains `NSCalendarsWriteOnlyAccessUsageDescription`.
 - Build metadata does not contain `NSCalendarsFullAccessUsageDescription`.
 
 ### Limits
 
-The Android check used a development build on an emulator.
+The Android check used development and release builds on an emulator.
 
 It does not prove behavior on a physical Android device.
 
@@ -277,15 +279,17 @@ It does not prove behavior on a physical Android device.
 
 Measured on an Android 16 emulator on 2026-09-26.
 
-The final local EAS release APK started without Metro. Five clean cold starts took 1,029–1,105 ms.
+The final local EAS release APK started without Metro. Five clean cold starts took 682–712 ms.
 
-The median cold start was 1,098 ms. The average cold start was 1,076.8 ms.
+The median cold start was 683 ms. The average cold start was 688.8 ms.
 
 A stress scroll used 12 fast swipes down and 12 fast swipes up through 1,012 activities.
 
-The host-GPU emulator recorded 485 frames. It classified 35 frames as janky, or 7.22 percent.
+After an emulator reboot, the host-GPU emulator recorded 518 frames.
 
-The frame percentiles were 17 ms at P50, 23 ms at P90, 48 ms at P95, and 65 ms at P99.
+It classified 23 frames as janky, or 4.44 percent.
+
+The frame percentiles were 17 ms at P50, 19 ms at P90, 20 ms at P95, and 23 ms at P99.
 
 The measurement uses an emulator with the host GPU. It does not predict physical-device frame times.
 
@@ -293,8 +297,8 @@ The measurement uses an emulator with the host GPU. It does not predict physical
 
 - Dataset tests: `src/mocks/seed-catalog.test.ts`.
 - Build instructions: `docs/operations/eas-local-builds.md`.
-- Release APK: `dist/eas-builds/build-1790447467788.apk`.
-- Measurement method: Android `am start -S -W` and `dumpsys gfxinfo` frame statistics.
+- Release APK: `dist/eas-builds/build-1790454953687.apk`.
+- Measurement method: Android `am force-stop`, `am start -W`, and `dumpsys gfxinfo` frame statistics.
 
 ## Scenario 8: Accessibility
 

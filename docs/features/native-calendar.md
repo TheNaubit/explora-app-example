@@ -53,6 +53,7 @@ The coordinator accepts one active operation. A second submission returns a dupl
 - Explora requests calendar access after the user selects **Done**.
 - Explora selects a writable event calendar.
 - Explora adds the event directly with Expo Calendar.
+- Explora waits for the date-time dialog to release focus before it shows save feedback.
 - A successful write shows one native success toast and matching haptic.
 - Permission denial and native errors show one inline recovery surface.
 - Local picker cancellation stays silent.
@@ -105,11 +106,11 @@ The iOS runtime check covered invalid input, write-only permission, blocked perm
 
 The native event form showed the title, location, description, start time, and calculated end time.
 
-The Android check covered permission, direct event creation, and visible success feedback.
-
-The saved event used calendar ID `2` and event ID `134`.
+The Android development and release checks covered cancellation, permission, direct event creation, and visible success feedback.
 
 The Android native feedback module reported **Ready** after the module bridge fix.
+
+The final release flow passed without Metro on `build-1790454953687.apk`.
 
 See [scenario 6](../verification/scenarios.md#scenario-6-native-calendar) for the observed values and screenshots.
 
