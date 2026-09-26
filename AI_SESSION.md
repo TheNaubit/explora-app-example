@@ -36,6 +36,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 28  | 2026-09-26     | Android Material Snackbar semantic symbols, hierarchy, contrast, and runtime evidence              | [ai-sessions/session-028-android-semantic-snackbar.md](./ai-sessions/session-028-android-semantic-snackbar.md)                 | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 29  | 2026-09-26     | Android Maestro parity, accessibility, release checks, SDK alignment, and performance evidence     | [ai-sessions/session-029-android-parity-verification.md](./ai-sessions/session-029-android-parity-verification.md)             | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 30  | 2026-09-26     | iOS release artifact, release-only Maestro checks, calendar verification, and artifact manifest    | [ai-sessions/session-030-ios-release-artifact.md](./ai-sessions/session-030-ios-release-artifact.md)                           | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 31  | 2026-09-27     | Assessment completion review and remaining submission work                                         | [ai-sessions/session-031-assessment-remaining-work.md](./ai-sessions/session-031-assessment-remaining-work.md)                 | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 

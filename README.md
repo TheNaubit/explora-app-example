@@ -132,7 +132,12 @@ The core journey, refresh, favorites, native calendar, and Dev Tools are impleme
 
 The Android APK and iOS Simulator release app are built and verified. See [`docs/verification/artifacts.md`](./docs/verification/artifacts.md).
 
-The improvement evidence, release note, final presentation, and iOS VoiceOver journey remain incomplete.
+Four assessment items remain:
+
+- Document one mobile improvement with clear before and after evidence.
+- Write the release note with signing, versioning, pre-release checks, and rollback guidance.
+- Record the final presentation. The user plans to create a video of no more than ten minutes.
+- Complete the main journey with VoiceOver on the iOS release app and record the evidence.
 
 ---
 
