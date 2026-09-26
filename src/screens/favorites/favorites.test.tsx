@@ -18,6 +18,7 @@ jest.mock("expo-router", () => {
 
   return {
     Link,
+    useFocusEffect: (effect: () => void) => effect(),
     router: {
       navigate: jest.fn(),
     },

@@ -9,7 +9,7 @@ import { router } from "expo-router";
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { A11y, announceStatus } from "@/a11y";
+import { announceStatus } from "@/a11y";
 import { ActivityCardCarousel } from "@/components/activity-card-carousel";
 import { CollapsingScreenHeader } from "@/components/collapsing-screen-header";
 import { getCollapsingHeaderTranslation } from "@/components/collapsing-screen-header/constants";
@@ -88,8 +88,10 @@ function FavoritesNative() {
   });
 
   return (
-    <View
-      collapsable={false}
+    <ScreenFrame
+      title={title}
+      padHorizontal={false}
+      padTop={false}
       style={[styles.root, { backgroundColor: theme.colors.background }]}
       testID="favorites-screen"
     >
@@ -138,8 +140,7 @@ function FavoritesNative() {
       >
         {hasFavorites ? <FavoritesSummary count={activities.length} /> : null}
       </CollapsingScreenHeader>
-      <A11y.ScreenChange title={title} />
-    </View>
+    </ScreenFrame>
   );
 }
 

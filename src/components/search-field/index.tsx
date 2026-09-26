@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
   input: {
     fontSize: typography.body.fontSize,
     fontWeight: typography.body.fontWeight,
-    height: MIN_TOUCH_TARGET,
     includeFontPadding: false,
+    minHeight: MIN_TOUCH_TARGET,
     paddingVertical: 0,
     textAlign: "left",
     textAlignVertical: "center",

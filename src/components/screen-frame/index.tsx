@@ -1,8 +1,9 @@
-import type { ComponentProps, ReactNode } from "react";
+import { useCallback, useRef, type ComponentProps, type ReactNode } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { useFocusEffect } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { A11y } from "@/a11y";
+import { A11y, announceStatus } from "@/a11y";
 
 type ViewStyleProp = ComponentProps<typeof View>["style"];
 type ScrollViewProps = Omit<
@@ -38,7 +39,7 @@ type ScreenFrameProps = {
 };
 
 /**
- * Shared screen shell. Announces the screen title on mount.
+ * Shared screen shell. Announces the title on mount and when the screen regains focus.
  * Applies safe-area padding so content clears the status bar and home indicator edges.
  * Use `scrollable` when a native stack header must bind to the root scroll view.
  * Renders `A11y.ScreenChange` after the screen content.
@@ -57,10 +58,22 @@ export function ScreenFrame({
   testID,
 }: ScreenFrameProps) {
   const insets = useSafeAreaInsets();
+  const hasReceivedInitialFocus = useRef(false);
   const horizontalInsetStyle = padHorizontal
     ? { paddingEnd: insets.right, paddingStart: insets.left }
     : null;
   const topInsetStyle = padTop ? { paddingTop: insets.top } : null;
+
+  useFocusEffect(
+    useCallback(() => {
+      if (hasReceivedInitialFocus.current) {
+        announceStatus(title);
+        return;
+      }
+
+      hasReceivedInitialFocus.current = true;
+    }, [title]),
+  );
 
   if (scrollable) {
     return (

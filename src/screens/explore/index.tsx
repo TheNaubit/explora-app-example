@@ -1,5 +1,5 @@
 import { useCallback, useMemo, type Ref } from "react";
-import { Platform, StyleSheet, useWindowDimensions, View } from "react-native";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 import {
   ScrollEdgeEffectProvider,
   useScrollEdgeEffectRef,
@@ -10,7 +10,6 @@ import { useFocusEffect } from "expo-router";
 import { type SharedValue, useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { A11y } from "@/a11y";
 import { ScreenFrame } from "@/components/screen-frame";
 import { toActivityListFilters } from "@/query/activity-queries";
 import type { ActivityListFilters } from "@/query/keys";
@@ -81,8 +80,10 @@ function ExploreNative({ mode }: { mode: DiscoveryMode }) {
   );
 
   return (
-    <View
-      collapsable={false}
+    <ScreenFrame
+      title={title}
+      padHorizontal={false}
+      padTop={false}
       style={[styles.root, { backgroundColor: theme.colors.background }]}
       testID={mode === "search" ? "search-screen" : "explore-screen"}
     >
@@ -103,8 +104,7 @@ function ExploreNative({ mode }: { mode: DiscoveryMode }) {
           title={title}
         />
       ) : null}
-      <A11y.ScreenChange title={title} />
-    </View>
+    </ScreenFrame>
   );
 }
 

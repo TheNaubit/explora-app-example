@@ -221,7 +221,12 @@ export function ExploreList({
         listFooterComponent={
           bannerNode ??
           (isFetchingNextPage ? (
-            <View style={styles.footer}>
+            <View
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+              style={styles.footer}
+              testID="explore-next-page-progress"
+            >
               <ActivityIndicator color={theme.colors.accent} />
             </View>
           ) : null)
