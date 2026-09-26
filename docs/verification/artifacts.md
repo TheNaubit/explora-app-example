@@ -62,6 +62,7 @@ The APK launched without Metro. It passed the two required assessment flows and 
 
 ## Related
 
+- [Release note](../operations/release-note.md)
 - [Verification scenarios](./scenarios.md)
 - [Local EAS build guide](../operations/eas-local-builds.md)
 - [Assessment requirements](../assessment/requirements.md)

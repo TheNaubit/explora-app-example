@@ -11,6 +11,7 @@ This area explains how we prove Explora behavior. Prefer links to scenarios, tes
 | Performance evidence                           | [Scenario 7](./scenarios.md#scenario-7-performance-with-at-least-1000-activities) |
 | Before and after improvement evidence          | [Platform-native outcome feedback](./improvement-native-feedback.md)              |
 | Release artifact manifest                      | [artifacts.md](./artifacts.md)                                                    |
+| Release process                                | [Release note](../operations/release-note.md)                                     |
 
 Submission packages (video, APK notes, `AI_SESSION.md`) may **point at** these pages. Do not turn this folder into the full submission dump.
 

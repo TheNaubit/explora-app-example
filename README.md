@@ -134,9 +134,10 @@ The Android APK and iOS Simulator release app are built and verified. See [`docs
 
 The before and after improvement evidence is complete. See [`docs/verification/improvement-native-feedback.md`](./docs/verification/improvement-native-feedback.md).
 
-Three assessment items remain:
+The technical release note is complete. See [`docs/operations/release-note.md`](./docs/operations/release-note.md).
 
-- Write the release note with signing, versioning, pre-release checks, and rollback guidance.
+Two assessment items remain:
+
 - Record the final presentation. The user plans to create a video of no more than ten minutes.
 - Complete the main journey with VoiceOver on the iOS release app and record the evidence.
 
