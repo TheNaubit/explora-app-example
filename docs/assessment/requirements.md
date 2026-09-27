@@ -56,5 +56,6 @@ If you cannot build one platform: say so early. Verify the platform you have. Fo
 ## Related
 
 - Hard constraints checklist: root `AGENTS.md`
+- [Ten-minute presentation rehearsal plan](./presentation-plan.md)
 - [Dataset](../product/dataset.md)
 - [Verification index](../verification/index.md)

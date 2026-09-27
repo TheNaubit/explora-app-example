@@ -8,23 +8,24 @@ Always-on coding rules and hard assessment constraints live in root [`AGENTS.md`
 
 Write wiki pages in Simplified Technical English. See [meta/simplified-technical-english.md](./meta/simplified-technical-english.md).
 
-| Area              | Content                                 | Index                                                                          |
-| ----------------- | --------------------------------------- | ------------------------------------------------------------------------------ |
-| Product           | Goals, journeys, scope                  | [product/overview.md](./product/overview.md)                                   |
-| Design system     | Tokens, components, states, materials   | [../DESIGN.md](../DESIGN.md)                                                   |
-| Dataset           | Supplied JSON, 1k scale, mocks          | [product/dataset.md](./product/dataset.md)                                     |
-| Assessment        | Full requirements, delivery, AI session | [assessment/requirements.md](./assessment/requirements.md)                     |
-| Architecture      | Structure, data flow                    | [architecture/overview.md](./architecture/overview.md)                         |
-| Project structure | Folder map                              | [architecture/project-structure.md](./architecture/project-structure.md)       |
-| Features          | Capability behavior                     | [features/index.md](./features/index.md)                                       |
-| Decisions         | ADR-style trade-offs                    | [decisions/index.md](./decisions/index.md)                                     |
-| Verification      | Scenarios, tests, evidence pointers     | [verification/index.md](./verification/index.md)                               |
-| Operations        | Local run, review modes                 | [operations/local-dev.md](./operations/local-dev.md)                           |
-| Maestro checks    | Automated iOS and Android state flows   | [operations/maestro.md](./operations/maestro.md)                               |
-| EAS local builds  | Profiles, npm scripts, install helpers  | [operations/eas-local-builds.md](./operations/eas-local-builds.md)             |
-| Release note      | Signing, versioning, checks, recovery   | [operations/release-note.md](./operations/release-note.md)                     |
-| Wiki meta         | How to maintain this tree               | [meta/wiki-maintenance.md](./meta/wiki-maintenance.md)                         |
-| STE               | Simplified Technical English rules      | [meta/simplified-technical-english.md](./meta/simplified-technical-english.md) |
+| Area              | Content                                | Index                                                                          |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------ |
+| Product           | Goals, journeys, scope                 | [product/overview.md](./product/overview.md)                                   |
+| Design system     | Tokens, components, states, materials  | [../DESIGN.md](../DESIGN.md)                                                   |
+| Dataset           | Supplied JSON, 1k scale, mocks         | [product/dataset.md](./product/dataset.md)                                     |
+| Assessment        | Requirements and delivery              | [assessment/requirements.md](./assessment/requirements.md)                     |
+| Presentation      | Ten-minute rehearsal plan              | [assessment/presentation-plan.md](./assessment/presentation-plan.md)           |
+| Architecture      | Structure, data flow                   | [architecture/overview.md](./architecture/overview.md)                         |
+| Project structure | Folder map                             | [architecture/project-structure.md](./architecture/project-structure.md)       |
+| Features          | Capability behavior                    | [features/index.md](./features/index.md)                                       |
+| Decisions         | ADR-style trade-offs                   | [decisions/index.md](./decisions/index.md)                                     |
+| Verification      | Scenarios, tests, evidence pointers    | [verification/index.md](./verification/index.md)                               |
+| Operations        | Local run, review modes                | [operations/local-dev.md](./operations/local-dev.md)                           |
+| Maestro checks    | Automated iOS and Android state flows  | [operations/maestro.md](./operations/maestro.md)                               |
+| EAS local builds  | Profiles, npm scripts, install helpers | [operations/eas-local-builds.md](./operations/eas-local-builds.md)             |
+| Release note      | Signing, versioning, checks, recovery  | [operations/release-note.md](./operations/release-note.md)                     |
+| Wiki meta         | How to maintain this tree              | [meta/wiki-maintenance.md](./meta/wiki-maintenance.md)                         |
+| STE               | Simplified Technical English rules     | [meta/simplified-technical-english.md](./meta/simplified-technical-english.md) |
 
 ## How to use
 

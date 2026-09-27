@@ -44,6 +44,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 36  | 2026-09-27     | Rebuilt release artifacts, repeated cross-platform flows, and refreshed release evidence           | [ai-sessions/session-036-release-refresh-after-interaction-changes.md](./ai-sessions/session-036-release-refresh-after-interaction-changes.md) | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 37  | 2026-09-27     | Recorded the user-confirmed physical iPhone VoiceOver main-journey result                          | [ai-sessions/session-037-physical-iphone-voiceover-result.md](./ai-sessions/session-037-physical-iphone-voiceover-result.md)                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 38  | 2026-09-27     | Repeated permission, cancellation, and save with the current iOS release archive                   | [ai-sessions/session-038-current-ios-release-eventkit-verification.md](./ai-sessions/session-038-current-ios-release-eventkit-verification.md) | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 39  | 2026-09-27     | Ten-minute presentation structure, terminal proof, recording setup, and rehearsal plan             | [ai-sessions/session-039-presentation-rehearsal-plan.md](./ai-sessions/session-039-presentation-rehearsal-plan.md)                             | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 

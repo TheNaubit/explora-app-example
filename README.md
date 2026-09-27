@@ -138,7 +138,7 @@ The technical release note is complete. See [`docs/operations/release-note.md`](
 
 One product-evidence item remains:
 
-- Record the final presentation. The user plans to create a video of no more than ten minutes.
+- Record the final presentation. Use the [ten-minute rehearsal plan](./docs/assessment/presentation-plan.md).
 
 The user completed the VoiceOver main journey on a physical iPhone development build.
 
