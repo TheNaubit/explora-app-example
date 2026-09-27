@@ -226,9 +226,20 @@ Passed on the iOS 27.0 Simulator.
 13. Closing the form returned to Activity Detail without a status message.
 14. Saving the form showed **Added to Calendar**.
 
-The previous iOS release app completed the schedule cancellation, system-form cancellation, and save path on 2026-09-26.
+The current iOS release archive repeated the complete EventKit flow on 2026-09-27.
 
-It launched from its embedded bundle without Metro. The saved event used `Botanical Garden Walk` with a one-hour duration.
+It launched from its embedded bundle without Metro on an iPhone 18 Pro Simulator with iOS 27.0.
+
+The release check observed these results:
+
+1. Schedule cancellation returned silently.
+2. Permission denial produced the blocked state and **Open Settings** action.
+3. The permission prompt requested add-only calendar access.
+4. The system form contained `Botanical Garden Walk`, `North Garden`, and the activity description.
+5. The form showed 15:51–16:51 for the one-hour activity on 28 September 2026.
+6. System-form cancellation returned to Activity Detail without feedback.
+7. Saving returned to Activity Detail with **Added to Calendar**.
+8. The success message said that the system calendar saved the activity.
 
 The focused Jest tests cover past dates, malformed data, invalid durations, both denial states, native errors, and duplicate protection.
 
@@ -274,7 +285,7 @@ The Android check used development and release builds on an emulator.
 
 It does not prove behavior on a physical Android device.
 
-The iOS release check used a Simulator. EventKit required Device Hub for final system-form actions.
+The iOS release check used a Simulator. Device Hub completed the separate EventKit system-form actions.
 
 ## Scenario 7: Performance with at least 1,000 activities
 

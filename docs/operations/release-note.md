@@ -125,6 +125,7 @@ Do not distribute the release if a required check fails.
 - Both artifact checksums match the artifact manifest.
 - Both apps launch without Metro.
 - The complete iOS release suite passed 9 of 9 flows.
+- The current iOS release archive passed the EventKit permission, cancellation, and save flow.
 - The complete Android release suite passed 8 of 8 flows.
 - The Android release calendar flow passed separately.
 - Android release performance evidence is recorded.
@@ -165,7 +166,6 @@ This project has no public store release to restore. The store procedure is futu
 - Store signing and store submission were not performed.
 - Physical-device haptic strength was not verified.
 - VoiceOver was not repeated on the iOS Simulator release artifact.
-- The current iOS archive did not repeat the final EventKit system-form actions.
 
 ## Related documents
 

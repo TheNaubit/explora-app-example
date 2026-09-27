@@ -100,9 +100,12 @@ The coordinator accepts one active operation. A second submission returns a dupl
 - Automated behavior verification: passed on 2026-09-26.
 - Local iOS development build: passed on 2026-09-24.
 - iOS 27.0 Simulator runtime verification: passed on 2026-09-24.
+- Current iOS release archive EventKit verification: passed on 2026-09-27.
 - Android 16 emulator runtime verification: passed on 2026-09-26.
 
 The iOS runtime check covered invalid input, write-only permission, blocked permission, native form cancellation, save success, and duplicate protection.
+
+The current release check repeated permission denial, add-only permission, system-form cancellation, and save success.
 
 The native event form showed the title, location, description, start time, and calculated end time.
 

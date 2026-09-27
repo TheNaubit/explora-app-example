@@ -91,7 +91,7 @@ The current iOS release app passed 9 of 9 flows without Metro on 2026-09-27.
 
 The run took 10 minutes and 47 seconds. It includes the Favorites empty-state navigation check.
 
-The EventKit form runs in a separate system window. The current suite did not repeat its final actions.
+The EventKit form runs in a separate system window. Device Hub completed the current release cancel and save actions.
 
 The current Android release app passed 8 of 8 flows on 2026-09-27.
 

@@ -28,8 +28,12 @@ The following release checks passed:
 - The suite covered discovery, detail, favorites, refresh, recovery, offline fallback, and lifecycle behavior.
 - The Favorites empty-state action opened Explore.
 - The feedback policy flow passed.
+- The EventKit permission prompt requested add-only access.
+- Permission denial produced the blocked recovery state.
+- System-form cancellation returned without feedback.
+- System-form save returned with the native success message.
 
-EventKit presents its form in a separate system window. The current archive did not repeat the final system-form actions.
+EventKit presented its form in a separate system window. Device Hub completed its final cancel and save actions.
 
 ## Android
 
