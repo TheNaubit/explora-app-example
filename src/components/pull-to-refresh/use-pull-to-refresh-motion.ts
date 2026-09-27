@@ -101,6 +101,7 @@ export function usePullToRefreshMotion(
       stop();
     } else {
       progress.set(0);
+      pullCommitted.set(false);
       pullIsActive.set(false);
     }
 

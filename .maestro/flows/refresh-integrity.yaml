@@ -9,8 +9,24 @@ tags:
 - runFlow: ../subflows/reset-test-state.yaml
 - scrollUntilVisible:
     element:
+      id: "dev-tools-initial-load-invalid-data"
+    direction: DOWN
+    visibilityPercentage: 50
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-detail-load-not-found"
+    direction: DOWN
+    visibilityPercentage: 50
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-page-load-invalid-data"
+    direction: DOWN
+    visibilityPercentage: 50
+- scrollUntilVisible:
+    element:
       id: "dev-tools-refresh-fail"
-    direction: UP
+    direction: DOWN
+    visibilityPercentage: 50
 - tapOn:
     id: "dev-tools-refresh-fail"
 - scrollUntilVisible:
@@ -30,9 +46,9 @@ tags:
       id: "activity-card-act-001"
     direction: UP
 - swipe:
-    start: 50%, 35%
-    end: 50%, 92%
-    duration: 1500
+    start: 50%, 40%
+    end: 50%, 80%
+    duration: 2500
 - extendedWaitUntil:
     visible:
       id: "explore-list"
@@ -51,8 +67,14 @@ tags:
 
 - scrollUntilVisible:
     element:
+      id: "dev-tools-refresh-timeout"
+    direction: UP
+    visibilityPercentage: 50
+- scrollUntilVisible:
+    element:
       id: "dev-tools-refresh-success"
     direction: UP
+    visibilityPercentage: 50
 - tapOn:
     id: "dev-tools-refresh-success"
 - scrollUntilVisible:
@@ -68,9 +90,9 @@ tags:
       id: "activity-card-act-001"
     direction: UP
 - swipe:
-    start: 50%, 35%
-    end: 50%, 92%
-    duration: 1500
+    start: 50%, 40%
+    end: 50%, 80%
+    duration: 2500
 - extendedWaitUntil:
     notVisible:
       id: "pull-to-refresh-indicator"

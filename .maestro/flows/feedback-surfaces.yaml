@@ -12,6 +12,11 @@ tags:
     direction: DOWN
 - tapOn:
     id: "dev-tools-actionable-error"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-inline-recovery-preview"
+    direction: DOWN
+    visibilityPercentage: 50
 - assertVisible:
     id: "dev-tools-inline-recovery-preview"
 - assertVisible: "Could not load more activities"
@@ -21,6 +26,11 @@ tags:
 - assertNotVisible:
     id: "dev-tools-inline-recovery-preview"
 
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-transient-error"
+    direction: DOWN
+    visibilityPercentage: 50
 - tapOn:
     id: "dev-tools-transient-error"
 - extendedWaitUntil:
@@ -30,6 +40,11 @@ tags:
     notVisible: "(?s)Could not refresh.*Your current activities are still available\\."
     timeout: 8000
 
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-calendar-success"
+    direction: DOWN
+    visibilityPercentage: 50
 - tapOn:
     id: "dev-tools-calendar-success"
 - extendedWaitUntil:

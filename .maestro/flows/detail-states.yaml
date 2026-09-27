@@ -7,8 +7,14 @@ tags:
 - runFlow: ../subflows/reset-test-state.yaml
 - scrollUntilVisible:
     element:
+      id: "dev-tools-initial-load-invalid-data"
+    direction: DOWN
+    visibilityPercentage: 50
+- scrollUntilVisible:
+    element:
       id: "dev-tools-detail-load-slow"
-    direction: UP
+    direction: DOWN
+    visibilityPercentage: 50
 - tapOn:
     id: "dev-tools-detail-load-slow"
 - swipe:
@@ -35,6 +41,7 @@ tags:
     element:
       id: "dev-tools-detail-load-invalid-data"
     direction: DOWN
+    visibilityPercentage: 50
 - tapOn:
     id: "dev-tools-detail-load-invalid-data"
 - swipe:
@@ -58,6 +65,7 @@ tags:
     element:
       id: "dev-tools-detail-load-not-found"
     direction: DOWN
+    visibilityPercentage: 50
 - tapOn:
     id: "dev-tools-detail-load-not-found"
 - swipe:
