@@ -130,10 +130,8 @@ Do not distribute the release if a required check fails.
 - Android release performance evidence is recorded.
 - Android main-journey accessibility evidence is recorded.
 - A physical iPhone development build compiled, installed, launched, and loaded its bundle.
-- The iOS release VoiceOver journey remains pending.
+- The user completed the VoiceOver main journey on the physical iPhone development build.
 - Physical-device haptic strength remains unverified.
-
-The pending iOS VoiceOver check blocks a complete assessment sign-off. It does not invalidate the stored artifact.
 
 ## Response to a bad release
 
@@ -166,7 +164,7 @@ This project has no public store release to restore. The store procedure is futu
 - The Android artifact was verified on an emulator.
 - Store signing and store submission were not performed.
 - Physical-device haptic strength was not verified.
-- The final iOS VoiceOver journey remains pending.
+- VoiceOver was not repeated on the iOS Simulator release artifact.
 - The current iOS archive did not repeat the final EventKit system-form actions.
 
 ## Related documents

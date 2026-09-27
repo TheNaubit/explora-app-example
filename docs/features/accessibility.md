@@ -18,8 +18,8 @@ Library setup alone is not enough. Every a11y rule in this project must serve th
 | Library + root provider      | Shipped (`react-native-a11y@0.9.0` + SDK 58 patch; provider is a 0.9 passthrough shim) |
 | Screen shell + focus helpers | Shipped on all platform screen branches                                                |
 | Discovery list / search      | Shipped (Explore list, search field, category chips)                                   |
-| Detail / favorites / refresh | Shipped on Android; iOS native main-journey evidence remains                           |
-| Scenario 8 evidence          | Written; Android passed; iOS native main-journey evidence remains                      |
+| Detail / favorites / refresh | Shipped; Android automation and physical iPhone VoiceOver checks passed                |
+| Scenario 8 evidence          | Written; Android checks and user-reported physical iPhone VoiceOver journey passed     |
 
 ## Stack
 
@@ -142,7 +142,11 @@ The run covered TalkBack, hardware-keyboard navigation, 2.0 font scale, dark mod
 
 An iPhone development build compiled, installed, launched, and loaded its Metro bundle on 2026-09-27.
 
-The physical iPhone VoiceOver main-journey run remains pending user verification.
+The user completed the VoiceOver main journey on that physical iPhone 14 Pro Max.
+
+The user reported that navigation, labels, focus, state, and announcements worked correctly.
+
+The device iOS version and a recording were not captured in this session.
 
 ## Related
 

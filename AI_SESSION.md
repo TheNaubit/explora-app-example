@@ -42,6 +42,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 34  | 2026-09-27     | Cross-platform accessibility audit, physical iPhone development build, and filter haptics          | [ai-sessions/session-034-accessibility-audit-and-device-build.md](./ai-sessions/session-034-accessibility-audit-and-device-build.md)           | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 35  | 2026-09-27     | Carousel focus restoration, earlier settle haptics, and empty-action interaction feedback          | [ai-sessions/session-035-carousel-focus-and-haptic-polish.md](./ai-sessions/session-035-carousel-focus-and-haptic-polish.md)                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 36  | 2026-09-27     | Rebuilt release artifacts, repeated cross-platform flows, and refreshed release evidence           | [ai-sessions/session-036-release-refresh-after-interaction-changes.md](./ai-sessions/session-036-release-refresh-after-interaction-changes.md) | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 37  | 2026-09-27     | Recorded the user-confirmed physical iPhone VoiceOver main-journey result                          | [ai-sessions/session-037-physical-iphone-voiceover-result.md](./ai-sessions/session-037-physical-iphone-voiceover-result.md)                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 

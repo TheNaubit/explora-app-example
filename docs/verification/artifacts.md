@@ -65,7 +65,8 @@ Android verified the APK Signature Scheme v2 signature. The signer certificate S
 
 - Both runtime checks used simulators or emulators.
 - Physical-device haptics remain unverified.
-- The full iOS VoiceOver main journey remains pending.
+- The user completed the VoiceOver main journey on a physical iPhone development build.
+- VoiceOver was not repeated on the iOS Simulator release artifact.
 - Store signing and publication are outside this assessment artifact scope.
 
 ## Related

@@ -136,10 +136,12 @@ The before and after improvement evidence is complete. See [`docs/verification/i
 
 The technical release note is complete. See [`docs/operations/release-note.md`](./docs/operations/release-note.md).
 
-Two assessment items remain:
+Two product-evidence items remain:
 
 - Record the final presentation. The user plans to create a video of no more than ten minutes.
-- Complete the main journey with VoiceOver on the iOS release app and record the evidence.
+- Repeat the final EventKit system-form actions with the current iOS release archive.
+
+The user completed the VoiceOver main journey on a physical iPhone development build.
 
 ---
 

@@ -2,16 +2,16 @@
 
 The assessment expects **6–8** scenarios with steps, expected behavior, observed results, and evidence. Track them here as you define and run them.
 
-| #   | Scenario                        | Covers                                     | Status                                                                 |
-| --- | ------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------- |
-| 1   | Core journey                    | Search/filter → detail → favorite → reopen | Maestro passed on iOS and Android release builds                       |
-| 2   | Generated-item refresh          | Successful refresh +1                      | Maestro count checks passed on iOS and Android release builds          |
-| 3   | Persistence / offline favorites | Relaunch + offline detail                  | Release checks passed on iOS; Android device-offline reopen passed     |
-| 4   | Failure recovery                | Failed refresh adds nothing                | Jest and Maestro passed on iOS and Android                             |
-| 5   | Lifecycle interruptions         | Background / delayed results               | Maestro background and resume passed on iOS and Android                |
-| 6   | Native calendar                 | Permissions / cancel / invalid             | Passed on iOS and Android                                              |
-| 7   | Performance (≥1k)               | Release startup measurement                | Android release cold-start measurement recorded                        |
-| 8   | Accessibility                   | Main journey accessibility                 | Android screen reader, keyboard, large text, and offline checks passed |
+| #   | Scenario                        | Covers                                     | Status                                                             |
+| --- | ------------------------------- | ------------------------------------------ | ------------------------------------------------------------------ |
+| 1   | Core journey                    | Search/filter → detail → favorite → reopen | Maestro passed on iOS and Android release builds                   |
+| 2   | Generated-item refresh          | Successful refresh +1                      | Maestro count checks passed on iOS and Android release builds      |
+| 3   | Persistence / offline favorites | Relaunch + offline detail                  | Release checks passed on iOS; Android device-offline reopen passed |
+| 4   | Failure recovery                | Failed refresh adds nothing                | Jest and Maestro passed on iOS and Android                         |
+| 5   | Lifecycle interruptions         | Background / delayed results               | Maestro background and resume passed on iOS and Android            |
+| 6   | Native calendar                 | Permissions / cancel / invalid             | Passed on iOS and Android                                          |
+| 7   | Performance (≥1k)               | Release startup measurement                | Android release cold-start measurement recorded                    |
+| 8   | Accessibility                   | Main journey accessibility                 | Android checks and physical iPhone VoiceOver journey passed        |
 
 When you specify or run a scenario, expand it here or add `scenarios/<name>.md` and link it from this table.
 
@@ -342,6 +342,10 @@ An iPhone 14 Pro Max development build compiled and installed on 2026-09-27.
 
 The app launched and loaded the development bundle on the physical device.
 
+The user completed the full VoiceOver main journey on that physical iPhone.
+
+The user reported that navigation, labels, focus, state, and announcements worked correctly.
+
 ### Evidence
 
 - Large-text catalog run: `.maestro/flows/catalog-states.yaml`.
@@ -356,6 +360,6 @@ The accessibility run used an Android emulator. It does not prove physical-devic
 
 The final iOS release app passed the automated core and saved-detail checks.
 
-The full iOS VoiceOver main journey remains pending user verification on the physical device.
+The device iOS version and a VoiceOver recording were not captured in this session.
 
-The development-build launch does not replace the stored iOS release-artifact checks.
+The physical-device development run does not replace the stored iOS release-artifact checks.

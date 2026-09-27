@@ -24,3 +24,4 @@ Submission packages (video, APK notes, `AI_SESSION.md`) may **point at** these p
 - The final Android release APK passed native calendar and assessment checks without Metro.
 - The final iOS Simulator release app passed launch, core, refresh, saved-detail, and native calendar checks without Metro.
 - The iOS development build passed the Favorites empty-action navigation flow after the interaction update.
+- The user completed the VoiceOver main journey on the physical iPhone development build.
