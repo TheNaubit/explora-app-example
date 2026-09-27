@@ -46,6 +46,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 38  | 2026-09-27     | Repeated permission, cancellation, and save with the current iOS release archive                   | [ai-sessions/session-038-current-ios-release-eventkit-verification.md](./ai-sessions/session-038-current-ios-release-eventkit-verification.md)       | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 39  | 2026-09-27     | Ten-minute presentation structure, terminal proof, recording setup, and rehearsal plan             | [ai-sessions/session-039-presentation-rehearsal-plan.md](./ai-sessions/session-039-presentation-rehearsal-plan.md)                                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 40  | 2026-09-27     | Supplied and performance catalog modes, refresh retry fix, and final release verification          | [ai-sessions/session-040-dataset-modes-and-final-release-verification.md](./ai-sessions/session-040-dataset-modes-and-final-release-verification.md) | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 41  | 2026-09-27     | Prepared the iOS, Android, and fish terminal presentation environment                              | [ai-sessions/session-041-presentation-environment-setup.md](./ai-sessions/session-041-presentation-environment-setup.md)                             | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 
