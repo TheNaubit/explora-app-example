@@ -39,6 +39,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 31  | 2026-09-27     | Assessment completion review and remaining submission work                                         | [ai-sessions/session-031-assessment-remaining-work.md](./ai-sessions/session-031-assessment-remaining-work.md)                       | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 32  | 2026-09-27     | Native feedback improvement with before and after evidence                                         | [ai-sessions/session-032-native-feedback-improvement-evidence.md](./ai-sessions/session-032-native-feedback-improvement-evidence.md) | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 33  | 2026-09-27     | Assessment release note with signing, versioning, checks, and recovery                             | [ai-sessions/session-033-release-note.md](./ai-sessions/session-033-release-note.md)                                                 | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 34  | 2026-09-27     | Cross-platform accessibility audit, physical iPhone development build, and filter haptics          | [ai-sessions/session-034-accessibility-audit-and-device-build.md](./ai-sessions/session-034-accessibility-audit-and-device-build.md) | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 

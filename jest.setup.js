@@ -113,11 +113,24 @@ jest.mock("@shopify/react-native-skia", () => {
     return React.createElement(View, { style, testID }, children);
   }
 
+  const Atlas = jest.fn(() => null);
+  const Fill = ({ children }) => React.createElement(React.Fragment, null, children);
+  const ImageShader = jest.fn(() => null);
+  const Shader = jest.fn(({ children }) => React.createElement(React.Fragment, null, children));
+
   return {
-    Atlas: () => null,
+    Atlas,
     Canvas,
     FilterMode: { Linear: "linear" },
+    Fill,
+    ImageShader,
     MipmapMode: { None: "none" },
+    Shader,
+    Skia: {
+      RuntimeEffect: {
+        Make: jest.fn(() => ({ kind: "runtime-effect" })),
+      },
+    },
     makeImageFromView: jest.fn(async () => ({
       height: () => 300,
       width: () => 300,

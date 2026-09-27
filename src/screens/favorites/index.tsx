@@ -116,7 +116,7 @@ function FavoritesNative() {
             actionLabel={t(favoritesMessages.emptyAction)}
             illustration={emptyFavoritesIllustration}
             presentation="centered"
-            onAction={() => router.navigate("/")}
+            onAction={() => router.navigate("/(explore)")}
           />
         </Animated.ScrollView>
       ) : (
@@ -166,7 +166,7 @@ function FavoritesStandard() {
             actionLabel={t(favoritesMessages.emptyAction)}
             illustration={emptyFavoritesIllustration}
             presentation="centered"
-            onAction={() => router.navigate("/")}
+            onAction={() => router.navigate("/(explore)")}
           />
         </View>
       ) : (

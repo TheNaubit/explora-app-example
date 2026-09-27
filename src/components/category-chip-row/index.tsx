@@ -14,6 +14,7 @@ import { CategoryChip } from "@/components/category-chip";
 import { DISCOVERY_CATEGORIES } from "@/components/category-chip-row/constants";
 import { categoryChipRowMessages } from "@/components/category-chip-row/messages";
 import { getCategoryChipIllustration } from "@/illustrations";
+import { hapticFilterSelection } from "@/haptics/feedback";
 import type { ActivityCategory } from "@/schemas/activity";
 import { spacing, useAppTheme } from "@/theme";
 
@@ -97,6 +98,9 @@ export function CategoryChipRow({ selectedCategories, onToggle }: CategoryChipRo
 
   function handleSelect(category: ActivityCategory | null) {
     Keyboard.dismiss();
+    if (category !== null || selectedCategories.length > 0) {
+      hapticFilterSelection();
+    }
     onToggle(category);
   }
 

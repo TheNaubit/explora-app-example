@@ -11,19 +11,20 @@ import {
 } from "react";
 import { type LayoutChangeEvent, Platform, StyleSheet, View } from "react-native";
 import {
-  Atlas,
   Canvas,
+  Fill,
   FilterMode,
+  ImageShader,
   makeImageFromView,
   MipmapMode,
   rect,
+  Shader,
   type SkImage,
-  useColorBuffer,
-  useRSXformBuffer,
 } from "@shopify/react-native-skia";
 import {
   cancelAnimation,
   Easing,
+  useDerivedValue,
   useReducedMotion,
   useSharedValue,
   withTiming,
@@ -34,12 +35,16 @@ import {
   PARTICLE_DISSOLVE_DURATION_MS,
   PARTICLE_DISSOLVE_CANVAS_PADDING,
   PARTICLE_DISSOLVE_GRAVITY_Y,
+  PARTICLE_DISSOLVE_MAX_LIFETIME,
+  PARTICLE_DISSOLVE_MIN_LIFETIME,
+  PARTICLE_DISSOLVE_PARTICLE_SIZE,
+  PARTICLE_DISSOLVE_RANDOM_STAGGER,
   PARTICLE_DISSOLVE_SCALE_LOSS,
   PARTICLE_DISSOLVE_TRAVEL_X,
   PARTICLE_DISSOLVE_TRAVEL_Y,
+  PARTICLE_DISSOLVE_WAVE_SPAN,
 } from "@/components/particle-dissolve/constants";
-import { getParticleProgress, particleRandom } from "@/components/particle-dissolve/particle-math";
-import { getParticleGrid } from "@/components/particle-dissolve/particle-grid";
+import { PARTICLE_DISSOLVE_SHADER } from "@/components/particle-dissolve/particle-shader";
 
 type ParticleDissolveProps = {
   children: (startDissolve: () => boolean) => ReactNode;
@@ -134,64 +139,30 @@ export function ParticleDissolve({
 
 function DissolveCanvas({ height, image, onComplete, width }: DissolveCanvasProps) {
   const progress = useSharedValue(0);
-  const imageWidth = image.width();
-  const imageHeight = image.height();
-  const platform = Platform.OS === "android" || Platform.OS === "ios" ? Platform.OS : "other";
-  const { columnCount, particleCount, rowCount } = getParticleGrid(width, height, platform);
-  const tileWidthPixels = imageWidth / columnCount;
-  const tileHeightPixels = imageHeight / rowCount;
-  const tileWidth = width / columnCount;
-  const tileHeight = height / rowCount;
-  const snapshotScale = width / imageWidth;
-
-  const sprites = useMemo(
-    () =>
-      Array.from({ length: particleCount }, (_, index) => {
-        const column = index % columnCount;
-        const row = Math.floor(index / columnCount);
-        return rect(
-          column * tileWidthPixels,
-          row * tileHeightPixels,
-          tileWidthPixels,
-          tileHeightPixels,
-        );
-      }),
-    [columnCount, particleCount, tileHeightPixels, tileWidthPixels],
+  const imageRect = useMemo(
+    () => rect(PARTICLE_DISSOLVE_CANVAS_PADDING, PARTICLE_DISSOLVE_CANVAS_PADDING, width, height),
+    [height, width],
   );
-
-  const transforms = useRSXformBuffer(particleCount, (transform, index) => {
-    "worklet";
-    const column = index % columnCount;
-    const row = Math.floor(index / columnCount);
-    const localProgress = getParticleProgress(progress.get(), index, column, columnCount);
-    const easedProgress = 1 - (1 - localProgress) * (1 - localProgress);
-    const randomX = particleRandom(index, 2) - 0.35;
-    const randomY = particleRandom(index, 3) - 0.65;
-    const travelX = randomX * PARTICLE_DISSOLVE_TRAVEL_X * easedProgress;
-    const travelY =
-      randomY * PARTICLE_DISSOLVE_TRAVEL_Y * easedProgress +
-      PARTICLE_DISSOLVE_GRAVITY_Y * easedProgress * easedProgress;
-    const scale = (1 - localProgress * PARTICLE_DISSOLVE_SCALE_LOSS) * snapshotScale;
-
-    transform.set(
-      scale,
-      0,
-      PARTICLE_DISSOLVE_CANVAS_PADDING + column * tileWidth + travelX,
-      PARTICLE_DISSOLVE_CANVAS_PADDING + row * tileHeight + travelY,
-    );
-  });
-
-  const colors = useColorBuffer(particleCount, (color, index) => {
-    "worklet";
-    const column = index % columnCount;
-    const localProgress = getParticleProgress(progress.get(), index, column, columnCount);
-    color[0] = 1;
-    color[1] = 1;
-    color[2] = 1;
-    color[3] = 1 - localProgress;
-  });
+  const uniforms = useDerivedValue(() => ({
+    gravity: PARTICLE_DISSOLVE_GRAVITY_Y,
+    maxLifetime: PARTICLE_DISSOLVE_MAX_LIFETIME,
+    minLifetime: PARTICLE_DISSOLVE_MIN_LIFETIME,
+    origin: [PARTICLE_DISSOLVE_CANVAS_PADDING, PARTICLE_DISSOLVE_CANVAS_PADDING],
+    particleSize: PARTICLE_DISSOLVE_PARTICLE_SIZE,
+    progress: progress.get(),
+    randomStagger: PARTICLE_DISSOLVE_RANDOM_STAGGER,
+    scaleLoss: PARTICLE_DISSOLVE_SCALE_LOSS,
+    size: [width, height],
+    travel: [PARTICLE_DISSOLVE_TRAVEL_X, PARTICLE_DISSOLVE_TRAVEL_Y],
+    waveSpan: PARTICLE_DISSOLVE_WAVE_SPAN,
+  }));
 
   useEffect(() => {
+    if (!PARTICLE_DISSOLVE_SHADER) {
+      onComplete();
+      return;
+    }
+
     progress.set(
       withTiming(
         1,
@@ -209,6 +180,8 @@ function DissolveCanvas({ height, image, onComplete, width }: DissolveCanvasProp
     return () => cancelAnimation(progress);
   }, [onComplete, progress]);
 
+  if (!PARTICLE_DISSOLVE_SHADER) return null;
+
   return (
     <Canvas
       accessibilityElementsHidden
@@ -217,14 +190,18 @@ function DissolveCanvas({ height, image, onComplete, width }: DissolveCanvasProp
       style={styles.canvas}
       testID="particle-dissolve-canvas"
     >
-      <Atlas
-        colorBlendMode="modulate"
-        colors={colors}
-        image={image}
-        sampling={{ filter: FilterMode.Linear, mipmap: MipmapMode.None }}
-        sprites={sprites}
-        transforms={transforms}
-      />
+      <Fill>
+        <Shader source={PARTICLE_DISSOLVE_SHADER} uniforms={uniforms}>
+          <ImageShader
+            fit="fill"
+            image={image}
+            rect={imageRect}
+            sampling={{ filter: FilterMode.Linear, mipmap: MipmapMode.None }}
+            tx="decal"
+            ty="decal"
+          />
+        </Shader>
+      </Fill>
     </Canvas>
   );
 }

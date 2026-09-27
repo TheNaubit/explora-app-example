@@ -335,7 +335,7 @@ Changing a mode does not silently reset favorites or generated activities.
 - Use a strong ease-out for timed entrances. Keep them below 300 milliseconds.
 - Empty and recovery states enter over 260 milliseconds: fade, 8-point rise, and scale from 0.98. Reduced motion keeps only the fade.
 - Use critically damped springs for direct manipulation.
-- Add haptics only for save, remove, refresh outcomes, errors, and a new settled Explore card.
+- Add haptics only for save, remove, refresh outcomes, errors, filter selection, and a newly settled activity card.
 - Keep the Android Snackbar surface neutral. Use a leading semantic symbol and tint for each outcome.
 - Keep the outcome in the snackbar text. Do not use symbol tint as the only meaning.
 - Dissolve a card into sampled particles when the user removes it from Favorites.
@@ -343,7 +343,7 @@ Changing a mode does not silently reset favorites or generated activities.
 - Animate the list to the replacement card. Do not use an instant offset correction.
 - Keep the replacement card selected throughout the list handoff.
 - Run the reflow transition only after a removal starts. Place cards at once on first display, on a return to the tab, and after a text size change.
-- Use one batched Skia canvas. Do not create one React Native view for each particle.
+- Use one Skia GPU shader. Do not run one worklet callback or create one React Native view for each particle.
 - Use `react-native-pulsar` only. Route system outcomes through `@/haptics/feedback`.
 - Use the realtime composer only for documented custom feedback. Do not use `expo-haptics`.
 - Replace spatial motion with a short cross-fade when reduced motion is active.

@@ -29,3 +29,10 @@ export function hapticFavoriteRemoved(): void {
     Presets.System.impactSoft();
   });
 }
+
+/** Filter selection changed. */
+export function hapticFilterSelection(): void {
+  playSafe(() => {
+    Presets.System.selection();
+  });
+}

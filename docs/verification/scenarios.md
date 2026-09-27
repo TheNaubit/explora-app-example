@@ -342,11 +342,16 @@ The native Android search icon was reachable with TalkBack. It was not in the no
 
 The keyboard run used the category filter to verify the required search or filter journey.
 
+An iPhone 14 Pro Max development build compiled and installed on 2026-09-27.
+
+The app launched and loaded the development bundle on the physical device.
+
 ### Evidence
 
 - Large-text catalog run: `.maestro/flows/catalog-states.yaml`.
 - Android combined run: `artifacts/maestro/android-core-offline-dark-large-text.xml`.
 - Component accessibility tests: `src/a11y/` and changed component tests.
+- Favorites empty-action navigation: `.maestro/flows/favorites-empty-navigation.yaml`.
 - Native evidence: Android `dumpsys accessibility` and UI Automator inspection.
 
 ### Limits
@@ -355,4 +360,6 @@ The accessibility run used an Android emulator. It does not prove physical-devic
 
 The final iOS release app passed the automated core and saved-detail checks.
 
-The full iOS VoiceOver main journey did not run again against the release app.
+The full iOS VoiceOver main journey remains pending user verification on the physical device.
+
+The development-build launch does not replace the stored iOS release-artifact checks.

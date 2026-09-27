@@ -16,7 +16,7 @@ Library setup alone is not enough. Every a11y rule in this project must serve th
 | Area                         | Status                                                                                 |
 | ---------------------------- | -------------------------------------------------------------------------------------- |
 | Library + root provider      | Shipped (`react-native-a11y@0.9.0` + SDK 58 patch; provider is a 0.9 passthrough shim) |
-| Screen shell + focus helpers | Shipped                                                                                |
+| Screen shell + focus helpers | Shipped on all platform screen branches                                                |
 | Discovery list / search      | Shipped (Explore list, search field, category chips)                                   |
 | Detail / favorites / refresh | Shipped on Android; iOS native main-journey evidence remains                           |
 | Scenario 8 evidence          | Written; Android passed; iOS native main-journey evidence remains                      |
@@ -101,7 +101,9 @@ Map every change to the assessment bar.
 
 - List cards use seeded cover photos (`getActivityCoverImage`) with BlurHash placeholders because the catalog JSON has no image URLs. Clay icons stay for empty states and category cues.
 - `ScreenFrame` pads the top and horizontal safe areas on Favorites and on web Explore. Native Explore uses the stack header for the top inset.
+- `ScreenFrame` announces its title again when a kept-alive screen returns to focus.
 - Search uses the native Stack search field and accessible category controls.
+- The search field uses a minimum height. Larger text can increase its height without clipping.
 - Search submit, filter selection, and list or chip drag remove search focus.
 - The header uses a soft iOS 26 scroll-edge effect. Older iOS uses a low-intensity static blur.
 - The compact header title uses a white foreground and a dark shadow over scrolling content.
@@ -114,6 +116,7 @@ Map every change to the assessment bar.
 - Native verification needs a development or release build. Expo Go alone is not enough.
 - Activity Detail uses `ScreenFrame` and accessible back, favorite, retry, and save controls.
 - Detail loading, loaded, not-found, and saved-fallback states use status announcements.
+- Infinite-scroll loading is brief background work. Its visual progress indicator is decorative and stays silent for screen readers.
 
 ### Expo SDK 58 / React Native 0.88
 
@@ -137,7 +140,9 @@ Android 16 emulator verification passed on 2026-09-26.
 
 The run covered TalkBack, hardware-keyboard navigation, 2.0 font scale, dark mode, and an offline saved-detail reopen.
 
-The iOS native main-journey accessibility run remains pending.
+An iPhone development build compiled, installed, launched, and loaded its Metro bundle on 2026-09-27.
+
+The physical iPhone VoiceOver main-journey run remains pending user verification.
 
 ## Related
 

@@ -1,0 +1,30 @@
+appId: com.adlerventures.explora
+name: Favorites empty action opens Explore
+tags:
+  - accessibility
+  - favorites
+  - ios
+  - navigation
+---
+- runFlow: ../subflows/reset-test-state.yaml
+
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-initial-load-normal"
+    direction: UP
+- swipe:
+    direction: DOWN
+    duration: 500
+- tapOn: "Favorites"
+- extendedWaitUntil:
+    visible:
+      id: "favorites-empty"
+    timeout: 8000
+- tapOn:
+    id: "empty-state-action"
+- extendedWaitUntil:
+    visible:
+      id: "explore-screen"
+    timeout: 8000
+- assertVisible:
+    id: "explore-list"

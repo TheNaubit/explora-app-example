@@ -43,7 +43,7 @@ describe("Favorites screen", () => {
     await waitFor(() => expect(screen.getByTestId("favorites-empty")).toBeTruthy());
     expect(screen.queryByTestId("favorites-summary")).toBeNull();
     await fireEvent.press(screen.getByTestId("empty-state-action"));
-    expect(router.navigate).toHaveBeenCalledWith("/");
+    expect(router.navigate).toHaveBeenCalledWith("/(explore)");
   });
 
   it("lists favorite activities", async () => {

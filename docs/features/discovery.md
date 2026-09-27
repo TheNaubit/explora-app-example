@@ -11,6 +11,7 @@
 - Each chip includes a decorative claymorphic image generated from the canonical illustration reference.
 - The selected chip keeps its glass texture and adds a light translucent accent tint.
 - Select multiple category chips. A result can match any selected category.
+- Play one Pulsar selection haptic when a category selection changes. Keep horizontal chip scrolling silent.
 - All clears the category selection and becomes the only selected chip.
 - Combine search and filter. Filters stay in the discovery store for the session.
 - Explore keeps a separate session scroll position for each search and category state.

@@ -127,6 +127,7 @@ Do not distribute the release if a required check fails.
 - Core, refresh, offline favorite, and native calendar checks passed on both platforms.
 - Android release performance evidence is recorded.
 - Android main-journey accessibility evidence is recorded.
+- A physical iPhone development build compiled, installed, launched, and loaded its bundle.
 - The iOS release VoiceOver journey remains pending.
 - Physical-device haptic strength remains unverified.
 
