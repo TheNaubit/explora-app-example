@@ -81,6 +81,7 @@ describe("Explore screen", () => {
   });
 
   it("shows empty state and clears filters", async () => {
+    const { Presets } = require("react-native-pulsar");
     setDiscoverySearch("zzz-no-such-activity-title");
 
     await render(createElement(Explore), {
@@ -90,6 +91,7 @@ describe("Explore screen", () => {
     await waitFor(() => expect(screen.getByTestId("explore-empty")).toBeTruthy());
     await fireEvent.press(screen.getByTestId("empty-state-action"));
     expect(getDiscoveryFilters().searchQuery).toBe("");
+    expect(Presets.System.selection).toHaveBeenCalledTimes(1);
   });
 
   it("handles invalid first-load data without a render error", async () => {

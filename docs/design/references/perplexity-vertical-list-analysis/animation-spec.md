@@ -45,7 +45,7 @@ Use fast list deceleration and interval snapping. The finger and scroll engine d
 - Let inactive scaling create the larger visible gap.
 - Keep about 32 points between header controls and the focused card.
 - Move cards with the collapsing iOS header.
-- Play one soft Pulsar detent after a new card settles.
+- Play one soft Pulsar detent when a new card snap commits.
 - Disable the carousel for reduced motion, web, or font scales above 1.3.
 - Keep the standard list for those fallback states.
 - Increase the iOS header reserve with Dynamic Type.

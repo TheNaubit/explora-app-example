@@ -15,8 +15,8 @@ export function getReconciledFocusIndex(
 
 /** Build the native scroll command for the replacement card. */
 export function getReconciledScrollParams(offset: number): {
-  animated: true;
+  animated: false;
   offset: number;
 } {
-  return { animated: true, offset };
+  return { animated: false, offset };
 }

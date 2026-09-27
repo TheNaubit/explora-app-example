@@ -36,3 +36,10 @@ export function hapticFilterSelection(): void {
     Presets.System.selection();
   });
 }
+
+/** Explicit navigation selection, such as an empty-state tab action. */
+export function hapticNavigationSelection(): void {
+  playSafe(() => {
+    Presets.System.selection();
+  });
+}

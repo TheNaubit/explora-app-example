@@ -25,7 +25,8 @@ export const discovery$ = observable<DiscoveryState>({ ...initialDiscoveryState 
 
 const discoveryScrollOffsets = new Map<string, number>();
 
-function getDiscoveryScrollKey({ search, categories }: DiscoveryScrollFilters): string {
+/** Stable key for one search and category position. */
+export function getDiscoveryScrollKey({ search, categories }: DiscoveryScrollFilters): string {
   return JSON.stringify([search, [...categories].sort()]);
 }
 

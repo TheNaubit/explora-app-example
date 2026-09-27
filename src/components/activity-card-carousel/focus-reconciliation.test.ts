@@ -17,7 +17,7 @@ describe("carousel focus reconciliation", () => {
     expect(getReconciledFocusIndex(["a", "b", "c"], ["b", "c"], 2)).toBe(1);
   });
 
-  it("uses an animated scroll for the replacement card", () => {
-    expect(getReconciledScrollParams(640)).toEqual({ animated: true, offset: 640 });
+  it("aligns the replacement card without a second native animation", () => {
+    expect(getReconciledScrollParams(640)).toEqual({ animated: false, offset: 640 });
   });
 });

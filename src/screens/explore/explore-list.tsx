@@ -1,4 +1,4 @@
-import { useRef, type Ref } from "react";
+import type { Ref } from "react";
 import {
   ActivityIndicator,
   Keyboard,
@@ -21,10 +21,12 @@ import { resolveErrorMessage } from "@/i18n";
 import { isApiError } from "@/query/errors";
 import type { ActivityListFilters } from "@/query/keys";
 import {
+  getDiscoveryScrollKey,
   getDiscoveryScrollOffset,
   resetDiscoveryFilters,
   setDiscoveryScrollOffset,
 } from "@/state/discovery";
+import { hapticFilterSelection } from "@/haptics/feedback";
 import { ExploreHeader } from "@/screens/explore/explore-header";
 import { ExploreLoadError } from "@/screens/explore/explore-load-error";
 import { ExploreSkeleton } from "@/screens/explore/explore-skeleton";
@@ -73,7 +75,8 @@ export function ExploreList({
       onBannerChange,
     });
   const hasActiveFilters = filters.search.length > 0 || filters.categories.length > 0;
-  const initialScrollOffset = useRef(getDiscoveryScrollOffset(filters)).current;
+  const listPositionKey = getDiscoveryScrollKey(filters);
+  const initialScrollOffset = getDiscoveryScrollOffset(filters);
   const pullToRefresh = usePullToRefreshMotion(refreshing, onRefresh);
 
   const bannerNode =
@@ -193,6 +196,7 @@ export function ExploreList({
             illustration={emptySearchIllustration}
             onAction={() => {
               if (hasActiveFilters) {
+                hapticFilterSelection();
                 resetDiscoveryFilters();
                 return;
               }
@@ -208,6 +212,7 @@ export function ExploreList({
   return (
     <View style={styles.root}>
       <ActivityCardCarousel
+        key={listPositionKey}
         activities={activities}
         initialScrollOffset={initialScrollOffset}
         followsCollapsingHeader={filtersInOverlay}

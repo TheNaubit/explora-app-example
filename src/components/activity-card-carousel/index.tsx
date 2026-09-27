@@ -11,7 +11,6 @@ import { AnimatedLegendList } from "@legendapp/list/reanimated";
 import type { LegendListRef } from "@legendapp/list/react-native";
 import { HapticSupport, Settings, useRealtimeComposer } from "react-native-pulsar";
 import Animated, {
-  Easing,
   Extrapolation,
   interpolate,
   type SharedValue,
@@ -19,7 +18,6 @@ import Animated, {
   useAnimatedScrollHandler,
   useReducedMotion,
   useSharedValue,
-  withTiming,
 } from "react-native-reanimated";
 
 import { ActivityCard } from "@/components/activity-card";
@@ -28,10 +26,7 @@ import {
   getReconciledFocusIndex,
   getReconciledScrollParams,
 } from "@/components/activity-card-carousel/focus-reconciliation";
-import {
-  PARTICLE_DISSOLVE_REFLOW_DURATION_MS,
-  PARTICLE_DISSOLVE_REFLOW_EASING,
-} from "@/components/particle-dissolve/constants";
+import { PARTICLE_DISSOLVE_REFLOW_DURATION_MS } from "@/components/particle-dissolve/constants";
 import {
   ACTIVITY_CARD_CAROUSEL_MAX_FONT_SCALE,
   ACTIVITY_CARD_HAPTIC_AMPLITUDE,
@@ -52,10 +47,12 @@ type ActivityCardCarouselProps = {
   followsCollapsingHeader?: boolean;
   headerHeight?: number;
   headerTranslation?: number;
+  initialFocusedIndex?: number;
   initialScrollOffset?: number;
   listFooterComponent?: ReactElement | null;
   listHeaderComponent?: ReactElement | null;
   onEndReached?: () => void;
+  onFocusedIndexChange?: (index: number) => void;
   onPullBegin?: () => void;
   onPullEnd?: () => void;
   onPullOffsetChange?: (normalizedOffset: number) => void;
@@ -73,10 +70,12 @@ export function ActivityCardCarousel({
   followsCollapsingHeader = false,
   headerHeight = 0,
   headerTranslation = COLLAPSING_HEADER_TRANSLATION,
+  initialFocusedIndex,
   initialScrollOffset,
   listFooterComponent,
   listHeaderComponent,
   onEndReached,
+  onFocusedIndexChange,
   onPullBegin,
   onPullEnd,
   onPullOffsetChange,
@@ -89,16 +88,7 @@ export function ActivityCardCarousel({
   const theme = useAppTheme();
   const { width, height, fontScale: measuredFontScale } = useWindowDimensions();
   const fontScale = measuredFontScale ?? 1;
-  const cardScrollOffset = useSharedValue(initialScrollOffset ?? 0);
-  const isReconcilingFocus = useSharedValue(0);
   const reduceMotion = useReducedMotion();
-  const listRef = useRef<LegendListRef | null>(null);
-  const reflowArmed = useSharedValue(0);
-  const reflowTransition = useMemo(() => createGatedReflowTransition(reflowArmed), [reflowArmed]);
-  const armedOrderKey = useRef<string | null>(null);
-  const disarmTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const previousActivityIds = useRef(activities.map(({ id }) => id));
-  const { playDiscrete } = useRealtimeComposer();
   const usesCardCarousel =
     Platform.OS !== "web" && !reduceMotion && fontScale <= ACTIVITY_CARD_CAROUSEL_MAX_FONT_SCALE;
   const { endPadding, itemExtent, mediaHeight, padTop } = getActivityCardCarouselLayout({
@@ -108,6 +98,18 @@ export function ActivityCardCarousel({
     usesCardCarousel,
     width,
   });
+  const startingOffset =
+    initialFocusedIndex === undefined ? initialScrollOffset : initialFocusedIndex * itemExtent;
+  const resolvedInitialOffset = useRef(startingOffset ?? 0).current;
+  const cardScrollOffset = useSharedValue(resolvedInitialOffset);
+  const isReconcilingFocus = useSharedValue(0);
+  const listRef = useRef<LegendListRef | null>(null);
+  const reflowArmed = useSharedValue(0);
+  const reflowTransition = useMemo(() => createGatedReflowTransition(reflowArmed), [reflowArmed]);
+  const armedOrderKey = useRef<string | null>(null);
+  const disarmTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const previousActivityIds = useRef(activities.map(({ id }) => id));
+  const { playDiscrete } = useRealtimeComposer();
   const activityOrderKey = activities.map(({ id }) => id).join("|");
   const usesReflowAnimation = favoriteRemovalEffect !== undefined && !reduceMotion;
   const armReflow = usesReflowAnimation
@@ -116,7 +118,7 @@ export function ActivityCardCarousel({
         reflowArmed.set(1);
       }
     : undefined;
-  const settledIndex = useRef(Math.round((initialScrollOffset ?? 0) / itemExtent));
+  const settledIndex = useRef(Math.round(resolvedInitialOffset / itemExtent));
   // The footer moves with the cards while the header collapses, so it stays next to the last card.
   const footerStyle = useAnimatedStyle(() => ({
     transform: [
@@ -142,6 +144,10 @@ export function ActivityCardCarousel({
   });
 
   useEffect(() => {
+    scrollOffset?.set(resolvedInitialOffset);
+  }, [resolvedInitialOffset, scrollOffset]);
+
+  useEffect(() => {
     const previousIds = previousActivityIds.current;
     const nextIds = activities.map(({ id }) => id);
     previousActivityIds.current = nextIds;
@@ -158,13 +164,9 @@ export function ActivityCardCarousel({
     const targetIndex = getReconciledFocusIndex(previousIds, nextIds, settledIndex.current);
     const targetOffset = targetIndex * itemExtent;
     settledIndex.current = targetIndex;
+    onFocusedIndexChange?.(targetIndex);
     isReconcilingFocus.set(1);
-    cardScrollOffset.set(
-      withTiming(targetOffset, {
-        duration: PARTICLE_DISSOLVE_REFLOW_DURATION_MS,
-        easing: Easing.bezier(...PARTICLE_DISSOLVE_REFLOW_EASING),
-      }),
-    );
+    cardScrollOffset.set(targetOffset);
 
     const scrollFrame = requestAnimationFrame(() => {
       void listRef.current?.scrollToOffset(getReconciledScrollParams(targetOffset));
@@ -186,6 +188,7 @@ export function ActivityCardCarousel({
     isReconcilingFocus,
     itemExtent,
     usesCardCarousel,
+    onFocusedIndexChange,
   ]);
 
   useEffect(() => {
@@ -207,18 +210,13 @@ export function ActivityCardCarousel({
     [],
   );
 
-  function handleMomentumScrollEnd(event: NativeSyntheticEvent<NativeScrollEvent>) {
-    onScrollPositionChange?.(event);
+  function commitFocusedIndex(nextIndex: number, playHaptic: boolean) {
+    const boundedIndex = Math.max(0, Math.min(nextIndex, Math.max(0, activities.length - 1)));
+    if (boundedIndex === settledIndex.current) return;
+    settledIndex.current = boundedIndex;
+    onFocusedIndexChange?.(boundedIndex);
 
-    if (!usesCardCarousel) return;
-
-    const normalizedOffset = Math.max(
-      0,
-      event.nativeEvent.contentOffset.y + (event.nativeEvent.contentInset?.top ?? 0),
-    );
-    const nextIndex = Math.round(normalizedOffset / itemExtent);
-    if (nextIndex === settledIndex.current) return;
-    settledIndex.current = nextIndex;
+    if (!playHaptic) return;
 
     try {
       if (Settings.getHapticsSupportLevel() >= HapticSupport.STANDARD_SUPPORT) {
@@ -229,6 +227,34 @@ export function ActivityCardCarousel({
     }
   }
 
+  function getCommittedIndex(event: NativeSyntheticEvent<NativeScrollEvent>): number {
+    const nativeEvent = event.nativeEvent;
+    const insetTop = nativeEvent.contentInset?.top ?? 0;
+    const targetOffset = nativeEvent.targetContentOffset?.y;
+    if (targetOffset !== undefined) {
+      return Math.round(Math.max(0, targetOffset + insetTop) / itemExtent);
+    }
+
+    const normalizedOffset = Math.max(0, nativeEvent.contentOffset.y + insetTop);
+    const velocity = nativeEvent.velocity?.y ?? 0;
+    if (velocity > 0) return Math.ceil(normalizedOffset / itemExtent);
+    if (velocity < 0) return Math.floor(normalizedOffset / itemExtent);
+    return Math.round(normalizedOffset / itemExtent);
+  }
+
+  function handleMomentumScrollEnd(event: NativeSyntheticEvent<NativeScrollEvent>) {
+    onScrollPositionChange?.(event);
+
+    if (!usesCardCarousel) return;
+
+    const normalizedOffset = Math.max(
+      0,
+      event.nativeEvent.contentOffset.y + (event.nativeEvent.contentInset?.top ?? 0),
+    );
+    const nextIndex = Math.round(normalizedOffset / itemExtent);
+    commitFocusedIndex(nextIndex, false);
+  }
+
   function handleScrollBeginDrag() {
     Keyboard.dismiss();
     onPullBegin?.();
@@ -237,6 +263,7 @@ export function ActivityCardCarousel({
   function handleScrollEndDrag(event: NativeSyntheticEvent<NativeScrollEvent>) {
     onScrollPositionChange?.(event);
     onPullEnd?.();
+    if (usesCardCarousel) commitFocusedIndex(getCommittedIndex(event), true);
   }
 
   return (
@@ -247,7 +274,7 @@ export function ActivityCardCarousel({
       recycleItems
       extraData={activityOrderKey}
       estimatedListSize={{ width, height }}
-      initialScrollOffset={initialScrollOffset}
+      initialScrollOffset={resolvedInitialOffset}
       renderItem={({ item, index }) =>
         usesCardCarousel ? (
           <ActivityCardCarouselItem

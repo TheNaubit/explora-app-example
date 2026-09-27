@@ -115,6 +115,26 @@ describe("ExploreList", () => {
     expect(getDiscoveryScrollOffset(defaultProps.filters)).toBe(248);
   });
 
+  it("restores the matching position when filters change in the kept-alive tab", async () => {
+    const searchFilters = { search: "museum", categories: [] } as const;
+    setDiscoveryScrollOffset(defaultProps.filters, 248);
+    setDiscoveryScrollOffset(searchFilters, 176);
+
+    const view = await render(createElement(ExploreList, defaultProps), {
+      wrapper: createWrapper(),
+    });
+    expect(screen.getByTestId("explore-list").props.initialScrollOffset).toBe(248);
+
+    await view.rerender(
+      createElement(ExploreList, {
+        ...defaultProps,
+        filters: searchFilters,
+      }),
+    );
+
+    expect(screen.getByTestId("explore-list").props.initialScrollOffset).toBe(176);
+  });
+
   it("shows a next-page footer spinner while fetching", async () => {
     const dismissKeyboard = jest.spyOn(Keyboard, "dismiss");
     mockUseExploreList.mockReturnValue({
@@ -251,9 +271,14 @@ describe("ExploreList", () => {
     ).toBeNull();
   });
 
-  it("snaps cards and plays one custom haptic for a new settled card", async () => {
+  it("plays one custom haptic when the next card snap commits", async () => {
     const { useRealtimeComposer } = require("react-native-pulsar");
     const ReactNative = require("react-native");
+    mockUseExploreList.mockReturnValue({
+      activities: [SUPPLIED_ACTIVITIES[0], SUPPLIED_ACTIVITIES[1]],
+      isFetchingNextPage: false,
+      handleEndReached: mockHandleEndReached,
+    });
     const windowDimensions = jest.spyOn(ReactNative, "useWindowDimensions").mockReturnValue({
       width: 402,
       height: 874,
@@ -275,6 +300,15 @@ describe("ExploreList", () => {
     expect(list.props.decelerationRate).toBe("fast");
     expect(list.props.disableIntervalMomentum).toBe(true);
 
+    await fireEvent(list, "scrollEndDrag", {
+      nativeEvent: {
+        contentOffset: { y: 24 },
+        targetContentOffset: { y: list.props.snapToInterval },
+      },
+    });
+
+    expect(composer.playDiscrete).toHaveBeenCalledTimes(1);
+
     await fireEvent(list, "momentumScrollEnd", {
       nativeEvent: { contentOffset: { y: list.props.snapToInterval } },
     });
@@ -287,6 +321,14 @@ describe("ExploreList", () => {
       EXPLORE_CARD_HAPTIC_AMPLITUDE,
       EXPLORE_CARD_HAPTIC_FREQUENCY,
     );
+
+    await fireEvent(list, "scrollEndDrag", {
+      nativeEvent: {
+        contentOffset: { y: list.props.snapToInterval - 24 },
+        velocity: { y: -1 },
+      },
+    });
+    expect(composer.playDiscrete).toHaveBeenCalledTimes(2);
     windowDimensions.mockRestore();
   });
 

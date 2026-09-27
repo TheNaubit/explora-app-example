@@ -4,7 +4,8 @@ import { useReducedMotion } from "react-native-reanimated";
 
 import { Favorites } from "@/screens/favorites";
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
-import { addFavorite, clearFavorites } from "@/state/favorites";
+import { addFavorite, clearFavorites, removeFavorite } from "@/state/favorites";
+import { resetFavoritesView, setFavoritesFocusedActivity } from "@/state/favorites-view";
 import { createProviders } from "@/test/ui-test-utils";
 
 jest.mock("expo-router", () => {
@@ -30,11 +31,13 @@ const mockUseReducedMotion = useReducedMotion as jest.MockedFunction<typeof useR
 describe("Favorites screen", () => {
   beforeEach(() => {
     clearFavorites();
+    resetFavoritesView();
     mockUseReducedMotion.mockReturnValue(false);
   });
 
   it("shows empty state and navigates to Explore", async () => {
     const { router } = require("expo-router");
+    const { Presets } = require("react-native-pulsar");
 
     await render(createElement(Favorites), {
       wrapper: createProviders(),
@@ -44,6 +47,7 @@ describe("Favorites screen", () => {
     expect(screen.queryByTestId("favorites-summary")).toBeNull();
     await fireEvent.press(screen.getByTestId("empty-state-action"));
     expect(router.navigate).toHaveBeenCalledWith("/(explore)");
+    expect(Presets.System.selection).toHaveBeenCalledTimes(1);
   });
 
   it("lists favorite activities", async () => {
@@ -74,6 +78,31 @@ describe("Favorites screen", () => {
     expect(screen.queryByTestId("category-chip-row")).toBeNull();
     expect(screen.queryByTestId("refresh-control")).toBeNull();
     expect(screen.queryByTestId("list-end-reached")).toBeNull();
+    windowDimensions.mockRestore();
+  });
+
+  it("restores the same focused favorite after an earlier favorite is removed", async () => {
+    const ReactNative = require("react-native");
+    const windowDimensions = jest.spyOn(ReactNative, "useWindowDimensions").mockReturnValue({
+      width: 402,
+      height: 874,
+      scale: 3,
+      fontScale: 1,
+    });
+    const activities = SUPPLIED_ACTIVITIES.slice(0, 3);
+    for (const activity of activities) addFavorite(activity);
+    setFavoritesFocusedActivity(
+      activities.map(({ id }) => id),
+      2,
+    );
+    removeFavorite(activities[0].id);
+
+    await render(createElement(Favorites), {
+      wrapper: createProviders(),
+    });
+
+    const list = await waitFor(() => screen.getByTestId("favorites-list"));
+    expect(list.props.initialScrollOffset).toBe(list.props.snapToInterval);
     windowDimensions.mockRestore();
   });
 

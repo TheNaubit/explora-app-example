@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Platform, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import {
   ScrollEdgeEffectProvider,
@@ -19,6 +19,8 @@ import { emptyFavoritesIllustration } from "@/illustrations";
 import { FavoritesSummary } from "@/screens/favorites/favorites-summary";
 import { favoritesMessages } from "@/screens/favorites/messages";
 import { useFavoriteActivities } from "@/screens/favorites/use-favorite-activities";
+import { hapticNavigationSelection } from "@/haptics/feedback";
+import { getFavoritesFocusedIndex, setFavoritesFocusedActivity } from "@/state/favorites-view";
 import { spacing, typography, useAppTheme } from "@/theme";
 
 /** Expanded Favorites header height below the iOS safe area. */
@@ -61,8 +63,29 @@ function useFavoritesScreenState() {
   return { activities, t };
 }
 
+function useFavoritesCarouselPosition(activities: ReturnType<typeof useFavoriteActivities>) {
+  const activityIds = useMemo(() => activities.map(({ id }) => id), [activities]);
+  const initialFocusedIndex = useRef(getFavoritesFocusedIndex(activityIds)).current;
+
+  const handleFocusedIndexChange = useCallback(
+    (index: number) => {
+      setFavoritesFocusedActivity(activityIds, index);
+    },
+    [activityIds],
+  );
+
+  return { handleFocusedIndexChange, initialFocusedIndex };
+}
+
+function browseActivities() {
+  hapticNavigationSelection();
+  router.navigate("/(explore)");
+}
+
 function FavoritesNative() {
   const { activities, t } = useFavoritesScreenState();
+  const { handleFocusedIndexChange, initialFocusedIndex } =
+    useFavoritesCarouselPosition(activities);
   const theme = useAppTheme();
   const insets = useSafeAreaInsets();
   const scrollEdgeRef = useScrollEdgeEffectRef();
@@ -116,7 +139,7 @@ function FavoritesNative() {
             actionLabel={t(favoritesMessages.emptyAction)}
             illustration={emptyFavoritesIllustration}
             presentation="centered"
-            onAction={() => router.navigate("/(explore)")}
+            onAction={browseActivities}
           />
         </Animated.ScrollView>
       ) : (
@@ -126,6 +149,8 @@ function FavoritesNative() {
           followsCollapsingHeader
           headerHeight={headerHeight}
           headerTranslation={headerTranslation}
+          initialFocusedIndex={initialFocusedIndex}
+          onFocusedIndexChange={handleFocusedIndexChange}
           scrollOffset={scrollOffset}
           scrollRef={scrollEdgeRef}
           testID="favorites-list"
@@ -146,6 +171,8 @@ function FavoritesNative() {
 
 function FavoritesStandard() {
   const { activities, t } = useFavoritesScreenState();
+  const { handleFocusedIndexChange, initialFocusedIndex } =
+    useFavoritesCarouselPosition(activities);
   const theme = useAppTheme();
 
   return (
@@ -166,13 +193,15 @@ function FavoritesStandard() {
             actionLabel={t(favoritesMessages.emptyAction)}
             illustration={emptyFavoritesIllustration}
             presentation="centered"
-            onAction={() => router.navigate("/(explore)")}
+            onAction={browseActivities}
           />
         </View>
       ) : (
         <ActivityCardCarousel
           activities={activities}
           favoriteRemovalEffect="particle-dissolve"
+          initialFocusedIndex={initialFocusedIndex}
+          onFocusedIndexChange={handleFocusedIndexChange}
           testID="favorites-list"
         />
       )}

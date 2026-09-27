@@ -15,6 +15,7 @@
 - All clears the category selection and becomes the only selected chip.
 - Combine search and filter. Filters stay in the discovery store for the session.
 - Explore keeps a separate session scroll position for each search and category state.
+- A kept-alive Explore tab restores the matching position when its filters change.
 - Explore saves the live scroll position when its route loses focus, including during active momentum.
 - Activity cards show a seeded cover photo with a BlurHash fade-in (`getActivityCoverImage`).
 - Card text sits inside the lower cover region.
@@ -26,7 +27,8 @@
 - Reanimated derives card scale, opacity, and image focus from the list scroll offset.
 - Unfocused card images use a light static blur layer. The layer fades out as each card reaches focus.
 - Fast interval snapping keeps one card focused and leaves adjacent cards visible.
-- A soft Pulsar detent plays once when a new card settles.
+- A soft Pulsar detent plays once when a new card snap commits.
+- Clearing an active empty-result filter plays the same selection haptic as a filter change.
 - Reduced motion, web, and large text use the standard vertical list.
 - Pull distance grows one stroke around a complete gray app-mark track.
 - Pull progress increases the mark opacity and scale. Partial pulls stay translucent and smaller.

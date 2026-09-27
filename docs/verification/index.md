@@ -17,9 +17,10 @@ Submission packages (video, APK notes, `AI_SESSION.md`) may **point at** these p
 
 ## Current local checks
 
-- On 2026-09-26, all 52 Jest suites and 196 tests passed.
+- On 2026-09-27, all 53 Jest suites and 203 tests passed.
 - Jest exited normally without `act()` warnings or open-handle warnings.
 - The Lingui check passed with 153 English source messages and no catalog difference.
 - Android Maestro passed all eight flows.
 - The final Android release APK passed native calendar and assessment checks without Metro.
 - The final iOS Simulator release app passed launch, core, refresh, saved-detail, and native calendar checks without Metro.
+- The iOS development build passed the Favorites empty-action navigation flow after the interaction update.
