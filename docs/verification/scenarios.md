@@ -10,7 +10,7 @@ The assessment expects **6–8** scenarios with steps, expected behavior, observ
 | 4   | Failure recovery                | Failed refresh adds nothing                | Jest and Maestro passed on iOS and Android                             |
 | 5   | Lifecycle interruptions         | Background / delayed results               | Maestro background and resume passed on iOS and Android                |
 | 6   | Native calendar                 | Permissions / cancel / invalid             | Passed on iOS and Android                                              |
-| 7   | Performance (≥1k)               | Scroll / search + measurement              | Android release startup and stress-scroll measurements recorded        |
+| 7   | Performance (≥1k)               | Release startup measurement                | Android release cold-start measurement recorded                        |
 | 8   | Accessibility                   | Main journey accessibility                 | Android screen reader, keyboard, large text, and offline checks passed |
 
 When you specify or run a scenario, expand it here or add `scenarios/<name>.md` and link it from this table.
@@ -39,7 +39,7 @@ Passed on an Android 16 emulator on 2026-09-26.
 
 The Android flow kept the search, filter, favorite, and persisted detail state.
 
-The final iOS release app passed this flow without Metro on 2026-09-26.
+The current iOS release app passed this flow without Metro on 2026-09-27.
 
 ### Evidence
 
@@ -67,7 +67,7 @@ The refresh added exactly one activity. Routine success produced no toast.
 
 The same count and feedback checks passed on an Android 16 emulator on 2026-09-26.
 
-The final iOS release app passed the failure and exact one-item success checks without Metro.
+The current iOS release app passed the failure and exact one-item success checks without Metro on 2026-09-27.
 
 ### Evidence
 
@@ -91,7 +91,7 @@ The final iOS release app passed the failure and exact one-item success checks w
 
 Steps 1–4 passed on the iOS 27.0 Simulator on 2026-09-25.
 
-Steps 1–4 also passed against the final iOS release app on 2026-09-26.
+Steps 1–4 also passed against the current iOS release app on 2026-09-27.
 
 All five steps passed on an Android 16 emulator on 2026-09-26.
 
@@ -183,7 +183,7 @@ Passed on an Android 16 emulator on 2026-09-26.
 
 - Platform: Explora iPhone 18 Pro Simulator on iOS 27.0.
 - App build: local development build `build-1790261620671.tar.gz`.
-- Final release build: `build-1790457549256.tar.gz`.
+- Current release build: `build-1790510925602.tar.gz`.
 - Activity: local activity `ref-0005`, with a 35-minute duration.
 - Runtime date: 2026-09-24.
 - Android platform: `sdk_gphone64_arm64` emulator on Android 16, API 36.
@@ -226,7 +226,7 @@ Passed on the iOS 27.0 Simulator.
 13. Closing the form returned to Activity Detail without a status message.
 14. Saving the form showed **Added to Calendar**.
 
-The final iOS release app repeated the schedule cancellation, system-form cancellation, and save path on 2026-09-26.
+The previous iOS release app completed the schedule cancellation, system-form cancellation, and save path on 2026-09-26.
 
 It launched from its embedded bundle without Metro. The saved event used `Botanical Garden Walk` with a one-hour duration.
 
@@ -262,8 +262,8 @@ The Android flow passed in local development and release builds.
 - Android error preview: [`android-error-light.jpg`](./evidence/native-feedback/android-error-light.jpg).
 - Android dark success preview: [`android-success-dark.jpg`](./evidence/native-feedback/android-success-dark.jpg).
 - Historical iOS development build: `build-1790261620671.tar.gz`.
-- iOS release build: `dist/eas-builds/build-1790457549256.tar.gz`.
-- Android release APK: `dist/eas-builds/build-1790454953687.apk`.
+- iOS release build: `dist/eas-builds/build-1790510925602.tar.gz`.
+- Android release APK: `dist/eas-builds/build-1790507141918.apk`.
 - Artifact metadata and checksums: [`artifacts.md`](./artifacts.md).
 - Build metadata contains `NSCalendarsWriteOnlyAccessUsageDescription`.
 - Build metadata does not contain `NSCalendarsFullAccessUsageDescription`.
@@ -280,38 +280,34 @@ The iOS release check used a Simulator. EventKit required Device Hub for final s
 
 ### Steps and expected results
 
-| Step | Action                                           | Expected result                                                  |
-| ---- | ------------------------------------------------ | ---------------------------------------------------------------- |
-| 1    | Install a release build.                         | The app starts without Metro.                                    |
-| 2    | Reset to the seeded 1,012-activity catalog.      | Explore reports the expected dataset size.                       |
-| 3    | Record a fixed scroll and search interaction.    | The recording contains the complete interaction.                 |
-| 4    | Measure the selected release performance metric. | The report states the device, build, dataset, steps, and result. |
-| 5    | Compare the result with the documented limit.    | The evidence explains the result and its limits.                 |
+| Step | Action                                      | Expected result                                             |
+| ---- | ------------------------------------------- | ----------------------------------------------------------- |
+| 1    | Install a release build.                    | The app starts without Metro.                               |
+| 2    | Reset to the seeded 1,012-activity catalog. | Explore reports the expected dataset size.                  |
+| 3    | Stop the app before each run.               | Each run starts from the same stopped state.                |
+| 4    | Measure five cold starts.                   | Each `am start -W` command reports the total start time.    |
+| 5    | Report the range, median, and average.      | The evidence states the build, dataset, device, and limits. |
 
 ### Observed result
 
-Measured on an Android 16 emulator on 2026-09-26.
+Measured on an Android 16 emulator on 2026-09-27.
 
-The final local EAS release APK started without Metro. Five clean cold starts took 682–712 ms.
+The current local EAS release APK started without Metro. The catalog contained 1,012 activities.
 
-The median cold start was 683 ms. The average cold start was 688.8 ms.
+Five clean cold starts took 706, 711, 726, 706, and 720 ms.
 
-A stress scroll used 12 fast swipes down and 12 fast swipes up through 1,012 activities.
+The median cold start was 711 ms. The average cold start was 713.8 ms.
 
-After an emulator reboot, the host-GPU emulator recorded 518 frames.
+The measurement uses an emulator with the host GPU. It does not predict physical-device startup time.
 
-It classified 23 frames as janky, or 4.44 percent.
-
-The frame percentiles were 17 ms at P50, 19 ms at P90, 20 ms at P95, and 23 ms at P99.
-
-The measurement uses an emulator with the host GPU. It does not predict physical-device frame times.
+Concurrent Simulator load contaminated repeated frame-statistics runs. Those results are not release evidence.
 
 ### Evidence
 
 - Dataset tests: `src/mocks/seed-catalog.test.ts`.
 - Build instructions: `docs/operations/eas-local-builds.md`.
-- Release APK: `dist/eas-builds/build-1790454953687.apk`.
-- Measurement method: Android `am force-stop`, `am start -W`, and `dumpsys gfxinfo` frame statistics.
+- Release APK: `dist/eas-builds/build-1790507141918.apk`.
+- Measurement method: Android `am force-stop`, one-second wait, `am start -W`, and a three-second settle.
 
 ## Scenario 8: Accessibility
 

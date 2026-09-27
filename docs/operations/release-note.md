@@ -35,10 +35,10 @@ These artifacts are for local assessment review.
 
 | Platform      | Artifact                                     | Build                           | Source commit | SHA-256                                                            |
 | ------------- | -------------------------------------------- | ------------------------------- | ------------- | ------------------------------------------------------------------ |
-| iOS Simulator | `dist/eas-builds/build-1790457549256.tar.gz` | Release, `production-simulator` | `8d4b3d0`     | `8a348a10b7ab80e0eb142e0df181dbc5f19a11760a5f40efb876ed576415526f` |
-| Android       | `dist/eas-builds/build-1790454953687.apk`    | Release, `production-apk`       | `2020ed1`     | `bcce2e2db7867bf4861c9cdce475586f11dc087ef2b3400f7c2acb740b8f978c` |
+| iOS Simulator | `dist/eas-builds/build-1790510925602.tar.gz` | Release, `production-simulator` | `16283fe`     | `4ba0196a5fb4f690fa36b7f9adc54c55021681ebdc52c178b37e7f70320a583e` |
+| Android       | `dist/eas-builds/build-1790507141918.apk`    | Release, `production-apk`       | `16283fe`     | `959ab2173fba217fa5ee51eb8983a9393b9c5b534f139d9dd79d94654e048137` |
 
-Commit `8d4b3d0` contains documentation changes after `2020ed1`. The app source is equal in both artifacts.
+Both artifacts contain the app source from commit `16283fe`.
 
 The complete artifact metadata is in the [release artifact manifest](../verification/artifacts.md).
 
@@ -124,7 +124,9 @@ Do not distribute the release if a required check fails.
 
 - Both artifact checksums match the artifact manifest.
 - Both apps launch without Metro.
-- Core, refresh, offline favorite, and native calendar checks passed on both platforms.
+- The complete iOS release suite passed 9 of 9 flows.
+- The complete Android release suite passed 8 of 8 flows.
+- The Android release calendar flow passed separately.
 - Android release performance evidence is recorded.
 - Android main-journey accessibility evidence is recorded.
 - A physical iPhone development build compiled, installed, launched, and loaded its bundle.
@@ -163,8 +165,9 @@ This project has no public store release to restore. The store procedure is futu
 - The iOS artifact runs on the Simulator only.
 - The Android artifact was verified on an emulator.
 - Store signing and store submission were not performed.
-- Physical-device haptics were not verified.
+- Physical-device haptic strength was not verified.
 - The final iOS VoiceOver journey remains pending.
+- The current iOS archive did not repeat the final EventKit system-form actions.
 
 ## Related documents
 

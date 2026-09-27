@@ -6,8 +6,8 @@ These local EAS artifacts satisfy the assessment distribution requirement.
 
 | Field               | Value                                                              |
 | ------------------- | ------------------------------------------------------------------ |
-| Artifact            | `dist/eas-builds/build-1790457549256.tar.gz`                       |
-| SHA-256             | `8a348a10b7ab80e0eb142e0df181dbc5f19a11760a5f40efb876ed576415526f` |
+| Artifact            | `dist/eas-builds/build-1790510925602.tar.gz`                       |
+| SHA-256             | `4ba0196a5fb4f690fa36b7f9adc54c55021681ebdc52c178b37e7f70320a583e` |
 | Platform            | iOS Simulator                                                      |
 | Architecture        | Universal `arm64` and `x86_64`                                     |
 | Build configuration | Release                                                            |
@@ -15,32 +15,28 @@ These local EAS artifacts satisfy the assessment distribution requirement.
 | App version         | `1.0.0`                                                            |
 | Build number        | `1`                                                                |
 | Minimum iOS         | `16.4`                                                             |
-| Source commit       | `8d4b3d0`                                                          |
+| Source commit       | `16283fe`                                                          |
 | Verification device | iPhone 18 Pro Simulator, iOS 27.0                                  |
 
 The archive contains `Explora.app`, its embedded JavaScript bundle, and no development-launcher bundle.
 
-The installed release app launched without Metro on 2026-09-26.
+The installed release app launched without Metro on 2026-09-27.
 
 The following release checks passed:
 
-- Core discovery, detail, favorite, and relaunch flow: 1 minute and 7 seconds.
-- Refresh failure and exact one-item success flow: 1 minute and 35 seconds.
-- Saved-detail fallback during a forced detail failure: 1 minute and 17 seconds.
-- Calendar schedule cancellation returned without feedback.
-- The system calendar form contained the title, location, notes, start time, and one-hour duration.
-- Saving the event returned to Activity Detail and showed the native success toast.
+- The complete Maestro suite passed 9 of 9 flows in 10 minutes and 47 seconds.
+- The suite covered discovery, detail, favorites, refresh, recovery, offline fallback, and lifecycle behavior.
+- The Favorites empty-state action opened Explore.
+- The feedback policy flow passed.
 
-EventKit presents its form in a separate system window. Maestro did not expose that window to its XCTest hierarchy.
-
-The calendar form finish used Device Hub. The other listed checks used Maestro.
+EventKit presents its form in a separate system window. The current archive did not repeat the final system-form actions.
 
 ## Android
 
 | Field               | Value                                                              |
 | ------------------- | ------------------------------------------------------------------ |
-| Artifact            | `dist/eas-builds/build-1790454953687.apk`                          |
-| SHA-256             | `bcce2e2db7867bf4861c9cdce475586f11dc087ef2b3400f7c2acb740b8f978c` |
+| Artifact            | `dist/eas-builds/build-1790507141918.apk`                          |
+| SHA-256             | `959ab2173fba217fa5ee51eb8983a9393b9c5b534f139d9dd79d94654e048137` |
 | Platform            | Android                                                            |
 | Architecture        | `arm64-v8a`, `armeabi-v7a`, `x86`, and `x86_64`                    |
 | Build configuration | Release                                                            |
@@ -48,10 +44,22 @@ The calendar form finish used Device Hub. The other listed checks used Maestro.
 | App version         | `1.0.0`                                                            |
 | Version code        | `1`                                                                |
 | Minimum SDK         | `24`                                                               |
-| Source commit       | `2020ed1`                                                          |
+| Source commit       | `16283fe`                                                          |
 | Verification device | Android 16 emulator, API 36                                        |
 
-The APK launched without Metro. It passed the two required assessment flows and the native calendar flow.
+The APK launched without Metro on 2026-09-27.
+
+The complete Maestro suite passed 8 of 8 flows in 10 minutes and 59 seconds.
+
+The separate release calendar flow passed in 35 seconds.
+
+Five clean cold starts took 706–726 ms with 1,012 activities. The median was 711 ms.
+
+Android verified the APK Signature Scheme v2 signature. The signer certificate SHA-256 is:
+
+```text
+0f2bc7ae30ab85f7828f3b3c4a59d77fb101da24c38512565ab0787d09681c7e
+```
 
 ## Limits
 
