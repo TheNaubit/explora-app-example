@@ -6,13 +6,15 @@ import {
   getCatalogSize,
   replaceCatalogForTests,
   resetCatalog,
+  setCatalogMode,
 } from "@/mocks/catalog-store";
 import {
   ACTIVITY_ID_PAD_LENGTH,
-  ASSESSMENT_MIN_CATALOG_SIZE,
   LIST_PAGE_SIZE,
+  PERFORMANCE_CATALOG_SIZE,
+  PERFORMANCE_GENERATED_ACTIVITY_COUNT,
   REFRESH_ACTIVITY_ID_PREFIX,
-  SEEDED_CATALOG_SIZE,
+  SUPPLIED_CATALOG_SIZE,
 } from "@/mocks/constants";
 import { delay, MOCK_DELAY_MS } from "@/mocks/delay";
 import {
@@ -55,7 +57,7 @@ describe("mock API", () => {
   });
 
   describe("listActivities", () => {
-    it(`returns the first page of ${LIST_PAGE_SIZE} and reports total ${SEEDED_CATALOG_SIZE}`, async () => {
+    it("returns the complete supplied catalog by default", async () => {
       setInitialLoadMode("normal");
 
       const result = await listActivities({ cursor: null });
@@ -65,21 +67,35 @@ describe("mock API", () => {
         return;
       }
 
-      expect(result.data.total).toBeGreaterThanOrEqual(ASSESSMENT_MIN_CATALOG_SIZE);
-      expect(result.data.total).toBe(SEEDED_CATALOG_SIZE);
+      expect(result.data.total).toBe(SUPPLIED_CATALOG_SIZE);
+      expect(result.data.activities).toEqual(SUPPLIED_ACTIVITIES);
+      expect(result.data.nextCursor).toBeNull();
+      expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.normal);
+    });
+
+    it("returns a paginated catalog with 1,000 generated activities in performance mode", async () => {
+      setCatalogMode("performance");
+
+      const result = await listActivities({ cursor: null });
+
+      expect(result.ok).toBe(true);
+      if (!result.ok) {
+        return;
+      }
+
+      expect(result.data.total).toBe(PERFORMANCE_CATALOG_SIZE);
+      expect(result.data.total - SUPPLIED_ACTIVITIES.length).toBe(
+        PERFORMANCE_GENERATED_ACTIVITY_COUNT,
+      );
       expect(result.data.activities).toHaveLength(LIST_PAGE_SIZE);
       expect(result.data.nextCursor).toBe(String(LIST_PAGE_SIZE));
-      expect(mockedDelay).toHaveBeenCalledWith(MOCK_DELAY_MS.normal);
-
-      for (const supplied of SUPPLIED_ACTIVITIES) {
-        const match = result.data.activities.find((activity) => activity.id === supplied.id);
-        if (match) {
-          expect(match).toEqual(supplied);
-        }
-      }
+      expect(result.data.activities.slice(0, SUPPLIED_ACTIVITIES.length)).toEqual(
+        SUPPLIED_ACTIVITIES,
+      );
     });
 
     it("returns the next page with pageLoad delay and a null cursor on the last page", async () => {
+      setCatalogMode("performance");
       const first = await listActivities({ cursor: null });
       expect(first.ok).toBe(true);
       if (!first.ok) {
@@ -111,16 +127,17 @@ describe("mock API", () => {
         cursor = page.data.nextCursor;
       }
 
-      const expectedLastPage = SEEDED_CATALOG_SIZE % LIST_PAGE_SIZE;
+      const expectedLastPage = PERFORMANCE_CATALOG_SIZE % LIST_PAGE_SIZE;
       expect(lastPageLength).toBe(expectedLastPage === 0 ? LIST_PAGE_SIZE : expectedLastPage);
     });
 
     it("filters by search and multiple categories across pages", async () => {
+      setCatalogMode("performance");
       const categories = ["Outdoors", "Culture"] as const;
       const result = await listActivities({
         cursor: null,
         categories: [...categories],
-        limit: SEEDED_CATALOG_SIZE,
+        limit: PERFORMANCE_CATALOG_SIZE,
       });
 
       expect(result.ok).toBe(true);
@@ -152,7 +169,7 @@ describe("mock API", () => {
         ok: true,
         data: { activities: [], nextCursor: null, total: 0 },
       });
-      expect(getCatalogSize()).toBe(SEEDED_CATALOG_SIZE);
+      expect(getCatalogSize()).toBe(SUPPLIED_CATALOG_SIZE);
     });
 
     it("returns networkOffline on first-page fail without mutating the catalog", async () => {
@@ -309,7 +326,7 @@ describe("mock API", () => {
       expect(getCatalogSize()).toBe(sizeBeforeFail + 1);
       expect(succeeded.data.activity.id).toMatch(refreshIdPattern);
 
-      const listed = await listActivities({ cursor: null, limit: SEEDED_CATALOG_SIZE + 10 });
+      const listed = await listActivities({ cursor: null, limit: PERFORMANCE_CATALOG_SIZE + 10 });
       expect(listed.ok).toBe(true);
       if (!listed.ok) {
         return;

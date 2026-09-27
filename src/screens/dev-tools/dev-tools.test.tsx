@@ -4,6 +4,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 
 import { DevTools } from "@/screens/dev-tools";
 import { resetLocalData } from "@/screens/dev-tools/dev-tools-actions";
+import { getCatalogMode } from "@/mocks/catalog-store";
 import { getReviewModeState, resetReviewModeState } from "@/mocks/review-mode";
 import { showNativeToast } from "@/native-toast";
 import { createProviders, createQueryClient } from "@/test/ui-test-utils";
@@ -41,8 +42,27 @@ describe("Dev Tools screen", () => {
     expect(screen.getByText("Activity detail")).toBeTruthy();
     expect(screen.getByText("Later page load")).toBeTruthy();
     expect(screen.getByText("Refresh")).toBeTruthy();
-    expect(screen.getByLabelText("Catalog activities, 1,012")).toBeTruthy();
+    expect(screen.getByText("Catalog dataset")).toBeTruthy();
+    expect(screen.getByLabelText("Catalog activities, 12")).toBeTruthy();
     expect(screen.getByTestId("dev-tools-favorite-count")).toBeTruthy();
+  });
+
+  it("switches between supplied and performance catalog modes", async () => {
+    await render(createElement(DevTools), { wrapper: createProviders() });
+
+    expect(screen.getByTestId("dev-tools-catalog-mode-supplied").props.accessibilityState).toEqual({
+      checked: true,
+    });
+
+    await fireEvent.press(screen.getByTestId("dev-tools-catalog-mode-performance"));
+
+    await waitFor(() => {
+      expect(getCatalogMode()).toBe("performance");
+      expect(screen.getByLabelText("Catalog activities, 1,012")).toBeTruthy();
+      expect(
+        screen.getByTestId("dev-tools-catalog-mode-performance").props.accessibilityState,
+      ).toEqual({ checked: true });
+    });
   });
 
   it("uses the screen root as the native large-title scroll view", async () => {
