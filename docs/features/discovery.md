@@ -58,7 +58,8 @@
 | Focused card motion   | `explore-activity-card.tsx`, `explore-list.tsx`                                    |
 | Pull to refresh       | `src/components/pull-to-refresh/`, `use-explore-refresh.ts`                        |
 | Supplied data         | `src/data/activities.ts`, `assets/activities.json`                                 |
-| Seed catalog          | `src/mocks/seed-catalog.ts` (1,012 items)                                          |
+| Supplied catalog      | `src/mocks/seed-catalog.ts` (12 items)                                             |
+| Performance catalog   | `src/mocks/seed-catalog.ts` (1,012 items)                                          |
 | Refresh persistence   | `src/mocks/catalog-store.ts`, MMKV                                                 |
 | Mock list API         | `src/mocks/api.ts` → `listActivities` (paginated)                                  |
 | List query            | `src/hooks/use-activities.ts` (`useInfiniteQuery`)                                 |

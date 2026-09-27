@@ -14,6 +14,9 @@ The **Dev Tools** tab provides reproducible assessment states.
 - **Reset request modes** restores normal loads and successful refresh.
 - Local data rows show the catalog and favorite counts.
 - **Reset local data** clears generated activities, favorites, filters, and request cache.
+- **Supplied (12)** is the normal catalog and reset baseline.
+- **Performance (1,012)** adds 1,000 deterministic activities and persists across cold starts.
+- Dataset switching keeps favorites, filters, and refresh-added activities.
 - Local data reset requires destructive confirmation.
 - A slow request supports background, resume, and late-result checks.
 - Request modes do not simulate the device offline state.

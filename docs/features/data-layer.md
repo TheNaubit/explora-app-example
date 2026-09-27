@@ -15,7 +15,9 @@ The client data layer has two owners:
 
 Mock handlers remain the only network layer. Review modes control first-page, next-page, and refresh latency or failure.
 
-MMKV stores only refresh-added activities and the refresh sequence. The app generates the fixed seed catalog at launch.
+MMKV stores the selected catalog dataset, refresh-added activities, and refresh sequence.
+
+The normal dataset contains the 12 supplied activities. Performance mode adds 1,000 deterministic activities through the same query path.
 
 Query errors use `ApiError` with `errorKey`. UI resolves keys with `resolveErrorMessage`.
 

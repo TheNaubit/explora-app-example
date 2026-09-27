@@ -3,9 +3,10 @@ import { z } from "zod";
 
 import { REFRESH_FAKER_BASE_SEED } from "@/mocks/constants";
 import { generateActivity, refreshActivityId } from "@/mocks/generate-activity";
-import { seedCatalog } from "@/mocks/seed-catalog";
+import { seedCatalog, seedPerformanceCatalog } from "@/mocks/seed-catalog";
 import { activitySchema, type Activity } from "@/schemas/activity";
 import {
+  CATALOG_MODE_PERSIST_KEY,
   CATALOG_REFRESH_PERSIST_KEY,
   CATALOG_REFRESH_PERSIST_VERSION,
   EXPLORA_MMKV_ID,
@@ -18,10 +19,14 @@ const persistedRefreshCatalogSchema = z.object({
 });
 
 type PersistedRefreshCatalog = z.infer<typeof persistedRefreshCatalogSchema>;
+export type CatalogMode = "supplied" | "performance";
+
+const catalogModeSchema = z.enum(["supplied", "performance"]);
 
 const catalogStorage = createMMKV({ id: EXPLORA_MMKV_ID });
 
 let catalog: Activity[] | null = null;
+let catalogMode: CatalogMode | null = null;
 let refreshActivities: Activity[] = [];
 let refreshSequence = 0;
 
@@ -45,7 +50,7 @@ function readPersistedRefreshCatalog(): PersistedRefreshCatalog {
       return result.data;
     }
   } catch {
-    // Remove invalid local data and restore the deterministic seed catalog.
+    // Remove invalid local data and restore the supplied catalog.
   }
 
   catalogStorage.remove(CATALOG_REFRESH_PERSIST_KEY);
@@ -56,12 +61,29 @@ function persistRefreshCatalog(state: PersistedRefreshCatalog): void {
   catalogStorage.set(CATALOG_REFRESH_PERSIST_KEY, JSON.stringify(state));
 }
 
+function readPersistedCatalogMode(): CatalogMode {
+  const storedValue = catalogStorage.getString(CATALOG_MODE_PERSIST_KEY);
+  const result = catalogModeSchema.safeParse(storedValue);
+
+  if (result.success) {
+    return result.data;
+  }
+
+  catalogStorage.remove(CATALOG_MODE_PERSIST_KEY);
+  return "supplied";
+}
+
+function baseCatalogForMode(mode: CatalogMode): Activity[] {
+  return mode === "performance" ? seedPerformanceCatalog() : seedCatalog();
+}
+
 function ensureCatalog(): Activity[] {
   if (catalog === null) {
     const persisted = readPersistedRefreshCatalog();
     refreshActivities = [...persisted.activities];
     refreshSequence = persisted.refreshSequence;
-    catalog = [...refreshActivities, ...seedCatalog()];
+    catalogMode = readPersistedCatalogMode();
+    catalog = [...refreshActivities, ...baseCatalogForMode(catalogMode)];
   }
 
   return catalog;
@@ -75,6 +97,20 @@ export function getCatalog(): readonly Activity[] {
 /** Current catalog length. */
 export function getCatalogSize(): number {
   return ensureCatalog().length;
+}
+
+/** Current reproducible catalog dataset. */
+export function getCatalogMode(): CatalogMode {
+  ensureCatalog();
+  return catalogMode ?? "supplied";
+}
+
+/** Select the normal supplied dataset or the performance dataset. */
+export function setCatalogMode(nextMode: CatalogMode): void {
+  ensureCatalog();
+  catalogStorage.set(CATALOG_MODE_PERSIST_KEY, nextMode);
+  catalogMode = nextMode;
+  catalog = [...refreshActivities, ...baseCatalogForMode(nextMode)];
 }
 
 /** Find one activity by id, or undefined when missing. */
@@ -108,11 +144,13 @@ export function prependRefreshActivity(): Activity {
 }
 
 /**
- * Reset the catalog to the seeded baseline and clear refresh sequence.
+ * Reset the catalog to the supplied baseline and clear refresh sequence.
  * Does not change review modes.
  */
 export function resetCatalog(): void {
   catalogStorage.remove(CATALOG_REFRESH_PERSIST_KEY);
+  catalogStorage.remove(CATALOG_MODE_PERSIST_KEY);
+  catalogMode = "supplied";
   catalog = seedCatalog();
   refreshActivities = [];
   refreshSequence = 0;
@@ -124,6 +162,7 @@ export function resetCatalog(): void {
  */
 export function replaceCatalogForTests(next: Activity[], nextRefreshSequence = 0): void {
   catalog = [...next];
+  catalogMode = "supplied";
   refreshActivities = [];
   refreshSequence = nextRefreshSequence;
 }
@@ -133,6 +172,7 @@ export function replaceCatalogForTests(next: Activity[], nextRefreshSequence = 0
  */
 export function clearCatalogForTests(): void {
   catalog = null;
+  catalogMode = null;
   refreshActivities = [];
   refreshSequence = 0;
 }

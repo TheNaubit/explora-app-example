@@ -13,11 +13,7 @@ import {
   PERFORMANCE_GENERATED_ACTIVITY_COUNT,
   SUPPLIED_CATALOG_SIZE,
 } from "@/mocks/constants";
-import {
-  seedCatalog,
-  seedCatalogFrom,
-  seedPerformanceCatalog,
-} from "@/mocks/seed-catalog";
+import { seedCatalog, seedCatalogFrom, seedPerformanceCatalog } from "@/mocks/seed-catalog";
 
 describe("seed catalog", () => {
   it("uses only the supplied activities for the default catalog", () => {
@@ -32,9 +28,7 @@ describe("seed catalog", () => {
 
     expect(catalog).toHaveLength(PERFORMANCE_CATALOG_SIZE);
     expect(catalog.slice(0, SUPPLIED_ACTIVITIES.length)).toEqual(SUPPLIED_ACTIVITIES);
-    expect(catalog.length - SUPPLIED_ACTIVITIES.length).toBe(
-      PERFORMANCE_GENERATED_ACTIVITY_COUNT,
-    );
+    expect(catalog.length - SUPPLIED_ACTIVITIES.length).toBe(PERFORMANCE_GENERATED_ACTIVITY_COUNT);
   });
 
   it("throws when the base list is larger than the target size", () => {

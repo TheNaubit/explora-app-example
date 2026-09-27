@@ -5,11 +5,7 @@ import {
   updateCatalogMode,
   updateReviewMode,
 } from "@/screens/dev-tools/dev-tools-actions";
-import {
-  getCatalogMode,
-  getCatalogSize,
-  prependRefreshActivity,
-} from "@/mocks/catalog-store";
+import { getCatalogMode, getCatalogSize, prependRefreshActivity } from "@/mocks/catalog-store";
 import { PERFORMANCE_CATALOG_SIZE, SUPPLIED_CATALOG_SIZE } from "@/mocks/constants";
 import { getReviewModeState, resetReviewModeState } from "@/mocks/review-mode";
 import { addFavorite, listFavoriteIds } from "@/state/favorites";

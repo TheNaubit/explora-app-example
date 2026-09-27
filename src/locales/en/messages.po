@@ -209,6 +209,12 @@ msgstr "Cancel"
 msgid "devTools.catalogActivities"
 msgstr "Catalog activities"
 
+#. Section title for selecting the normal or performance activity dataset
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.catalogDataset"
+msgstr "Catalog dataset"
+
 #. Screen reader status after a successful catalog refresh
 #. js-lingui-explicit-id
 #: src/screens/explore/messages.ts
@@ -569,6 +575,12 @@ msgstr "Opens the system event form with this activity pre-filled."
 msgid "category.outdoors"
 msgstr "Outdoors"
 
+#. Catalog mode with the supplied activities and 1,000 generated activities
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.catalogMode.performance"
+msgstr "Performance (1,012)"
+
 #. Action that previews an inline retry surface
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
@@ -722,6 +734,11 @@ msgstr "Select a future date and start time before you open Calendar."
 
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts
+msgid "devTools.catalogModeHint"
+msgstr "Selects this catalog dataset and keeps favorites, filters, and refresh activities."
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
 msgid "devTools.modeOptionHint"
 msgstr "Selects this request mode."
 
@@ -768,6 +785,12 @@ msgstr "Success"
 #: src/screens/dev-tools/messages.ts
 msgid "devTools.feedbackPolicyHelp"
 msgstr "Success and cancel stay silent. Only confirmed calendar saves show success feedback."
+
+#. Catalog mode that uses only the supplied assessment activities
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.catalogMode.supplied"
+msgstr "Supplied (12)"
 
 #. js-lingui-explicit-id
 #: src/screens/activity-detail/messages.ts
@@ -864,6 +887,11 @@ msgstr "Try again"
 #: src/screens/dev-tools/messages.ts
 msgid "devTools.nativeFeedbackUnavailable"
 msgstr "Unavailable"
+
+#. js-lingui-explicit-id
+#: src/screens/dev-tools/messages.ts
+msgid "devTools.catalogDatasetHelp"
+msgstr "Use Supplied for normal review. Performance adds 1,000 local activities and persists for cold starts."
 
 #. js-lingui-explicit-id
 #: src/screens/dev-tools/messages.ts

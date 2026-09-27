@@ -213,6 +213,7 @@ describe("mock API", () => {
     });
 
     it("treats an invalid cursor as offset zero", async () => {
+      setCatalogMode("performance");
       const result = await listActivities({ cursor: "not-a-number" });
 
       expect(result.ok).toBe(true);

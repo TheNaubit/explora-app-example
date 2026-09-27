@@ -33,5 +33,7 @@ The plan includes one optional Maestro flow for a successful timed rehearsal.
 ## Limits
 
 - This session created a rehearsal plan. It did not create a slide deck or video.
+- The user later asked to keep the rehearsal plan out of the final repository tree.
+- The repository no longer contains the presentation plan.
 - The user still needs to complete the rehearsals and record the final presentation.
 - This file summarizes the work. It is not a verbatim conversation export.

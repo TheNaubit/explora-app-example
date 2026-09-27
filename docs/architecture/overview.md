@@ -11,7 +11,7 @@ This page describes how Explora is structured. Update it when layering, data flo
 ## Data and validation
 
 - Supplied catalog: `assets/activities.json`, loaded in `src/data/activities.ts`
-- Seeded discovery catalog (1,012): `src/mocks/seed-catalog.ts` plus a catalog store
+- Supplied catalog (12) and performance catalog (1,012): `src/mocks/seed-catalog.ts` plus the catalog store
 - Persisted refresh delta: MMKV in `src/mocks/catalog-store.ts`
 - Runtime validation: Zod (`src/schemas/`), helpers in `src/utils/parse-with-schema.ts`
 - Mocked network: `src/mocks/api.ts` (paginated list, get, refresh) plus review modes

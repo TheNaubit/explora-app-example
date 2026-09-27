@@ -12,7 +12,8 @@ Reviewers judge product choices, technical decisions, and **proof with evidence*
 - **Lifecycle:** background, resume, and late results must not erase or reverse user changes in silence.
 - **Usability / accessibility:** usable navigation, keyboard behavior, larger text, and screen-reader access for the main journey.
 - **Native capability:** one useful device feature (deep links, local notifications, camera, microphone, location, or similar). Show permission, cancel, and invalid-input cases. Prefer a feature you can verify without external services.
-- **Performance evidence:** one measurement from a **release** build. State device, build, dataset, and steps. Explain the result and limits. “Feels fast” is not enough.
+- **Data:** use the 12 supplied activities as the normal catalog. Keep their stable content and IDs.
+- **Performance evidence:** demonstrate scrolling, search, and interaction with at least 1,000 generated activities. Measure a **release** build and state its limits.
 - **Part 2 — one improvement:** pick one real mobile problem. Explain why it matters. Show before and after evidence. State limits.
 
 ## Out of scope
@@ -56,6 +57,5 @@ If you cannot build one platform: say so early. Verify the platform you have. Fo
 ## Related
 
 - Hard constraints checklist: root `AGENTS.md`
-- [Ten-minute presentation rehearsal plan](./presentation-plan.md)
 - [Dataset](../product/dataset.md)
 - [Verification index](../verification/index.md)

@@ -1,6 +1,6 @@
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
-import { LIST_PAGE_SIZE } from "@/mocks/constants";
-import { resetCatalog } from "@/mocks/catalog-store";
+import { resetCatalog, setCatalogMode } from "@/mocks/catalog-store";
+import { LIST_PAGE_SIZE, SUPPLIED_CATALOG_SIZE } from "@/mocks/constants";
 import { resetReviewModeState, setDetailLoadMode, setRefreshMode } from "@/mocks/review-mode";
 import {
   fetchActivitiesPage,
@@ -32,6 +32,14 @@ describe("activity query helpers", () => {
   });
 
   it("fetches the first catalog page", async () => {
+    const page = await fetchActivitiesPage(toActivityListFilters("", []), null);
+    expect(page.activities).toHaveLength(SUPPLIED_CATALOG_SIZE);
+    expect(page.nextCursor).toBeNull();
+    expect(getNextActivitiesPageParam(page)).toBeNull();
+  });
+
+  it("fetches a paginated performance catalog page", async () => {
+    setCatalogMode("performance");
     const page = await fetchActivitiesPage(toActivityListFilters("", []), null);
     expect(page.activities).toHaveLength(LIST_PAGE_SIZE);
     expect(page.nextCursor).toBe(String(LIST_PAGE_SIZE));

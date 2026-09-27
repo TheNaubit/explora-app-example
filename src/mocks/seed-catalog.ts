@@ -1,16 +1,16 @@
 import { SUPPLIED_ACTIVITIES } from "@/data/activities";
-import { CATALOG_FAKER_BASE_SEED, SEEDED_CATALOG_SIZE } from "@/mocks/constants";
+import { CATALOG_FAKER_BASE_SEED, PERFORMANCE_CATALOG_SIZE } from "@/mocks/constants";
 import { generateActivity, generatedActivityId } from "@/mocks/generate-activity";
 import type { Activity } from "@/schemas/activity";
 
-export { CATALOG_FAKER_BASE_SEED, SEEDED_CATALOG_SIZE } from "@/mocks/constants";
+export { CATALOG_FAKER_BASE_SEED, PERFORMANCE_CATALOG_SIZE } from "@/mocks/constants";
 
 /**
  * Build a catalog from a base list, filling up to `targetSize` with generated items.
  */
 export function seedCatalogFrom(
   baseActivities: readonly Activity[],
-  targetSize: number = SEEDED_CATALOG_SIZE,
+  targetSize: number,
 ): Activity[] {
   const generatedCount = targetSize - baseActivities.length;
 
@@ -35,9 +35,13 @@ export function seedCatalogFrom(
 }
 
 /**
- * Build the local discovery catalog.
- * Keeps the supplied 12 activities unchanged, then fills to `SEEDED_CATALOG_SIZE`.
+ * Build the normal discovery catalog from the supplied activities only.
  */
 export function seedCatalog(): Activity[] {
-  return seedCatalogFrom(SUPPLIED_ACTIVITIES, SEEDED_CATALOG_SIZE);
+  return [...SUPPLIED_ACTIVITIES];
+}
+
+/** Build the reproducible performance catalog with 1,000 generated activities. */
+export function seedPerformanceCatalog(): Activity[] {
+  return seedCatalogFrom(SUPPLIED_ACTIVITIES, PERFORMANCE_CATALOG_SIZE);
 }

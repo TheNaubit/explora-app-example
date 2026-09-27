@@ -7,6 +7,17 @@ tags:
 - runFlow: ../subflows/reset-test-state.yaml
 - scrollUntilVisible:
     element:
+      id: "dev-tools-catalog-mode-performance"
+    direction: UP
+- tapOn:
+    id: "dev-tools-catalog-mode-performance"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-catalog-count"
+    direction: DOWN
+- assertVisible: "Catalog activities, 1,012"
+- scrollUntilVisible:
+    element:
       id: "dev-tools-page-load-timeout"
     direction: UP
 - tapOn:

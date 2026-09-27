@@ -19,20 +19,24 @@ The file has **12** fictional activities. Fields:
 
 Load and validate with Zod in `src/data/activities.ts` and `src/schemas/activity.ts`.
 
+The normal catalog and **Reset local data** use these 12 activities only.
+
 ## Performance scale (≥1,000 activities)
 
-Discovery must support scroll, search, and interaction with at least **1,000** local activities.
+Discovery must demonstrate scroll, search, and interaction with at least **1,000 locally generated activities**.
 
 - Keep the original 12 as the base.
-- `seedCatalog` in `src/mocks/seed-catalog.ts` fills to **1,012** items (`SEEDED_CATALOG_SIZE` in `src/mocks/constants.ts`).
+- Select **Performance (1,012)** in Dev Tools to add 1,000 deterministic activities.
+- `seedPerformanceCatalog` fills to `PERFORMANCE_CATALOG_SIZE` in `src/mocks/constants.ts`.
 - Generated ids use `gen-0001` … (`GENERATED_ACTIVITY_ID_PREFIX`) with a fixed Faker base seed (`CATALOG_FAKER_BASE_SEED`).
-- Reset with `resetCatalog()` from `src/mocks/catalog-store.ts`.
+- The selected dataset persists across cold starts for release measurements.
+- Reset with `resetCatalog()` to return to the 12-item supplied catalog.
 
 Refresh is different. A successful refresh adds **one** activity at the start of the catalog.
 
 Refresh ids use `ref-0001`, … through `REFRESH_ACTIVITY_ID_PREFIX` and `REFRESH_FAKER_BASE_SEED`.
 
-MMKV stores the refresh-added activities and their sequence. A cold launch restores them before the seeded catalog.
+MMKV stores the selected dataset, refresh-added activities, and refresh sequence. A cold launch restores them before the base catalog.
 
 ## Mocked network
 

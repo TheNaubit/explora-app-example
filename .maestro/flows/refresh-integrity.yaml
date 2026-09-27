@@ -47,7 +47,7 @@ tags:
     direction: DOWN
 - assertVisible:
     id: "dev-tools-catalog-count"
-- assertVisible: "Catalog activities, 1,012"
+- assertVisible: "Catalog activities, 12"
 
 - scrollUntilVisible:
     element:
@@ -81,4 +81,4 @@ tags:
     element:
       id: "dev-tools-catalog-count"
     direction: DOWN
-- assertVisible: "Catalog activities, 1,013"
+- assertVisible: "Catalog activities, 13"

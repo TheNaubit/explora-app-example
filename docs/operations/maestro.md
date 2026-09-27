@@ -101,7 +101,9 @@ The Android core flow also passed with dark mode, 2.0 font scale, and device net
 
 The current Android release APK passed the native calendar flow separately in 35 seconds.
 
-The bootstrap resets local data and request modes through Dev Tools.
+The bootstrap resets local data to the 12 supplied activities and resets request modes through Dev Tools.
+
+The pagination flow selects Performance (1,012) before it requests later pages.
 
 The bootstrap accepts a partly visible reset row. It waits for the native confirmation animation before it continues.
 

@@ -13,3 +13,6 @@ export const CATALOG_REFRESH_PERSIST_KEY = "explora-refresh-catalog-v1";
 
 /** Schema version for refresh-added catalog persistence. */
 export const CATALOG_REFRESH_PERSIST_VERSION = 1;
+
+/** MMKV key for the selected assessment catalog dataset. */
+export const CATALOG_MODE_PERSIST_KEY = "explora-catalog-mode-v1";

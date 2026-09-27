@@ -105,7 +105,8 @@ Details: [`docs/architecture/project-structure.md`](./docs/architecture/project-
 ## Data and mocks
 
 - Supplied dataset: `assets/activities.json` (12 activities, stable IDs)
-- Keep those 12 intact. Generate more local activities for the ≥1,000 performance case
+- The normal catalog uses those 12 activities only
+- Dev Tools can add 1,000 deterministic local activities for the performance case
 - Network calls are mocked (TanStack Query + local mocks). Validate payloads with Zod
 - Use the **Dev Tools** tab for success, slow, and failure request modes.
 - Use **Reset local data** in Dev Tools to restore the local assessment baseline.
@@ -138,7 +139,7 @@ The technical release note is complete. See [`docs/operations/release-note.md`](
 
 One product-evidence item remains:
 
-- Record the final presentation. Use the [ten-minute rehearsal plan](./docs/assessment/presentation-plan.md).
+- Record the final presentation. The video must not exceed ten minutes.
 
 The user completed the VoiceOver main journey on a physical iPhone development build.
 

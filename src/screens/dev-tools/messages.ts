@@ -16,6 +16,30 @@ export const devToolsMessages = {
     comment: "Section title for simulated request behavior",
     message: "Request modes",
   }),
+  catalogDataset: msg({
+    id: "devTools.catalogDataset",
+    comment: "Section title for selecting the normal or performance activity dataset",
+    message: "Catalog dataset",
+  }),
+  catalogDatasetHelp: msg({
+    id: "devTools.catalogDatasetHelp",
+    message:
+      "Use Supplied for normal review. Performance adds 1,000 local activities and persists for cold starts.",
+  }),
+  suppliedCatalog: msg({
+    id: "devTools.catalogMode.supplied",
+    comment: "Catalog mode that uses only the supplied assessment activities",
+    message: "Supplied (12)",
+  }),
+  performanceCatalog: msg({
+    id: "devTools.catalogMode.performance",
+    comment: "Catalog mode with the supplied activities and 1,000 generated activities",
+    message: "Performance (1,012)",
+  }),
+  catalogModeHint: msg({
+    id: "devTools.catalogModeHint",
+    message: "Selects this catalog dataset and keeps favorites, filters, and refresh activities.",
+  }),
   initialLoad: msg({
     id: "devTools.initialLoad",
     comment: "Setting for the first catalog request",

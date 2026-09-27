@@ -19,15 +19,15 @@ When you specify or run a scenario, expand it here or add `scenarios/<name>.md` 
 
 ### Steps and expected results
 
-| Step | Action                                           | Expected result                                         |
-| ---- | ------------------------------------------------ | ------------------------------------------------------- |
-| 1    | Open Explore.                                    | The catalog loads with at least 1,000 local activities. |
-| 2    | Search for `Botanical Garden Walk`.              | Only the matching activity remains visible.             |
-| 3    | Select the Outdoors category.                    | The matching outdoor activity remains visible.          |
-| 4    | Open the activity and return to Explore.         | Search and category state stay active.                  |
-| 5    | Save the activity and open Favorites.            | Favorites contains the saved activity.                  |
-| 6    | Open the saved detail.                           | The detail shows the same activity.                     |
-| 7    | Close and relaunch the app, then open Favorites. | The saved activity remains available.                   |
+| Step | Action                                           | Expected result                                |
+| ---- | ------------------------------------------------ | ---------------------------------------------- |
+| 1    | Open Explore.                                    | The catalog loads the 12 supplied activities.  |
+| 2    | Search for `Botanical Garden Walk`.              | Only the matching activity remains visible.    |
+| 3    | Select the Outdoors category.                    | The matching outdoor activity remains visible. |
+| 4    | Open the activity and return to Explore.         | Search and category state stay active.         |
+| 5    | Save the activity and open Favorites.            | Favorites contains the saved activity.         |
+| 6    | Open the saved detail.                           | The detail shows the same activity.            |
+| 7    | Close and relaunch the app, then open Favorites. | The saved activity remains available.          |
 
 ### Observed result
 
@@ -53,10 +53,10 @@ The current iOS release app passed this flow without Metro on 2026-09-27.
 
 | Step | Action                                   | Expected result                                         |
 | ---- | ---------------------------------------- | ------------------------------------------------------- |
-| 1    | Reset local data.                        | The catalog reports 1,012 activities.                   |
+| 1    | Reset local data.                        | The catalog reports 12 activities.                      |
 | 2    | Select successful refresh in Dev Tools.  | The next refresh uses the successful response.          |
 | 3    | Pull Explore past the refresh threshold. | One request starts and the refresh indicator appears.   |
-| 4    | Wait for completion.                     | The catalog reports 1,013 activities.                   |
+| 4    | Wait for completion.                     | The catalog reports 13 activities.                      |
 | 5    | Inspect the activity list.               | The generated activity supports normal catalog actions. |
 
 ### Observed result
@@ -291,13 +291,13 @@ The iOS release check used a Simulator. Device Hub completed the separate EventK
 
 ### Steps and expected results
 
-| Step | Action                                      | Expected result                                             |
-| ---- | ------------------------------------------- | ----------------------------------------------------------- |
-| 1    | Install a release build.                    | The app starts without Metro.                               |
-| 2    | Reset to the seeded 1,012-activity catalog. | Explore reports the expected dataset size.                  |
-| 3    | Stop the app before each run.               | Each run starts from the same stopped state.                |
-| 4    | Measure five cold starts.                   | Each `am start -W` command reports the total start time.    |
-| 5    | Report the range, median, and average.      | The evidence states the build, dataset, device, and limits. |
+| Step | Action                                   | Expected result                                             |
+| ---- | ---------------------------------------- | ----------------------------------------------------------- |
+| 1    | Install a release build.                 | The app starts without Metro.                               |
+| 2    | Select Performance (1,012) in Dev Tools. | Explore reports 12 supplied and 1,000 generated activities. |
+| 3    | Stop the app before each run.            | Each run starts from the same stopped state.                |
+| 4    | Measure five cold starts.                | Each `am start -W` command reports the total start time.    |
+| 5    | Report the range, median, and average.   | The evidence states the build, dataset, device, and limits. |
 
 ### Observed result
 

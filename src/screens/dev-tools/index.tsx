@@ -7,13 +7,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { announceStatus } from "@/a11y";
 import { ScreenFrame } from "@/components/screen-frame";
 import { useFavoriteIds } from "@/hooks/use-favorites";
-import { getCatalogSize } from "@/mocks/catalog-store";
+import { getCatalogMode, getCatalogSize, type CatalogMode } from "@/mocks/catalog-store";
 import { getReviewModeState, resetReviewModeState } from "@/mocks/review-mode";
 import { DevToolsActionRow } from "@/screens/dev-tools/dev-tools-action-row";
+import { DevToolsCatalogModeSection } from "@/screens/dev-tools/dev-tools-catalog-mode-section";
 import { DevToolsFeedbackSection } from "@/screens/dev-tools/dev-tools-feedback-section";
 import {
   clearRequestCache,
   resetLocalData,
+  updateCatalogMode,
   updateReviewMode,
   type ReviewModeKey,
 } from "@/screens/dev-tools/dev-tools-actions";
@@ -47,11 +49,13 @@ export function DevTools() {
   const queryClient = useQueryClient();
   const favoriteIds = useFavoriteIds();
   const [catalogCount, setCatalogCount] = useState(getCatalogSize);
+  const [catalogMode, setCatalogModeState] = useState(getCatalogMode);
   const [modes, setModes] = useState(getReviewModeState);
 
   useFocusEffect(
     useCallback(() => {
       setCatalogCount(getCatalogSize());
+      setCatalogModeState(getCatalogMode());
       setModes(getReviewModeState());
     }, []),
   );
@@ -89,6 +93,20 @@ export function DevTools() {
     announceStatus(t(devToolsMessages.requestCacheCleared));
   }
 
+  function handleCatalogModeChange(nextMode: CatalogMode) {
+    const result = updateCatalogMode(queryClient, nextMode);
+    const setting = t(devToolsMessages.catalogDataset);
+    const option = t(
+      nextMode === "supplied"
+        ? devToolsMessages.suppliedCatalog
+        : devToolsMessages.performanceCatalog,
+    );
+
+    setCatalogCount(result.catalogCount);
+    setCatalogModeState(result.catalogMode);
+    announceStatus(i18n._({ ...devToolsMessages.modeChanged, values: { option, setting } }));
+  }
+
   function handleResetModes() {
     setModes(resetReviewModeState());
     announceStatus(t(devToolsMessages.requestModesReset));
@@ -97,6 +115,7 @@ export function DevTools() {
   function handleConfirmedLocalReset() {
     const result = resetLocalData(queryClient);
     setCatalogCount(result.catalogCount);
+    setCatalogModeState(getCatalogMode());
     announceStatus(t(devToolsMessages.localDataReset));
   }
 
@@ -136,6 +155,7 @@ export function DevTools() {
       </Text>
 
       <View style={styles.sections}>
+        <DevToolsCatalogModeSection onChange={handleCatalogModeChange} selected={catalogMode} />
         <DevToolsModeSection
           help={t(devToolsMessages.initialLoadHelp)}
           onChange={(value) =>

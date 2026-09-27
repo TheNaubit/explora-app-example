@@ -1,6 +1,11 @@
 import type { QueryClient } from "@tanstack/react-query";
 
-import { getCatalogSize, resetCatalog } from "@/mocks/catalog-store";
+import {
+  getCatalogSize,
+  resetCatalog,
+  setCatalogMode,
+  type CatalogMode,
+} from "@/mocks/catalog-store";
 import { getReviewModeState, setReviewModeState } from "@/mocks/review-mode";
 import type { ReviewModeState } from "@/schemas/review-mode";
 import { resetDiscoveryFilters, resetDiscoveryScrollOffsets } from "@/state/discovery";
@@ -19,6 +24,17 @@ export function updateReviewMode<Key extends ReviewModeKey>(
 /** Reset request results and refetch active screens without changing local user data. */
 export function clearRequestCache(queryClient: QueryClient): void {
   void queryClient.resetQueries();
+}
+
+/** Select a reproducible catalog dataset without changing favorites or filters. */
+export function updateCatalogMode(
+  queryClient: QueryClient,
+  catalogMode: CatalogMode,
+): { catalogCount: number; catalogMode: CatalogMode } {
+  setCatalogMode(catalogMode);
+  clearRequestCache(queryClient);
+
+  return { catalogCount: getCatalogSize(), catalogMode };
 }
 
 /** Reset local product data and request state to a reproducible baseline. */

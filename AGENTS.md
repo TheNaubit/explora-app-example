@@ -62,7 +62,8 @@ Do not forget these rules. Full text: [`docs/assessment/requirements.md`](./docs
 **Data**
 
 - Keep all **12** supplied activities in `assets/activities.json` with original IDs and content.
-- Discovery must support **≥1,000** local activities (12 + generated).
+- Use the 12 supplied activities as the normal catalog and reset baseline.
+- Provide a reproducible performance mode with the 12 supplied activities plus 1,000 generated activities.
 - Refresh is different: add **one** activity only after a successful refresh.
 - Mock the network locally. Validate payloads with **Zod**. Support success, fail, and slow loads that you can reproduce.
 

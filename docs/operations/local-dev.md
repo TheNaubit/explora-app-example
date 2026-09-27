@@ -35,7 +35,8 @@ Agents must not wait for the commit hook alone. After a change batch, run:
 ## Data
 
 - Supplied catalog: `assets/activities.json` (validated on load)
-- Seeded discovery catalog: 1,012 activities via `src/mocks/seed-catalog.ts`
+- Normal discovery catalog: 12 supplied activities via `src/mocks/seed-catalog.ts`
+- Performance dataset: select **Performance (1,012)** in Dev Tools
 - Reset in-memory catalog: `import { resetCatalog } from "@/mocks/catalog-store"`
 - Reset review modes: `import { resetReviewModeState } from "@/mocks/review-mode"`
 - Clear favorites: `import { clearFavorites } from "@/state/favorites"`
@@ -77,7 +78,9 @@ Changing a mode clears the request cache. The next matching request uses that mo
 
 Changing a mode also changes the review revision in Query keys. Kept-alive tabs reload the selected mode.
 
-Select **Reset local data** to clear generated activities, favorites, filters, and request cache. Request modes do not change.
+Select **Reset local data** to restore the 12 supplied activities. It also clears refresh activities, favorites, filters, and request cache.
+
+Select **Performance (1,012)** before performance and pagination checks. The selection persists across cold starts.
 
 ## Related
 

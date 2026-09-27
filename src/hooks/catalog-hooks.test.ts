@@ -12,8 +12,8 @@ import {
   useOfflineSnapshot,
 } from "@/hooks/use-favorites";
 import { useRefreshCatalog } from "@/hooks/use-refresh-catalog";
-import { LIST_PAGE_SIZE } from "@/mocks/constants";
-import { resetCatalog } from "@/mocks/catalog-store";
+import { resetCatalog, setCatalogMode } from "@/mocks/catalog-store";
+import { LIST_PAGE_SIZE, SUPPLIED_CATALOG_SIZE } from "@/mocks/constants";
 import { resetReviewModeState, setInitialLoadMode, setRefreshMode } from "@/mocks/review-mode";
 import { clearFavorites } from "@/state/favorites";
 import { resetDiscoveryFilters } from "@/state/discovery";
@@ -46,7 +46,20 @@ describe("catalog and favorites hooks", () => {
     clearFavorites();
   });
 
-  it("loads paginated activities", async () => {
+  it("loads the supplied activities by default", async () => {
+    const queryClient = createQueryClient();
+    const { result } = await renderHook(() => useActivities({ search: "", categories: [] }), {
+      wrapper: createWrapper(queryClient),
+    });
+
+    await waitFor(() =>
+      expect(result.current.data?.pages[0]?.activities).toHaveLength(SUPPLIED_CATALOG_SIZE),
+    );
+    expect(result.current.hasNextPage).toBe(false);
+  });
+
+  it("loads paginated activities in performance mode", async () => {
+    setCatalogMode("performance");
     const queryClient = createQueryClient();
     const { result } = await renderHook(() => useActivities({ search: "", categories: [] }), {
       wrapper: createWrapper(queryClient),
@@ -55,6 +68,7 @@ describe("catalog and favorites hooks", () => {
     await waitFor(() =>
       expect(result.current.data?.pages[0]?.activities).toHaveLength(LIST_PAGE_SIZE),
     );
+    expect(result.current.hasNextPage).toBe(true);
   });
 
   it("reloads a kept-alive catalog after a review mode changes", async () => {
@@ -64,7 +78,7 @@ describe("catalog and favorites hooks", () => {
     });
 
     await waitFor(() =>
-      expect(result.current.data?.pages[0]?.activities).toHaveLength(LIST_PAGE_SIZE),
+      expect(result.current.data?.pages[0]?.activities).toHaveLength(SUPPLIED_CATALOG_SIZE),
     );
 
     await act(async () => {

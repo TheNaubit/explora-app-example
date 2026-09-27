@@ -311,6 +311,8 @@ The assessment requires reproducible success, slow, and failure states. Provide 
 
 - Add a **Dev Tools** native tab with a tools icon.
 - Use an iOS-style grouped settings screen.
+- Include a catalog dataset selector for Supplied (12) and Performance (1,012).
+- Persist the performance selection so release cold-start measurements remain reproducible.
 - Include first catalog modes for Normal, Slow, Empty, Offline, Timeout, and Invalid data.
 - Include the same activity detail modes and Not found.
 - Include the same later-page modes.

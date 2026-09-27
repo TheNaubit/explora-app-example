@@ -3,14 +3,15 @@
  * Prefer these over inline numbers or string prefixes in mock code.
  */
 
-/** Assessment minimum for discovery performance (scroll / search). */
-export const ASSESSMENT_MIN_CATALOG_SIZE = 1_000;
+/** Number of activities in the supplied assessment dataset. */
+export const SUPPLIED_CATALOG_SIZE = 12;
 
-/**
- * Seeded discovery catalog size: 12 supplied activities + 1,000 generated.
- * Must stay at or above `ASSESSMENT_MIN_CATALOG_SIZE`.
- */
-export const SEEDED_CATALOG_SIZE = 1_012;
+/** Assessment minimum for locally generated performance activities. */
+export const PERFORMANCE_GENERATED_ACTIVITY_COUNT = 1_000;
+
+/** Performance dataset size: 12 supplied activities plus 1,000 generated activities. */
+export const PERFORMANCE_CATALOG_SIZE =
+  SUPPLIED_CATALOG_SIZE + PERFORMANCE_GENERATED_ACTIVITY_COUNT;
 
 /**
  * Fixed Faker base seed for performance-scale generated activities.
