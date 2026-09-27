@@ -39,7 +39,9 @@ Passed on an Android 16 emulator on 2026-09-26.
 
 The Android flow kept the search, filter, favorite, and persisted detail state.
 
-The current iOS release app passed this flow without Metro on 2026-09-27.
+The final iOS release app passed this flow without Metro on 2026-09-27.
+
+The final Android release APK passed this flow without Metro on 2026-09-27.
 
 ### Evidence
 
@@ -67,7 +69,9 @@ The refresh added exactly one activity. Routine success produced no toast.
 
 The same count and feedback checks passed on an Android 16 emulator on 2026-09-26.
 
-The current iOS release app passed the failure and exact one-item success checks without Metro on 2026-09-27.
+The final iOS and Android release artifacts passed the failure and exact one-item success checks on 2026-09-27.
+
+Both runs started with 12 activities. A failed refresh kept 12 activities. The next successful refresh produced 13 activities.
 
 ### Evidence
 
@@ -183,7 +187,7 @@ Passed on an Android 16 emulator on 2026-09-26.
 
 - Platform: Explora iPhone 18 Pro Simulator on iOS 27.0.
 - App build: local development build `build-1790261620671.tar.gz`.
-- Current release build: `build-1790510925602.tar.gz`.
+- Current release build: `build-1790521772499.tar.gz`.
 - Activity: local activity `ref-0005`, with a 35-minute duration.
 - Runtime date: 2026-09-24.
 - Android platform: `sdk_gphone64_arm64` emulator on Android 16, API 36.
@@ -226,22 +230,23 @@ Passed on the iOS 27.0 Simulator.
 13. Closing the form returned to Activity Detail without a status message.
 14. Saving the form showed **Added to Calendar**.
 
-The current iOS release archive repeated the complete EventKit flow on 2026-09-27.
+The final iOS release archive repeated the release-only EventKit flow on 2026-09-27.
 
 It launched from its embedded bundle without Metro on an iPhone 18 Pro Simulator with iOS 27.0.
 
 The release check observed these results:
 
 1. Schedule cancellation returned silently.
-2. Permission denial produced the blocked state and **Open Settings** action.
-3. The permission prompt requested add-only calendar access.
-4. The system form contained `Botanical Garden Walk`, `North Garden`, and the activity description.
-5. The form showed 15:51–16:51 for the one-hour activity on 28 September 2026.
-6. System-form cancellation returned to Activity Detail without feedback.
-7. Saving returned to Activity Detail with **Added to Calendar**.
-8. The success message said that the system calendar saved the activity.
+2. The permission prompt requested add-only calendar access.
+3. The system form contained `Botanical Garden Walk`, `North Garden`, and the activity description.
+4. The form showed a one-hour interval for the one-hour activity.
+5. System-form cancellation returned to Activity Detail without feedback.
+6. Saving returned to Activity Detail with **Added to Calendar**.
+7. The success message said that the system calendar saved the activity.
 
-The focused Jest tests cover past dates, malformed data, invalid durations, both denial states, native errors, and duplicate protection.
+The earlier runtime check covered permission denial and the **Open Settings** recovery action.
+
+Focused Jest tests cover past dates, malformed data, invalid durations, both denial states, native errors, and duplicate protection.
 
 The Android flow passed in local development and release builds.
 
@@ -260,6 +265,8 @@ The Android flow passed in local development and release builds.
 ### Evidence
 
 - Automated: `src/calendar/add-to-calendar.test.ts`.
+- iOS release flow: `.maestro/release-flows/native-calendar-ios.yaml`.
+- Android release flow: `.maestro/release-flows/native-calendar-android.yaml`.
 - UI validation: `src/screens/activity-detail/activity-detail.test.tsx`.
 - Compact Activity Detail action: [`ios-compact-calendar-action.jpg`](./evidence/native-calendar/ios-compact-calendar-action.jpg).
 - Fitted Liquid Glass sheet: [`ios-fitted-liquid-glass-sheet.jpg`](./evidence/native-calendar/ios-fitted-liquid-glass-sheet.jpg).
@@ -273,8 +280,8 @@ The Android flow passed in local development and release builds.
 - Android error preview: [`android-error-light.jpg`](./evidence/native-feedback/android-error-light.jpg).
 - Android dark success preview: [`android-success-dark.jpg`](./evidence/native-feedback/android-success-dark.jpg).
 - Historical iOS development build: `build-1790261620671.tar.gz`.
-- iOS release build: `dist/eas-builds/build-1790510925602.tar.gz`.
-- Android release APK: `dist/eas-builds/build-1790507141918.apk`.
+- iOS release build: `dist/eas-builds/build-1790521772499.tar.gz`.
+- Android release APK: `dist/eas-builds/build-1790524156875.apk`.
 - Artifact metadata and checksums: [`artifacts.md`](./artifacts.md).
 - Build metadata contains `NSCalendarsWriteOnlyAccessUsageDescription`.
 - Build metadata does not contain `NSCalendarsFullAccessUsageDescription`.
@@ -285,7 +292,7 @@ The Android check used development and release builds on an emulator.
 
 It does not prove behavior on a physical Android device.
 
-The iOS release check used a Simulator. Device Hub completed the separate EventKit system-form actions.
+The iOS release check used a Simulator. The release-only Maestro flow controlled the EventKit system form.
 
 ## Scenario 7: Performance with at least 1,000 activities
 
@@ -305,9 +312,9 @@ Measured on an Android 16 emulator on 2026-09-27.
 
 The current local EAS release APK started without Metro. The catalog contained 1,012 activities.
 
-Five clean cold starts took 706, 711, 726, 706, and 720 ms.
+Five clean cold starts took 848, 756, 767, 762, and 750 ms.
 
-The median cold start was 711 ms. The average cold start was 713.8 ms.
+The range was 750–848 ms. The median was 762 ms. The average was 776.6 ms.
 
 The measurement uses an emulator with the host GPU. It does not predict physical-device startup time.
 
@@ -317,8 +324,8 @@ Concurrent Simulator load contaminated repeated frame-statistics runs. Those res
 
 - Dataset tests: `src/mocks/seed-catalog.test.ts`.
 - Build instructions: `docs/operations/eas-local-builds.md`.
-- Release APK: `dist/eas-builds/build-1790507141918.apk`.
-- Measurement method: Android `am force-stop`, one-second wait, `am start -W`, and a three-second settle.
+- Release APK: `dist/eas-builds/build-1790524156875.apk`.
+- Measurement method: Android `am force-stop` followed by `am start -W` for each run.
 
 ## Scenario 8: Accessibility
 
@@ -337,7 +344,7 @@ Step 1 passed for the catalog state flow on the iOS 27.0 Simulator.
 
 Steps 1–4 passed on an Android 16 emulator on 2026-09-26.
 
-The combined Maestro run used dark mode, 2.0 font scale, and disabled device networking.
+The final APK repeated the combined Maestro run with dark mode, 2.0 font scale, and disabled device networking.
 
 TalkBack exposed the expected labels, roles, selected states, and activity descriptions.
 

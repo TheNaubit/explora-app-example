@@ -1,0 +1,64 @@
+appId: com.adlerventures.explora
+name: iOS release calendar cancellation, permission, and save
+tags:
+  - ios
+  - release-native
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: "explore-list"
+    timeout: 30000
+
+- tapOn:
+    id: "activity-card-act-001"
+- extendedWaitUntil:
+    visible:
+      id: "activity-detail-content"
+    timeout: 8000
+
+- tapOn:
+    id: "add-to-calendar-button"
+- extendedWaitUntil:
+    visible:
+      id: "calendar-schedule-cancel"
+    timeout: 5000
+- tapOn:
+    id: "calendar-schedule-cancel"
+- assertVisible:
+    id: "add-to-calendar-button"
+
+- tapOn:
+    id: "add-to-calendar-button"
+- extendedWaitUntil:
+    visible:
+      id: "calendar-schedule-confirm"
+    timeout: 5000
+- tapOn:
+    id: "calendar-schedule-confirm"
+- runFlow:
+    when:
+      visible: "Allow “Explora” to add events to your calendar?"
+    commands:
+      - tapOn: "Allow"
+- extendedWaitUntil:
+    visible: "New Event"
+    timeout: 10000
+- assertVisible: "Botanical Garden Walk"
+- assertVisible: "North Garden"
+- tapOn: "Cancel"
+- assertVisible:
+    id: "add-to-calendar-button"
+
+- tapOn:
+    id: "add-to-calendar-button"
+- tapOn:
+    id: "calendar-schedule-confirm"
+- extendedWaitUntil:
+    visible: "New Event"
+    timeout: 10000
+- tapOn: "Done"
+- extendedWaitUntil:
+    visible: "(?s)Added to Calendar.*The system calendar saved this activity\\."
+    timeout: 10000

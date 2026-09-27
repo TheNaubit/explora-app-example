@@ -36,3 +36,8 @@ appId: com.adlerventures.explora
     direction: UP
 - tapOn:
     id: "dev-tools-reset-modes"
+- scrollUntilVisible:
+    element:
+      id: "dev-tools-catalog-mode-supplied"
+    direction: UP
+    visibilityPercentage: 50

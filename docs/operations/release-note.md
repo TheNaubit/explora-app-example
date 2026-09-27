@@ -18,7 +18,8 @@ The Android APK and iOS Simulator app run without Metro or Expo Go.
 
 ## Release contents
 
-- Browse, search, and filter a local catalog with more than 1,000 activities.
+- Browse, search, and filter the 12 supplied activities.
+- Select a separate 1,012-item performance catalog in Dev Tools.
 - Keep search and filter state after opening an activity.
 - Save favorites and open their details offline.
 - Add exactly one activity after a successful refresh.
@@ -35,10 +36,10 @@ These artifacts are for local assessment review.
 
 | Platform      | Artifact                                     | Build                           | Source commit | SHA-256                                                            |
 | ------------- | -------------------------------------------- | ------------------------------- | ------------- | ------------------------------------------------------------------ |
-| iOS Simulator | `dist/eas-builds/build-1790510925602.tar.gz` | Release, `production-simulator` | `16283fe`     | `4ba0196a5fb4f690fa36b7f9adc54c55021681ebdc52c178b37e7f70320a583e` |
-| Android       | `dist/eas-builds/build-1790507141918.apk`    | Release, `production-apk`       | `16283fe`     | `959ab2173fba217fa5ee51eb8983a9393b9c5b534f139d9dd79d94654e048137` |
+| iOS Simulator | `dist/eas-builds/build-1790521772499.tar.gz` | Release, `production-simulator` | `1311cbc`     | `c1ee720d8ee789914ff69174b9d63b58faba1db6917d1993a911ce0236e18a63` |
+| Android       | `dist/eas-builds/build-1790524156875.apk`    | Release, `production-apk`       | `1311cbc`     | `caaeecdd1761361f23e771b7f2285bbb613a8e6c899148643c0f43e07562c2d9` |
 
-Both artifacts contain the app source from commit `16283fe`.
+Both artifacts contain the app source from commit `1311cbc`.
 
 The complete artifact metadata is in the [release artifact manifest](../verification/artifacts.md).
 

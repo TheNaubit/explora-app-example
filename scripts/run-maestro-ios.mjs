@@ -4,6 +4,7 @@ import process from "node:process";
 
 const preferredSimulatorName = "Explora iPhone 18 Pro";
 const reportDirectory = "artifacts/maestro";
+const releaseNativeFlag = "--release-native";
 
 function findDeviceId() {
   if (process.env.MAESTRO_DEVICE_ID) {
@@ -32,6 +33,12 @@ function findDeviceId() {
 }
 
 const deviceId = findDeviceId();
+const forwardedArguments = process.argv.slice(2);
+const isReleaseNativeRun = forwardedArguments.includes(releaseNativeFlag);
+const maestroArguments = forwardedArguments.filter((argument) => argument !== releaseNativeFlag);
+const reportName = isReleaseNativeRun ? "ios-release-native-results.xml" : "results.xml";
+const outputDirectory = isReleaseNativeRun ? "ios-release-native-run" : "run";
+const flowTarget = isReleaseNativeRun ? ".maestro/release-flows" : ".maestro";
 mkdirSync(reportDirectory, { recursive: true });
 
 const result = spawnSync(
@@ -40,18 +47,17 @@ const result = spawnSync(
     "--device",
     deviceId,
     "test",
-    "--config",
-    ".maestro/config.yaml",
+    ...(isReleaseNativeRun ? [] : ["--config", ".maestro/config.yaml"]),
     "--format",
     "JUNIT",
     "--output",
-    `${reportDirectory}/results.xml`,
+    `${reportDirectory}/${reportName}`,
     "--test-output-dir",
-    `${reportDirectory}/run`,
+    `${reportDirectory}/${outputDirectory}`,
     "--exclude-tags",
     "android",
-    ...process.argv.slice(2),
-    ".maestro",
+    ...maestroArguments,
+    flowTarget,
   ],
   {
     env: {

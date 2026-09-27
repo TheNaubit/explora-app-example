@@ -59,6 +59,14 @@ npm run test:e2e:release:android
 
 This flow checks cancellation, the permission prompt, event creation, and the success Snackbar.
 
+Run the iOS release-only native calendar flow:
+
+```bash
+npm run test:e2e:release:ios
+```
+
+This flow checks both cancellation paths, the prefilled EventKit form, saving, and success feedback.
+
 Set `MAESTRO_DEVICE_ID` when more than one suitable Simulator is booted.
 
 The runner prefers a booted Simulator named `Explora iPhone 18 Pro`.
@@ -89,19 +97,21 @@ The iOS suite used a Simulator development build. It did not use a production-re
 
 The current iOS release app passed 9 of 9 flows without Metro on 2026-09-27.
 
-The run took 10 minutes and 47 seconds. It includes the Favorites empty-state navigation check.
+The run took 10 minutes and 56 seconds. It includes the Favorites empty-state navigation check.
 
-The EventKit form runs in a separate system window. Device Hub completed the current release cancel and save actions.
+The release-only iOS calendar flow passed on the same artifact.
 
 The current Android release app passed 8 of 8 flows on 2026-09-27.
 
-The run took 10 minutes and 59 seconds.
+The run took 10 minutes and 45 seconds.
 
 The Android core flow also passed with dark mode, 2.0 font scale, and device networking disabled.
 
-The current Android release APK passed the native calendar flow separately in 35 seconds.
+The current Android release APK passed the native calendar flow separately in 36 seconds.
 
 The bootstrap resets local data to the 12 supplied activities and resets request modes through Dev Tools.
+
+It returns to the catalog controls before each flow. This keeps Android and iOS scroll positions consistent.
 
 The pagination flow selects Performance (1,012) before it requests later pages.
 

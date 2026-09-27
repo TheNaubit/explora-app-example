@@ -113,7 +113,9 @@ The Android development and release checks covered cancellation, permission, dir
 
 The Android native feedback module reported **Ready** after the module bridge fix.
 
-The current Android release flow passed without Metro on `build-1790507141918.apk`.
+The current iOS release flow passed without Metro on `build-1790521772499.tar.gz`.
+
+The current Android release flow passed without Metro on `build-1790524156875.apk`.
 
 See [scenario 6](../verification/scenarios.md#scenario-6-native-calendar) for the observed values and screenshots.
 
