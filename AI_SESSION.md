@@ -48,6 +48,7 @@ Each linked file is either a conversation export or an **AI-generated session su
 | 40  | 2026-09-27     | Supplied and performance catalog modes, refresh retry fix, and final release verification          | [ai-sessions/session-040-dataset-modes-and-final-release-verification.md](./ai-sessions/session-040-dataset-modes-and-final-release-verification.md)       | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 41  | 2026-09-27     | Prepared the iOS, Android, and fish terminal presentation environment                              | [ai-sessions/session-041-presentation-environment-setup.md](./ai-sessions/session-041-presentation-environment-setup.md)                                   | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 | 42  | 2026-09-28     | GitHub upload, assessment artifact packaging, and consolidated AI session record                   | [ai-sessions/session-042-submission-packaging-and-consolidated-ai-record.md](./ai-sessions/session-042-submission-packaging-and-consolidated-ai-record.md) | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
+| 43  | 2026-09-28     | Upload-ready README and decisions-and-evidence documents                                           | [ai-sessions/session-043-upload-ready-readme-and-decisions-evidence.md](./ai-sessions/session-043-upload-ready-readme-and-decisions-evidence.md)           | OpenAI Codex desktop agent; GPT-5 family; exact deployment slug unavailable   |
 
 ## How to add a later session
 

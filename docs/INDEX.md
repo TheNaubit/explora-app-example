@@ -14,6 +14,7 @@ Write wiki pages in Simplified Technical English. See [meta/simplified-technical
 | Design system     | Tokens, components, states, materials  | [../DESIGN.md](../DESIGN.md)                                                   |
 | Dataset           | Supplied JSON, 1k scale, mocks         | [product/dataset.md](./product/dataset.md)                                     |
 | Assessment        | Requirements and delivery              | [assessment/requirements.md](./assessment/requirements.md)                     |
+| Evidence          | Decisions, trade-offs, and results     | [assessment/decisions-and-evidence.md](./assessment/decisions-and-evidence.md) |
 | Architecture      | Structure, data flow                   | [architecture/overview.md](./architecture/overview.md)                         |
 | Project structure | Folder map                             | [architecture/project-structure.md](./architecture/project-structure.md)       |
 | Features          | Capability behavior                    | [features/index.md](./features/index.md)                                       |

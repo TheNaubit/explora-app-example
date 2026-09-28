@@ -57,5 +57,6 @@ If you cannot build one platform: say so early. Verify the platform you have. Fo
 ## Related
 
 - Hard constraints checklist: root `AGENTS.md`
+- [Decisions and evidence](./decisions-and-evidence.md)
 - [Dataset](../product/dataset.md)
 - [Verification index](../verification/index.md)
